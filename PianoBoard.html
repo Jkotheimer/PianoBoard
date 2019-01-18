@@ -7,14 +7,30 @@
     </head>
     <body>
         <script>
-            function A3(event) {
+            function KeyStroke(event) {
                 if(event == q) {
-                    var audio = new Audio('Piano.pp.A#.wav');
+                    var x = document.getElementById("A3");
+                    x.style.background = "grey";
+                    var audio = new Audio('Piano.pp.A3.wav');
                     audio.play();
                 }
                 return false;
             }
         </script>
-        <button class="PianoKey" accessKey="q" onkeypress="myFunction(event)">A</button>
+        <div onkeypress="KeyStroke(event)">
+            <button id="C3" class="PianoKey">C</button>
+            <button id="C#3" class="PianoKey sharp">C#</button>
+            <button id="D" class="PianoKey">D</button>
+            <button id="D#3" class="PianoKey sharp">D#</button>
+            <button id="E3" class="PianoKey">E</button>
+            <button id="F3" class="PianoKey">F</button>
+            <button id="F#3" class="PianoKey sharp">F#</button>
+            <button id="G3" class="PianoKey">G</button>
+            <button id="G#3" class="PianoKey sharp">G#</button>
+            <button id="A3" class="PianoKey">A</button>
+            <button id="A#3" class="PianoKey sharp">A#</button>
+            <button id="B3" class="PianoKey">B</button>
+            <button id="C4" class="PianoKey">C</button>
+        </div>
     </body>
 </html>
