@@ -1,3 +1,45 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <meta charset="utf-8">
+        <title>PianoBoard</title>
+        <style>
+            .PianoKey {
+                background-color: #FFFFFF;
+                border: 3px solid grey;
+                color: black;
+                padding: 100px 25px;
+                text-align: center;
+                font-size: 16px;
+                cursor: pointer;
+            }
+            .PianoKey:hover {
+                border:3px solid black; }
+            .PianoKey:active {
+                background-color: #CCCCCC; }
+            .sharp {
+                background-color: #000000;
+                color: white;
+                padding: 50px 20px;
+            }
+            .sharp:active {
+                background-color: #333333
+            }
+        </style>
+    </head>
+    <body>
+        <button class="PianoKey">C</button>
+        <button class="PianoKey sharp">C#</button>
+        <button class="PianoKey">D</button>
+        <button class="PianoKey sharp">D#</button>
+        <button class="PianoKey">E</button>
+        <button class="PianoKey">F</button>
+        <button class="PianoKey sharp">F#</button>
+        <button class="PianoKey">G</button>
+        <button class="PianoKey sharp">G#</button>
+        <button class="PianoKey">A</button>
+        <button class="PianoKey sharp">A#</button>
+        <button class="PianoKey">B</button>
+        <button class="PianoKey">C</button>
+    </body>
 </html>
