@@ -11,3 +11,21 @@ will be a button that compiles all of the tracks to a single Mp3 file and downlo
 to the user's computer.
 
 Copywrite© Jack Kotheimer 2019
+
+<button class="PianoKey">C</button>
+        <button class="PianoKey sharp">C#</button>
+        <button class="PianoKey">D</button>
+        <button class="PianoKey sharp">D#</button>
+        <button class="PianoKey">E</button>
+        <button class="PianoKey">F</button>
+        <button class="PianoKey sharp">F#</button>
+        <button class="PianoKey">G</button>
+        <button class="PianoKey sharp">G#</button>
+        <button class="PianoKey">A
+            <audio>
+                <source src="Piano.pp.A3.wav" type="audio/wav">
+            </audio>
+        </button>
+        <button class="PianoKey sharp">A#</button>
+        <button class="PianoKey">B</button>
+        <button class="PianoKey">C</button>

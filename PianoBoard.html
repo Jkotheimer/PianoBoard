@@ -3,26 +3,18 @@
     <head>
         <meta charset="utf-8">
         <title>PianoBoard</title>
-        <link rel="ButtonStyles" href="Buttons.css">
+        <link rel="stylesheet" href="Styles1.css">
     </head>
     <body>
-        <button class="PianoKey" A3.play()>
-            <audio>
-                <source src="Piano.pp.A3.wav" type="audio/wav">
-            </audio>
-            C
-        </button>
-        <button class="PianoKey sharp">C#</button>
-        <button class="PianoKey">D</button>
-        <button class="PianoKey sharp">D#</button>
-        <button class="PianoKey">E</button>
-        <button class="PianoKey">F</button>
-        <button class="PianoKey sharp">F#</button>
-        <button class="PianoKey">G</button>
-        <button class="PianoKey sharp">G#</button>
-        <button class="PianoKey">A</button>
-        <button class="PianoKey sharp">A#</button>
-        <button class="PianoKey">B</button>
-        <button class="PianoKey">C</button>
+        <script>
+            function A3(event) {
+                if(event == q) {
+                    var audio = new Audio('Piano.pp.A#.wav');
+                    audio.play();
+                }
+                return false;
+            }
+        </script>
+        <button class="PianoKey" accessKey="q" onkeypress="myFunction(event)">A</button>
     </body>
 </html>
