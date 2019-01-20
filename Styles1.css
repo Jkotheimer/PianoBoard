@@ -21,3 +21,7 @@
 .sharp:active {
     background-color: #333333
 }
+.border {
+    border: 3px solid black;
+    padding: 5px;
+}
