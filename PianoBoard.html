@@ -4,39 +4,43 @@
         <meta charset="utf-8">
         <title>PianoBoard</title>
         <link rel="stylesheet" href="Styles1.css">
+        
+    </head>
+    <body>
         <audio id="C3.wav">
             <source src="Piano.C3.wav" type="audio/wav">
         </audio>
         <audio id="C#3.wav">
             <source src="Piano.C#3.wav" type="audio/wav">
         </audio>
-    </head>
-    <body>
         <script>
             function action(event) {
-                var x;
-                var note;
+                var x = document.getElementById("C3");
+                var note = document.getElementById("C3.wav");
                 if(event.type == "mousedown") {
                     //TODO figure out how the fuck to get the id of the button that was clicked on.
                 }
                 else if(event.type == "keydown"){
+                    document.getElementById("z").innerHTML += "<br>made it";
                     if(event.key == "q") {
-                        x = document.getElementbyId(C3);
-                        note = document.getElementbyId(A3.wav);
+                        x = document.getElementbyId("C3");
+                        note = document.getElementbyId("C3.wav");
                     }
                     else if(event.key == "2") {
-                        x = document.getElementbyId()
-                        note = document.getElementById(C3.wav);
+                        x = document.getElementbyId("C#3");
+                        note = document.getElementById("C#3.wav");
                     }
-                    x.style.background = "grey";
-                    note.play();
+                    
                 }
                 else if(event.type == "mouseup") {
                     //TODO stop the playing sound of the note, but not immediately.  More like a fade out.
                 }
-                else { //event.type == "keyup" 
+                else { //keyup
                     //TODO stop the playing sound of the note, but not immediately.  More like a fade out.
                 }
+                document.getElementById("z").innerHTML += "<br>" + x + "   " + note;
+                x.style.background = "grey";
+                note.play();
                 return false;
             }
 
