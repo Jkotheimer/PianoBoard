@@ -4,23 +4,38 @@
         <meta charset="utf-8">
         <title>PianoBoard</title>
         <link rel="stylesheet" href="Styles1.css">
-        <audio id="A3.wav">
-            <source src="Piano.A3.wav" type="audio/wav">
+        <audio id="C3.wav">
+            <source src="Piano.C3.wav" type="audio/wav">
+        </audio>
+        <audio id="C#3.wav">
+            <source src="Piano.C#3.wav" type="audio/wav">
         </audio>
     </head>
     <body>
         <script>
             function action(event) {
-                if(event.key == "q") {
-                    x = document.getElementbyId(A3);
-                    note = document.getElementbyId(A3.wav);
+                var x;
+                var note;
+                if(event.type == "mousedown") {
+                    //TODO figure out how the fuck to get the id of the button that was clicked on.
                 }
-                else if(event.key == "2") {
-                    x = document.getElementbyId()
-                    note = document.getElementById(C3.wav);
+                else if(event.type == "keydown"){
+                    if(event.key == "q") {
+                        x = document.getElementbyId(C3);
+                        note = document.getElementbyId(A3.wav);
+                    }
+                    else if(event.key == "2") {
+                        x = document.getElementbyId()
+                        note = document.getElementById(C3.wav);
+                    }
+                    x.style.background = "grey";
+                    note.play();
                 }
-                if(event.type == "mousedown" || event.type == "keydown"){
-                    document.getElementById("z").innerHTML += "<br>" + event.currentTarget;
+                else if(event.type == "mouseup") {
+                    //TODO stop the playing sound of the note, but not immediately.  More like a fade out.
+                }
+                else { //event.type == "keyup" 
+                    //TODO stop the playing sound of the note, but not immediately.  More like a fade out.
                 }
                 return false;
             }
