@@ -4,51 +4,57 @@
         <meta charset="utf-8">
         <title>PianoBoard</title>
         <link rel="stylesheet" href="Styles1.css">
-        
-    </head>
-    <body>
-        <audio id="C3.wav">
-            <source src="Piano.C3.wav" type="audio/wav">
-        </audio>
-        <audio id="C#3.wav">
-            <source src="Piano.C#3.wav" type="audio/wav">
-        </audio>
         <script>
             function action(event) {
-                var x = document.getElementById("C3");
-                var note = document.getElementById("C3.wav");
                 if(event.type == "mousedown") {
                     //TODO figure out how the fuck to get the id of the button that was clicked on.
                 }
-                else if(event.type == "keydown"){
-                    document.getElementById("z").innerHTML += "<br>made it";
+                else if(event.type.includes("key")){
+                    //if the event is a keystroke, take note of which key was used
                     if(event.key == "q") {
-                        x = document.getElementbyId("C3");
-                        note = document.getElementbyId("C3.wav");
+                        document.getElementById("z").innerHTML += "<br>" + event.key;
+                        var x = document.getElementById("C3");
+                        document.getElementById("z").innerHTML += " 2";
+                        var note = document.getElementbyId("C3.ogg");
+                        document.getElementById("z").innerHTML += " 3";
                     }
                     else if(event.key == "2") {
-                        x = document.getElementbyId("C#3");
-                        note = document.getElementById("C#3.wav");
+                        var x = document.getElementbyId("C#3");
+                        var note = document.getElementById("C#3.ogg");
                     }
-                    
+                    if(event.type == "keydown") {
+                        x.style.background = "grey";
+                        note.play();
+                    }
+                    else { //keyup
+                        x.style.background = "white";
+                        note.pause();
+                    }                        
                 }
                 else if(event.type == "mouseup") {
                     //TODO stop the playing sound of the note, but not immediately.  More like a fade out.
                 }
                 else { //keyup
-                    //TODO stop the playing sound of the note, but not immediately.  More like a fade out.
+                    //TODO stop the playing sound of the note, but not immediately.  More like a fade out.    
                 }
-                document.getElementById("z").innerHTML += "<br>" + x + "   " + note;
-                x.style.background = "grey";
-                note.play();
                 return false;
             }
-
         </script>
+    </head>
+    <body>
+        
+
+        <audio id="C3.ogg">
+            <source src="Piano.C3.ogg" type="audio/ogg">
+        </audio>
+        <audio id="C#3.ogg">
+            <source src="Piano.C#3.ogg" type="audio/ogg">
+        </audio>
+
         <div id="board" onkeydown="action(event)" onkeyup="action(event)" onmousedown="action(event)" onmouseup="action(event)">
-            <button id="C3" class="PianoKey">C</button>
+            <button id="C3" class="PianoKey">C</button>    
             <button id="C#3" class="PianoKey sharp">C#</button>
-            <button id="D" class="PianoKey">D</button>
+            <button id="D3" class="PianoKey">D</button>
             <button id="D#3" class="PianoKey sharp">D#</button>
             <button id="E3" class="PianoKey">E</button>
             <button id="F3" class="PianoKey">F</button>
