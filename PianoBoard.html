@@ -4,21 +4,29 @@
         <meta charset="utf-8">
         <title>PianoBoard</title>
         <link rel="stylesheet" href="Styles1.css">
+        <audio id="A3.wav">
+            <source src="Piano.A3.wav" type="audio/wav">
+        </audio>
     </head>
     <body>
         <script>
-            function KeyStroke(KeyboardEvent) {
-                document.getElementById("z").innerHTML += "<br>" + KeyboardEvent.char;
-                if(event.data == q) {
-                    var x = document.getElementById("A3");
-                    x.style.color = "red";
-                    var audio = new Audio('Piano.pp.A3.wav');
-                    audio.play();
+            function action(event) {
+                if(event.key == "q") {
+                    x = document.getElementbyId(A3);
+                    note = document.getElementbyId(A3.wav);
+                }
+                else if(event.key == "2") {
+                    x = document.getElementbyId()
+                    note = document.getElementById(C3.wav);
+                }
+                if(event.type == "mousedown" || event.type == "keydown"){
+                    document.getElementById("z").innerHTML += "<br>" + event.currentTarget;
                 }
                 return false;
             }
+
         </script>
-        <div id="board" onkeydown="KeyStroke(KeyboardEvent)">
+        <div id="board" onkeydown="action(event)" onkeyup="action(event)" onmousedown="action(event)" onmouseup="action(event)">
             <button id="C3" class="PianoKey">C</button>
             <button id="C#3" class="PianoKey sharp">C#</button>
             <button id="D" class="PianoKey">D</button>
