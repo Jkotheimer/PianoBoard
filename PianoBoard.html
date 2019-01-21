@@ -5,67 +5,219 @@
         <title>PianoBoard</title>
         <link rel="stylesheet" href="Styles1.css">
         <script>
-            var x;
-            var note;
-            var dcolor;
-            var ucolor;
+            var x = null;
+            var note = null;
+            var dcolor = null;
+            var ucolor = null;
+            function volFader(event) {
+                var fadePoint = note.currentTime + 1;
+                var first = false;
+                var fadeAudio = setInterval(function () {
+                    if(note.volume == 1.0 && first == true){
+                        return false;
+                    }
+                    if ((note.currentTime <= fadePoint) && (note.volume >= 0.03)) {
+                        note.volume -= 0.01;
+                    }
+                    first = true;
+                    if (note.volume < 0.03) {
+                        clearInterval(fadeAudio);
+                    }
+                }, 10);
+                return false;
+            }
             function action(event) {
+                var lastkey = document.getElementById("lastKey");
+                if(lastkey.value == event.key && lastkey.val2 == event.type){
+                    return false;
+                }
+                else{
+                    lastkey.value = event.key;
+                    lastkey.val2 = event.type;
+                }
                 if(event.type == "mousedown") {
-                    note = document.getElementById(event.srcElement.id + ".ogg");
+                    note = document.getElementById(event.srcElement.id + ".mp3");
+                    note.volume = 1.0;
+                    note.load();
                     note.play();
-                    document.getElementById("z").innerHTML = note.id;
                 }
                 else if(event.type == "mouseup") {
-                    note = document.getElementById(event.srcElement.id + ".ogg");
-                    note.pause();
+                    note = document.getElementById(event.srcElement.id + ".mp3");
+                    volFader(event);
                 }
                 else if(event.type.includes("key")){
                     //if the event is a keystroke, take note of which key was used
-                    
-                    if(event.key == "q") {
-                        x = document.getElementById("C3");
-                        note = document.getElementById("C3.ogg");
+                    if(event.key.equalsIgnoreCase("q")) {
+                        x = document.getElementById("C2");
+                        note = document.getElementById("C2.mp3");
                         dcolor = "#CCCCCC";
                         ucolor = "#FFFFFF";
                     }
-                    else if(event.key == "2") {
-                        x = document.getElementById("C#3");
-                        note = document.getElementById("C#3.ogg");
+                    else if(event.key == "2" || event.key == "@") {
+                        x = document.getElementById("C#2");
+                        note = document.getElementById("C#2.mp3");
                         dcolor = "#333333";
                         ucolor = "#000000";
                     }
-                    if(event.type == "keydown") {             
-                        document.getElementById("z").innerHTML = note.id;
+                    else if(event.key.equalsIgnoreCase("w")) {
+                        x = document.getElementById("D2");
+                        note = document.getElementById("D2.mp3");
+                        dcolor = "#CCCCCC";
+                        ucolor = "#FFFFFF";
+                    }
+                    else if(event.key == "3" || event.key == "#") {
+                        x = document.getElementById("D#2");
+                        note = document.getElementById("D#2.mp3");
+                        dcolor = "#333333";
+                        ucolor = "#000000";
+                    }
+                    else if(event.key.equalsIgnoreCase("e")) {
+                        x = document.getElementById("E2");
+                        note = document.getElementById("E2.mp3");
+                        dcolor = "#CCCCCC";
+                        ucolor = "#FFFFFF";
+                    }
+                    else if(event.key.equalsIgnoreCase("r")) {
+                        x = document.getElementById("F2");
+                        note = document.getElementById("F2.mp3");
+                        dcolor = "#CCCCCC";
+                        ucolor = "#FFFFFF";
+                    }
+                    else if(event.key == "5" || event.key == "%") {
+                        x = document.getElementById("F#2");
+                        note = document.getElementById("F#2.mp3");
+                        dcolor = "#333333";
+                        ucolor = "#000000";
+                    }
+                    else if(event.key.equalsIgnoreCase("t")) {
+                        x = document.getElementById("G2");
+                        note = document.getElementById("G2.mp3");
+                        dcolor = "#CCCCCC";
+                        ucolor = "#FFFFFF";
+                    }
+                    else if(event.key == "6" || event.key == "^") {
+                        x = document.getElementById("G#2");
+                        note = document.getElementById("G#2.mp3");
+                        dcolor = "#333333";
+                        ucolor = "#000000";
+                    }
+                    else if(event.key.equalsIgnoreCase("y")) {
+                        x = document.getElementById("A2");
+                        note = document.getElementById("A2.mp3");
+                        dcolor = "#CCCCCC";
+                        ucolor = "#FFFFFF";
+                    }
+                    else if(event.key = "7" || event.key == "&") {
+                        x = document.getElementById("A#2");
+                        note = document.getElementById("A#2.mp3");
+                        dcolor = "#333333";
+                        ucolor = "#000000";
+                    }
+                    else if(event.key.equalsIgnoreCase("u")) {
+                        x = document.getElementById("B2");
+                        note = document.getElementById("B2.mp3");
+                        dcolor = "#CCCCCC";
+                        ucolor = "#FFFFFF";
+                    }
+                    else if(event.key.equalsIgnoreCase("i")) {
+                        x = document.getElementById("C3");
+                        note = document.getElementById("C3.mp3");
+                        dcolor = "#CCCCCC";
+                        ucolor = "#FFFFFF";
+                    }
+                    if(event.type == "keydown") {
                         x.style.background = dcolor;
+                        note.volume = 1.0;
+                        note.load();
                         note.play();
                     }
-                    else { //keyup
+                    if(event.type == "keyup") {
                         x.style.background = ucolor;
-                        note.pause();
+                        volFader(event);
                     }                        
                 }
                 return false;
             }
         </script>
-        <audio id="C3.ogg">
-            <p>hereeee</p>
-            <source src="Piano.C3.ogg" type="audio/ogg">
-            this aint workin chief
+        <audio id="C2.mp3" controls>
+            <source src="PianoBoard Samples/Piano/Piano.mp3/piano.C2.mp3" type="audio/mpeg">
+            <source src="PianoBoard Samples/Piano/Piano.wav/piano.C2.wav" type="audio/wav">
+            Audio not supported by your browser
         </audio>
-        <audio id="C#3.ogg">
-            <p>here</p>
-            <source src="Piano.C#3.ogg" type="audio/ogg">
-            this aint workin chief
+        <audio id="C#2.mp3" controls>
+            <source src="PianoBoard Samples/Piano/Piano.mp3/piano.C#2.mp3" type="audio/mpeg">
+            <source src="PianoBoard Samples/Piano/Piano.wav/piano.C#2 .wav" type="audio/wav">
+            Audio not supported by your browser
+        </audio>
+        <audio id="D2.mp3" controls>
+            <source src="PianoBoard Samples/Piano/Piano.mp3/piano.D2.mp3" type="audio/mpeg">
+            <source src="PianoBoard Samples/Piano/Piano.wav/piano.D2 .wav" type="audio/wav">
+            Audio not supported by your browser
+        </audio>
+        <audio id="D#2.mp3" controls>
+            <source src="PianoBoard Samples/Piano/Piano.mp3/piano.D#2.mp3" type="audio/mpeg">
+            <source src="PianoBoard Samples/Piano/Piano.wav/piano.D#2 .wav" type="audio/wav">
+            Audio not supported by your browser
+        </audio>
+        <audio id="E2.mp3" controls>
+            <source src="PianoBoard Samples/Piano/Piano.mp3/piano.E2.mp3" type="audio/mpeg">
+            <source src="PianoBoard Samples/Piano/Piano.wav/piano.E2 .wav" type="audio/wav">
+            Audio not supported by your browser
+        </audio>
+        <audio id="F2.mp3" controls>
+            <source src="PianoBoard Samples/Piano/Piano.mp3/piano.F2.mp3" type="audio/mpeg">
+            <source src="PianoBoard Samples/Piano/Piano.wav/piano.F2 .wav" type="audio/wav">
+            Audio not supported by your browser
+        </audio>
+        <audio id="F#2.mp3" controls>
+            <source src="PianoBoard Samples/Piano/Piano.mp3/piano.F#2.mp3" type="audio/mpeg">
+            <source src="PianoBoard Samples/Piano/Piano.wav/piano.F#2 .wav" type="audio/wav">
+            Audio not supported by your browser
+        </audio>
+        <audio id="F#2.mp3" controls>
+            <source src="PianoBoard Samples/Piano/Piano.mp3/piano.F#2.mp3" type="audio/mpeg">
+            <source src="PianoBoard Samples/Piano/Piano.wav/piano.F#2 .wav" type="audio/wav">
+            Audio not supported by your browser
+        </audio>
+        <audio id="G2.mp3" controls>
+            <source src="PianoBoard Samples/Piano/Piano.mp3/piano.G2.mp3" type="audio/mpeg">
+            <source src="PianoBoard Samples/Piano/Piano.wav/piano.G2 .wav" type="audio/wav">
+            Audio not supported by your browser
+        </audio>
+        <audio id="G#2.mp3" controls>
+            <source src="PianoBoard Samples/Piano/Piano.mp3/piano.G#2.mp3" type="audio/mpeg">
+            <source src="PianoBoard Samples/Piano/Piano.wav/piano.G#2 .wav" type="audio/wav">
+            Audio not supported by your browser
+        </audio>
+        <audio id="A2.mp3" controls>
+            <source src="PianoBoard Samples/Piano/Piano.mp3/piano.A2.mp3" type="audio/mpeg">
+            <source src="PianoBoard Samples/Piano/Piano.wav/piano.A2 .wav" type="audio/wav">
+            Audio not supported by your browser
+        </audio>
+        <audio id="A#2.mp3" controls>
+            <source src="PianoBoard Samples/Piano/Piano.mp3/piano.A#2.mp3" type="audio/mpeg">
+            <source src="PianoBoard Samples/Piano/Piano.wav/piano.A#2 .wav" type="audio/wav">
+            Audio not supported by your browser
+        </audio>
+        <audio id="B2.mp3" controls>
+            <source src="PianoBoard Samples/Piano/Piano.mp3/piano.B2.mp3" type="audio/mpeg">
+            <source src="PianoBoard Samples/Piano/Piano.wav/piano.B2 .wav" type="audio/wav">
+            Audio not supported by your browser
+        </audio>
+        <audio id="C3.mp3" controls>
+            <source src="PianoBoard Samples/Piano/Piano.mp3/piano.C3.mp3" type="audio/mpeg">
+            <source src="PianoBoard Samples/Piano/Piano.wav/piano.C3 .wav" type="audio/wav">
+            Audio not supported by your browser
         </audio>
     </head>
     <body>
-        <div id="board" class="border"  
+        <div id="board" class="border"
                         onkeydown="action(event)" 
                         onkeyup="action(event)" 
                         onmousedown="action(event)" 
                         onmouseup="action(event)">
             
-            <button id="C3" class="PianoKey">C</button>    
+            <button id="C3" class="PianoKey" >C</button>    
             <button id="C#3" class="PianoKey sharp">C#</button>
             <button id="D3" class="PianoKey">D</button>
             <button id="D#3" class="PianoKey sharp">D#</button>
@@ -80,6 +232,6 @@
             <button id="C4" class="PianoKey">C</button>
         </div>
         <br>
-        <div id="z"></div>
+        <div id="lastKey" value="xx" val2="yy"></div>
     </body>
 </html>
