@@ -2,7 +2,8 @@
     background-color: #FFFFFF;
     border: 3px solid grey;
     color: black;
-    padding: 100px 25px;
+    padding: 75px 20px 30px 20px;
+    /*padding: top - left - bottom - right*/
     margin: -5px;
     text-align: center;
     font-size: 16px;
@@ -15,14 +16,14 @@
 .sharp {
     background-color: #000000;
     color: white;
-    padding: 50px 20px;
-    margin: -4px
+    padding: 30px 10px;
+    margin: -25px -25px;
+    z-index: 1; position:relative;
 }
 .sharp:active {
-    background-color: #333333
+    background-color: #333333;
 }
 .border {
     border: 3px solid black;
-    padding: 5
-    px;
+    padding: 5px;
 }

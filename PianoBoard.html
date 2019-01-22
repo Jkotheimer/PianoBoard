@@ -4,12 +4,13 @@
         <meta charset="utf-8">
         <title>PianoBoard</title>
         <link rel="stylesheet" href="Styles1.css">
-        <audio id="C2.mp3" controls>
+        <script type="text/javascript" src="KeyAction.js"></script>
+        <audio id="C2.mp3">
             <source src="PianoBoard Samples/Piano/Piano.mp3/piano.C2.mp3" type="audio/mpeg">
             <source src="PianoBoard Samples/Piano/Piano.wav/piano.C2.wav" type="audio/wav">
             Audio not supported by your browser
         </audio>
-        <audio id="C#2.mp3" controls>
+        <audio id="C#2.mp3">
             <source src="PianoBoard Samples/Piano/Piano.mp3/piano.Csh2.mp3" type="audio/mpeg">
             <source src="PianoBoard Samples/Piano/Piano.wav/piano.Csh2 .wav" type="audio/wav">
             Audio not supported by your browser
@@ -71,7 +72,6 @@
         </audio>
     </head>
     <body>
-        <script type="text/javascript" src="KeyAction.js"></script>
         <div id="board" class="border"
                         onkeydown="action(event)" 
                         onkeyup="action(event)" 
@@ -91,6 +91,18 @@
             <button id="A#2" class="PianoKey sharp">A#</button>
             <button id="B2" class="PianoKey">B</button>
             <button id="C3" class="PianoKey">C</button>
+            <button id="C#3" class="PianoKey sharp">C#</button>
+            <button id="D3" class="PianoKey">D</button>
+            <button id="D#3" class="PianoKey sharp">D#</button>
+            <button id="E3" class="PianoKey">E</button>
+            <button id="F3" class="PianoKey">F</button>
+            <button id="F#3" class="PianoKey sharp">F#</button>
+            <button id="G3" class="PianoKey">G</button>
+            <button id="G#3" class="PianoKey sharp">G#</button>
+            <button id="A3" class="PianoKey">A</button>
+            <button id="A#3" class="PianoKey sharp">A#</button>
+            <button id="B3" class="PianoKey">B</button>
+            <button id="C4" class="PianoKey">C</button>
         </div>
         <br>
         <div id="lastKey" value="xx" val2="yy"></div>
