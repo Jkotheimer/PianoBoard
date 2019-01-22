@@ -52,11 +52,12 @@ function action(event) {
             K = event.srcElement.id;
         }
         if(K.includes("#")){
-            document.getElementById(K).style.background = "#333333"
+            document.getElementById(K).style.background = "#333333";
         }
         else {
-            document.getElementById(K).style.background = "#CCCCCC"
+            document.getElementById(K).style.background = "#CCCCCC";
         }
+        document.getElementById(K).style.boxShadow = "0 2px 5px black";
         note = document.getElementById(K + ".mp3");
         note.volume = 1.0;
         note.load();
@@ -72,11 +73,12 @@ function action(event) {
             K = event.srcElement.id;
         }
         if(K.includes("#")){
-            document.getElementById(K).style.background = "#000000"
+            document.getElementById(K).style.background = "#000000";
         }
         else {
-            document.getElementById(K).style.background = "#FFFFFF"
+            document.getElementById(K).style.background = "#FFFFFF";
         }
+        document.getElementById(K).style.boxShadow = "0px 5px 5px black";
         note = document.getElementById(K + ".mp3");
         if(event.key != "hellYeah"){ //If we are sweeping the notes, a little sustain sounds nicers
             volFader();
@@ -127,6 +129,7 @@ function action(event) {
         //If it was a keydown event, change the color, turn up the volume, load the soundfile, and jam out!
         if(event.type == "keydown") {
             x.style.background = dcolor;
+            x.style.boxShadow = "0 2px 5px black";
             note.volume = 1.0;
             note.load();
             note.play();
@@ -134,6 +137,7 @@ function action(event) {
         //If it was a keyup event, change the color back, and fade the soundfile out
         if(event.type == "keyup") {
             x.style.background = ucolor;
+            x.style.boxShadow = "0px 5px 5px black";
             volFader();
         }                        
     }
