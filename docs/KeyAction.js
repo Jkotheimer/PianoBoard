@@ -55,10 +55,33 @@ function action(event) {
             case "6" || "^": getSharpNote("A#2"); break;
             case "Y": getNote("B2"); break;
             case "U": getNote("C3"); break;
+            case "8" || "*": getSharpNote("C#3"); break;
+            case "I": getNote("D3"); break;
+            case "9" || "(": getSharpNote("D#3"); break;
+            case "O": getNote("E3"); break;
+            case "P": getNote("F3"); break;
+            case "-" || "_": getSharpNote("F#3"); break;
+            case "[": getNote("G3"); break;
+            case "=" || "+": getSharpNote("G#3"); break;
+            case "]": getNote("A3"); break;
+            case "BACKSPACE" || "^": getSharpNote("A#3"); break;
+            case "\\": getNote("B3"); break;
+            case "Z": getNote("C4"); break;
+            case "S": getSharpNote("C#4"); break;
+            case "X": getNote("D4"); break;
+            case "D": getSharpNote("D#4"); break;
+            case "C": getNote("E4"); break;
+            case "V": getNote("F4"); break;
+            case "G": getSharpNote("F#4"); break;
+            case "B": getNote("G4"); break;
+            case "H": getSharpNote("G#4"); break;
+            case "N": getNote("A4"); break;
+            case "J": getSharpNote("A#4"); break;
+            case "M": getNote("B4"); break;
+            case ",": getNote("C5"); break;
         }
         
         if(event.type == "keydown") {
-            document.getElementById("lastKey").innerHTML = event.key;
             x.style.background = dcolor;
             note.volume = 1.0;
             note.load();
