@@ -2,7 +2,7 @@ var x = null;
 var note = null;
 var dcolor = null;
 var ucolor = null;
-function volFader(event) {
+function volFader() {
     var fadePoint = note.currentTime + 1;
     var first = false;
     var fadeAudio = setInterval(function () {
@@ -21,22 +21,50 @@ function volFader(event) {
 }
 function action(event) {
     var lastkey = document.getElementById("lastKey");
-    if(lastkey.value == event.key && lastkey.val2 == event.type){
+    if(lastkey.value == event.key && lastkey.val2 == event.type && event.key != "hellYeah"){
         return false;
     }
-    else{
+    else if(event.key != "hellYeah"){
         lastkey.value = event.key;
         lastkey.val2 = event.type;
     }
     if(event.type == "mousedown") {
-        note = document.getElementById(event.srcElement.id + ".mp3");
+        var K;
+        if(event.key == "hellYeah"){
+            K = event.srcElement;
+        }
+        else {
+            K = event.srcElement.id;
+        }
+        if(K.includes("#")){
+            document.getElementById(K).style.background = "#333333"
+        }
+        else {
+            document.getElementById(K).style.background = "#CCCCCC"
+        }
+        note = document.getElementById(K + ".mp3");
         note.volume = 1.0;
         note.load();
         note.play();
     }
     else if(event.type == "mouseup") {
-        note = document.getElementById(event.srcElement.id + ".mp3");
-        volFader(event);
+        var K;
+        if(event.key == "hellYeah"){
+            K = event.srcElement;
+        }
+        else {
+            K = event.srcElement.id;
+        }
+        if(K.includes("#")){
+            document.getElementById(K).style.background = "#000000"
+        }
+        else {
+            document.getElementById(K).style.background = "#FFFFFF"
+        }
+        note = document.getElementById(K + ".mp3");
+        if(event.key != "hellYeah"){
+            volFader();
+        }
     }
     else if(event.type.includes("key")){
          //if the event is a keystroke, take note of which key was used
@@ -89,7 +117,7 @@ function action(event) {
         }
         if(event.type == "keyup") {
             x.style.background = ucolor;
-            volFader(event);
+            volFader();
         }                        
     }
     return false;
@@ -106,4 +134,16 @@ function getSharpNote(N) {
     note = document.getElementById(N + ".mp3");
     dcolor = "#333333";
     ucolor = "#000000";
+}
+function sweep(identifier) {
+    if(document.getElementById("lastKey").val2 == "mousedown") {
+        var EV = {key:"hellYeah", type:"mousedown", srcElement:identifier};
+        action(EV);
+    }
+}
+function sweepout(identifier) {
+    if(document.getElementById("lastKey").val2 == "mousedown") {
+        var EV = {key:"hellYeah", type:"mouseup", srcElement:identifier};
+        action(EV);
+    }
 }
