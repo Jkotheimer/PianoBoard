@@ -121,6 +121,7 @@ function action(event) {
         }
         
         if(event.type == "keydown") {
+            document.getElementById("lastKey").innerHTML = event.key;
             x.style.background = dcolor;
             note.volume = 1.0;
             note.load();
