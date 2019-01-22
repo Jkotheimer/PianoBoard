@@ -170,3 +170,7 @@ function sweepout(identifier) {
         action(EV);
     }
 }
+
+// To be used later: This is how to get the selected option from the dropbox
+var y = document.getElementById("instrument");
+var selection = y.options[y.selectedIndex].value;

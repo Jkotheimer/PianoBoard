@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title>PianoBoard</title>
-        <link rel="stylesheet" href="Styles1.css">
+        <link rel="stylesheet" href="PianoStyle.css">
         <script type="text/javascript" src="KeyAction.js"></script>
         <audio id="C2.mp3">
             <source src="PianoBoard Samples/Piano/Piano.mp3/piano.C2.mp3" type="audio/mpeg">
@@ -234,8 +234,40 @@
             <button id="A#4" class="PianoKey sharp" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">A#<br><br><div style="color: #6699CC">J</div></button>
             <button id="B4" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">B<br><br><div style="color: #6699CC">M</div></button>
             <button id="C5" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">C<br><br><div style="color: #6699CC">,</div></button>
+        
+            <h1>PianoBoard</h1>
+            <p> 
+                Hello, and welcome to PianoBoard!<br>This is a free web-app where you can record multiple tracks of 
+                music using only your keyboard.  <br>Select a tempo, an instrument to play, then select a track to 
+                record to. Have fun!<br>
+            </p>
+            <br>
+            <h2><u>Instrument</u></h2>
+            <select id="instrument" name="Instrument">
+                <option value="Piano">Piano</option>
+                <option value="AGuitar">Acoustic Guitar</option>
+                <option value="CEGuitar">Clean Electric Guitar</option>
+                <option value="DEGuitar">Distorted Electric Guitar</option>
+                <option value="Bass">Bass</option>
+                <option value="Cello">Cello</option>
+                <option value="Violin">Violin</option>
+                <option value="Trumpet">Trumpet</option>
+            </select>
+            <div id="x"></div>
         </div>
         <br>
         <div id="lastKey" value="xx" val2="yy"></div>
+        <!--From here:
+            2) Tempo settings
+                - BPM input
+                - Play Click Track selector
+            3) Instrument selector
+            4) A track upon which to record the notes being played
+                - Record button
+                - Playback button
+                - Volume slider
+                - Time Counter (Measures, Beats) 
+            5) A button to add more tracks to the mix
+            6) Export to Mp3 button-->
     </body>
 </html>
