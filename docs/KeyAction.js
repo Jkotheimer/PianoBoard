@@ -2,6 +2,13 @@ var x = null;
 var note = null;
 var dcolor = null;
 var ucolor = null;
+/*
+volFader() is a function called when a pianokey is being released.
+It would sound awfully shitty if the piano sound was immediately cut off, so we need to fade
+the volume out. Of course this fading needs to be faster than the natural fade of the piano note,
+so it only takes a second to be faded out. The volume does not fade all the way to zero because
+for some reason the setInterval function bugs out if I try to do it, but 3% volume is good enough.
+*/
 function volFader() {
     var fadePoint = note.currentTime + 1;
     var first = false;
@@ -19,7 +26,14 @@ function volFader() {
     }, 10);
     return false;
 }
+/*
+The action() function is used to play and release the piano keys. An input event is sent in as the
+parameters (either keyup, keydown, mouseup, or mousedown). A connection is made between the input
+source and a key on the virtual piano, and a sound is put out through the speakers as a result.
+*/
 function action(event) {
+    // When a key is held down, it continually pushes input, so we check the last key and event type
+    // to ensure that the sound of the note doesn't continue reloading and spaz out.
     var lastkey = document.getElementById("lastKey");
     if(lastkey.value == event.key && lastkey.val2 == event.type && event.key != "hellYeah"){
         return false;
@@ -28,9 +42,10 @@ function action(event) {
         lastkey.value = event.key;
         lastkey.val2 = event.type;
     }
+    //If the mouse is clicked on a note, play that note
     if(event.type == "mousedown") {
         var K;
-        if(event.key == "hellYeah"){
+        if(event.key == "hellYeah"){ //This is added for the sweeping function of the mouse
             K = event.srcElement;
         }
         else {
@@ -47,6 +62,7 @@ function action(event) {
         note.load();
         note.play();
     }
+    //If the mouse is unclicked, reset the keys back to their original colors and fade out the sounds
     else if(event.type == "mouseup") {
         var K;
         if(event.key == "hellYeah"){
@@ -62,7 +78,7 @@ function action(event) {
             document.getElementById(K).style.background = "#FFFFFF"
         }
         note = document.getElementById(K + ".mp3");
-        if(event.key != "hellYeah"){
+        if(event.key != "hellYeah"){ //If we are sweeping the notes, a little sustain sounds nicers
             volFader();
         }
     }
@@ -108,13 +124,14 @@ function action(event) {
             case "M": getNote("B4"); break;
             case ",": getNote("C5"); break;
         }
-        
+        //If it was a keydown event, change the color, turn up the volume, load the soundfile, and jam out!
         if(event.type == "keydown") {
             x.style.background = dcolor;
             note.volume = 1.0;
             note.load();
             note.play();
         }
+        //If it was a keyup event, change the color back, and fade the soundfile out
         if(event.type == "keyup") {
             x.style.background = ucolor;
             volFader();
@@ -123,6 +140,7 @@ function action(event) {
     return false;
 }
 
+//Set all of the important variables to the correct values based on whether the note is sharp or not
 function getNote(N) {
     x = document.getElementById(N);
     note = document.getElementById(N + ".mp3");
@@ -135,6 +153,11 @@ function getSharpNote(N) {
     dcolor = "#333333";
     ucolor = "#000000";
 }
+/*  
+    These functions are used for when the user clicks on a key and sweeps the mouse across the piano.
+    These functions give the piano the ability to ring out all of the notes that the mouse runs over
+    between the time the mouse is clicked and unclicked. 
+*/
 function sweep(identifier) {
     if(document.getElementById("lastKey").val2 == "mousedown") {
         var EV = {key:"hellYeah", type:"mousedown", srcElement:identifier};
