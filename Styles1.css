@@ -16,8 +16,9 @@
 .sharp {
     background-color: #000000;
     color: white;
-    padding: 30px 10px;
-    margin: -25px -25px;
+    padding: 25px 5px;
+    margin: -20px -px;
+    top: -45px;
     z-index: 1; position:relative;
 }
 .sharp:active {
