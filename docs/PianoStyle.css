@@ -1,34 +1,48 @@
+pre,
+code,
+kbd,
+samp,
+tt{
+  font-family:monospace,monospace;
+  font-size:1em;
+}
 /*Default settings that do not need variable action*/
+.Board {
+    margin: -1vw 0 1vw;
+    padding: 0 0 0 1vw;
+    background-color: #6699CC;
+    box-shadow: 0 0 1vw 1vw #6699CC;
+}
 .PianoKey {
     background-color: #FFFFFF;
-    border: .2% solid grey;
-    border-radius: 0px 0px 10px 10px;
+    border: .15vw solid grey;
+    border-radius: 0vw 0vw 1vw 1vw;
     color: black;
-    font-family: "Roboto Regular", monospace;
+    font-family: monospace, monospace;
     text-align: center;
     z-index: 0; position: relative;
     cursor: pointer;
-    box-shadow: 0px 5px 5px black;
-    padding: 125px 1.6% 1% 1.6%;
-    margin: 0px -.15% 5% -.15%;
-    font-size: 15px;
-    top: -1px;
+    box-shadow: 0vw .5vw .5vw black;
+    padding: 10vw 1.19% 1vw 1.19%;
+    margin: 0 -.2% 1%;
+    font-size: 1.4vw;
+    top: 0;
 }
 .PianoKey:hover {
-    border: 2px solid black;
+    border: .15vw solid black;
     z-index: 1; position: relative;
 }
 .PianoKey:active {
     background-color: #CCCCCC;
-    box-shadow: 0 2px 5px black;
+    box-shadow: 0vw .5vw .5vw black;
  }
 .sharp {
     background-color: #000000;
     color: white;
     z-index: 2; position: relative;
-    padding: 39px 1% 1% 1%;
-    margin: 0px -1.95%;
-    top: -87px;
+    padding: 2vw .3vw 1vw .3vw;
+    margin: 0 -1.4%;
+    top: -8vw;
 }
 .sharp:active {
     background-color: #333333;

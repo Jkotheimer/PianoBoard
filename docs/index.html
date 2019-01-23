@@ -192,7 +192,8 @@
         </audio>
     </head>
     <body>
-        <div id="board" onkeydown="action(event)" 
+        <div id="board" class="Board"
+                        onkeydown="action(event)" 
                         onkeyup="action(event)" 
                         onmousedown="action(event)" 
                         onmouseup="action(event)">
@@ -234,39 +235,37 @@
             <button id="A#4" class="PianoKey sharp Pkey Psharp" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">A#<br><br><div style="color: #6699CC">J</div></button>
             <button id="B4" class="PianoKey Pkey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">B<br><br><div style="color: #6699CC">M</div></button>
             <button id="C5" class="PianoKey Pkey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">C<br><br><div style="color: #6699CC">,</div></button>
-        
-            <h1>PianoBoard</h1>
-            <p> 
-                Hello, and welcome to PianoBoard!<br>This is a free web-app where you can record multiple tracks of 
-                music using only your keyboard.  <br>Select a tempo, an instrument to play, then select a track to 
-                record to. Have fun!<br>
-            </p>
-            <br>
-            <h2><u>Instrument</u></h2>
-            <select id="instrument" name="Instrument">
-                <option value="Piano">Piano</option>
-                <option value="AGuitar">Acoustic Guitar</option>
-                <option value="CEGuitar">Clean Electric Guitar</option>
-                <option value="DEGuitar">Distorted Electric Guitar</option>
-                <option value="Bass">Bass</option>
-                <option value="Cello">Cello</option>
-                <option value="Violin">Violin</option>
-                <option value="Trumpet">Trumpet</option>
-            </select>
-            <div id="x"></div>
-            <div>
-                <button onclick="myFunction()">Try it</button>
+        </div>
+        <h1>PianoBoard</h1>
+        <p> 
+            Hello, and welcome to PianoBoard!<br>This is a free web-app where you can record multiple tracks of 
+            music using only your keyboard.  <br>Select a tempo, an instrument to play, then select a track to 
+            record to. Have fun!<br>
+        </p>
+        <br>
+        <h2><u>Instrument</u></h2>
+        <select id="instrument" name="Instrument">
+            <option value="Piano">Piano</option>
+            <option value="AGuitar">Acoustic Guitar</option>
+            <option value="CEGuitar">Clean Electric Guitar</option>
+            <option value="DEGuitar">Distorted Electric Guitar</option>
+            <option value="Bass">Bass</option>
+            <option value="Cello">Cello</option>
+            <option value="Violin">Violin</option>
+            <option value="Trumpet">Trumpet</option>
+        </select>
+        <div>
+            <button onclick="myFunction()">Try it</button>
 
-                <p1 id="demo"></p1>
+            <p1 id="demo"></p1>
 
-                <script>
-                    function myFunction() {
-                        var w = window.innerWidth;
-                        var h = window.innerHeight;
-                        document.getElementById("demo").innerHTML = "<br>Width: " + w + "<br>Height: " + h;
-                    }
-                </script>
-            </div>
+            <script>
+                function myFunction() {
+                    var w = window.innerWidth;
+                    var h = window.innerHeight;
+                    document.getElementById("demo").innerHTML = "<br>Width: " + w + "<br>Height: " + h;
+                }
+            </script>
         </div>
         <br>
         <div id="lastKey" value="xx" val2="yy"></div>
