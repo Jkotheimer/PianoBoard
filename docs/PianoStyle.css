@@ -1,19 +1,22 @@
+/*Default settings that do not need variable action*/
 .PianoKey {
     background-color: #FFFFFF;
-    border: 3px solid grey;
+    border: 2px solid grey;
     border-radius: 0px 0px 10px 10px;
     color: black;
-    padding: 125px 22px 10px 21px;
-    /*padding: top - left - bottom - right*/
-    margin: -4px;
+    font-family: "Roboto Regular", monospace;
+    left: 5px;
     text-align: center;
-    font-size: 16px;
     z-index: 0; position: relative;
     cursor: pointer;
     box-shadow: 0px 5px 5px black;
+    padding: 125px 1.6% 1% 1.6%;
+    margin: 0px -.15% 5% -.15%;
+    font-size: 15px;
+    top: -1px;
 }
 .PianoKey:hover {
-    border:3px solid black;
+    border: 2px solid black;
     z-index: 1; position: relative;
 }
 .PianoKey:active {
@@ -23,21 +26,60 @@
 .sharp {
     background-color: #000000;
     color: white;
-    padding: 25px 10px;
-    margin: -25px -25px;
-    top: -100px;
     z-index: 2; position: relative;
+    padding: 39px 1.1% 1% 1.1%;
+    margin: 0px -2.05%;
+    top: -87px;
 }
 .sharp:active {
     background-color: #333333;
 }
-h1 {
-    font-size: 400%;
-    margin: 20px 0px 0px;
-    color: #6699CC;
-    text-shadow:  1px -1px 5px #3366AA;
+
+/*Resolution width 700-900
+@media only screen and (min-width : 700px) and (max-width : 1200px){
+    .PKey {
+        padding: 67px 10px 5px 10px;
+        margin: 0px -5px 10px -5px;
+        font-size: 10px;
+    }
+    .Psharp {
+        padding: 13px 5px;
+        margin: -15px -5px;
+        top: -54px;
+    }
+    h1 {
+        color: #6699CC;
+        text-shadow:  1px -1px 5px #3366AA;
+        font-size: 200%;
+        margin: 10px 0px 0px;
+    }
+    p {
+        font-size: 67%;
+        margin: 38px 0px 0px 200px;
+    }
 }
-p {
-    font-size: 125%;
-    margin: -75px 0px 0px 400px;
+
+/*Resolution width 1900 - 2400
+@media only screen and (min-width: 1280px) and (max-width: 1500px){
+    .Pkey {
+        padding: 125px 20px 10px 20px;
+        margin: 0px -5px 20px -4px;
+        font-size: 20px;
+    }
+    .Psharp {
+        padding: 25px 10px;
+        margin: -25px -25px;
+        top: -100px;
+    }
+    h1 {
+        color: #6699CC;
+        text-shadow:  1px -1px 5px #3366AA;
+        font-size: 400%;
+        margin: 20px 0px 0px;
+    }
+    p {
+        font-size: 125%;
+        margin: 75px 0px 0px 400px;
+    }
 }
+*/
