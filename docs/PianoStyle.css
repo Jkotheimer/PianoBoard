@@ -1,11 +1,10 @@
 /*Default settings that do not need variable action*/
 .PianoKey {
     background-color: #FFFFFF;
-    border: 2px solid grey;
+    border: .2% solid grey;
     border-radius: 0px 0px 10px 10px;
     color: black;
     font-family: "Roboto Regular", monospace;
-    left: 5px;
     text-align: center;
     z-index: 0; position: relative;
     cursor: pointer;
@@ -27,8 +26,8 @@
     background-color: #000000;
     color: white;
     z-index: 2; position: relative;
-    padding: 39px 1.1% 1% 1.1%;
-    margin: 0px -2.05%;
+    padding: 39px 1% 1% 1%;
+    margin: 0px -1.95%;
     top: -87px;
 }
 .sharp:active {
