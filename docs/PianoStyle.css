@@ -6,10 +6,10 @@ tt{
   font-family:monospace,monospace;
   font-size:1em;
 }
-/*Default settings that do not need variable action*/
+/*All of these settings are a ratio of the window size being used.*/
 .Board {
     margin: -1vw 0 .5vw;
-    padding: 0 0 0 1vw;
+    padding: 0 2vw;
     background-color: #6699CC;
     box-shadow: 0 0 1vw 1vw #6699CC;
 }
@@ -23,7 +23,7 @@ tt{
     z-index: 0; position: relative;
     cursor: pointer;
     box-shadow: 0vw .5vw .5vw black;
-    padding: 10vw 1.18% 1vw 1.18%;
+    padding: 10vw 1.5% 1vw 1.5%;
     margin: 0 -.2% 1%;
     font-size: 1.4vw;
     top: 0;
@@ -41,58 +41,43 @@ tt{
     color: white;
     z-index: 2; position: relative;
     padding: 2vw .3vw 1vw .3vw;
-    margin: 0 -1.4%;
+    margin: 0 -1.45%;
     top: -8vw;
 }
 .sharp:active {
     background-color: #333333;
 }
 
-/*Resolution width 700-900
-@media only screen and (min-width : 700px) and (max-width : 1200px){
-    .PKey {
-        padding: 67px 10px 5px 10px;
-        margin: 0px -5px 10px -5px;
-        font-size: 10px;
-    }
-    .Psharp {
-        padding: 13px 5px;
-        margin: -15px -5px;
-        top: -54px;
-    }
-    h1 {
-        color: #6699CC;
-        text-shadow:  1px -1px 5px #3366AA;
-        font-size: 200%;
-        margin: 10px 0px 0px;
-    }
-    p {
-        font-size: 67%;
-        margin: 38px 0px 0px 200px;
-    }
-}
-
-/*Resolution width 1900 - 2400
-@media only screen and (min-width: 1280px) and (max-width: 1500px){
+/*When the window gets really small, the margins get fucked up, so its nice to have a safety net to protect it*/
+@media only screen and (max-width: 800px) {
     .Pkey {
-        padding: 125px 20px 10px 20px;
-        margin: 0px -5px 20px -4px;
-        font-size: 20px;
+        margin: 0 -.3% 1%;
     }
     .Psharp {
-        padding: 25px 10px;
-        margin: -25px -25px;
-        top: -100px;
-    }
-    h1 {
-        color: #6699CC;
-        text-shadow:  1px -1px 5px #3366AA;
-        font-size: 400%;
-        margin: 20px 0px 0px;
-    }
-    p {
-        font-size: 125%;
-        margin: 75px 0px 0px 400px;
+        margin: 0 -1.5%;
     }
 }
-*/
+@media only screen and (max-width: 650px) {
+    .Pkey {
+        margin: 0 -.4% 1%;
+    }
+    .Psharp {
+        margin: 0 -1.6%;
+    }
+}
+@media only screen and (max-width: 510px) {
+    .Pkey {
+        margin: 0 -.5% 1%;
+    }
+    .Psharp {
+        margin: 0 -1.7%;
+    }
+}
+@media only screen and (max-width: 400px) {
+    .Pkey {
+        margin: 0 -.6% 1%;
+    }
+    .Psharp {
+        margin: 0 -1.8%;
+    }
+}

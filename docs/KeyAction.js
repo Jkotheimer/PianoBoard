@@ -2,6 +2,7 @@ var x = null;
 var note = null;
 var dcolor = null;
 var ucolor = null;
+var DKEYS = new Set();
 /*
 volFader() is a function called when a pianokey is being released.
 It would sound awfully shitty if the piano sound was immediately cut off, so we need to fade
@@ -35,11 +36,10 @@ function action(event) {
     // When a key is held down, it continually pushes input, so we check the last key and event type
     // to ensure that the sound of the note doesn't continue reloading and spaz out.
     var lastkey = document.getElementById("lastKey");
+    var vals = DKEYS.keys();
+    lastkey.innerHTML = vals;
     if(event.srcElement.id == "board") return false;
-    if(lastkey.value == event.key && lastkey.val2 == event.type && event.key != "hellYeah"){
-        return false;
-    }
-    else if(event.key != "hellYeah"){
+    if(event.key != "hellYeah"){
         lastkey.value = event.key;
         lastkey.val2 = event.type;
     }
@@ -127,20 +127,26 @@ function action(event) {
             case "M": getNote("B4"); break;
             case ",": getNote("C5"); break;
         }
+        //If it was a keyup event, change the color back, and fade the soundfile out
+        if(event.type == "keyup") {
+            volFader();
+            x.style.background = ucolor;
+            DKEYS.delete(x.id);
+            x.style.boxShadow = "0vw .5vw .5vw black";
+        }   
+        //If the input is a keydown event, but that key is already down, chillax and don't do anything
+        if(DKEYS.has(x.id)){
+            return false;
+        }
         //If it was a keydown event, change the color, turn up the volume, load the soundfile, and jam out!
         if(event.type == "keydown") {
             x.style.background = dcolor;
             x.style.boxShadow = "0vw .2vw .2vw black";
+            DKEYS.add(x.id);
             note.volume = 1.0;
             note.load();
             note.play();
-        }
-        //If it was a keyup event, change the color back, and fade the soundfile out
-        if(event.type == "keyup") {
-            x.style.background = ucolor;
-            x.style.boxShadow = "0vw .5vw .5vw black";
-            volFader();
-        }                        
+        }                     
     }
     return false;
 }
