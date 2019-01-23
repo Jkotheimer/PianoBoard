@@ -36,8 +36,6 @@ function action(event) {
     // When a key is held down, it continually pushes input, so we check the last key and event type
     // to ensure that the sound of the note doesn't continue reloading and spaz out.
     var lastkey = document.getElementById("lastKey");
-    var vals = DKEYS.keys();
-    lastkey.innerHTML = vals;
     if(event.srcElement.id == "board") return false;
     if(event.key != "hellYeah"){
         lastkey.value = event.key;
