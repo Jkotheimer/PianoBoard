@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title>PianoBoard</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="PianoStyle.css">
         <script type="text/javascript" src="KeyAction.js"></script>
         <audio id="C2.mp3">
@@ -238,36 +239,36 @@
             <button id="C5" class="PianoKey Pkey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">C<br><br><div style="color: #6699CC">,</div></button>
         </div>
         </div>
-        <h1>PianoBoard</h1>
-        <p> 
-            Hello, and welcome to PianoBoard!<br>This is a free web-app where you can record multiple tracks of 
-            music using only your keyboard.  <br>Select a tempo, an instrument to play, then select a track to 
-            record to. Have fun!<br>
-        </p>
+        
+        <div class="title">
+            <h1>PianoBoard  |</h1>
+            <p> 
+                Hello, and welcome to PianoBoard!<br>This is a free web-app where you can record multiple tracks of 
+                music using only your keyboard.  <br>Select a tempo, an instrument to play, then select a track to 
+                record to. Have fun!<br>
+            </p>
+        </div>
         <br>
-        <h2><u>Instrument</u></h2>
-        <select id="instrument" name="Instrument">
-            <option value="Piano">Piano</option>
-            <option value="AGuitar">Acoustic Guitar</option>
-            <option value="CEGuitar">Clean Electric Guitar</option>
-            <option value="DEGuitar">Distorted Electric Guitar</option>
-            <option value="Bass">Bass</option>
-            <option value="Cello">Cello</option>
-            <option value="Violin">Violin</option>
-            <option value="Trumpet">Trumpet</option>
-        </select>
-        <div>
-            <button onclick="myFunction()">Try it</button>
-
-            <p1 id="demo"></p1>
-
-            <script>
-                function myFunction() {
-                    var w = window.innerWidth;
-                    var h = window.innerHeight;
-                    document.getElementById("demo").innerHTML = "<br>Width: " + w + "<br>Height: " + h;
-                }
-            </script>
+        <div class="title">
+            <h2>Instrument</h2>
+            <select id="instrument" name="Instrument">
+                <option value="Piano">Piano</option>
+                <option value="AGuitar">Acoustic Guitar</option>
+                <option value="CEGuitar">Clean Electric Guitar</option>
+                <option value="DEGuitar">Distorted Electric Guitar</option>
+                <option value="Bass">Bass</option>
+                <option value="Cello">Cello</option>
+                <option value="Violin">Violin</option>
+                <option value="Trumpet">Trumpet</option>
+            </select>
+            <div class="moveover mo">
+                <h3 class="h3">Tempo</h3>
+                <input type="number" name="Tempo" class="in1" value="120">
+            </div>
+            <div class="moveover1 mo1">
+                <label for="PCC" class="checkword">Play Click</label>
+                <input type="checkbox" name="PCC" id="PCC" class="largeCheck">
+            </div>
         </div>
         <br>
         <div id="lastKey" value="xx" val2="yy"></div>
