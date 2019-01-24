@@ -49,6 +49,7 @@ div.Board {
 }
 div.title {
     font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    position: absolute;
 }
 h1 {
     font-size: 5vw;
@@ -60,22 +61,32 @@ p {
     margin: -10.3vw 0 0 35vw;
 }
 h2 {
+    position: absolute;
     font-size: 2.5vw;
-    color: #FF6666;
+    color: #6699CC;
     margin: 2vw 0 0 1vw;
 }
 h3{
+    position: absolute;
     font-size: 2vw;
-    color: #FF6666;
+    color: #6699CC;
     margin: 2.5vw 0 0 1vw;
+}
+.inst {
+    position: absolute;
+    top: 10vw;
+}
+.Temp {
+    position:absolute;
+    top: 19vw;
 }
 select {
     width: 15vw;
     height: 3vw;
     text-align-last: center;
-    margin: 0 0 0 .5vw;
+    margin: 6vw 0 0 .5vw;
     font-size: 1.2vw;
-    background-color: #FF6666;
+    background-color: #6699CC;
     border-radius: 1vw;
 }
 .moveover {
@@ -87,13 +98,14 @@ select {
     height: 3vw;
     font-size: 2vw;
     text-align: center;
-    background-color: #FF6666;
+    background-color: #6699CC;
     border-radius: 1vw;
-    margin: 0 0 0 1vw;
+    border-color: #6699CC;
+    margin: 5.5vw 0 0 1vw;
 }
 .moveover1 {
     margin: -6vw 0 0 39vw;
-    background-color: #FF6666;
+    background-color: #6699CC;
     text-align-last: center;
     font-size: 1vw;
     color: white;
@@ -115,12 +127,53 @@ select {
     position: absolute;
     font-size: 2vw;
     left: 65vw;
-    top: 29vw;
+    top: 11.5vw;
     width: 20vw;
     height: 6vw;
     border-radius: 1vw;
     padding: 1vw;
-    Background-color: #FF6666;
+    Background-color: #FFDDBB;
+}
+.Multitrack {
+    position:absolute;
+    width: 75vw;
+    height: 8vw;
+    top: 40vw;
+    background-color: #FFDDBB;
+    border: 2px solid Black;
+}
+.AddTrack {
+    position: absolute;
+    width: 15vw;
+    height: 4vw;
+    font-size: 1.5vw;
+    top: 50vw;
+    border: 2px solid #999999;
+}
+.AddTrack:hover {
+    border: 2px solid Black;
+}
+.AddTrack:active {
+    background-color: #999999;
+}
+.Export {
+    position: absolute;
+    width: 20vw;
+    height: 6vw;
+    font-size: 2vw;
+    left: 56vw;
+    top: 50vw;
+    border: 2px solid #999999;
+}
+.Export:hover {
+    border: 2px solid Black;
+}
+.Export:active {
+    background-color: #999999;
+}
+.bottom {
+    position: absolute;
+    top: 75vw;
 }
 /*When the window gets really small, the margins get fucked up, so its nice to have a safety net to protect it*/
 @media only screen and (max-width: 800px) {
@@ -137,12 +190,6 @@ select {
     }
     .Psharp {
         margin: 0 -1.6%;
-    }
-    .mo {
-        margin: -10vw 0 0 25vw;
-    }
-    .mo1 {
-        margin: -7vw 0 0 34vw;
     }
 }
 @media only screen and (max-width: 510px) {

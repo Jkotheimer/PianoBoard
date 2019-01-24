@@ -240,6 +240,7 @@
         </div>
         </div>
         <div id="lastKey" value="xx" val2="yy"></div>
+
         <div class="title">
             <h1>PianoBoard  |</h1>
             <p> 
@@ -247,45 +248,46 @@
                 music using only your keyboard.  <br>Select a tempo, an instrument to play, then select a track to 
                 record to. Have fun!<br>
             </p>
-        </div>
-        <br>
-        <div class="title">
-            <h2>Instrument</h2>
-            <select id="instrument" name="Instrument">
-                <option value="Piano">Piano</option>
-                <option value="AGuitar">Acoustic Guitar</option>
-                <option value="CEGuitar">Clean Electric Guitar</option>
-                <option value="DEGuitar">Distorted Electric Guitar</option>
-                <option value="Bass">Bass</option>
-                <option value="Cello">Cello</option>
-                <option value="Violin">Violin</option>
-                <option value="Trumpet">Trumpet</option>
-            </select>
-            <div class="moveover mo">
-                <h3 class="h3">Tempo</h3>
-                <input type="number" name="Tempo" class="in1" value="120">
+            <div class="inst">
+                <h2>Instrument</h2>
+                <select id="instrument" name="Instrument" style="box-shadow: 0 0 1vw #6699CC">
+                    <option value="Piano">Piano</option>
+                    <option value="AGuitar">Acoustic Guitar</option>
+                    <option value="CEGuitar">Clean Electric Guitar</option>
+                    <option value="DEGuitar">Distorted Electric Guitar</option>
+                    <option value="Bass">Bass</option>
+                    <option value="Cello">Cello</option>
+                    <option value="Violin">Violin</option>
+                    <option value="Trumpet">Trumpet</option>
+                </select>
             </div>
-            <div class="moveover1 mo1">
-                <label for="PCC" class="checkword">Play Click</label>
-                <input type="checkbox" name="PCC" id="PCC" class="largeCheck">
-            </div>
-            <div class="MBbox">
-                <div class="header">
-                    <span style="position: absolute; left: 2vw;">Measures</span>
-                    <span style="position: absolute; right: 2vw;">Beats</span>
+            <div class="Temp">
+                <div class="moveover mo">
+                    <h3 class="h3">Tempo</h3>
+                    <input type="number" name="Tempo" class="in1" value="120" style="box-shadow: 0 0 1vw #6699CC;">
                 </div>
-                <div class="MB">
+                <div class="moveover1 mo1" style="box-shadow: 0 0 1vw #6699CC">
+                    <label for="PCC" class="checkword">Play Click</label>
+                    <input type="checkbox" name="PCC" id="PCC" class="largeCheck" style="box-shadow: 0 0 1vw #6699CC">
+                </div>
+            </div>
+            <div class="MBbox" style="box-shadow: 0 0 1vw Black">
+                <div>
+                    <span style="position: absolute; left: 2vw;"><u>Measures</u></span>
+                    <span style="position: absolute; right: 2vw;"><u>Beats</u></span>
+                </div>
+                <div>
                     <span id="Measures" style="position:absolute; top: 4vw; left: 5vw;">00</span>
                     <span id="Beats" style="position:absolute; top: 4vw; right: 3.5vw;">00</span>
                 </div>
             </div>
         </div>
-        <br>
+
+        <div class="Multitrack"></div>
+        <button id="AddTrack" class="AddTrack">+ Add Track</button>
+        <button id="Export" class="Export">Export Mp3</button>
+        <p class="bottom">_</p>
         <!--From here:
-            2) Tempo settings
-                - BPM input
-                - Play Click Track selector
-            3) Instrument selector
             4) A track upon which to record the notes being played
                 - Record button
                 - Playback button
