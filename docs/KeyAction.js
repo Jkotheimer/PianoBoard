@@ -180,35 +180,60 @@ function sweepout(identifier) {
     }
 }
 
-function addTrack(){
-    var init = document.getElementById("initTrack")
-    var tracks = Number(init.title);
-    tracks++;
-    init.title = tracks.toString();
-    var nextTrack = document.getElementById("track" + tracks);
-    nextTrack.className = "Multitrack";
-    var nTop = 40 + (8*(tracks-1));
-    nextTrack.style.cssText = "top: " + nTop + "vw;";
-    var del = document.createElement("BUTTON");
-    del.id = "del" + tracks;
-    del.className ="delete";
-    del.innerHTML = "<strong>X</strong>";
-    document.body.appendChild(del);
-    del.style.cssText = "top: " + (nTop+.5) + "vw;";
-    document.getElementById("del" + tracks).addEventListener("click", function(){
-        del.className = null;
-        nextTrack.className = null;
-        tracks--;
-        init.title = tracks.toString();
-        document.getElementById("AddTrack").style.cssText = "top: " +  + "vw;";
-        document.getElementById("Export").style.cssText = "top: " +  + "vw;";
-    });
-    //move the add track and export buttons down with it
+var TRACKS = new Set();
+function addTrack() {
+    var init = document.getElementById("initTrack");
+    var newTrack = document.getElementById("TrackTemplate").cloneNode(true);
+    document.body.appendChild(newTrack);
+    var TrackNum = Number(init.title);
+    TrackNum++;
+    newTrack.id = TrackNum.toString();
+    TRACKS.add(newTrack.id);
+    newTrack.style.cssText = "display: block;";
+    init.title = TrackNum.toString();
+    var nTop = 40 + (8*(TrackNum-1));
+    newTrack.style.cssText = "top: " + nTop + "vw;";
     document.getElementById("AddTrack").style.cssText = "top: " + (nTop+10) + "vw;";
     document.getElementById("Export").style.cssText = "top: " + (nTop+10) + "vw;";
     return true;
 }
-
+function deleteTrack(event) {
+    var init = document.getElementById("initTrack");
+    var track = document.getElementById(event.srcElement.parentElement.id);
+    track.parentNode.removeChild(track);
+    var TrackNum = Number(init.title);
+    TrackNum--;
+    init.title = TrackNum.toString();
+    TRACKS.remove(track);
+    //iterate through the set by order of id#
+    var arr = new Array();
+    var min = 1000;
+    var T1 = TRACKS;
+    var iter = TRACKS.values();
+    //iterate, find the smallest id in the set, then add it to the end of the array
+    //if we're at the end of 1 iteration, we found the first min, then its time to 
+    //delete that val from the set, and reset the iterator.
+    //if there is only 1 id left in the set, push it onto the array, and exit the loop.
+    for(var i = 0; i < T1.size; i++) {
+        var next = iter.next().value;
+        if(T1.size == 1){
+            arr.push(next);
+            continue;
+        }
+        if(next < min){
+            min = next;
+        }
+        if(i == T1.size-1){
+            arr.push(min);
+            T1.delete(min);
+            i = 0;
+            iter = T1.values();
+        }
+    }
+    var nTop = 40 + (8*(TrackNum-1));
+    document.getElementById("AddTrack").style.cssText = "top: " + (nTop+10) + "vw;";
+    document.getElementById("Export").style.cssText = "top: " + (nTop+10) + "vw;";
+}
 // To be used later: This is how to get the selected option from the dropbox
 var y = document.getElementById("instrument");
 var selection = y.options[y.selectedIndex].value;
