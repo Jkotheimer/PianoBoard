@@ -135,7 +135,7 @@ select {
     Background-color: #FFDDBB;
 }
 .Multitrack {
-    position:absolute;
+    position: absolute;
     width: 75vw;
     height: 8vw;
     top: 40vw;
@@ -150,12 +150,8 @@ select {
     top: 50vw;
     border: 2px solid #999999;
 }
-.AddTrack:hover {
-    border: 2px solid Black;
-}
-.AddTrack:active {
-    background-color: #999999;
-}
+.AddTrack:hover {border: 2px solid Black;}
+.AddTrack:active {background-color: #999999;}
 .Export {
     position: absolute;
     width: 20vw;
@@ -174,6 +170,15 @@ select {
 .bottom {
     position: absolute;
     top: 75vw;
+}
+.delete {
+    position: absolute;
+    left: 74vw;
+    width: 1vw; height: 1vw;
+    padding: .05vw 0 0 .04vw;
+    font-family: "Arial", sans-serif;
+    font-size: .8vw;
+    background-color: #6699CC;
 }
 /*When the window gets really small, the margins get fucked up, so its nice to have a safety net to protect it*/
 @media only screen and (max-width: 800px) {

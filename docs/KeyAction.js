@@ -180,6 +180,35 @@ function sweepout(identifier) {
     }
 }
 
+function addTrack(){
+    var init = document.getElementById("initTrack")
+    var tracks = Number(init.title);
+    tracks++;
+    init.title = tracks.toString();
+    var nextTrack = document.getElementById("track" + tracks);
+    nextTrack.className = "Multitrack";
+    var nTop = 40 + (8*(tracks-1));
+    nextTrack.style.cssText = "top: " + nTop + "vw;";
+    var del = document.createElement("BUTTON");
+    del.id = "del" + tracks;
+    del.className ="delete";
+    del.innerHTML = "<strong>X</strong>";
+    document.body.appendChild(del);
+    del.style.cssText = "top: " + (nTop+.5) + "vw;";
+    document.getElementById("del" + tracks).addEventListener("click", function(){
+        del.className = null;
+        nextTrack.className = null;
+        tracks--;
+        init.title = tracks.toString();
+        document.getElementById("AddTrack").style.cssText = "top: " +  + "vw;";
+        document.getElementById("Export").style.cssText = "top: " +  + "vw;";
+    });
+    //move the add track and export buttons down with it
+    document.getElementById("AddTrack").style.cssText = "top: " + (nTop+10) + "vw;";
+    document.getElementById("Export").style.cssText = "top: " + (nTop+10) + "vw;";
+    return true;
+}
+
 // To be used later: This is how to get the selected option from the dropbox
 var y = document.getElementById("instrument");
 var selection = y.options[y.selectedIndex].value;
