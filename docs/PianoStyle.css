@@ -79,7 +79,7 @@ select {
     border-radius: 1vw;
 }
 .moveover {
-    margin: -9vw 0 0 25vw;
+    margin: -9vw 0 0 30vw;
     padding: -1vw 1vw 1vw;
 }
 .in1 {
@@ -92,7 +92,7 @@ select {
     margin: 0 0 0 1vw;
 }
 .moveover1 {
-    margin: -6vw 0 0 34vw;
+    margin: -6vw 0 0 39vw;
     background-color: #FF6666;
     text-align-last: center;
     font-size: 1vw;
@@ -109,6 +109,18 @@ select {
 .checkword {
     position: absolute;
     margin: .3vw 0 0;
+}
+.MBbox {
+    text-align: center;
+    position: absolute;
+    font-size: 2vw;
+    left: 65vw;
+    top: 29vw;
+    width: 20vw;
+    height: 6vw;
+    border-radius: 1vw;
+    padding: 1vw;
+    Background-color: #FF6666;
 }
 /*When the window gets really small, the margins get fucked up, so its nice to have a safety net to protect it*/
 @media only screen and (max-width: 800px) {

@@ -239,7 +239,7 @@
             <button id="C5" class="PianoKey Pkey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">C<br><br><div style="color: #6699CC">,</div></button>
         </div>
         </div>
-        
+        <div id="lastKey" value="xx" val2="yy"></div>
         <div class="title">
             <h1>PianoBoard  |</h1>
             <p> 
@@ -269,9 +269,18 @@
                 <label for="PCC" class="checkword">Play Click</label>
                 <input type="checkbox" name="PCC" id="PCC" class="largeCheck">
             </div>
+            <div class="MBbox">
+                <div class="header">
+                    <span style="position: absolute; left: 2vw;">Measures</span>
+                    <span style="position: absolute; right: 2vw;">Beats</span>
+                </div>
+                <div class="MB">
+                    <span id="Measures" style="position:absolute; top: 4vw; left: 5vw;">00</span>
+                    <span id="Beats" style="position:absolute; top: 4vw; right: 3.5vw;">00</span>
+                </div>
+            </div>
         </div>
         <br>
-        <div id="lastKey" value="xx" val2="yy"></div>
         <!--From here:
             2) Tempo settings
                 - BPM input
