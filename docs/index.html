@@ -283,16 +283,16 @@
             </div>
         </div>
 
-        <div id="initTrack" class="Multitrack" title="1"></div>
+        <div id="initTrack" class="Multitrack" title="1"><strong style="position: absolute;left:.5vw;top:.5vw;">0</strong></div>
 
         <div id="TrackTemplate" class="Multitrack" style="display: none">
-            <button class="delete" onmouseup="deleteTrack(event)">X</button>
+            <strong id="hed" style="position: absolute;left:.5vw;top:.5vw;">1</strong>
+            <button class="delete" onclick="deleteTrack(event)">X</button>
         </div>
 
         
         <button id="AddTrack" class="AddTrack" onclick="addTrack()">+ Add Track</button>
         <button id="Export" class="Export">Export Mp3</button>
-        <p class="bottom">_</p>
         <!--
         <div id="track3"></div><div id="track4"></div><div id="track5"></div><div id="track6"></div><div id="track7"></div>
         <div id="track8"></div><div id="track9"></div><div id="track10"></div><div id="track11"></div><div id="track12"></div><div id="track13"></div>

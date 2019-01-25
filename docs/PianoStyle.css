@@ -159,6 +159,7 @@ select {
     font-size: 2vw;
     left: 56vw;
     top: 50vw;
+    margin-bottom: 20vw;
     border: 2px solid #999999;
 }
 .Export:hover {
@@ -167,14 +168,10 @@ select {
 .Export:active {
     background-color: #999999;
 }
-.bottom {
-    position: absolute;
-    top: 75vw;
-}
 .delete {
     position: absolute;
-    left: 74vw;
-    width: 1vw; height: 1vw;
+    left: 73.5vw;
+    width: 1.5vw; height: 1.5vw;
     padding: .05vw 0 0 .04vw;
     font-family: "Arial", sans-serif;
     font-size: .8vw;
