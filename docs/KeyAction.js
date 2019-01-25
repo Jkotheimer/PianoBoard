@@ -184,33 +184,37 @@ var TRACKS = new Set();
 function addTrack() {
     var newTrack = document.getElementById("TrackTemplate").cloneNode(true);
     document.body.appendChild(newTrack);
-    var TrackNum = TRACKS.size;
+    var TrackNum = TRACKS.size+2;
     newTrack.id = TrackNum.toString();
     TRACKS.add(newTrack.id);
-    var num = 2 + Number(TrackNum);
-    document.getElementById("hed").innerHTML = num;
+    newTrack.innerHTML += "<strong id=\"num" +TrackNum+ "\" style=\"position: absolute;left:.5vw;top:.5vw;\">" + TrackNum + "</strong>";
     newTrack.style.cssText = "display: block;";
-    var nTop = 40 + (8*(TrackNum+1));
-    newTrack.style.cssText = "top: " + nTop + "vw;";
+    var nTop = 40 + (8*(TrackNum-1));
     newTrack.style.cssText = "top: " + nTop + "vw;";
     document.getElementById("AddTrack").style.cssText = "top: " + (nTop+10) + "vw;";
     document.getElementById("Export").style.cssText = "top: " + (nTop+10) + "vw;";
     return true;
 }
 function deleteTrack(event) {
+    var init = document.getElementById("initTrack");
     var track = document.getElementById(event.srcElement.parentElement.id);
     track.parentNode.removeChild(track);
     TRACKS.delete(track.id);
-    //for(let item of TRACKS.keys()) initl.innerHTML += item + ", ";
-    var TrackNum = TRACKS.size;
-    var nTop = 40 + (8*(TrackNum));
-    var temp = nTop;
+    var nTop = 40;
+    var ident = 1;
     for(let item of TRACKS.keys()) {
-        document.getElementById(item.toString()).style.cssText = "top: " + temp + "vw;";
-        temp -= 8;
+        nTop += 8;
+        ident++;
+        var thing = document.getElementById(item.toString());
+        item = ident.toString();
+        thing.style.cssText = "top: " + nTop + "vw;";
+        thing.id = ident.toString();
+        document.getElementById("num" + item.toString()).innerHTML = thing.id;
     }
-    document.getElementById("AddTrack").style.cssText = "top: " + (nTop+10) + "vw;";
-    document.getElementById("Export").style.cssText = "top: " + (nTop+10) + "vw;";
+    init.innerHTML;
+    for(let dd of TRACKS.keys()) init.innerHTML += dd;
+    document.getElementById("AddTrack").style.cssText = "top: " + (nTop + 10) + "vw;";
+    document.getElementById("Export").style.cssText = "top: " + (nTop + 10) + "vw;";
 }
 // To be used later: This is how to get the selected option from the dropbox
 var y = document.getElementById("instrument");
