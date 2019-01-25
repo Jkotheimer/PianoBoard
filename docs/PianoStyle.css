@@ -142,6 +142,11 @@ select {
     background-color: #FFDDBB;
     border: 2px solid Black;
 }
+.TrackName {
+    width: 10vw;
+    font-size: 1.2vw;
+    background-color: #FFDDBB
+}
 .AddTrack {
     position: absolute;
     width: 15vw;

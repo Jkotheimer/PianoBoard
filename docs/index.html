@@ -283,27 +283,23 @@
             </div>
         </div>
 
-        <div id="initTrack" class="Multitrack" title="1"><strong style="position: absolute;left:.5vw;top:.5vw;">0</strong></div>
+        <div id="initTrack" class="Multitrack" title="1">
+            <input type="text" value="Track 1" class="TrackName">
+        </div>
 
         <div id="TrackTemplate" class="Multitrack" style="display: none">
             <button class="delete" onclick="deleteTrack(event)">X</button>
         </div>
-
         
         <button id="AddTrack" class="AddTrack" onclick="addTrack()">+ Add Track</button>
         <button id="Export" class="Export">Export Mp3</button>
-        <!--
-        <div id="track3"></div><div id="track4"></div><div id="track5"></div><div id="track6"></div><div id="track7"></div>
-        <div id="track8"></div><div id="track9"></div><div id="track10"></div><div id="track11"></div><div id="track12"></div><div id="track13"></div>
-        <div id="track14"></div><div id="track15"></div><div id="track16"></div><div id="track17"></div><div id="track18"></div><div id="track19"></div>
-        <div id="track20"></div>
-        <!-From here:
+        <!--From here:
             4) A track upon which to record the notes being played
                 - Record button
                 - Playback button
                 - Volume slider
                 - Time Counter (Measures, Beats) 
-            5) A button to add more tracks to the mix
+                - Get the click track to play along only when selected
             6) Export to Mp3 button-->
     </body>
 </html>

@@ -181,38 +181,30 @@ function sweepout(identifier) {
 }
 
 var TRACKS = new Set();
+var TrackNum = 2;
 function addTrack() {
+    var init = document.getElementById("initTrack");
     var newTrack = document.getElementById("TrackTemplate").cloneNode(true);
-    document.body.appendChild(newTrack);
-    var TrackNum = TRACKS.size+2;
+    var nTop = 40 + (8*(TRACKS.size+1));
     newTrack.id = TrackNum.toString();
     TRACKS.add(newTrack.id);
-    newTrack.innerHTML += "<strong id=\"num" +TrackNum+ "\" style=\"position: absolute;left:.5vw;top:.5vw;\">" + TrackNum + "</strong>";
-    newTrack.style.cssText = "display: block;";
-    var nTop = 40 + (8*(TrackNum-1));
+    newTrack.innerHTML += "<input type=\"text\" id=\"Tname\" class=\"TrackName\" value=\"Track " + TrackNum + "\">"; 
     newTrack.style.cssText = "top: " + nTop + "vw;";
+    document.body.appendChild(newTrack);
     document.getElementById("AddTrack").style.cssText = "top: " + (nTop+10) + "vw;";
     document.getElementById("Export").style.cssText = "top: " + (nTop+10) + "vw;";
-    return true;
+    TrackNum++;
 }
 function deleteTrack(event) {
-    var init = document.getElementById("initTrack");
     var track = document.getElementById(event.srcElement.parentElement.id);
-    track.parentNode.removeChild(track);
     TRACKS.delete(track.id);
+    track.parentNode.removeChild(track);
     var nTop = 40;
-    var ident = 1;
     for(let item of TRACKS.keys()) {
         nTop += 8;
-        ident++;
-        var thing = document.getElementById(item.toString());
-        item = ident.toString();
-        thing.style.cssText = "top: " + nTop + "vw;";
-        thing.id = ident.toString();
-        document.getElementById("num" + item.toString()).innerHTML = thing.id;
+        var trk = document.getElementById(item);
+        trk.style.cssText = "top: " + nTop + "vw;";
     }
-    init.innerHTML;
-    for(let dd of TRACKS.keys()) init.innerHTML += dd;
     document.getElementById("AddTrack").style.cssText = "top: " + (nTop + 10) + "vw;";
     document.getElementById("Export").style.cssText = "top: " + (nTop + 10) + "vw;";
 }
