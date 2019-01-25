@@ -188,7 +188,10 @@ function addTrack() {
     var nTop = 40 + (8*(TRACKS.size+1));
     newTrack.id = TrackNum.toString();
     TRACKS.add(newTrack.id);
-    newTrack.innerHTML += "<input type=\"text\" id=\"Tname\" class=\"TrackName\" value=\"Track " + TrackNum + "\">"; 
+    newTrack.innerHTML += 
+    " <div style=\"position:absolute;background-color:#6699CC;width:11vw;height:8vw;\"> " + 
+    " <input type=\"text\" id=\"Tname\" class=\"TrackName\" value=\"Track " + TrackNum + "\"> " + 
+    " <button id=\"RecordButton\"></button><button id=\"PlayButton\"></button></div> "; 
     newTrack.style.cssText = "top: " + nTop + "vw;";
     document.body.appendChild(newTrack);
     document.getElementById("AddTrack").style.cssText = "top: " + (nTop+10) + "vw;";

@@ -250,7 +250,7 @@
             </p>
             <div class="inst">
                 <h2>Instrument</h2>
-                <select id="instrument" name="Instrument" style="box-shadow: 0 0 1vw #6699CC">
+                <select id="Instrument" name="Instrument">
                     <option value="Piano">Piano</option>
                     <option value="AGuitar">Acoustic Guitar</option>
                     <option value="CEGuitar">Clean Electric Guitar</option>
@@ -262,13 +262,13 @@
                 </select>
             </div>
             <div class="Temp">
-                <div class="moveover mo">
+                <div class="moveover">
                     <h3 class="h3">Tempo</h3>
-                    <input type="number" name="Tempo" class="in1" value="120" style="box-shadow: 0 0 1vw #6699CC;">
+                    <input type="number" name="Tempo" class="in1" value="120">
                 </div>
-                <div class="moveover1 mo1" style="box-shadow: 0 0 1vw #6699CC">
+                <div id="PCCC" class="moveover1">
                     <label for="PCC" class="checkword">Play Click</label>
-                    <input type="checkbox" name="PCC" id="PCC" class="largeCheck" style="box-shadow: 0 0 1vw #6699CC">
+                    <input type="checkbox" name="PCC" id="PCC" class="largeCheck">
                 </div>
             </div>
             <div class="MBbox" style="box-shadow: 0 0 1vw Black">
@@ -284,7 +284,11 @@
         </div>
 
         <div id="initTrack" class="Multitrack" title="1">
-            <input type="text" value="Track 1" class="TrackName">
+            <div style="position:absolute;background-color:#6699CC;width:11vw;height:8vw;">
+                <input type="text" value="Track 1" class="TrackName">
+                <button id="PlayButton"></button>
+                <button id="RecordButton"></button>
+            </div>
         </div>
 
         <div id="TrackTemplate" class="Multitrack" style="display: none">

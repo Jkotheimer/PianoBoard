@@ -27,6 +27,7 @@ div.Board {
     margin: 0 -.2% 1%;
     font-size: 1.4vw;
     top: 0;
+    transition: all 0.1s ease;
 }
 .PianoKey:hover {
     border: .15vw solid black;
@@ -101,11 +102,13 @@ select {
     background-color: #6699CC;
     border-radius: 1vw;
     border-color: #6699CC;
+    box-shadow: 0 0 1vw #6699CC;
     margin: 5.5vw 0 0 1vw;
 }
 .moveover1 {
     margin: -6vw 0 0 39vw;
     background-color: #6699CC;
+    box-shadow: 0 0 1vw #6699CC;
     text-align-last: center;
     font-size: 1vw;
     color: white;
@@ -117,10 +120,19 @@ select {
     width: 1.3vw;
     height: 1.3vw;
     margin: .4vw 0 -1vw 5.5vw;
+    box-shadow: 0 0 1vw #6699CC;
+    transition: all 0.3s ease;
+}
+.largeCheck:hover {
+    cursor: pointer;
 }
 .checkword {
     position: absolute;
     margin: .3vw 0 0;
+    transition: all 0.3s ease;
+}
+.checkword:hover {
+    cursor: pointer;
 }
 .MBbox {
     text-align: center;
@@ -134,6 +146,18 @@ select {
     padding: 1vw;
     Background-color: #FFDDBB;
 }
+#Instrument{
+    box-shadow: 0 0 1vw #6699CC;
+}
+#Instrument:hover {
+    border: 1px solid navy;
+    cursor: pointer;
+}
+#PCCC:hover {
+    border: 1px solid navy;
+    cursor: pointer;
+}
+
 .Multitrack {
     position: absolute;
     width: 75vw;
@@ -143,9 +167,51 @@ select {
     border: 2px solid Black;
 }
 .TrackName {
-    width: 10vw;
+    width: 10.6vw;
     font-size: 1.2vw;
-    background-color: #FFDDBB
+    background-color: #6699CC;
+    border-color: #6699CC;
+}
+.TrackName:hover {
+    border-color: #3366FF;
+}
+#PlayButton {
+    position: absolute;
+    top: 3.5vw;
+    left:1.5vw;
+    border-top: 1.5vw solid transparent;
+    border-left: 2vw solid #000;
+    border-bottom: 1.5vw solid transparent;
+    background-color: transparent;
+}
+#RecordButton {
+    position:absolute;
+    top: 3.5vw;
+    left: 6vw;
+    box-sizing: border-box;
+	display:block;
+	width: 3vw;
+	height: 3vw;
+	padding-top: .5vw;
+	padding-left: .5vw;
+	line-height: 2vw;
+	border: .1vw solid #fff;
+	border-radius: 50%;
+	color:#f5f5f5;
+	text-align:center;
+	text-decoration:none;
+	background-color: #CC0000;
+	font-size:2vw;
+	font-weight:bold;
+	transition: all 0.3s ease;
+}
+#RecordButton:hover {
+    cursor: pointer;
+	box-shadow: 0px 0px 10px #CC0000;
+	text-shadow: 0px 0px 10px #CC0000;
+}
+#RecordButton:active {
+    border-radius: 0;
 }
 .AddTrack {
     position: absolute;
