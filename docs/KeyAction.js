@@ -183,15 +183,14 @@ function sweepout(identifier) {
 var TRACKS = new Set();
 var TrackNum = 2;
 function addTrack() {
-    var init = document.getElementById("initTrack");
     var newTrack = document.getElementById("TrackTemplate").cloneNode(true);
     var nTop = 40 + (8*(TRACKS.size+1));
     newTrack.id = TrackNum.toString();
     TRACKS.add(newTrack.id);
-    newTrack.innerHTML += 
-    " <div style=\"position:absolute;background-color:#6699CC;width:11vw;height:8vw;\"> " + 
-    " <input type=\"text\" id=\"Tname\" class=\"TrackName\" value=\"Track " + TrackNum + "\"> " + 
-    " <button id=\"RecordButton\"></button><button id=\"PlayButton\"></button></div> "; 
+    newTrack.innerHTML += " <div id=\"TRK" + TrackNum + "\"style=\"position:absolute;background-color:#6699CC;width:11vw;height:8vw;\"> " + 
+    " <input type=\"text\" id=\"Tname\" class=\"TrackName\" value=\"Track " + TrackNum + "\">" + 
+    "<button id=\"PB" + TrackNum + "\" class=\"PlayButton\" onclick=\"togglePP(event)\"></button>" +
+    "<button id=\"RB" + TrackNum + "\" class=\"RecButton\" onclick=\"toggleRS(event)\"></button></div> "; 
     newTrack.style.cssText = "top: " + nTop + "vw;";
     document.body.appendChild(newTrack);
     document.getElementById("AddTrack").style.cssText = "top: " + (nTop+10) + "vw;";
@@ -210,6 +209,36 @@ function deleteTrack(event) {
     }
     document.getElementById("AddTrack").style.cssText = "top: " + (nTop + 10) + "vw;";
     document.getElementById("Export").style.cssText = "top: " + (nTop + 10) + "vw;";
+}
+function togglePP(event) {
+    var element = document.getElementById(event.srcElement.id);
+    if (element.className == "PauseButton") {
+        element.className = "PlayButton";
+    }
+    else {
+        element.className = "PauseButton";
+    }
+}
+var Pstick = false;
+function toggleRS(event) {
+    var element = document.getElementById(event.srcElement.id);
+    var PPB = "PB" + element.parentElement.id.substr(3);
+    PPB = document.getElementById(PPB);
+    if (element.className == "RecButton") {
+        if(PPB.className == "PlayButton") {
+            PPB.className="PauseButton";
+        }
+        else {
+            Pstick=true;
+        }
+        element.className = "StopButton";
+    }
+    else {
+        if(PPB.className == "PauseButton" && Pstick == false) {
+            PPB.className="PlayButton";
+        }
+        element.className = "RecButton";
+    }
 }
 // To be used later: This is how to get the selected option from the dropbox
 var y = document.getElementById("instrument");

@@ -283,11 +283,11 @@
             </div>
         </div>
 
-        <div id="initTrack" class="Multitrack" title="1">
-            <div style="position:absolute;background-color:#6699CC;width:11vw;height:8vw;">
+        <div id="initTrack" class="Multitrack">
+            <div id="TRK1" style="position:absolute;background-color:#6699CC;width:11vw;height:8vw;">
                 <input type="text" value="Track 1" class="TrackName">
-                <button id="PlayButton"></button>
-                <button id="RecordButton"></button>
+                <button id="PB1" class="PlayButton" onclick="togglePP(event)"></button>
+                <button id="RB1" class="RecButton" onclick="toggleRS(event)"></button>
             </div>
         </div>
 
@@ -297,6 +297,8 @@
         
         <button id="AddTrack" class="AddTrack" onclick="addTrack()">+ Add Track</button>
         <button id="Export" class="Export">Export Mp3</button>
+        <br>
+        <div id="demo"></div>
         <!--From here:
             4) A track upon which to record the notes being played
                 - Record button

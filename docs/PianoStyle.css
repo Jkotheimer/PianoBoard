@@ -175,43 +175,58 @@ select {
 .TrackName:hover {
     border-color: #3366FF;
 }
-#PlayButton {
+.PlayButton {
     position: absolute;
     top: 3.5vw;
     left:1.5vw;
     border-top: 1.5vw solid transparent;
-    border-left: 2vw solid #000;
+    border-left: 2.5vw solid green;
     border-bottom: 1.5vw solid transparent;
+    border-right: 0vw;
     background-color: transparent;
 }
-#RecordButton {
+.PlayButton:hover {
+    cursor: pointer;
+}
+.PauseButton {
+    position: absolute;
+    width: 2vw;
+    height: 2.7vw;
+    top: 3.7vw;
+    left:1.5vw;
+    border-style: double;
+    border-width: 0 0 0 2vw;
+    border-color: navy;
+    background-color: transparent;
+}
+.PauseButton:hover {
+    cursor: pointer;
+}
+.RecButton {
     position:absolute;
     top: 3.5vw;
     left: 6vw;
-    box-sizing: border-box;
-	display:block;
 	width: 3vw;
 	height: 3vw;
-	padding-top: .5vw;
-	padding-left: .5vw;
-	line-height: 2vw;
-	border: .1vw solid #fff;
+	border: .1vw solid transparent;
 	border-radius: 50%;
-	color:#f5f5f5;
-	text-align:center;
-	text-decoration:none;
 	background-color: #CC0000;
-	font-size:2vw;
-	font-weight:bold;
-	transition: all 0.3s ease;
 }
-#RecordButton:hover {
+.RecButton:hover {
     cursor: pointer;
-	box-shadow: 0px 0px 10px #CC0000;
-	text-shadow: 0px 0px 10px #CC0000;
 }
-#RecordButton:active {
-    border-radius: 0;
+.StopButton {
+    position:absolute;
+    top: 3.5vw;
+    left: 6vw;
+	width: 3vw;
+	height: 3vw;
+	border: .1vw solid transparent;
+	border-radius: 0;
+	background-color: #CC0000;
+}
+.StopButton:hover {
+    cursor: pointer;
 }
 .AddTrack {
     position: absolute;
