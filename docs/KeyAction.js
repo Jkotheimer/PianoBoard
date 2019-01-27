@@ -10,6 +10,34 @@ the volume out. Of course this fading needs to be faster than the natural fade o
 so it only takes a second to be faded out. The volume does not fade all the way to zero because
 for some reason the setInterval function bugs out if I try to do it, but 3% volume is good enough.
 */
+document.addEventListener("keydown", function(){
+    if(event.key == "Enter") {
+        //do nothing
+    }
+    else if(event.keyCode == 32) {
+        //do nothing
+    }
+    else if(event.key == "Shift") {
+        //Make the keys pressed after this resonate
+    }
+    else {
+        action(event);
+    }
+  });
+document.addEventListener("keyup", function() {
+    if(event.key == "Enter") {
+        toggleRS(event);
+    }
+    else if (event.keyCode == 32) {
+        togglePP(event);
+    }
+    else if(event.key == "Shift") {
+        //stop resonation
+    }
+    else {
+        action(event);
+    }
+})
 function volFader() {
     var fadePoint = note.currentTime + 1;
     var first = false;
@@ -35,6 +63,15 @@ source and a key on the virtual piano, and a sound is put out through the speake
 function action(event) {
     // When a key is held down, it continually pushes input, so we check the last key and event type
     // to ensure that the sound of the note doesn't continue reloading and spaz out.
+    if(event.key == "Enter") {
+        return false;
+    }
+    else if(event.keyCode == 32) {
+        return false;
+    }
+    else if(event.key == "Shift") {
+        return false;
+    }
     var lastkey = document.getElementById("lastKey");
     if(event.srcElement.id == "board") return false;
     if(event.key != "hellYeah"){
@@ -179,12 +216,11 @@ function sweepout(identifier) {
         action(EV);
     }
 }
-
 var TRACKS = new Set();
 var TrackNum = 2;
 function addTrack() {
     var newTrack = document.getElementById("TrackTemplate").cloneNode(true);
-    var nTop = 40 + (8*(TRACKS.size+1));
+    var nTop = 45 + (8*(TRACKS.size+1));
     newTrack.id = TrackNum.toString();
     TRACKS.add(newTrack.id);
     newTrack.innerHTML += " <div id=\"TRK" + TrackNum + "\"style=\"position:absolute;background-color:#6699CC;width:11vw;height:8vw;\"> " + 
@@ -201,7 +237,7 @@ function deleteTrack(event) {
     var track = document.getElementById(event.srcElement.parentElement.id);
     TRACKS.delete(track.id);
     track.parentNode.removeChild(track);
-    var nTop = 40;
+    var nTop = 45;
     for(let item of TRACKS.keys()) {
         nTop += 8;
         var trk = document.getElementById(item);
@@ -211,32 +247,67 @@ function deleteTrack(event) {
     document.getElementById("Export").style.cssText = "top: " + (nTop + 10) + "vw;";
 }
 function togglePP(event) {
+    if(event.keyCode == 32) {
+        var button = document.getElementById("PB0");
+        if(button.classList.contains("PauseButton")){
+            button.classList.replace("PauseButton", "PlayButton");
+        } else {
+            button.classList.replace("PlayButton", "PauseButton")
+        }
+        return true;
+    }
     var element = document.getElementById(event.srcElement.id);
+    if(element.classList.contains("Main")){
+        if(element.classList.contains("PauseButton")){
+            element.classList.replace("PauseButton", "PlayButton");
+        } else {
+            element.classList.replace("PlayButton", "PauseButton")
+        }
+        return true;
+    }
     if (element.className == "PauseButton") {
         element.className = "PlayButton";
     }
     else {
         element.className = "PauseButton";
     }
+    return true;
 }
-var Pstick = false;
 function toggleRS(event) {
+    if(event.key == "Enter") {
+        var button = document.getElementById("RB0");
+        var Pbutton = document.getElementById("PB0");
+        if(Pbutton.classList.contains("PlayButton")) {
+            Pbutton.classList.replace("PlayButton", "PauseButton");
+        }
+        if(button.classList.contains("RecButton")){
+            button.classList.replace("RecButton", "StopButton");
+        } else {
+            button.classList.replace("StopButton", "RecButton")
+        }
+        return true;
+    }
     var element = document.getElementById(event.srcElement.id);
     var PPB = "PB" + element.parentElement.id.substr(3);
     PPB = document.getElementById(PPB);
+    if(element.classList.contains("Main")){
+        if(PPB.classList.contains("PlayButton")) {
+            PPB.classList.replace("PlayButton", "PauseButton");
+        }
+        if(element.classList.contains("RecButton")){
+            element.classList.replace("RecButton", "StopButton");
+        } else {
+            element.classList.replace("StopButton", "RecButton")
+        }
+        return true;
+    }
     if (element.className == "RecButton") {
         if(PPB.className == "PlayButton") {
             PPB.className="PauseButton";
         }
-        else {
-            Pstick=true;
-        }
         element.className = "StopButton";
     }
     else {
-        if(PPB.className == "PauseButton" && Pstick == false) {
-            PPB.className="PlayButton";
-        }
         element.className = "RecButton";
     }
 }

@@ -15,6 +15,7 @@ div.Board {
 }
 .PianoKey {
     background-color: #FFFFFF;
+    outline: none;
     border: .15vw solid grey;
     border-radius: 0vw 0vw 1vw 1vw;
     color: black;
@@ -162,7 +163,7 @@ select {
     position: absolute;
     width: 75vw;
     height: 8vw;
-    top: 40vw;
+    top: 45vw;
     background-color: #FFDDBB;
     border: 2px solid Black;
 }
@@ -177,13 +178,19 @@ select {
 }
 .PlayButton {
     position: absolute;
-    top: 3.5vw;
-    left:1.5vw;
+    top: 3vw;
+    left:1vw;
+    border-top: 1vw solid transparent;
+    border-left: 2vw solid green;
+    border-bottom: 1vw solid transparent;
+    border-right: 0vw;
+    background-color: transparent;
+}
+.PlayButton.Main {
+    left: 2vw;
     border-top: 1.5vw solid transparent;
     border-left: 2.5vw solid green;
     border-bottom: 1.5vw solid transparent;
-    border-right: 0vw;
-    background-color: transparent;
 }
 .PlayButton:hover {
     cursor: pointer;
@@ -191,39 +198,54 @@ select {
 .PauseButton {
     position: absolute;
     width: 2vw;
-    height: 2.7vw;
-    top: 3.7vw;
-    left:1.5vw;
+    height: 2vw;
+    top: 3vw;
+    left:1vw;
     border-style: double;
-    border-width: 0 0 0 2vw;
+    border-width: 0 0 0 1.5vw;
     border-color: navy;
     background-color: transparent;
+}
+.PauseButton.Main {
+    left: 2vw;
+    height: 3vw;
+    border-width: 0 0 0 2vw;
 }
 .PauseButton:hover {
     cursor: pointer;
 }
 .RecButton {
     position:absolute;
-    top: 3.5vw;
-    left: 6vw;
-	width: 3vw;
-	height: 3vw;
+    top: 3vw;
+    left: 4vw;
+	width: 2vw;
+	height: 2vw;
 	border: .1vw solid transparent;
 	border-radius: 50%;
 	background-color: #CC0000;
+}
+.RecButton.Main {
+    left: 6vw;
+	width: 3vw;
+	height: 3vw;
 }
 .RecButton:hover {
     cursor: pointer;
 }
 .StopButton {
     position:absolute;
-    top: 3.5vw;
-    left: 6vw;
-	width: 3vw;
-	height: 3vw;
+    top: 3vw;
+    left: 4vw;
+	width: 2vw;
+	height: 2vw;
 	border: .1vw solid transparent;
 	border-radius: 0;
 	background-color: #CC0000;
+}
+.StopButton.Main {
+    left: 6vw;
+	width: 3vw;
+	height: 3vw;
 }
 .StopButton:hover {
     cursor: pointer;
@@ -233,7 +255,7 @@ select {
     width: 15vw;
     height: 4vw;
     font-size: 1.5vw;
-    top: 50vw;
+    top: 55vw;
     border: 2px solid #999999;
 }
 .AddTrack:hover {border: 2px solid Black;}
@@ -244,7 +266,7 @@ select {
     height: 6vw;
     font-size: 2vw;
     left: 56vw;
-    top: 50vw;
+    top: 55vw;
     margin-bottom: 20vw;
     border: 2px solid #999999;
 }
