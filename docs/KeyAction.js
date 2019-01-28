@@ -3,6 +3,7 @@ var note = null;
 var dcolor = null;
 var ucolor = null;
 var DKEYS = new Set();
+var reso = false;
 /*
 volFader() is a function called when a pianokey is being released.
 It would sound awfully shitty if the piano sound was immediately cut off, so we need to fade
@@ -11,28 +12,26 @@ so it only takes a second to be faded out. The volume does not fade all the way 
 for some reason the setInterval function bugs out if I try to do it, but 3% volume is good enough.
 */
 document.addEventListener("keydown", function(){
-    if(event.key == "Enter") {
-        //do nothing
-    }
-    else if(event.keyCode == 32) {
-        //do nothing
+    if(event.keyCode == 32) {
+        if(event.srcElement.id != "Tname") event.preventDefault();
     }
     else if(event.key == "Shift") {
-        //Make the keys pressed after this resonate
+        reso = true;
     }
-    else {
+    else if(event.srcElement.id.includes("RB") || event.srcElement.id.includes("PB")){
         action(event);
     }
   });
 document.addEventListener("keyup", function() {
-    if(event.key == "Enter") {
-        toggleRS(event);
-    }
-    else if (event.keyCode == 32) {
-        togglePP(event);
+    if (event.keyCode == 32) {
+        if(event.srcElement.id != "Tname") {
+            event.preventDefault();
+            togglePP(event);
+            PAPA();
+        }
     }
     else if(event.key == "Shift") {
-        //stop resonation
+        reso = false;
     }
     else {
         action(event);
@@ -116,7 +115,7 @@ function action(event) {
         }
         document.getElementById(K).style.boxShadow = "0vw .5vw .5vw black";
         note = document.getElementById(K + ".mp3");
-        if(event.key != "hellYeah"){ //If we are sweeping the notes, a little sustain sounds nicers
+        if(event.key != "hellYeah" && reso == false){ //If we are sweeping the notes, a little sustain sounds nicers
             volFader();
         }
     }
@@ -164,7 +163,9 @@ function action(event) {
         }
         //If it was a keyup event, change the color back, and fade the soundfile out
         if(event.type == "keyup") {
-            volFader();
+            if(reso == false){
+                volFader();
+            }
             x.style.background = ucolor;
             DKEYS.delete(x.id);
             x.style.boxShadow = "0vw .5vw .5vw black";
@@ -229,7 +230,14 @@ function addTrack() {
     "<button id=\"PB" + TrackNum + "\" class=\"PlayButton\" onclick=\"togglePP(event)\"></button>" +
     "<button id=\"RB" + TrackNum + "\" class=\"RecButton\" onclick=\"toggleRS(event)\"></button>" + 
     "<button id=\"Mut" + TrackNum + "\" class=\"MuteButton\" onclick=\"toggleMB(event)\">M</button>" + 
-    "<button id=\"Sol" + TrackNum + "\" class=\"SoloButton\" onclick=\"toggleSB(event)\">S</button></div>"; 
+    "<button id=\"Sol" + TrackNum + "\" class=\"SoloButton\" onclick=\"toggleSB(event)\">S</button></div>" + 
+    "<div style=\"position:absolute;top: 6.5vw;left: 1.7vw;width:10vw;\">" + 
+    "<input id=\"Pan" + TrackNum + "\" type=\"range\" title=\"Pan\" min=\"0\" max=\"100\" value=\"50\" class=\"slider\" onmousemove=\"getPanVal(event)\">" +
+    "<span id=\"PLB" + TrackNum + "\" class=\"PanNum\">0</span>" +
+    "<button id=\"Ctr" + TrackNum + "\" class=\"zeroButton\" title=\"Zero Pan\" onclick=\"zero(event)\">0</button></div>" +
+    "<div style=\"position:absolute;top: 4.5vw;left: 5.5vw;width:10vw;\">" +
+    "<input id=\"Vol" + TrackNum + "\" type=\"range\" title=\"Volume\" min=\"0\" max=\"100\" value=\"50\" class=\"slider Vol\" onmousemove=\"getVolVal(event)\">" + 
+    "<span id=\"VLB" + TrackNum + "\" class=\"VolNum\">50<br>db</span></div>"; 
     newTrack.style.cssText = "top: " + nTop + "vw;";
     document.body.appendChild(newTrack);
     document.getElementById("AddTrack").style.cssText = "top: " + (nTop+10) + "vw;";
@@ -249,6 +257,20 @@ function deleteTrack(event) {
     document.getElementById("AddTrack").style.cssText = "top: " + (nTop + 10) + "vw;";
     document.getElementById("Export").style.cssText = "top: " + (nTop + 10) + "vw;";
 }
+function PAPA() {
+    var f = document.getElementsByClassName("PlayAll");
+    var e = f.item(0);
+    if(e.innerHTML == "Play All") {
+        e.innerHTML = "Pause All";
+        e.style.left = "-2vw";
+        e.style.color = "navy";
+    }
+    else if(e.innerHTML == "Pause All") {
+        e.innerHTML = "Play All";
+        e.style.left = "0vw";
+        e.style.color = "#2A8D30";
+    }
+}
 function togglePP(event) {
     if(event.keyCode == 32) {
         var button = document.getElementById("PB0");
@@ -260,6 +282,8 @@ function togglePP(event) {
         return true;
     }
     var element = document.getElementById(event.srcElement.id);
+    var RB = "RB" + element.parentElement.id.substr(3);
+    RB = document.getElementById(RB);
     if(element.classList.contains("Main")){
         if(element.classList.contains("PauseButton")){
             element.classList.replace("PauseButton", "PlayButton");
@@ -269,6 +293,9 @@ function togglePP(event) {
         return true;
     }
     if (element.className == "PauseButton") {
+        if(RB.className == "StopButton") {
+            RB.className="RecButton";
+        }
         element.className = "PlayButton";
     }
     else {
@@ -277,19 +304,6 @@ function togglePP(event) {
     return true;
 }
 function toggleRS(event) {
-    if(event.key == "Enter") {
-        var button = document.getElementById("RB0");
-        var Pbutton = document.getElementById("PB0");
-        if(Pbutton.classList.contains("PlayButton")) {
-            Pbutton.classList.replace("PlayButton", "PauseButton");
-        }
-        if(button.classList.contains("RecButton")){
-            button.classList.replace("RecButton", "StopButton");
-        } else {
-            button.classList.replace("StopButton", "RecButton")
-        }
-        return true;
-    }
     var element = document.getElementById(event.srcElement.id);
     var PPB = "PB" + element.parentElement.id.substr(3);
     PPB = document.getElementById(PPB);
@@ -340,7 +354,7 @@ function getPanVal(event) {
         span.innerHTML = pan + "R";
     }
     else if(pan < 0) {
-        pan *=-1;
+        pan *= -1;
         span.innerHTML = pan + "L";
     }
     else {
@@ -348,7 +362,9 @@ function getPanVal(event) {
     }
 }
 function getVolVal(event) {
-    
+    var element = document.getElementById(event.srcElement.id);
+    var span = document.getElementById("VLB" + element.id.substr(3));
+    span.innerHTML = element.value + "<br>db"; 
 }
 // To be used later: This is how to get the selected option from the dropbox
 var y = document.getElementById("instrument");
