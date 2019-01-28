@@ -163,15 +163,18 @@ select {
     position: absolute;
     width: 75vw;
     height: 8vw;
-    top: 45vw;
+    top: 40vw;
     background-color: #FFDDBB;
     border: 2px solid Black;
+    border-radius: 1vw 0 0 1vw;
 }
 .TrackName {
     width: 10.6vw;
     font-size: 1.2vw;
+    top: 0vw;
     background-color: #6699CC;
     border-color: #6699CC;
+    border-radius: 1vw;
 }
 .TrackName:hover {
     border-color: #3366FF;
@@ -179,7 +182,7 @@ select {
 .PlayButton {
     position: absolute;
     top: 3vw;
-    left:1vw;
+    left: 1.5vw;
     border-top: 1vw solid transparent;
     border-left: 2vw solid green;
     border-bottom: 1vw solid transparent;
@@ -200,7 +203,7 @@ select {
     width: 2vw;
     height: 2vw;
     top: 3vw;
-    left:1vw;
+    left: 1.5vw;
     border-style: double;
     border-width: 0 0 0 1.5vw;
     border-color: navy;
@@ -217,7 +220,7 @@ select {
 .RecButton {
     position:absolute;
     top: 3vw;
-    left: 4vw;
+    left: 4.5vw;
 	width: 2vw;
 	height: 2vw;
 	border: .1vw solid transparent;
@@ -235,7 +238,7 @@ select {
 .StopButton {
     position:absolute;
     top: 3vw;
-    left: 4vw;
+    left: 4.5vw;
 	width: 2vw;
 	height: 2vw;
 	border: .1vw solid transparent;
@@ -250,12 +253,42 @@ select {
 .StopButton:hover {
     cursor: pointer;
 }
+.MuteButton {
+    position: absolute;
+    top: 0;
+    left: 11vw;
+    width: 0vw;
+    height: 4vw;
+    border: .1vw solid white;
+    background-color: gray;
+    font-size: 1vw;
+    padding-right: 1.2vw;
+    border-radius: .5vw;
+}
+.MuteButton:hover {border: .1vw solid red; cursor: pointer;}
+.MuteButton:active {background-color: maroon;}
+.MBon {background-color: red;}
+.SoloButton {
+    position: absolute;
+    top: 4vw;
+    left: 11vw;
+    width: 0vw;
+    height: 4vw;
+    border: .1vw solid white;
+    background-color: gray;
+    font-size: 1vw;
+    padding-right: 1.2vw;
+    border-radius: .5vw;
+}
+.SoloButton:hover {border: .1vw solid yellow; cursor: pointer;}
+.SoloButton:active {background-color: #999900;}
+.SBon {background-color: yellow;}
 .AddTrack {
     position: absolute;
     width: 15vw;
     height: 4vw;
     font-size: 1.5vw;
-    top: 55vw;
+    top: 50vw;
     border: 2px solid #999999;
 }
 .AddTrack:hover {border: 2px solid Black;}
@@ -266,16 +299,12 @@ select {
     height: 6vw;
     font-size: 2vw;
     left: 56vw;
-    top: 55vw;
+    top: 50vw;
     margin-bottom: 20vw;
     border: 2px solid #999999;
 }
-.Export:hover {
-    border: 2px solid Black;
-}
-.Export:active {
-    background-color: #999999;
-}
+.Export:hover {border: 2px solid Black;}
+.Export:active {background-color: #999999;}
 .delete {
     position: absolute;
     left: 73.5vw;
@@ -284,6 +313,47 @@ select {
     font-family: "Arial", sans-serif;
     font-size: .8vw;
     background-color: #6699CC;
+}
+.delete:hover {cursor: pointer;}
+
+.slider {
+    position: absolute;
+    -webkit-appearance: none;
+    width: 5vw;
+    height: 1vw;
+    border-radius: 1vw;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+.slider:hover {opacity: 1;}
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 1vw;
+    height: 1vw;
+    background: #4CAF50;
+    cursor: pointer;
+}
+.slider.Vol {
+    transform: rotate(90deg);
+    top: 4.5vw;
+    left: 5.5vw;
+}
+.zeroButton {
+    position: absolute;
+    top:0;
+    left:-1.7vw;
+    height:1.5vw;
+    width:1.5vw;
+    font-size:1vw;
+    background-color: #4CAF50;
+    border: .1vw solid white;
+    border-bottom-left-radius: 1vw;
+    padding-left: -1vw;
+
 }
 /*When the window gets really small, the margins get fucked up, so its nice to have a safety net to protect it*/
 @media only screen and (max-width: 800px) {

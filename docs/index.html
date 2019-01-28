@@ -283,16 +283,25 @@
             </div>
         </div>
 
-        <div id="inl0" style="position: relative;top:20vw;">
-            <button id="PB0" class="PlayButton Main" onclick="togglePP(event)"></button>
-            <button id="RB0" class="RecButton Main" onclick="toggleRS(event)"></button>
+        <div id="inl0" style="position: relative;top:11vw;left: 53vw;">
+            <button id="PB0" class="PlayButton Main" title="Play All" onclick="togglePP(event)"></button>
         </div>
 
         <div id="initTrack" class="Multitrack">
-            <div id="TRK1" style="position:absolute;background-color:#6699CC;width:11vw;height:8vw;">
+            <div id="TRK1" style="position:absolute;background-color:#6699CC;width:11vw;height:8vw;border-radius:1vw;">
                 <input type="text" value="Track 1" class="TrackName">
-                <button id="PB1" class="PlayButton" onclick="togglePP(event)"></button>
-                <button id="RB1" class="RecButton" onclick="toggleRS(event)"></button>
+                <button id="PB1" class="PlayButton" title="Play" onclick="togglePP(event)"></button>
+                <button id="RB1" class="RecButton" title="Record" onclick="toggleRS(event)"></button>
+                <button id="Mut1" class="MuteButton" title="Mute" onclick="toggleMB(event)">M</button>
+                <button id="Sol1" class="SoloButton" title="Solo" onclick="toggleSB(event)">S</button>
+                <div style="position:absolute;top: 6.5vw;left: 1.7vw;width:10vw;">
+                    <input id="Pan1" type="range" title="Pan" min="0" max="100" value="50" class="slider" onmousemove="getPanVal(event)">
+                    <span id="PLB1" style="position: absolute;top:-1.2vw;left:2.3vw;">0</span>
+                    <button id="Ctr1" class="zeroButton" title="Zero Pan" onclick="zero(event)">0</button>
+                </div>
+                <div>
+                    <input id="Vol1" type="range" title="Volume" min="0" max="100" value="50" class="slider Vol">
+                </div>
             </div>
         </div>
 

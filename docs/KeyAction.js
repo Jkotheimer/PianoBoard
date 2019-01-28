@@ -220,13 +220,16 @@ var TRACKS = new Set();
 var TrackNum = 2;
 function addTrack() {
     var newTrack = document.getElementById("TrackTemplate").cloneNode(true);
-    var nTop = 45 + (8*(TRACKS.size+1));
+    var nTop = 40 + (8*(TRACKS.size+1));
     newTrack.id = TrackNum.toString();
     TRACKS.add(newTrack.id);
-    newTrack.innerHTML += " <div id=\"TRK" + TrackNum + "\"style=\"position:absolute;background-color:#6699CC;width:11vw;height:8vw;\"> " + 
+    newTrack.innerHTML += " <div id=\"TRK" + TrackNum + 
+    "\"style=\"position:absolute;background-color:#6699CC;width:11vw;height:8vw;border-radius:1vw;\"> " + 
     " <input type=\"text\" id=\"Tname\" class=\"TrackName\" value=\"Track " + TrackNum + "\">" + 
     "<button id=\"PB" + TrackNum + "\" class=\"PlayButton\" onclick=\"togglePP(event)\"></button>" +
-    "<button id=\"RB" + TrackNum + "\" class=\"RecButton\" onclick=\"toggleRS(event)\"></button></div> "; 
+    "<button id=\"RB" + TrackNum + "\" class=\"RecButton\" onclick=\"toggleRS(event)\"></button>" + 
+    "<button id=\"Mut" + TrackNum + "\" class=\"MuteButton\" onclick=\"toggleMB(event)\">M</button>" + 
+    "<button id=\"Sol" + TrackNum + "\" class=\"SoloButton\" onclick=\"toggleSB(event)\">S</button></div>"; 
     newTrack.style.cssText = "top: " + nTop + "vw;";
     document.body.appendChild(newTrack);
     document.getElementById("AddTrack").style.cssText = "top: " + (nTop+10) + "vw;";
@@ -237,7 +240,7 @@ function deleteTrack(event) {
     var track = document.getElementById(event.srcElement.parentElement.id);
     TRACKS.delete(track.id);
     track.parentNode.removeChild(track);
-    var nTop = 45;
+    var nTop = 40;
     for(let item of TRACKS.keys()) {
         nTop += 8;
         var trk = document.getElementById(item);
@@ -290,17 +293,6 @@ function toggleRS(event) {
     var element = document.getElementById(event.srcElement.id);
     var PPB = "PB" + element.parentElement.id.substr(3);
     PPB = document.getElementById(PPB);
-    if(element.classList.contains("Main")){
-        if(PPB.classList.contains("PlayButton")) {
-            PPB.classList.replace("PlayButton", "PauseButton");
-        }
-        if(element.classList.contains("RecButton")){
-            element.classList.replace("RecButton", "StopButton");
-        } else {
-            element.classList.replace("StopButton", "RecButton")
-        }
-        return true;
-    }
     if (element.className == "RecButton") {
         if(PPB.className == "PlayButton") {
             PPB.className="PauseButton";
@@ -310,6 +302,53 @@ function toggleRS(event) {
     else {
         element.className = "RecButton";
     }
+}
+function toggleMB(event) {
+    var element = document.getElementById(event.srcElement.id);
+    if(element.classList.contains("MBon")) {
+        element.classList.remove("MBon");
+    } else {
+        element.classList.add("MBon");
+    }
+}
+function toggleSB(event) {
+    var element = document.getElementById(event.srcElement.id);
+    if(element.classList.contains("SBon")) {
+        element.classList.remove("SBon");
+    } else {
+        element.classList.add("SBon");
+    }
+}
+function zero(event) {
+    var element = document.getElementById(event.srcElement.id);
+    var span = document.getElementById("PLB" + element.id.substr(3));
+    var panner = document.getElementById("Pan" + element.id.substr(3));
+    span.innerHTML = "0";
+    panner.value = 50;
+}
+function getPanVal(event) {
+    var element = document.getElementById(event.srcElement.id);
+    var span = document.getElementById("PLB" + element.id.substr(3));
+    var pan = element.value - 50;
+    if(pan == 50) {
+        span.innerHTML = "R";
+    }
+    else if(pan == -50) {
+        span.innerHTML = "L";
+    }
+    else if(pan > 0) {
+        span.innerHTML = pan + "R";
+    }
+    else if(pan < 0) {
+        pan *=-1;
+        span.innerHTML = pan + "L";
+    }
+    else {
+        span.innerHTML = pan;
+    }
+}
+function getVolVal(event) {
+    
 }
 // To be used later: This is how to get the selected option from the dropbox
 var y = document.getElementById("instrument");
