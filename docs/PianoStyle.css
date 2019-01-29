@@ -84,6 +84,25 @@ select {
     background-color: #6699CC;
     border-radius: 1vw;
 }
+#SnapSelect {
+    position: absolute;
+    width: 9.5vw;
+    height: 2vw;
+    top:-5.5vw;
+    left: 9.3vw;
+    font-size: 1vw;
+    background-color: #6699CC;
+    border-radius: 1vw;
+    box-shadow: .5vw black;
+}
+#SnapBeat {
+    position: absolute;
+    left:78vw;
+    top: 20vw;
+    font-size: 2vw;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    color: #6699CC;
+}
 .moveover {
     margin: -9vw 0 0 30vw;
     padding: -1vw 1vw 1vw;
@@ -157,7 +176,7 @@ select {
     width: 62.15vw;
     height: 2vw;
     top: 38vw;
-    left: 13.65vw;
+    left: 13.55vw;
     background: #FFDDBB;
     border-top-right-radius: .5vw;
     outline: none;
@@ -343,6 +362,7 @@ select {
 .delete {
     position: absolute;
     left: 73.5vw;
+    z-index: 3;
     width: 1.5vw; height: 1.5vw;
     padding: .05vw 0 0 .04vw;
     font-family: "Arial", sans-serif;
@@ -450,6 +470,13 @@ select {
     width: 62vw;
     height: 8vw;
     background-color: #FFDDBB;
+}
+#pMarker {
+    position: absolute;
+    left: 0vw;;
+    width: .3vw;
+    height: 8vw;
+    background: #000000;
 }
 /*When the window gets really small, the margins get fucked up, so its nice to have a safety net to protect it*/
 @media only screen and (max-width: 800px) {

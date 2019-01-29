@@ -238,7 +238,8 @@ function addTrack() {
     "<button id=\"Ctr" + TrackNum + "\" class=\"zeroButton\" title=\"Zero Pan\" onclick=\"zero(event)\">0</button></div>" +
     "<div style=\"position:absolute;top: 4.5vw;left: 5.5vw;width:10vw;\">" +
     "<input id=\"Vol" + TrackNum + "\" type=\"range\" title=\"Volume\" min=\"0\" max=\"100\" value=\"50\" class=\"slider Vol\" onmousemove=\"getVolVal(event)\" onmouseup=\"getVolVal(event)\">" + 
-    "<span id=\"VLB" + TrackNum + "\" class=\"VolNum\">50<br>db</span></div>"; 
+    "<span id=\"VLB" + TrackNum + "\" class=\"VolNum\">50<br>db</span></div>" + 
+    "<div id=\"RecArea\"><div id=\"pMarker\"></div></div>"; 
     newTrack.style.cssText = "top: " + nTop + "vw;";
     document.body.appendChild(newTrack);
     document.getElementById("AddTrack").style.cssText = "top: " + (nTop+10) + "vw;";
@@ -388,14 +389,50 @@ function getVolVal(event) {
     var span = document.getElementById("VLB" + element.id.substr(3));
     span.innerHTML = element.value + "<br>db"; 
 }
-
+/* we want to take the snap to setting and make the max of the scrubber equal to the length of the recording plus a few measures
+Play the click track every (tempo/60) seconds
+Snap-to settings: (how many ticks will there be on the ruler)
+• whole note = (recording length in seconds)*(Tempo/60)
+• half note = (RLS)*(Tempo/30) + 2
+• third note = (RLS)*(Tempo/20) + 2
+• quarter note = (RLS)*(Tempo/15) + 2
+• fifth note = (RLS)*(Tempo/12) + 2
+• sixth note = (RLS)*(Tempo/10) + 2
+• eighth note = (RLS)*(Tempo/7) + 2
+• sixteenth note = (RLS)*(Tempo/3) + 2
+• thirtysecond note = (RLS)*(Tempo) + 2
+*/
 function Scrub(){
     var TimeSig = document.getElementById("TimeNumerator").value;
-    var spot = document.getElementById("Rul").value;
-    var measures = document.getElementById("Measures");
+    var ruler = document.getElementById("Rul");
+    var spot = ruler.value;
+    var len = ruler.max;
+    var measures = document.getElementById("Measures"); 
     var beats = document.getElementById("Beats");
     measures.innerHTML = Math.floor(spot/TimeSig);
     beats.innerHTML = spot%TimeSig + 1;
+}
+function changeTickNum() {
+    var div = document.getElementById("SnapSelect").value;
+    var BPMSR = document.getElementById("TimeNumerator").value;
+    var RecLength = document.getElementById("RecArea");
+    var Tempo = document.getElementById("TEMPOOO").value;
+    RecLength = RecLength.title;
+    document.getElementById("demo").innerHTML = BPMSR;
+    var ruler = document.getElementById("Rul");
+    if(div == "None"){//we want the smoothest sample size (480 samples per beat * however many beats there are)
+        ruler.max = 480*(BPMSR + (BPMSR * RecLength));
+    }
+    else if(div == "whole"){
+        ruler.max = RecLength * (Tempo/60) + BPMSR;
+    }
+    else {
+        div = 1/div;
+        ruler.max = RecLength * (Tempo/60) * div + BPMSR;
+    }
+}
+function Record(ident) {
+    
 }
 // To be used later: This is how to get the selected option from the dropbox
 var y = document.getElementById("instrument");
