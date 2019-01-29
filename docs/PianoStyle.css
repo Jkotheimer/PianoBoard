@@ -73,6 +73,7 @@ h3{
 .Temp {
     position:absolute;
     top: 19vw;
+    left:-10vw;
 }
 select {
     width: 15vw;
@@ -150,12 +151,35 @@ select {
     border: 1px solid navy;
     cursor: pointer;
 }
+#Rul {
+    position: absolute;
+    -webkit-appearance: none;
+    width: 62.15vw;
+    height: 2vw;
+    top: 38vw;
+    left: 13.65vw;
+    background: #FFDDBB;
+    border-top-right-radius: .5vw;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+#Rul:hover {opacity: 1;}
+#Rul::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: .5vw;
+    height: 2vw;
+    background: #4CAF50;
+    cursor: pointer;
+}
 .Multitrack {
     position: absolute;
     width: 75vw;
     height: 8vw;
     top: 40vw;
-    background-color: #FFDDBB;
+    background-color: white;
     border: 2px solid Black;
     border-radius: 1vw 0 0 1vw;
 }
@@ -344,6 +368,7 @@ select {
     appearance: none;
     width: 1vw;
     height: 1vw;
+    border-radius: 1vw;
     background: #4CAF50;
     cursor: pointer;
 }
@@ -351,6 +376,20 @@ select {
     transform: rotate(270deg);
     top: 0vw;
     left: 0vw;
+}
+.slider.Main {
+    transform: rotate(270deg);
+    width: 10vw;
+    height:2vw;
+    left: 9vw;
+    top:5vw;
+}
+.slider.Main::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 2vw;
+    height: 2vw;
+    border-radius: 1vw;
 }
 .PanNum {
     position: absolute;
@@ -363,6 +402,11 @@ select {
     top: 0;
     left: 4vw;
     font-size: 1vw;
+}
+.VolNum.Main {
+    left: 17vw;
+    top: 3.5vw;
+    font-size: 2vw;
 }
 .zeroButton {
     position: absolute;
@@ -380,6 +424,32 @@ select {
 }
 .zeroButton:active {
     background-color: green;
+}
+.TSbox {
+    position: absolute;
+    left: 88vw;
+    top: 11.5vw;
+    text-align:center;
+    padding-top: .5vw;
+    background-color:#6699CC;
+    box-shadow:0 0 1vw Black;
+    border-radius: 1vw;
+    width: 9vw;
+    height: 7.5vw;
+}
+.TimeSig {
+    text-align: center;
+    width: 2.7vw;
+    font-size: 1.5vw;
+    background-color: transparent;
+    border: .1vw solid transparent;
+}
+#RecArea {
+    position: absolute;
+    left: 13vw;
+    width: 62vw;
+    height: 8vw;
+    background-color: #FFDDBB;
 }
 /*When the window gets really small, the margins get fucked up, so its nice to have a safety net to protect it*/
 @media only screen and (max-width: 800px) {

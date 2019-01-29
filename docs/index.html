@@ -277,15 +277,24 @@
                     <span style="position: absolute; right: 2vw;"><u>Beats</u></span>
                 </div>
                 <div>
-                    <span id="Measures" style="position:absolute; top: 4vw; left: 5vw;">00</span>
-                    <span id="Beats" style="position:absolute; top: 4vw; right: 3.5vw;">00</span>
+                    <span id="Measures" style="position:absolute; top: 4vw; left: 5vw;">0</span>
+                    <span id="Beats" style="position:absolute; top: 4vw; right: 3.5vw;">1</span>
                 </div>
+            </div>
+            <div class="TSbox">
+                Time Signature
+                <input type="text" id="TimeNumerator" class="TimeSig" value="4">/
+                <input type="text" id="TimeDenominator" class="TimeSig" value="4">
             </div>
         </div>
 
-        <div id="inl0" style="position: relative;top:9.4vw;left: 52vw;">
+        <input id="Rul" type="range" min="0" max="20" value="0" onmousemove="Scrub()" onmouseup="Scrub()" onkeyup="Scrub()">
+
+        <div id="inl0" style="position: relative;top:9.4vw;left: 43vw;">
             <button id="PB0" class="PlayButton Main" title="Play All" onclick="togglePP(event);PAPA()"></button>
             <span id="PB0" class="PlayAll" onclick="togglePP(event);PAPA()">Play All</span>
+            <input id="Vol0" title="Main Volume" type="range" min="0" max="100" value="50" class="slider Main" onmousemove="getVolVal(event)" onmouseup="getVolVal(event)">
+            <span id="VLB0" class="VolNum Main">50<br>db</span>
         </div>
 
         <div id="initTrack" class="Multitrack">
@@ -296,14 +305,18 @@
                 <button id="Mut1" class="MuteButton" title="Mute" onclick="toggleMB(event)">M</button>
                 <button id="Sol1" class="SoloButton" title="Solo" onclick="toggleSB(event)">S</button>
                 <div style="position:absolute;top: 6.5vw;left: 1.7vw;width:10vw;">
-                    <input id="Pan1" type="range" title="Pan" min="0" max="100" value="50" class="slider" onmousemove="getPanVal(event)">
+                    <input id="Pan1" type="range" title="Pan" min="0" max="100" value="50" class="slider" onmousemove="getPanVal(event)" onmouseup="getPanVal(event)">
                     <span id="PLB1" class="PanNum">0</span>
                     <button id="Ctr1" class="zeroButton" title="Zero Pan" onclick="zero(event)">0</button>
                 </div>
                 <div style="position:absolute;top: 4.5vw;left: 5.5vw;width:10vw;">
-                    <input id="Vol1" type="range" title="Volume" min="0" max="100" value="50" class="slider Vol" onmousemove="getVolVal(event)">
+                    <input id="Vol1" type="range" title="Volume" min="0" max="100" value="50" class="slider Vol" onmousemove="getVolVal(event)" onmouseup="getVolVal(event)">
                     <span id="VLB1" class="VolNum">50<br>db</span>
                 </div>
+            </div>
+            <!--Use the Tempo input to define the spaces between ticks-->
+            <div id="RecArea"> 
+                
             </div>
         </div>
 

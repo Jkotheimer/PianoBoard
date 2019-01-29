@@ -218,10 +218,11 @@ function sweepout(identifier) {
     }
 }
 var TRACKS = new Set();
+TRACKS.add("1");
 var TrackNum = 2;
 function addTrack() {
     var newTrack = document.getElementById("TrackTemplate").cloneNode(true);
-    var nTop = 40 + (8*(TRACKS.size+1));
+    var nTop = 40 + (8*(TRACKS.size));
     newTrack.id = TrackNum.toString();
     TRACKS.add(newTrack.id);
     newTrack.innerHTML += " <div id=\"TRK" + TrackNum + 
@@ -232,11 +233,11 @@ function addTrack() {
     "<button id=\"Mut" + TrackNum + "\" class=\"MuteButton\" onclick=\"toggleMB(event)\">M</button>" + 
     "<button id=\"Sol" + TrackNum + "\" class=\"SoloButton\" onclick=\"toggleSB(event)\">S</button></div>" + 
     "<div style=\"position:absolute;top: 6.5vw;left: 1.7vw;width:10vw;\">" + 
-    "<input id=\"Pan" + TrackNum + "\" type=\"range\" title=\"Pan\" min=\"0\" max=\"100\" value=\"50\" class=\"slider\" onmousemove=\"getPanVal(event)\">" +
+    "<input id=\"Pan" + TrackNum + "\" type=\"range\" title=\"Pan\" min=\"0\" max=\"100\" value=\"50\" class=\"slider\" onmousemove=\"getPanVal(event)\" onmouseup=\"getPanVal(event)\">" +
     "<span id=\"PLB" + TrackNum + "\" class=\"PanNum\">0</span>" +
     "<button id=\"Ctr" + TrackNum + "\" class=\"zeroButton\" title=\"Zero Pan\" onclick=\"zero(event)\">0</button></div>" +
     "<div style=\"position:absolute;top: 4.5vw;left: 5.5vw;width:10vw;\">" +
-    "<input id=\"Vol" + TrackNum + "\" type=\"range\" title=\"Volume\" min=\"0\" max=\"100\" value=\"50\" class=\"slider Vol\" onmousemove=\"getVolVal(event)\">" + 
+    "<input id=\"Vol" + TrackNum + "\" type=\"range\" title=\"Volume\" min=\"0\" max=\"100\" value=\"50\" class=\"slider Vol\" onmousemove=\"getVolVal(event)\" onmouseup=\"getVolVal(event)\">" + 
     "<span id=\"VLB" + TrackNum + "\" class=\"VolNum\">50<br>db</span></div>"; 
     newTrack.style.cssText = "top: " + nTop + "vw;";
     document.body.appendChild(newTrack);
@@ -250,6 +251,7 @@ function deleteTrack(event) {
     track.parentNode.removeChild(track);
     var nTop = 40;
     for(let item of TRACKS.keys()) {
+        if(item == "1") continue;
         nTop += 8;
         var trk = document.getElementById(item);
         trk.style.cssText = "top: " + nTop + "vw;";
@@ -272,12 +274,24 @@ function PAPA() {
     }
 }
 function togglePP(event) {
+    // For use of main P/P button
+    var btns = new Set();
+    for(let item of TRACKS.keys()){
+        var ident = "PB" + item;
+        btns.add(ident);
+    }
     if(event.keyCode == 32) {
         var button = document.getElementById("PB0");
         if(button.classList.contains("PauseButton")){
             button.classList.replace("PauseButton", "PlayButton");
+            for(let item of btns.keys()) {
+                document.getElementById(item).classList.replace("PauseButton", "PlayButton");
+            }
         } else {
-            button.classList.replace("PlayButton", "PauseButton")
+            button.classList.replace("PlayButton", "PauseButton");
+            for(let item of btns.keys()) {
+                document.getElementById(item).classList.replace("PlayButton", "PauseButton");
+            }
         }
         return true;
     }
@@ -287,8 +301,14 @@ function togglePP(event) {
     if(element.classList.contains("Main")){
         if(element.classList.contains("PauseButton")){
             element.classList.replace("PauseButton", "PlayButton");
+            for(let item of btns.keys()) {
+                document.getElementById(item).classList.replace("PauseButton", "PlayButton");
+            }
         } else {
-            element.classList.replace("PlayButton", "PauseButton")
+            element.classList.replace("PlayButton", "PauseButton");
+            for(let item of btns.keys()) {
+                document.getElementById(item).classList.replace("PlayButton", "PauseButton");
+            }
         }
         return true;
     }
@@ -311,9 +331,11 @@ function toggleRS(event) {
         if(PPB.className == "PlayButton") {
             PPB.className="PauseButton";
         }
+        Record(element.parentElement.id);
         element.className = "StopButton";
     }
     else {
+        endRecording(element.parentElement.id);
         element.className = "RecButton";
     }
 }
@@ -365,6 +387,15 @@ function getVolVal(event) {
     var element = document.getElementById(event.srcElement.id);
     var span = document.getElementById("VLB" + element.id.substr(3));
     span.innerHTML = element.value + "<br>db"; 
+}
+
+function Scrub(){
+    var TimeSig = document.getElementById("TimeNumerator").value;
+    var spot = document.getElementById("Rul").value;
+    var measures = document.getElementById("Measures");
+    var beats = document.getElementById("Beats");
+    measures.innerHTML = Math.floor(spot/TimeSig);
+    beats.innerHTML = spot%TimeSig + 1;
 }
 // To be used later: This is how to get the selected option from the dropbox
 var y = document.getElementById("instrument");
