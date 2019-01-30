@@ -173,10 +173,10 @@ select {
 #Rul {
     position: absolute;
     -webkit-appearance: none;
-    width: 62.15vw;
+    width: 61.8vw;
     height: 2vw;
     top: 38vw;
-    left: 13.55vw;
+    left: 13.7vw;
     background: #FFDDBB;
     border-top-right-radius: .5vw;
     outline: none;
@@ -188,7 +188,7 @@ select {
 #Rul::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: .5vw;
+    width: .3vw;
     height: 2vw;
     background: #4CAF50;
     cursor: pointer;
@@ -450,6 +450,7 @@ select {
     left: 88vw;
     top: 11.5vw;
     text-align:center;
+    font-size:1.3vw;
     padding-top: .5vw;
     background-color:#6699CC;
     box-shadow:0 0 1vw Black;
@@ -471,7 +472,7 @@ select {
     height: 8vw;
     background-color: #FFDDBB;
 }
-#pMarker {
+.pmarker {
     position: absolute;
     left: 0vw;;
     width: .3vw;

@@ -239,7 +239,7 @@ function addTrack() {
     "<div style=\"position:absolute;top: 4.5vw;left: 5.5vw;width:10vw;\">" +
     "<input id=\"Vol" + TrackNum + "\" type=\"range\" title=\"Volume\" min=\"0\" max=\"100\" value=\"50\" class=\"slider Vol\" onmousemove=\"getVolVal(event)\" onmouseup=\"getVolVal(event)\">" + 
     "<span id=\"VLB" + TrackNum + "\" class=\"VolNum\">50<br>db</span></div>" + 
-    "<div id=\"RecArea\"><div id=\"pMarker\"></div></div>"; 
+    "<div id=\"RecArea\"><div id=\"pMarker" + TrackNum + "\" class=\"pmarker\"></div></div>"; 
     newTrack.style.cssText = "top: " + nTop + "vw;";
     document.body.appendChild(newTrack);
     document.getElementById("AddTrack").style.cssText = "top: " + (nTop+10) + "vw;";
@@ -389,46 +389,29 @@ function getVolVal(event) {
     var span = document.getElementById("VLB" + element.id.substr(3));
     span.innerHTML = element.value + "<br>db"; 
 }
-/* we want to take the snap to setting and make the max of the scrubber equal to the length of the recording plus a few measures
-Play the click track every (tempo/60) seconds
-Snap-to settings: (how many ticks will there be on the ruler)
-• whole note = (recording length in seconds)*(Tempo/60)
-• half note = (RLS)*(Tempo/30) + 2
-• third note = (RLS)*(Tempo/20) + 2
-• quarter note = (RLS)*(Tempo/15) + 2
-• fifth note = (RLS)*(Tempo/12) + 2
-• sixth note = (RLS)*(Tempo/10) + 2
-• eighth note = (RLS)*(Tempo/7) + 2
-• sixteenth note = (RLS)*(Tempo/3) + 2
-• thirtysecond note = (RLS)*(Tempo) + 2
-*/
 function Scrub(){
     var TimeSig = document.getElementById("TimeNumerator").value;
     var ruler = document.getElementById("Rul");
     var spot = ruler.value;
-    var len = ruler.max;
+    var length = ruler.max;
     var measures = document.getElementById("Measures"); 
     var beats = document.getElementById("Beats");
-    measures.innerHTML = Math.floor(spot/TimeSig);
-    beats.innerHTML = spot%TimeSig + 1;
-}
-function changeTickNum() {
-    var div = document.getElementById("SnapSelect").value;
-    var BPMSR = document.getElementById("TimeNumerator").value;
-    var RecLength = document.getElementById("RecArea");
-    var Tempo = document.getElementById("TEMPOOO").value;
-    RecLength = RecLength.title;
-    document.getElementById("demo").innerHTML = BPMSR;
-    var ruler = document.getElementById("Rul");
-    if(div == "None"){//we want the smoothest sample size (480 samples per beat * however many beats there are)
-        ruler.max = 480*(BPMSR + (BPMSR * RecLength));
+    var pixelPosition = ruler.clientWidth * (spot/length);
+    var pMarker;
+    for(let item of TRACKS.keys()) {
+        document.getElementById("demo").innerHTML = item;
+        pMarker = document.getElementById("pMarker" + item);
+        pMarker.style.left = pixelPosition + "px";
     }
-    else if(div == "whole"){
-        ruler.max = RecLength * (Tempo/60) + BPMSR;
-    }
-    else {
-        div = 1/div;
-        ruler.max = RecLength * (Tempo/60) * div + BPMSR;
+    measures.innerHTML = Math.floor(spot/480);
+    for(var i = 1; i <= TimeSig; i++) {
+        if(spot%480 < (480/TimeSig)*i) {
+            beats.innerHTML = i;
+            break;
+        }
+        else {
+            beats.innerHTML = 1;
+        }
     }
 }
 function Record(ident) {
