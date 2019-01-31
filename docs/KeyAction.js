@@ -27,7 +27,6 @@ document.addEventListener("keyup", function() {
         if(event.srcElement.id != "Tname") {
             event.preventDefault();
             togglePP(event);
-            PAPA();
         }
     }
     else if(event.key == "Shift") {
@@ -222,11 +221,11 @@ TRACKS.add("1");
 var TrackNum = 2;
 function addTrack() {
     var newTrack = document.getElementById("TrackTemplate").cloneNode(true);
-    var nTop = 40 + (8*(TRACKS.size));
+    var nTop = 40.1 + (8.1*(TRACKS.size));
     newTrack.id = TrackNum.toString();
     TRACKS.add(newTrack.id);
     newTrack.innerHTML += " <div id=\"TRK" + TrackNum + 
-    "\"style=\"position:absolute;background-color:#6699CC;width:11vw;height:8vw;border-radius:1vw;\"> " + 
+    "\"style=\"position:absolute;background-color:#6699CC;width:13vw;height:8vw;border-radius:1vw 0 0 1vw;\"> " + 
     " <input type=\"text\" id=\"Tname\" class=\"TrackName\" value=\"Track " + TrackNum + "\">" + 
     "<button id=\"PB" + TrackNum + "\" class=\"PlayButton\" onclick=\"togglePP(event)\"></button>" +
     "<button id=\"RB" + TrackNum + "\" class=\"RecButton\" onclick=\"toggleRS(event)\"></button>" + 
@@ -239,7 +238,7 @@ function addTrack() {
     "<div style=\"position:absolute;top: 4.5vw;left: 5.5vw;width:10vw;\">" +
     "<input id=\"Vol" + TrackNum + "\" type=\"range\" title=\"Volume\" min=\"0\" max=\"100\" value=\"50\" class=\"slider Vol\" onmousemove=\"getVolVal(event)\" onmouseup=\"getVolVal(event)\">" + 
     "<span id=\"VLB" + TrackNum + "\" class=\"VolNum\">50<br>db</span></div>" + 
-    "<div id=\"RecArea\"><div id=\"pMarker" + TrackNum + "\" class=\"pmarker\"></div></div>"; 
+    "<div id=\"RecArea" + TrackNum + "\" class=\"RecArea\" title=0><div id=\"pMarker" + TrackNum + "\" class=\"pmarker\"></div></div>"; 
     newTrack.style.cssText = "top: " + nTop + "vw;";
     document.body.appendChild(newTrack);
     document.getElementById("AddTrack").style.cssText = "top: " + (nTop+10) + "vw;";
@@ -250,10 +249,10 @@ function deleteTrack(event) {
     var track = document.getElementById(event.srcElement.parentElement.id);
     TRACKS.delete(track.id);
     track.parentNode.removeChild(track);
-    var nTop = 40;
+    var nTop = 40.1;
     for(let item of TRACKS.keys()) {
         if(item == "1") continue;
-        nTop += 8;
+        nTop += 8.1;
         var trk = document.getElementById(item);
         trk.style.cssText = "top: " + nTop + "vw;";
     }
@@ -277,21 +276,52 @@ function PAPA() {
 function togglePP(event) {
     // For use of main P/P button
     var btns = new Set();
+    var rbtns = new Set();
     for(let item of TRACKS.keys()){
         var ident = "PB" + item;
+        var pbutt = document.getElementById(ident);
         btns.add(ident);
+        ident = "RB" + item;
+        rbtns.add(ident);
+        var rbutt = document.getElementById(ident);
+        if(rbutt.classList.contains("StopButton")) {
+            rbutt.classList.replace("StopButton", "RecButton");
+            pbutt.classList.replace("PauseButton", "PlayButton");
+            endRecording(pbutt.id);
+            PauseTrack(rbutt.id);
+            return true;
+        }
     }
     if(event.keyCode == 32) {
         var button = document.getElementById("PB0");
+        for(let item of btns.keys()) {
+            if(button.classList.contains("PauseButton"))break;
+            if(document.getElementById(item).classList.contains("PauseButton")){
+                document.getElementById(item).classList.replace("PauseButton", "PlayButton");
+                PauseTrack(item);
+                return true;
+            }
+        }
+        PAPA();
         if(button.classList.contains("PauseButton")){
             button.classList.replace("PauseButton", "PlayButton");
             for(let item of btns.keys()) {
-                document.getElementById(item).classList.replace("PauseButton", "PlayButton");
+                if(document.getElementById(item).classList.contains("PauseButton")){
+                    document.getElementById(item).classList.replace("PauseButton", "PlayButton");
+                    PauseTrack(item);
+                }
+            }
+            for(let item of rbtns.keys()) {
+                if(document.getElementById(item).classList.contains("StopButton")) {
+                    document.getElementById(item).classList.replace("StopButton","RecButton");
+                    endRecording(item);
+                }
             }
         } else {
             button.classList.replace("PlayButton", "PauseButton");
             for(let item of btns.keys()) {
                 document.getElementById(item).classList.replace("PlayButton", "PauseButton");
+                PlayTrack(item);
             }
         }
         return true;
@@ -300,15 +330,30 @@ function togglePP(event) {
     var RB = "RB" + element.parentElement.id.substr(3);
     RB = document.getElementById(RB);
     if(element.classList.contains("Main")){
+        for(let item of btns.keys()) {
+            if(element.classList.contains("PauseButton"))break;
+            if(document.getElementById(item).classList.contains("PauseButton")){
+                document.getElementById(item).classList.replace("PauseButton", "PlayButton");
+                PauseTrack(item);
+                return true;
+            }
+        }
+        PAPA();
         if(element.classList.contains("PauseButton")){
             element.classList.replace("PauseButton", "PlayButton");
             for(let item of btns.keys()) {
-                document.getElementById(item).classList.replace("PauseButton", "PlayButton");
+                if(document.getElementById(item).classList.contains("PauseButton")){
+                    document.getElementById(item).classList.replace("PauseButton", "PlayButton");
+                    PauseTrack(item);
+                }
             }
         } else {
             element.classList.replace("PlayButton", "PauseButton");
             for(let item of btns.keys()) {
-                document.getElementById(item).classList.replace("PlayButton", "PauseButton");
+                if(document.getElementById(item).classList.contains("PlayButton")){
+                    document.getElementById(item).classList.replace("PlayButton", "PauseButton");
+                    PlayTrack(item);
+                }
             }
         }
         return true;
@@ -316,11 +361,14 @@ function togglePP(event) {
     if (element.className == "PauseButton") {
         if(RB.className == "StopButton") {
             RB.className="RecButton";
+            endRecording(element.parentElement.id);
         }
         element.className = "PlayButton";
+        PauseTrack(element.id);
     }
     else {
         element.className = "PauseButton";
+        PlayTrack(element.id);
     }
     return true;
 }
@@ -331,13 +379,14 @@ function toggleRS(event) {
     if (element.className == "RecButton") {
         if(PPB.className == "PlayButton") {
             PPB.className="PauseButton";
+            PlayTrack(element.id);
         }
-        Record(element.parentElement.id);
         element.className = "StopButton";
+        Record(element.id);
     }
     else {
-        endRecording(element.parentElement.id);
         element.className = "RecButton";
+        endRecording(element.id);
     }
 }
 function toggleMB(event) {
@@ -399,7 +448,6 @@ function Scrub(){
     var pixelPosition = ruler.clientWidth * (spot/length);
     var pMarker;
     for(let item of TRACKS.keys()) {
-        document.getElementById("demo").innerHTML = item;
         pMarker = document.getElementById("pMarker" + item);
         pMarker.style.left = pixelPosition + "px";
     }
@@ -414,8 +462,32 @@ function Scrub(){
         }
     }
 }
+var startTime;
 function Record(ident) {
-    
+}
+function endRecording(ident) {
+}
+function PauseTrack(ident) {
+    clearInterval(startTime);
+}
+function PlayTrack(ident){
+    var track = document.getElementById("RecArea" + ident.substr(2));
+    var ruler = document.getElementById("Rul");
+    var tempo = document.getElementById("TEMPOOO").value;
+    clearInterval(startTime);
+    if(ruler.value == ruler.max) ruler.value = 0;
+    startTime = setInterval(function() {
+        ruler.value++;
+        Scrub();
+        if(ruler.value == ruler.max) {
+            PauseTrack(ident);
+            for(let item of TRACKS.keys()) {
+                var x = document.getElementById("PB" + item);
+                if(x.classList.contains("PauseButton")) x.classList.replace("PauseButton", "PlayButton");
+            }
+        }
+        //marker.style.left = ruler.clientWidth * (ruler.value/ruler.max) + "px";
+    }, (1000 * (60/tempo))/480);
 }
 // To be used later: This is how to get the selected option from the dropbox
 var y = document.getElementById("instrument");

@@ -291,31 +291,31 @@
         <input id="Rul" type="range" min=0 max=960 value=0 onmousemove="Scrub()" onmouseup="Scrub()" onkeyup="Scrub()" onkeydown="Scrub()">
 
         <div id="inl0" style="position: relative;top:9.4vw;left: 43vw;">
-            <button id="PB0" class="PlayButton Main" title="Play All" onclick="togglePP(event);PAPA()"></button>
-            <span id="PB0" class="PlayAll" onclick="togglePP(event);PAPA()">Play All</span>
-            <input id="Vol0" title="Main Volume" type="range" min="0" max="100" value="50" class="slider Main" onmousemove="getVolVal(event)" onmouseup="getVolVal(event)">
+            <button id="PB0" class="PlayButton Main" title="Play All" onclick="togglePP(event)"></button>
+            <span id="PB0" class="PlayAll" onclick="togglePP(event)">Play All</span>
+            <input id="Vol0" title="Main Volume" type="range" min="0" max="100" value="50" class="slider Main" onmousemove="getVolVal(event)" onmouseup="getVolVal(event)" onkeydown="getVolVal(event)" onkeyup="getVolVal(event)">
             <span id="VLB0" class="VolNum Main">50<br>db</span>
         </div>
 
         <div id="initTrack" class="Multitrack">
-            <div id="TRK1" style="position:absolute;background-color:#6699CC;width:11vw;height:8vw;border-radius:1vw;">
+            <div id="TRK1" style="position:absolute;background-color:#6699CC;width:13vw;height:8vw;border-radius:1vw 0 0 1vw;">
                 <input type="text" id="Tname" value="Track 1" class="TrackName">
                 <button id="PB1" class="PlayButton" title="Play/Pause" onclick="togglePP(event)"></button>
                 <button id="RB1" class="RecButton" title="Record/Stop" onclick="toggleRS(event)"></button>
                 <button id="Mut1" class="MuteButton" title="Mute" onclick="toggleMB(event)">M</button>
                 <button id="Sol1" class="SoloButton" title="Solo" onclick="toggleSB(event)">S</button>
                 <div style="position:absolute;top: 6.5vw;left: 1.7vw;width:10vw;">
-                    <input id="Pan1" type="range" title="Pan" min="0" max="100" value="50" class="slider" onmousemove="getPanVal(event)" onmouseup="getPanVal(event)">
+                    <input id="Pan1" type="range" title="Pan" min="0" max="100" value="50" class="slider" onmousemove="getPanVal(event)" onmouseup="getPanVal(event)" onkeydown="getPanVal(event)" onkeyup="getPanVal(event)">
                     <span id="PLB1" class="PanNum">0</span>
                     <button id="Ctr1" class="zeroButton" title="Zero Pan" onclick="zero(event)">0</button>
                 </div>
                 <div style="position:absolute;top: 4.5vw;left: 5.5vw;width:10vw;">
-                    <input id="Vol1" type="range" title="Volume" min="0" max="100" value="50" class="slider Vol" onmousemove="getVolVal(event)" onmouseup="getVolVal(event)">
+                    <input id="Vol1" type="range" title="Volume" min="0" max="100" value="50" class="slider Vol" onmousemove="getVolVal(event)" onmouseup="getVolVal(event)" onkeydown="getVolVal(event)" onkeyup="getVolVal(event)">
                     <span id="VLB1" class="VolNum">50<br>db</span>
                 </div>
             </div>
             <!--Use the Tempo input to define the spaces between ticks-->
-            <div id="RecArea" title=0> 
+            <div id="RecArea1" class="RecArea" title=0 onmousemove="Scrub()" onmouseup="Scrub()" onkeyup="Scrub()" onkeydown="Scrub()"> 
                 <div id="pMarker1" class="pmarker"></div>
             </div>
         </div>
@@ -324,7 +324,7 @@
             <button class="delete" onclick="deleteTrack(event)">X</button>
         </div>
         
-        <button id="AddTrack" class="AddTrack" onclick="addTrack()">+ Add Track</button>
+        <button id="AddTrack" class="AddTrack" onclick="addTrack();Scrub()">+ Add Track</button>
         <button id="Export" class="Export">Export Mp3</button>
         <br>
         <div id="demo"></div>

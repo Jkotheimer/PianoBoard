@@ -47,7 +47,7 @@ div.title {
 }
 h1 {
     font-size: 5vw;
-    text-shadow: 2px 2px 8px #6699CC;
+    text-shadow: .2vw .2vw .8vw #6699CC;
     color: #6699CC;
 }
 p {
@@ -163,11 +163,11 @@ select {
     box-shadow: 0 0 1vw #6699CC;
 }
 #Instrument:hover {
-    border: 1px solid navy;
+    border: .1vw solid navy;
     cursor: pointer;
 }
 #PCCC:hover {
-    border: 1px solid navy;
+    border: .1vw solid navy;
     cursor: pointer;
 }
 #Rul {
@@ -199,7 +199,7 @@ select {
     height: 8vw;
     top: 40vw;
     background-color: white;
-    border: 2px solid Black;
+    border: .17vw solid Black;
     border-radius: 1vw 0 0 1vw;
 }
 .TrackName {
@@ -266,6 +266,7 @@ select {
 }
 .PlayAll:hover {
     color: #2A8D30;
+    cursor: pointer;
 }
 .RecButton {
     position:absolute;
@@ -343,9 +344,9 @@ select {
     height: 4vw;
     font-size: 1.5vw;
     top: 50vw;
-    border: 2px solid #999999;
+    border: .2vw solid #999999;
 }
-.AddTrack:hover {border: 2px solid Black;}
+.AddTrack:hover {border: .2vw solid Black;}
 .AddTrack:active {background-color: #999999;}
 .Export {
     position: absolute;
@@ -355,9 +356,9 @@ select {
     left: 56vw;
     top: 50vw;
     margin-bottom: 20vw;
-    border: 2px solid #999999;
+    border: .2vw solid #999999;
 }
-.Export:hover {border: 2px solid Black;}
+.Export:hover {border: .2vw solid Black;}
 .Export:active {background-color: #999999;}
 .delete {
     position: absolute;
@@ -465,7 +466,7 @@ select {
     background-color: transparent;
     border: .1vw solid transparent;
 }
-#RecArea {
+.RecArea {
     position: absolute;
     left: 13vw;
     width: 62vw;
