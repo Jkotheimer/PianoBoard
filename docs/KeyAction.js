@@ -500,7 +500,7 @@ function Record(ident) {
     Recording.style.height = "8vw";
     var w = 0;
     RecordTime = setInterval(function() {
-        document.getElementById("demo").innerHTML = "Anal";
+        document.getElementById("demo").innerHTML = w;
         Recording.style.width =  "0vw";
     }, 1000 / (tempo/2) );
 }
