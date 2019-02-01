@@ -468,11 +468,11 @@ function Scrub(){
         pMarker = document.getElementById("pMarker" + item);
         pMarker.style.left = pixelPosition + "px";
     }
-    measures.innerHTML = Math.floor(spot/480);
+    measures.innerHTML = Math.floor(spot/120);
     var lastBeat = beats.innerHTML;
     var click = -1;
     for(var i = 1; i <= TimeSig; i++) {
-        if(spot%480 < (480/TimeSig)*i) {
+        if(spot%120 < (120/TimeSig)*i) {
             beats.innerHTML = i;
             break;
         }
@@ -538,7 +538,7 @@ function PlayTrack(ident){
                 }
             }
         }
-    }, ((1000 * (60/tempo))/480));
+    }, 1000 / (tempo/2) );
 }
 // To be used later: This is how to get the selected option from the dropbox
 var y = document.getElementById("instrument");
