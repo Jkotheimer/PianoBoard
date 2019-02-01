@@ -488,14 +488,26 @@ function Scrub(){
 }
 var PlayTime;
 var RecordTime;
+var isRec = false;
 function Record(ident) {
-    document.getElementById("demo").innerHTML = ident;
+    isRec = true;
+    clearInterval(RecordTime);
     ident = ident.substr(2);
     var Rec = document.getElementById("RecArea" + ident);
     Rec.innerHTML += "<div id=\"Recording" + ident + "\"></div>";
-    RecordTime = setInterval(function() {}, 1000 / (tempo/2))
+    var Recording = document.getElementById("Recording" + ident);
+    Recording.style.backgroundColor = "maroon";
+    Recording.style.height = "8vw";
+    var w = 0;
+    RecordTime = setInterval(function() {
+        document.getElementById("demo").innerHTML = "Anal";
+        Recording.style.width =  "0vw";
+    }, 1000 / (tempo/2) );
 }
 function endRecording(ident) {
+    isRec = false;
+    clearInterval(RecordTime);
+    document.getElementById("Recording" + ident.subst(2)).style.backgroundColor = "green";
 }
 function PauseTrack(ident) {
     clearInterval(PlayTime);
@@ -527,7 +539,9 @@ function PlayTrack(ident){
             lclick.load();
             lclick.play();
         }
-        var isRec = false;
+        if(isRec){
+            
+        }
         if(ruler.value == ruler.max) {
             for(let item of TRACKS.keys()) {
                 if(document.getElementById("RB" + item).classList.contains("StopButton")) isRec = true;
