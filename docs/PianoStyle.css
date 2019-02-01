@@ -166,6 +166,9 @@ select {
     border: .1vw solid navy;
     cursor: pointer;
 }
+#PCCC {
+    border: .1vw solid transparent;
+}
 #PCCC:hover {
     border: .1vw solid navy;
     cursor: pointer;

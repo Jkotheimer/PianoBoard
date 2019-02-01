@@ -13,7 +13,7 @@ for some reason the setInterval function bugs out if I try to do it, but 3% volu
 */
 document.addEventListener("keydown", function(){
     if(event.keyCode == 32) {
-        if(event.srcElement.id != "Tname") event.preventDefault();
+        event.preventDefault();
     }
     else if(event.key == "Shift") {
         reso = true;
@@ -277,6 +277,7 @@ function togglePP(event) {
     // For use of main P/P button
     var btns = new Set();
     var rbtns = new Set();
+    var stopRec = false;
     for(let item of TRACKS.keys()){
         var ident = "PB" + item;
         var pbutt = document.getElementById(ident);
@@ -289,8 +290,21 @@ function togglePP(event) {
             pbutt.classList.replace("PauseButton", "PlayButton");
             endRecording(pbutt.id);
             PauseTrack(rbutt.id);
-            return true;
+            stopRec = true;
         }
+    }
+    if(stopRec == true) {
+        for(let item of btns.keys()){
+            if(document.getElementById(item).classList.contains("PauseButton")){
+                document.getElementById(item).classList.replace("PauseButton", "PlayButton");
+                if(document.getElementById("PB0").classList.contains("PauseButton")){
+                    document.getElementById("PB0").classList.replace("PauseButton", "PlayButton");
+                    PAPA();
+                }
+                PauseTrack(item);
+            }
+        }
+        return true;
     }
     if(event.keyCode == 32) {
         var button = document.getElementById("PB0");
@@ -364,6 +378,9 @@ function togglePP(event) {
             endRecording(element.parentElement.id);
         }
         element.className = "PlayButton";
+        for(let item of TRACKS.keys()){
+            if(document.getElementById("PB" + item).classList.contains("PauseButton")) return true;
+        }
         PauseTrack(element.id);
     }
     else {
@@ -452,6 +469,8 @@ function Scrub(){
         pMarker.style.left = pixelPosition + "px";
     }
     measures.innerHTML = Math.floor(spot/480);
+    var lastBeat = beats.innerHTML;
+    var click = -1;
     for(var i = 1; i <= TimeSig; i++) {
         if(spot%480 < (480/TimeSig)*i) {
             beats.innerHTML = i;
@@ -461,6 +480,11 @@ function Scrub(){
             beats.innerHTML = 1;
         }
     }
+    if(lastBeat != beats.innerHTML){
+        if(beats.innerHTML == 1) click = 0;
+        else click = 1;
+    }
+    return click;
 }
 var startTime;
 function Record(ident) {
@@ -475,19 +499,46 @@ function PlayTrack(ident){
     var ruler = document.getElementById("Rul");
     var tempo = document.getElementById("TEMPOOO").value;
     clearInterval(startTime);
-    if(ruler.value == ruler.max) ruler.value = 0;
+    if(ruler.value == ruler.max) {
+        ruler.value = 0;
+    }
+    var playClick = document.getElementById("PCC").checked;
+    var hclick = document.getElementById("HClick");
+    var lclick = document.getElementById("LClick");
+    if(ruler.value == 0 && playClick) {
+        hclick.load();
+        hclick.play();
+    }
     startTime = setInterval(function() {
         ruler.value++;
-        Scrub();
+        var click = Scrub();
+        playClick = document.getElementById("PCC").checked;
+        if(click == 0 && playClick) {
+            hclick.load();
+            hclick.play();
+        }
+        else if(click == 1 && playClick) {
+            lclick.load();
+            lclick.play();
+        }
+        var isRec = false;
         if(ruler.value == ruler.max) {
-            PauseTrack(ident);
             for(let item of TRACKS.keys()) {
-                var x = document.getElementById("PB" + item);
-                if(x.classList.contains("PauseButton")) x.classList.replace("PauseButton", "PlayButton");
+                if(document.getElementById("RB" + item).classList.contains("StopButton")) isRec = true;
+            }
+            if(!isRec){   
+                PauseTrack(ident);
+                for(let item of TRACKS.keys()) {
+                    var x = document.getElementById("PB" + item);
+                    if(x.classList.contains("PauseButton")) x.classList.replace("PauseButton", "PlayButton");
+                }
+                if(document.getElementById("PB0").classList.contains("PauseButton")){
+                    document.getElementById("PB0").classList.replace("PauseButton", "PlayButton");
+                    PAPA();
+                }
             }
         }
-        //marker.style.left = ruler.clientWidth * (ruler.value/ruler.max) + "px";
-    }, (1000 * (60/tempo))/480);
+    }, ((1000 * (60/tempo))/480));
 }
 // To be used later: This is how to get the selected option from the dropbox
 var y = document.getElementById("instrument");
