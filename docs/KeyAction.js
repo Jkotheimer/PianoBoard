@@ -486,19 +486,25 @@ function Scrub(){
     }
     return click;
 }
-var startTime;
+var PlayTime;
+var RecordTime;
 function Record(ident) {
+    document.getElementById("demo").innerHTML = ident;
+    ident = ident.substr(2);
+    var Rec = document.getElementById("RecArea" + ident);
+    Rec.innerHTML += "<div id=\"Recording" + ident + "\"></div>";
+    RecordTime = setInterval(function() {}, 1000 / (tempo/2))
 }
 function endRecording(ident) {
 }
 function PauseTrack(ident) {
-    clearInterval(startTime);
+    clearInterval(PlayTime);
 }
 function PlayTrack(ident){
     var track = document.getElementById("RecArea" + ident.substr(2));
     var ruler = document.getElementById("Rul");
     var tempo = document.getElementById("TEMPOOO").value;
-    clearInterval(startTime);
+    clearInterval(PlayTime);
     if(ruler.value == ruler.max) {
         ruler.value = 0;
     }
@@ -509,7 +515,7 @@ function PlayTrack(ident){
         hclick.load();
         hclick.play();
     }
-    startTime = setInterval(function() {
+    PlayTime = setInterval(function() {
         ruler.value++;
         var click = Scrub();
         playClick = document.getElementById("PCC").checked;
