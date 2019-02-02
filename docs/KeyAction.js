@@ -35,7 +35,10 @@ document.addEventListener("keyup", function() {
     else {
         action(event);
     }
-})
+});
+window.addEventListener("contextmenu", e => {
+    e.preventDefault();
+  });
 function volFader() {
     var fadePoint = note.currentTime + 1;
     var first = false;
@@ -53,6 +56,9 @@ function volFader() {
     }, 10);
     return false;
 }
+
+document.addEventListener("touchstart", event.preventDefault());
+document.addEventListener("touchmove" , event.preventDefault());
 /*
 The action() function is used to play and release the piano keys. An input event is sent in as the
 parameters (either keyup, keydown, mouseup, or mousedown). A connection is made between the input
@@ -77,7 +83,7 @@ function action(event) {
         lastkey.val2 = event.type;
     }
     //If the mouse is clicked on a note, play that note
-    if(event.type == "mousedown") {
+    if(event.type == "mousedown" || event.type == "touchstart") {
         var K;
         if(event.key == "hellYeah"){ //This is added for the sweeping function of the mouse
             K = event.srcElement;
@@ -98,7 +104,7 @@ function action(event) {
         note.play();
     }
     //If the mouse is unclicked, reset the keys back to their original colors and fade out the sounds
-    else if(event.type == "mouseup") {
+    else if(event.type == "mouseup" || event.type == "touchend") {
         var K;
         if(event.key == "hellYeah"){
             K = event.srcElement;
@@ -205,13 +211,15 @@ function getSharpNote(N) {
     between the time the mouse is clicked and unclicked. 
 */
 function sweep(identifier) {
-    if(document.getElementById("lastKey").val2 == "mousedown") {
+    var lastk = document.getElementById("lastKey").val2;
+    if(lastk == "mousedown") {
         var EV = {key:"hellYeah", type:"mousedown", srcElement:identifier};
         action(EV);
     }
 }
 function sweepout(identifier) {
-    if(document.getElementById("lastKey").val2 == "mousedown") {
+    var lastk = document.getElementById("lastKey").val2;
+    if(lastk == "mousedown") {
         var EV = {key:"hellYeah", type:"mouseup", srcElement:identifier};
         action(EV);
     }
@@ -227,18 +235,18 @@ function addTrack() {
     newTrack.innerHTML += " <div id=\"TRK" + TrackNum + 
     "\"style=\"position:absolute;background-color:#6699CC;width:13vw;height:8vw;border-radius:1vw 0 0 1vw;\"> " + 
     " <input type=\"text\" id=\"Tname\" class=\"TrackName\" value=\"Track " + TrackNum + "\">" + 
-    "<button id=\"PB" + TrackNum + "\" class=\"PlayButton\" onclick=\"togglePP(event)\"></button>" +
-    "<button id=\"RB" + TrackNum + "\" class=\"RecButton\" onclick=\"toggleRS(event)\"></button>" + 
-    "<button id=\"Mut" + TrackNum + "\" class=\"MuteButton\" onclick=\"toggleMB(event)\">M</button>" + 
-    "<button id=\"Sol" + TrackNum + "\" class=\"SoloButton\" onclick=\"toggleSB(event)\">S</button></div>" + 
+    "<button id=\"PB" + TrackNum + "\" title=\"Play/Pause\" class=\"PlayButton\" onclick=\"togglePP(event)\"></button>" +
+    "<button id=\"RB" + TrackNum + "\" title=\"Record/Stop\" class=\"RecButton\" onclick=\"toggleRS(event)\"></button>" + 
+    "<button id=\"Mut" + TrackNum + "\" title=\"Mute\" class=\"MuteButton\" onclick=\"toggleMB(event)\">M</button>" + 
+    "<button id=\"Sol" + TrackNum + "\" title=\"Solo\" class=\"SoloButton\" onclick=\"toggleSB(event)\">S</button></div>" + 
     "<div style=\"position:absolute;top: 6.5vw;left: 1.7vw;width:10vw;\">" + 
-    "<input id=\"Pan" + TrackNum + "\" type=\"range\" title=\"Pan\" min=\"0\" max=\"100\" value=\"50\" class=\"slider\" onmousemove=\"getPanVal(event)\" onmouseup=\"getPanVal(event)\">" +
+    "<input id=\"Pan" + TrackNum + "\" type=\"range\" title=\"Pan\" min=\"0\" max=\"100\" value=\"50\" class=\"slider\" onmousemove=\"getPanVal(event)\" onmouseup=\"getPanVal(event)\" onkeydown=\"getPanVal(event)\" onkeyup=\"getPanVal(event)\">" +
     "<span id=\"PLB" + TrackNum + "\" class=\"PanNum\">0</span>" +
     "<button id=\"Ctr" + TrackNum + "\" class=\"zeroButton\" title=\"Zero Pan\" onclick=\"zero(event)\">0</button></div>" +
     "<div style=\"position:absolute;top: 4.5vw;left: 5.5vw;width:10vw;\">" +
-    "<input id=\"Vol" + TrackNum + "\" type=\"range\" title=\"Volume\" min=\"0\" max=\"100\" value=\"50\" class=\"slider Vol\" onmousemove=\"getVolVal(event)\" onmouseup=\"getVolVal(event)\">" + 
+    "<input id=\"Vol" + TrackNum + "\" type=\"range\" title=\"Volume\" min=\"0\" max=\"100\" value=\"50\" class=\"slider Vol\" onmousemove=\"getVolVal(event)\" onmouseup=\"getVolVal(event)\" onkeydown=\"getVolVal(event)\" onkeyup=\"getVolVal(event)\">" + 
     "<span id=\"VLB" + TrackNum + "\" class=\"VolNum\">50<br>db</span></div>" + 
-    "<div id=\"RecArea" + TrackNum + "\" class=\"RecArea\" title=0><div id=\"pMarker" + TrackNum + "\" class=\"pmarker\"></div></div>"; 
+    "<div id=\"RecArea" + TrackNum + "\" class=\"RecArea\"><div id=\"pMarker" + TrackNum + "\" class=\"pmarker\"></div></div>"; 
     newTrack.style.cssText = "top: " + nTop + "vw;";
     document.body.appendChild(newTrack);
     document.getElementById("AddTrack").style.cssText = "top: " + (nTop+10) + "vw;";
@@ -275,9 +283,10 @@ function PAPA() {
 }
 function togglePP(event) {
     // For use of main P/P button
+    var stopRec = false;
     var btns = new Set();
     var rbtns = new Set();
-    var stopRec = false;
+    // add "RB1..." to rbtns and add "PB1..." to btns
     for(let item of TRACKS.keys()){
         var ident = "PB" + item;
         var pbutt = document.getElementById(ident);
@@ -285,37 +294,43 @@ function togglePP(event) {
         ident = "RB" + item;
         rbtns.add(ident);
         var rbutt = document.getElementById(ident);
+        // if any buttons are recording, stop the recordings
         if(rbutt.classList.contains("StopButton")) {
             rbutt.classList.replace("StopButton", "RecButton");
             pbutt.classList.replace("PauseButton", "PlayButton");
-            endRecording(pbutt.id);
             PauseTrack(rbutt.id);
+            endRecording(pbutt.id);
             stopRec = true;
         }
     }
+    // if were stopping the recording, run through all of the buttons and pause them all
     if(stopRec == true) {
         for(let item of btns.keys()){
             if(document.getElementById(item).classList.contains("PauseButton")){
                 document.getElementById(item).classList.replace("PauseButton", "PlayButton");
+                PauseTrack(item);
                 if(document.getElementById("PB0").classList.contains("PauseButton")){
                     document.getElementById("PB0").classList.replace("PauseButton", "PlayButton");
                     PAPA();
                 }
-                PauseTrack(item);
             }
         }
         return true;
     }
     if(event.keyCode == 32) {
         var button = document.getElementById("PB0");
+        // if the spacebar was hit, check all of the buttons and pause the ones that are playing
+        var Pausereturn = false;
         for(let item of btns.keys()) {
             if(button.classList.contains("PauseButton"))break;
             if(document.getElementById(item).classList.contains("PauseButton")){
                 document.getElementById(item).classList.replace("PauseButton", "PlayButton");
                 PauseTrack(item);
-                return true;
+                Pausereturn = true;
             }
         }
+        if(Pausereturn) return true;
+        // if none of the other tracks were playing, 
         PAPA();
         if(button.classList.contains("PauseButton")){
             button.classList.replace("PauseButton", "PlayButton");
@@ -389,19 +404,25 @@ function togglePP(event) {
     }
     return true;
 }
+// Toggle the record and stop button and call the start/stop recording functions
 function toggleRS(event) {
     var element = document.getElementById(event.srcElement.id);
     var PPB = "PB" + element.parentElement.id.substr(3);
     PPB = document.getElementById(PPB);
-    if (element.className == "RecButton") {
+    var hasOtherRec = false;
+    for(let item of TRACKS.keys()) {
+        if(document.getElementById("RB" + item).classList.contains("StopButton") && element.id != "RB" + item) hasOtherRec = true;
+    }
+    if (element.className == "RecButton" && !hasOtherRec) {
+        // only let it record if none of the other tracks are recording
+        element.className = "StopButton";
+        Record(element.id);
         if(PPB.className == "PlayButton") {
             PPB.className="PauseButton";
             PlayTrack(element.id);
         }
-        element.className = "StopButton";
-        Record(element.id);
     }
-    else {
+    else if(!hasOtherRec) {
         element.className = "RecButton";
         endRecording(element.id);
     }
@@ -489,25 +510,29 @@ function Scrub(){
 var PlayTime;
 var RecordTime;
 var isRec = false;
+var recnums = new Map();
 function Record(ident) {
     isRec = true;
-    clearInterval(RecordTime);
+    RecordTime = false;
     ident = ident.substr(2);
+    if(recnums.has(ident)){
+        var idnum = recnums.get(ident);
+        recnums.set(ident, idnum + 1);
+    }
+    else recnums.set(ident, 1);
+    var recnum = recnums.get(ident);
     var Rec = document.getElementById("RecArea" + ident);
-    Rec.innerHTML += "<div id=\"Recording" + ident + "\"></div>";
-    var Recording = document.getElementById("Recording" + ident);
-    Recording.style.backgroundColor = "maroon";
-    Recording.style.height = "8vw";
-    var w = 0;
-    RecordTime = setInterval(function() {
-        document.getElementById("demo").innerHTML = w;
-        Recording.style.width =  "0vw";
-    }, 1000 / (tempo/2) );
+    Rec.innerHTML += "<div class=\"startedRec\" id=\"Recording" + ident + ":" + recnum + "\" " + 
+                     "onmousedown=\"CheckMouseAction(event)\"></div>";
+    document.getElementById("Recording1:1");
 }
 function endRecording(ident) {
     isRec = false;
     clearInterval(RecordTime);
-    document.getElementById("Recording" + ident.subst(2)).style.backgroundColor = "green";
+    var finishedRec = document.getElementById("Recording" + ident.substr(2) + ":" + recnums.get(ident.substr(2)));
+    finishedRec.className = "finishedRec";
+    // we want to check if the track overlapped any other tracks, and delete the overlapped parts and possibly split one recoring into two
+    checkOverlap(ident);
 }
 function PauseTrack(ident) {
     clearInterval(PlayTime);
@@ -517,6 +542,7 @@ function PlayTrack(ident){
     var ruler = document.getElementById("Rul");
     var tempo = document.getElementById("TEMPOOO").value;
     clearInterval(PlayTime);
+    PlayTime = false;
     if(ruler.value == ruler.max) {
         ruler.value = 0;
     }
@@ -527,10 +553,22 @@ function PlayTrack(ident){
         hclick.load();
         hclick.play();
     }
+    var w = 0;
+    var Recordingz;
+    var left = ruler.value;
+    if(recnums.size != 0){
+        Recordingz = document.getElementById("Recording" + ident.substr(2) + ":" + recnums.get(ident.substr(2)));
+    }
+    
     PlayTime = setInterval(function() {
         ruler.value++;
         var click = Scrub();
         playClick = document.getElementById("PCC").checked;
+        if(isRec){
+            w++;
+            Recordingz.style.width = w*(ruler.clientWidth/ruler.max) + "px";
+            Recordingz.style.left = left * (ruler.clientWidth/ruler.max) + "px";
+        }
         if(click == 0 && playClick) {
             hclick.load();
             hclick.play();
@@ -538,9 +576,6 @@ function PlayTrack(ident){
         else if(click == 1 && playClick) {
             lclick.load();
             lclick.play();
-        }
-        if(isRec){
-            
         }
         if(ruler.value == ruler.max) {
             for(let item of TRACKS.keys()) {
@@ -559,6 +594,23 @@ function PlayTrack(ident){
             }
         }
     }, 1000 / (tempo/2) );
+}
+function CheckMouseAction(event) {
+    var button = event.button;
+    if(button == 0) {
+        var RecTrack = document.getElementById(event.srcElement.id);
+        RecTrack.className = "finishedRec";
+        //ruler.value = 0;
+    }
+    else if(button == 2) {
+        var RecTrack = document.getElementById(event.srcElement.id);
+        RecTrack.className = "finishedRec1";
+    }
+}
+function checkOverlap(ident) {
+    for(var i = 1; i < recnums.get(ident); i++){
+        var RecTrack = document.getElementById("Recording" + ident.substr(2) + ":" + i);
+    }
 }
 // To be used later: This is how to get the selected option from the dropbox
 var y = document.getElementById("instrument");

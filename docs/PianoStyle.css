@@ -478,11 +478,39 @@ select {
 }
 .pmarker {
     position: absolute;
+    z-index: 10000;
     left: 0vw;;
     width: .3vw;
     height: 8vw;
     background: #000000;
 }
+.startedRec {
+    position: absolute;
+    background-color: maroon;
+    height: 8vw;
+    border-left: .1vw solid transparent;
+    border-right: .1vw solid transparent;
+}
+.finishedRec {
+    position: absolute;
+    background-color: green;
+    height: 8vw;
+    border-left: .1vw solid black;
+    border-right: .1vw solid black;
+}
+.finishedRec:hover {
+    cursor: text;
+}
+.finishedRec1 {
+    position: absolute;
+    background-color: darkgreen;
+    height: 8vw;
+    border-left: .1vw solid blue;
+    border-right: .1vw solid blue;
+    z-index: 5;
+}
+.finishedRec1:hover {cursor: grab;}
+.finishedRec1:active {cursor: grabbing;}
 /*When the window gets really small, the margins get fucked up, so its nice to have a safety net to protect it*/
 @media only screen and (max-width: 800px) {
     .Pkey {
