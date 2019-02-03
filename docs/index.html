@@ -3,7 +3,6 @@
     <head>
         <meta charset="utf-8">
         <title>PianoBoard</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="PianoStyle.css">
         <script type="text/javascript" src="KeyAction.js"></script>
         <audio id="HClick"><source src="PianoBoard Samples/Clicks/Hard_Click.mp3" type="audio/mpeg">Audio not supported by your browser</audio>
@@ -120,9 +119,9 @@
                     <h3 class="h3">Tempo</h3>
                     <input id="TEMPOOO" type="number" name="Tempo" class="in1" value="120">
                 </div>
-                <div id="PCCC" class="moveover1">
-                    <label for="PCC" class="checkword">Play Click</label>
-                    <input type="checkbox" name="PCC" id="PCC" class="largeCheck">
+                <div id="PCCC" class="moveover1" onclick="var p = document.getElementById('PCC');if(p.checked){p.checked=false}else{p.checked=true}">
+                    <label class="checkword">Play Click</label>
+                    <input type="checkbox" name="PCC" id="PCC" class="largeCheck" onclick="var p = document.getElementById('PCC');if(p.checked){p.checked=false}else{p.checked=true}">
                 </div>
             </div>
             <div class="MBbox" style="box-shadow: 0 0 1vw Black">

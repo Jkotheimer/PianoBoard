@@ -32,6 +32,9 @@ document.addEventListener("keyup", function() {
     else if(event.key == "Shift") {
         reso = false;
     }
+    else if(event.key == "Delete") {
+        alertDeleteRec();
+    }
     else {
         action(event);
     }
@@ -56,9 +59,6 @@ function volFader() {
     }, 10);
     return false;
 }
-
-document.addEventListener("touchstart", event.preventDefault());
-document.addEventListener("touchmove" , event.preventDefault());
 /*
 The action() function is used to play and release the piano keys. An input event is sent in as the
 parameters (either keyup, keydown, mouseup, or mousedown). A connection is made between the input
@@ -277,7 +277,7 @@ function PAPA() {
     }
     else if(e.innerHTML == "Pause All") {
         e.innerHTML = "Play All";
-        e.style.left = "0vw";
+        e.style.left = "-1vw";
         e.style.color = "#2A8D30";
     }
 }
@@ -511,6 +511,7 @@ var PlayTime;
 var RecordTime;
 var isRec = false;
 var recnums = new Map();
+var trkSelected = new Map();
 function Record(ident) {
     isRec = true;
     RecordTime = false;
@@ -524,7 +525,7 @@ function Record(ident) {
     var Rec = document.getElementById("RecArea" + ident);
     Rec.innerHTML += "<div class=\"startedRec\" id=\"Recording" + ident + ":" + recnum + "\" " + 
                      "onmousedown=\"CheckMouseAction(event)\"></div>";
-    document.getElementById("Recording1:1");
+    trkSelected.set("Recording" + ident + ":" + recnum, false);
 }
 function endRecording(ident) {
     isRec = false;
@@ -600,16 +601,51 @@ function CheckMouseAction(event) {
     if(button == 0) {
         var RecTrack = document.getElementById(event.srcElement.id);
         RecTrack.className = "finishedRec";
+        trkSelected.set(RecTrack.id, false);
         //ruler.value = 0;
     }
     else if(button == 2) {
         var RecTrack = document.getElementById(event.srcElement.id);
         RecTrack.className = "finishedRec1";
+        trkSelected.set(RecTrack.id, true);
     }
 }
 function checkOverlap(ident) {
     for(var i = 1; i < recnums.get(ident); i++){
         var RecTrack = document.getElementById("Recording" + ident.substr(2) + ":" + i);
+    }
+}
+var hasAlert = false;
+var dsa1 = false
+var hasSelected = false;
+function alertDeleteRec(){
+    hasSelected = false;
+    for(let item of trkSelected.keys()){
+        if(trkSelected.get(item)){
+            hasSelected = true;
+        }
+    }
+    if(!hasAlert && !dsa1 && hasSelected){
+        document.body.innerHTML += "<div id=\"RecDelAlert\"><strong>Warning:</strong> are you sure you want to delete this recording? " + 
+                      "<button onclick=\"deleteRecording();removeAlert(this.parentElement);\" class=\"Abutt\">Delete</button><button onclick=\"removeAlert(this.parentElement)\" class=\"Abutt\">Cancel</button>" + 
+                      "<br>Don't show this warning again<input id=\"dsa1\"type=\"checkbox\" style=\"width:1.5vw;height:1.5vw;\"></div>";
+        hasAlert = true;
+    } else if(dsa1 && hasSelected) {
+        deleteRecording();
+    }
+}
+function removeAlert(a) {
+    if(document.getElementById("dsa1").checked) dsa1 = true;
+    a.parentElement.removeChild(a);
+    hasAlert = false;
+}
+function deleteRecording(){
+    for(let item of trkSelected.keys()){
+        if(trkSelected.get(item)){
+            var thing = document.getElementById(item);
+            thing.parentElement.removeChild(thing);
+            trkSelected.delete(item);
+        }
     }
 }
 // To be used later: This is how to get the selected option from the dropbox
