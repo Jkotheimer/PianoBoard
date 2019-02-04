@@ -455,7 +455,7 @@ select {
 .TSbox {
     position: absolute;
     left: 88vw;
-    top: 11.5vw;
+    top: 10vw;
     text-align:center;
     font-size:1.3vw;
     padding-top: .5vw;
@@ -483,7 +483,7 @@ select {
     position: absolute;
     z-index: 10000;
     left: 0vw;;
-    width: .3vw;
+    width: .2vw;
     height: 8vw;
     background: #000000;
 }

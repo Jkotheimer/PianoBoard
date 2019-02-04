@@ -33,7 +33,7 @@ document.addEventListener("keyup", function() {
         reso = false;
     }
     else if(event.key == "Delete") {
-        alertDeleteRec();
+        alertDeleteRec("recording", event);
     }
     else {
         action(event);
@@ -253,8 +253,11 @@ function addTrack() {
     document.getElementById("Export").style.cssText = "top: " + (nTop+10) + "vw;";
     TrackNum++;
 }
-function deleteTrack(event) {
-    var track = document.getElementById(event.srcElement.parentElement.id);
+var delType;
+var popupEvent;
+function deleteTrack() {
+    if(delType == "recording") return false;
+    var track = document.getElementById(popupEvent.srcElement.parentElement.id);
     TRACKS.delete(track.id);
     track.parentNode.removeChild(track);
     var nTop = 40.1;
@@ -309,11 +312,11 @@ function togglePP(event) {
             if(document.getElementById(item).classList.contains("PauseButton")){
                 document.getElementById(item).classList.replace("PauseButton", "PlayButton");
                 PauseTrack(item);
-                if(document.getElementById("PB0").classList.contains("PauseButton")){
-                    document.getElementById("PB0").classList.replace("PauseButton", "PlayButton");
-                    PAPA();
-                }
             }
+        }
+        if(document.getElementById("PB0").classList.contains("PauseButton")){
+            document.getElementById("PB0").classList.replace("PauseButton", "PlayButton");
+            PAPA();
         }
         return true;
     }
@@ -556,16 +559,27 @@ function PlayTrack(ident){
     }
     var w = 0;
     var Recordingz;
-    var left = ruler.value;
-    if(recnums.size != 0){
-        Recordingz = document.getElementById("Recording" + ident.substr(2) + ":" + recnums.get(ident.substr(2)));
-    }
-    
+    var left = ruler.value-1;
+    var lastId = -1;
     PlayTime = setInterval(function() {
+        if(isRec && ruler.value >= ruler.max/2){
+            ruler.value--;
+            w--;
+        }
         ruler.value++;
         var click = Scrub();
         playClick = document.getElementById("PCC").checked;
         if(isRec){
+            var idee;
+            for(let item of TRACKS.keys()) {
+                if(document.getElementById("RB" + item).classList.contains("StopButton")) idee = item;
+            }
+            if(lastId != recnums.get(idee)) {
+                lastId = recnums.get(idee);
+                left = ruler.value-1;
+                w = 0;
+            }
+            Recordingz = document.getElementById("Recording" + idee + ":" + recnums.get(idee));
             w++;
             Recordingz.style.width = w*(ruler.clientWidth/ruler.max) + "px";
             Recordingz.style.left = left * (ruler.clientWidth/ruler.max) + "px";
@@ -597,6 +611,7 @@ function PlayTrack(ident){
     }, 1000 / (tempo/2) );
 }
 function CheckMouseAction(event) {
+    if(isRec) return false;
     var button = event.button;
     if(button == 0) {
         var RecTrack = document.getElementById(event.srcElement.id);
@@ -616,30 +631,41 @@ function checkOverlap(ident) {
     }
 }
 var hasAlert = false;
-var dsa1 = false
+var dsa1 = false;
+var dsa2 = false;
 var hasSelected = false;
-function alertDeleteRec(){
+function alertDeleteRec(type, event){
     hasSelected = false;
+    delType = type;
+    popupEvent = event;
     for(let item of trkSelected.keys()){
         if(trkSelected.get(item)){
             hasSelected = true;
         }
     }
-    if(!hasAlert && !dsa1 && hasSelected){
-        document.body.innerHTML += "<div id=\"RecDelAlert\"><strong>Warning:</strong> are you sure you want to delete this recording? " + 
-                      "<button onclick=\"deleteRecording();removeAlert(this.parentElement);\" class=\"Abutt\">Delete</button><button onclick=\"removeAlert(this.parentElement)\" class=\"Abutt\">Cancel</button>" + 
-                      "<br>Don't show this warning again<input id=\"dsa1\"type=\"checkbox\" style=\"width:1.5vw;height:1.5vw;\"></div>";
+    if((!hasAlert && hasSelected && !dsa1 && type == "recording") || (!hasAlert && !dsa2 && type == "track")){
+        document.body.innerHTML += "<div id=\"RecDelAlert\"><strong>Warning:</strong> are you sure you want to delete this " + type + "? " + 
+                      "<button onclick=\"deleteRecording();deleteTrack();removeAlert(this.parentElement);\" class=\"Abutt\">Delete</button>" + 
+                      "<button onclick=\"removeAlert(this.parentElement)\" class=\"Abutt\">Cancel</button>" + 
+                      "<br>Don't show this warning again<input id=\"dsa1\" type=\"checkbox\" style=\"position:relative;width:1.5vw;height:1.5vw;top:.3vw;\"></div>";
         hasAlert = true;
-    } else if(dsa1 && hasSelected) {
+    } else if(dsa1 && hasSelected && type == "recording") {
         deleteRecording();
+    }
+    else if(dsa2 && type == "track"){
+        deleteTrack();
     }
 }
 function removeAlert(a) {
-    if(document.getElementById("dsa1").checked) dsa1 = true;
+    if(document.getElementById("dsa1").checked) {
+        if(delType == "recording") dsa1 = true;
+        else if(delType == "track") dsa2 = true;
+    }
     a.parentElement.removeChild(a);
     hasAlert = false;
 }
 function deleteRecording(){
+    if(delType != "recording") return false;
     for(let item of trkSelected.keys()){
         if(trkSelected.get(item)){
             var thing = document.getElementById(item);
