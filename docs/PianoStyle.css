@@ -518,7 +518,7 @@ select {
     position: absolute;
     width: 50vw;
     left: 25vw;
-    height: 8vw;
+    height: 10vw;
     top: 35vw;
     font-size: 2vw;
     background-color: #CC0000;
@@ -539,6 +539,8 @@ select {
     border: .05 solid transparent;
 }
 .Abutt:hover{background-color: #DDDDDD;cursor: pointer;}
+.Abutt.trkdel {position: relative; top: 5.5vw; left: -13vw;}
+.Abutt.trkcnl {position: relative; top: 2.3vw; left: 38vw;}
 .Abutt:active{background-color: #555555;color:white;}
 /*When the window gets really small, the margins get fucked up, so its nice to have a safety net to protect it*/
 @media only screen and (max-width: 800px) {

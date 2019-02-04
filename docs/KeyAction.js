@@ -643,13 +643,20 @@ function alertDeleteRec(type, event){
             hasSelected = true;
         }
     }
-    if((!hasAlert && hasSelected && !dsa1 && type == "recording") || (!hasAlert && !dsa2 && type == "track")){
+    if(!hasAlert && hasSelected && !dsa1 && type == "recording"){
         document.body.innerHTML += "<div id=\"RecDelAlert\"><strong>Warning:</strong> are you sure you want to delete this " + type + "? " + 
                       "<button onclick=\"deleteRecording();deleteTrack();removeAlert(this.parentElement);\" class=\"Abutt\">Delete</button>" + 
                       "<button onclick=\"removeAlert(this.parentElement)\" class=\"Abutt\">Cancel</button>" + 
                       "<br>Don't show this warning again<input id=\"dsa1\" type=\"checkbox\" style=\"position:relative;width:1.5vw;height:1.5vw;top:.3vw;\"></div>";
         hasAlert = true;
-    } else if(dsa1 && hasSelected && type == "recording") {
+    } else if(!hasAlert && !dsa2 && type == "track") {
+        document.body.innerHTML += "<div id=\"RecDelAlert\"><strong>Warning:</strong> are you sure you want to delete this " + type + "? " + 
+                      "<button onclick=\"deleteRecording();deleteTrack();removeAlert(this.parentElement);\" class=\"Abutt trkdel\">Delete</button>" + 
+                      "<button onclick=\"removeAlert(this.parentElement)\" class=\"Abutt trkcnl\">Cancel</button>" + 
+                      "<br>Don't show this warning again<input id=\"dsa1\" type=\"checkbox\" style=\"position:relative;width:1.5vw;height:1.5vw;top:.3vw;\"></div>";
+        hasAlert = true;
+    }
+    else if(dsa1 && hasSelected && type == "recording") {
         deleteRecording();
     }
     else if(dsa2 && type == "track"){
