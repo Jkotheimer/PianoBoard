@@ -4,6 +4,7 @@ var dcolor = null;
 var ucolor = null;
 var DKEYS = new Set();
 var reso = false;
+var letterz = new Set(["Tab","1","q","2","w","e","4","r","5","t","6","y","u","8","i","9","o","p","-","[","=","]","Backspace","\\"]);
 /*
 volFader() is a function called when a pianokey is being released.
 It would sound awfully shitty if the piano sound was immediately cut off, so we need to fade
@@ -12,13 +13,14 @@ so it only takes a second to be faded out. The volume does not fade all the way 
 for some reason the setInterval function bugs out if I try to do it, but 3% volume is good enough.
 */
 document.addEventListener("keydown", function(){
-    if(event.keyCode == 32) {
+    if(event.keyCode == 32 && event.srcElement.id != "Tname") {
         event.preventDefault();
     }
     else if(event.key == "Shift") {
         reso = true;
+        event.preventDefault();
     }
-    else if(event.srcElement.id.includes("RB") || event.srcElement.id.includes("PB")){
+    if(letterz.has(event.key) && !event.srcElement.id.includes("Tname")){
         action(event);
     }
   });
@@ -31,29 +33,30 @@ document.addEventListener("keyup", function() {
     }
     else if(event.key == "Shift") {
         reso = false;
+        event.preventDefault();
     }
     else if(event.key == "Delete") {
         alertDeleteRec("recording", event);
     }
-    else {
+    else if(letterz.has(event.key) && !event.srcElement.id.includes("Tname")){
         action(event);
     }
 });
 window.addEventListener("contextmenu", e => {
     e.preventDefault();
   });
-function volFader() {
-    var fadePoint = note.currentTime + 1;
+function volFader(theNote) {
+    var fadePoint = theNote.currentTime + 1;
     var first = false;
     var fadeAudio = setInterval(function () {
-        if(note.volume == 1.0 && first == true){
+        if(theNote.volume == 1.0 && first == true){
             return false;
         }
-        if ((note.currentTime <= fadePoint) && (note.volume >= 0.03)) {
-            note.volume -= 0.01;
+        if ((theNote.currentTime <= fadePoint) && (theNote.volume >= 0.03)) {
+            theNote.volume -= 0.01;
         }
         first = true;
-        if (note.volume < 0.03) {
+        if (theNote.volume < 0.03) {
             clearInterval(fadeAudio);
         }
     }, 10);
@@ -83,7 +86,7 @@ function action(event) {
         lastkey.val2 = event.type;
     }
     //If the mouse is clicked on a note, play that note
-    if(event.type == "mousedown" || event.type == "touchstart") {
+    if(event.type == "mousedown") {
         var K;
         if(event.key == "hellYeah"){ //This is added for the sweeping function of the mouse
             K = event.srcElement;
@@ -104,7 +107,7 @@ function action(event) {
         note.play();
     }
     //If the mouse is unclicked, reset the keys back to their original colors and fade out the sounds
-    else if(event.type == "mouseup" || event.type == "touchend") {
+    else if(event.type == "mouseup") {
         var K;
         if(event.key == "hellYeah"){
             K = event.srcElement;
@@ -120,8 +123,8 @@ function action(event) {
         }
         document.getElementById(K).style.boxShadow = "0vw .5vw .5vw black";
         note = document.getElementById(K + ".mp3");
-        if(event.key != "hellYeah" && reso == false){ //If we are sweeping the notes, a little sustain sounds nicers
-            volFader();
+        if(event.key != "hellYeah" && reso == false){ //If we are sweeping the notes, a little sustain sounds nicer
+            volFader(note);
         }
     }
     else if(event.type.includes("key")){
@@ -169,7 +172,7 @@ function action(event) {
         //If it was a keyup event, change the color back, and fade the soundfile out
         if(event.type == "keyup") {
             if(reso == false){
-                volFader();
+                volFader(note);
             }
             x.style.background = ucolor;
             DKEYS.delete(x.id);
@@ -225,6 +228,7 @@ function sweepout(identifier) {
     }
 }
 var TRACKS = new Set();
+var TrkNames = new Map();
 TRACKS.add("1");
 var TrackNum = 2;
 function addTrack() {
@@ -234,7 +238,7 @@ function addTrack() {
     TRACKS.add(newTrack.id);
     newTrack.innerHTML += " <div id=\"TRK" + TrackNum + 
     "\"style=\"position:absolute;background-color:#6699CC;width:13vw;height:8vw;border-radius:1vw 0 0 1vw;\"> " + 
-    " <input type=\"text\" id=\"Tname\" class=\"TrackName\" value=\"Track " + TrackNum + "\">" + 
+    " <input type=\"text\" id=\"Tname" + TrackNum + "\" class=\"TrackName\" value=\"Track " + TrackNum + "\" onkeypress=\"nameChange(event);\">" + 
     "<button id=\"PB" + TrackNum + "\" title=\"Play/Pause\" class=\"PlayButton\" onclick=\"togglePP(event)\"></button>" +
     "<button id=\"RB" + TrackNum + "\" title=\"Record/Stop\" class=\"RecButton\" onclick=\"toggleRS(event)\"></button>" + 
     "<button id=\"Mut" + TrackNum + "\" title=\"Mute\" class=\"MuteButton\" onclick=\"toggleMB(event)\">M</button>" + 
@@ -248,6 +252,8 @@ function addTrack() {
     "<span id=\"VLB" + TrackNum + "\" class=\"VolNum\">50<br>db</span></div>" + 
     "<div id=\"RecArea" + TrackNum + "\" class=\"RecArea\"><div id=\"pMarker" + TrackNum + "\" class=\"pmarker\"></div></div>"; 
     newTrack.style.cssText = "top: " + nTop + "vw;";
+    var TN = "Track " + TrackNum;
+    TrkNames.set(TN, TN);
     document.body.appendChild(newTrack);
     document.getElementById("AddTrack").style.cssText = "top: " + (nTop+10) + "vw;";
     document.getElementById("Export").style.cssText = "top: " + (nTop+10) + "vw;";
@@ -256,8 +262,9 @@ function addTrack() {
 var delType;
 var popupEvent;
 function deleteTrack() {
-    if(delType == "recording") return false;
     var track = document.getElementById(popupEvent.srcElement.parentElement.id);
+    var TN = "Tname" + track.id.substr(3);
+    TrkNames.set(TN, null);
     TRACKS.delete(track.id);
     track.parentNode.removeChild(track);
     var nTop = 40.1;
@@ -269,6 +276,12 @@ function deleteTrack() {
     }
     document.getElementById("AddTrack").style.cssText = "top: " + (nTop + 10) + "vw;";
     document.getElementById("Export").style.cssText = "top: " + (nTop + 10) + "vw;";
+}
+function nameChange(event){
+    if(event.key == "Enter" || event.key == "Tab") return false;
+    var TN = "tname" + event.srcElement.parentElement.id.substr(3);
+    var value = event.srcElement.value
+    TrkNames.set(TN, value + event.key);
 }
 function PAPA() {
     var f = document.getElementsByClassName("PlayAll");
@@ -645,22 +658,25 @@ function alertDeleteRec(type, event){
     }
     if(!hasAlert && hasSelected && !dsa1 && type == "recording"){
         document.body.innerHTML += "<div id=\"RecDelAlert\"><strong>Warning:</strong> are you sure you want to delete this " + type + "? " + 
-                      "<button onclick=\"deleteRecording();deleteTrack();removeAlert(this.parentElement);\" class=\"Abutt\">Delete</button>" + 
+                      "<button onclick=\"deleteRecording();removeAlert(this.parentElement);\" class=\"Abutt\">Delete</button>" + 
                       "<button onclick=\"removeAlert(this.parentElement)\" class=\"Abutt\">Cancel</button>" + 
                       "<br>Don't show this warning again<input id=\"dsa1\" type=\"checkbox\" style=\"position:relative;width:1.5vw;height:1.5vw;top:.3vw;\"></div>";
         hasAlert = true;
     } else if(!hasAlert && !dsa2 && type == "track") {
         document.body.innerHTML += "<div id=\"RecDelAlert\"><strong>Warning:</strong> are you sure you want to delete this " + type + "? " + 
-                      "<button onclick=\"deleteRecording();deleteTrack();removeAlert(this.parentElement);\" class=\"Abutt trkdel\">Delete</button>" + 
+                      "<button onclick=\"deleteTrack();removeAlert(this.parentElement);\" class=\"Abutt trkdel\">Delete</button>" + 
                       "<button onclick=\"removeAlert(this.parentElement)\" class=\"Abutt trkcnl\">Cancel</button>" + 
                       "<br>Don't show this warning again<input id=\"dsa1\" type=\"checkbox\" style=\"position:relative;width:1.5vw;height:1.5vw;top:.3vw;\"></div>";
         hasAlert = true;
-    }
-    else if(dsa1 && hasSelected && type == "recording") {
+    } else if(dsa1 && hasSelected && type == "recording") {
         deleteRecording();
-    }
-    else if(dsa2 && type == "track"){
+    } else if(dsa2 && type == "track"){
         deleteTrack();
+    }
+    // reset all of the tracknames
+    for(let item of TrkNames.keys()) {
+        document.getElementById("demo").innerHTML += item;
+        document.getElementById(item).value = TrkNames.get(item);
     }
 }
 function removeAlert(a) {
@@ -672,7 +688,6 @@ function removeAlert(a) {
     hasAlert = false;
 }
 function deleteRecording(){
-    if(delType != "recording") return false;
     for(let item of trkSelected.keys()){
         if(trkSelected.get(item)){
             var thing = document.getElementById(item);
