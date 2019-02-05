@@ -265,7 +265,7 @@ var delType;
 var popupEvent;
 function deleteTrack() {
     var track = document.getElementById(popupEvent.srcElement.parentNode.id);
-    var TN = "Tname" + track.id.substr(3);
+    var TN = "Tname" + track.id;
     TrkNames.delete(TN);
     TRACKS.delete(track.id);
     track.parentNode.removeChild(track);
@@ -653,6 +653,7 @@ function alertDeleteRec(type, event){
     hasSelected = false;
     delType = type;
     popupEvent = event;
+    var theTrk;
     for(let item of trkSelected.keys()){
         if(trkSelected.get(item)){
             hasSelected = true;
@@ -678,18 +679,24 @@ function alertDeleteRec(type, event){
     }
     // reset all of the tracknames
     for(let item of TrkNames.keys()) {
-        document.getElementById("demo").innerHTML += item + ": " + TrkNames.get(item);
         document.getElementById(item).value = TrkNames.get(item);
     }
-    var theTrk;
+    var thing;
     if(type == "recording"){
-        theTrk = theTrk.substr(9,10);
-        theTrk = theTrk.substr(0,1);
-        theTrk = Number(theTrk);
+        thing = theTrk.substr(9);
+        thing = thing.substr(0,1);
     } else {
-        theTrk = Number(event.srcElement.parentElement.id);
+        thing = event.srcElement.parentNode.id;
     }
-    document.getElementById("RecDelAlert").style.cssText += "top: " + (((theTrk-1) * 8.1) + 40) + "vw;";
+    var i = 1;
+    for(let item of TRACKS.keys()) {
+        if(item == thing) {
+            theTrk = Number(i);
+        }
+        i++;
+    }
+    document.getElementById("demo").innerHTML = thing;
+    document.getElementById("RecDelAlert").style.cssText += "top: " + (((theTrk-1) * 8.1) + 38) + "vw;";
 }
 function removeAlert(a) {
     if(document.getElementById("dsa1").checked) {
