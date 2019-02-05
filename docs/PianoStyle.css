@@ -516,10 +516,9 @@ select {
 .finishedRec1:active {cursor: grabbing;}
 #RecDelAlert {
     position: absolute;
-    width: 50vw;
     left: 25vw;
+    width: 50vw;
     height: 10vw;
-    top: 35vw;
     font-size: 2vw;
     background-color: #CC0000;
     border: .2vw solid black;

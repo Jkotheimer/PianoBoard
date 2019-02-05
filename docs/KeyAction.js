@@ -13,7 +13,7 @@ so it only takes a second to be faded out. The volume does not fade all the way 
 for some reason the setInterval function bugs out if I try to do it, but 3% volume is good enough.
 */
 document.addEventListener("keydown", function(){
-    if(event.keyCode == 32 && event.srcElement.id != "Tname") {
+    if(event.keyCode == 32 && !event.srcElement.id.includes("Tname")) {
         event.preventDefault();
     }
     else if(event.key == "Shift") {
@@ -229,6 +229,7 @@ function sweepout(identifier) {
 }
 var TRACKS = new Set();
 var TrkNames = new Map();
+TrkNames.set("Tname1", "Track 1");
 TRACKS.add("1");
 var TrackNum = 2;
 function addTrack() {
@@ -252,8 +253,9 @@ function addTrack() {
     "<span id=\"VLB" + TrackNum + "\" class=\"VolNum\">50<br>db</span></div>" + 
     "<div id=\"RecArea" + TrackNum + "\" class=\"RecArea\"><div id=\"pMarker" + TrackNum + "\" class=\"pmarker\"></div></div>"; 
     newTrack.style.cssText = "top: " + nTop + "vw;";
+    var ID = "Tname" + TrackNum;
     var TN = "Track " + TrackNum;
-    TrkNames.set(TN, TN);
+    TrkNames.set(ID, TN);
     document.body.appendChild(newTrack);
     document.getElementById("AddTrack").style.cssText = "top: " + (nTop+10) + "vw;";
     document.getElementById("Export").style.cssText = "top: " + (nTop+10) + "vw;";
@@ -262,9 +264,9 @@ function addTrack() {
 var delType;
 var popupEvent;
 function deleteTrack() {
-    var track = document.getElementById(popupEvent.srcElement.parentElement.id);
+    var track = document.getElementById(popupEvent.srcElement.parentNode.id);
     var TN = "Tname" + track.id.substr(3);
-    TrkNames.set(TN, null);
+    TrkNames.delete(TN);
     TRACKS.delete(track.id);
     track.parentNode.removeChild(track);
     var nTop = 40.1;
@@ -279,7 +281,7 @@ function deleteTrack() {
 }
 function nameChange(event){
     if(event.key == "Enter" || event.key == "Tab") return false;
-    var TN = "tname" + event.srcElement.parentElement.id.substr(3);
+    var TN = "Tname" + event.srcElement.parentElement.id.substr(3);
     var value = event.srcElement.value
     TrkNames.set(TN, value + event.key);
 }
@@ -654,6 +656,7 @@ function alertDeleteRec(type, event){
     for(let item of trkSelected.keys()){
         if(trkSelected.get(item)){
             hasSelected = true;
+            theTrk = item;
         }
     }
     if(!hasAlert && hasSelected && !dsa1 && type == "recording"){
@@ -675,9 +678,18 @@ function alertDeleteRec(type, event){
     }
     // reset all of the tracknames
     for(let item of TrkNames.keys()) {
-        document.getElementById("demo").innerHTML += item;
+        document.getElementById("demo").innerHTML += item + ": " + TrkNames.get(item);
         document.getElementById(item).value = TrkNames.get(item);
     }
+    var theTrk;
+    if(type == "recording"){
+        theTrk = theTrk.substr(9,10);
+        theTrk = theTrk.substr(0,1);
+        theTrk = Number(theTrk);
+    } else {
+        theTrk = Number(event.srcElement.parentElement.id);
+    }
+    document.getElementById("RecDelAlert").style.cssText += "top: " + (((theTrk-1) * 8.1) + 40) + "vw;";
 }
 function removeAlert(a) {
     if(document.getElementById("dsa1").checked) {
