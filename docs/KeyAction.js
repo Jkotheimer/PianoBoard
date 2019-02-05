@@ -4,7 +4,8 @@ var dcolor = null;
 var ucolor = null;
 var DKEYS = new Set();
 var reso = false;
-var letterz = new Set(["Tab","1","q","2","w","e","4","r","5","t","6","y","u","8","i","9","o","p","-","[","=","]","Backspace","\\"]);
+var letterz = new Set(["Tab","1","q","2","w","e","4","r","5","t","6","y","u","8","i","9","o","p","-","[",
+                        "=","]","Backspace","\\","z","s","x","d","c","v","g","b","h","n","j","m",","]);
 /*
 volFader() is a function called when a pianokey is being released.
 It would sound awfully shitty if the piano sound was immediately cut off, so we need to fade
@@ -26,7 +27,7 @@ document.addEventListener("keydown", function(){
   });
 document.addEventListener("keyup", function() {
     if (event.keyCode == 32) {
-        if(event.srcElement.id != "Tname") {
+        if(!event.srcElement.id.includes("Tname")) {
             event.preventDefault();
             togglePP(event);
         }
@@ -505,7 +506,7 @@ function Scrub(){
     var pMarker;
     for(let item of TRACKS.keys()) {
         pMarker = document.getElementById("pMarker" + item);
-        pMarker.style.left = pixelPosition + "px";
+        pMarker.style.top = pixelPosition + "px";
     }
     measures.innerHTML = Math.floor(spot/120);
     var lastBeat = beats.innerHTML;
@@ -558,6 +559,7 @@ function PauseTrack(ident) {
 }
 function PlayTrack(ident){
     var track = document.getElementById("RecArea" + ident.substr(2));
+    var TimeSig = document.getElementById("TimeNumerator").value;
     var ruler = document.getElementById("Rul");
     var tempo = document.getElementById("TEMPOOO").value;
     clearInterval(PlayTime);
@@ -576,10 +578,15 @@ function PlayTrack(ident){
     var Recordingz;
     var left = ruler.value-1;
     var lastId = -1;
+    document.getElementById("demo").innerHTML = track.style.cssFloat;
     PlayTime = setInterval(function() {
         if(isRec && ruler.value >= ruler.max/2){
             ruler.value--;
-            w--;
+            left--;
+            track.style.height += left * (ruler.clientWidth/ruler.max) + "px";
+            for(let recc of trkSelected) {
+                document.getElementById(recc).style.top -= left * (ruler.clientWidth/ruler.max) + "px";
+            }
         }
         ruler.value++;
         var click = Scrub();
@@ -596,8 +603,8 @@ function PlayTrack(ident){
             }
             Recordingz = document.getElementById("Recording" + idee + ":" + recnums.get(idee));
             w++;
-            Recordingz.style.width = w*(ruler.clientWidth/ruler.max) + "px";
-            Recordingz.style.left = left * (ruler.clientWidth/ruler.max) + "px";
+            Recordingz.style.height = w*(ruler.clientWidth/ruler.max) + "px";
+            Recordingz.style.top = left * (ruler.clientWidth/ruler.max) + "px";
         }
         if(click == 0 && playClick) {
             hclick.load();
@@ -695,7 +702,6 @@ function alertDeleteRec(type, event){
         }
         i++;
     }
-    document.getElementById("demo").innerHTML = thing;
     document.getElementById("RecDelAlert").style.cssText += "top: " + (((theTrk-1) * 8.1) + 38) + "vw;";
 }
 function removeAlert(a) {
