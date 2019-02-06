@@ -543,7 +543,7 @@ function Record(ident) {
     var recnum = recnums.get(ident);
     var Rec = document.getElementById("RecArea" + ident);
     Rec.innerHTML += "<div class=\"startedRec\" id=\"Recording" + ident + ":" + recnum + "\" " + 
-                     "onmousedown=\"CheckMouseAction(event)\"></div>";
+                     "onmousedown=\"CheckMouseAction(event);dragRec(event);\"onmouseup=\"undragRec(event)\"></div>";
     trkSelected.set("Recording" + ident + ":" + recnum, false);
 }
 function endRecording(ident) {
@@ -558,7 +558,6 @@ function PauseTrack(ident) {
     clearInterval(PlayTime);
 }
 function PlayTrack(ident){
-    var track = document.getElementById("RecArea" + ident.substr(2));
     var TimeSig = document.getElementById("TimeNumerator").value;
     var ruler = document.getElementById("Rul");
     var tempo = document.getElementById("TEMPOOO").value;
@@ -578,15 +577,18 @@ function PlayTrack(ident){
     var Recordingz;
     var left = ruler.value-1;
     var lastId = -1;
-    document.getElementById("demo").innerHTML = track.style.cssFloat;
+    var movingRecs = new Map();
+    if(trkSelected.size > 0) {
+        for(let recc of trkSelected.keys()) {
+            var top = document.getElementById(recc);
+            movingRecs.set(top.id, top.style.top);
+        }
+    }
     PlayTime = setInterval(function() {
+        var track = document.getElementById("RecArea" + ident.substr(2));
         if(isRec && ruler.value >= ruler.max/2){
             ruler.value--;
             left--;
-            track.style.height += left * (ruler.clientWidth/ruler.max) + "px";
-            for(let recc of trkSelected) {
-                document.getElementById(recc).style.top -= left * (ruler.clientWidth/ruler.max) + "px";
-            }
         }
         ruler.value++;
         var click = Scrub();
@@ -605,6 +607,17 @@ function PlayTrack(ident){
             w++;
             Recordingz.style.height = w*(ruler.clientWidth/ruler.max) + "px";
             Recordingz.style.top = left * (ruler.clientWidth/ruler.max) + "px";
+            // Move all of the other recordings over with it
+            if(ruler.value >= ruler.max/2) {
+                document.getElementById("demo").innerHTML = null;
+                document.getElementById("demo").innerHTML = Recordingz.id + "<br>";
+                for(let recc of movingRecs.keys()) {
+                    document.getElementById("demo").innerHTML += movingRecs.get(recc) + " ";
+                    if(recc == Recordingz.id) continue;
+                    var recToMove = document.getElementById(recc);
+                    recToMove.style.top = movingRecs.get(recc) + left * (ruler.clientWidth/ruler.max) + "px";
+                }
+            }
         }
         if(click == 0 && playClick) {
             hclick.load();
@@ -720,6 +733,21 @@ function deleteRecording(){
             trkSelected.delete(item);
         }
     }
+}
+/* TODO: Allow these functions to do the following:
+    - Drag a recording across its current track
+    - Drag a recording to another track
+    - If we drag on top of another recording, pop up a warning saying: 
+        "warning: this track overlaps another one.  Would you like to overwrite this track?"
+    - If the mouse leaves all of the recording areas completely, make the mouse a "not allowed" cursor
+    - Allow us to drag and drop an external audio file into an empty track.  If dropping onto a track with existing recordings in it,
+        pop up a warning saying that you're not allowed to do that and you must drop into an empty track.
+*/
+function dragRec(event){
+    return false;
+}
+function undragRec(event){
+    return false;
 }
 // To be used later: This is how to get the selected option from the dropbox
 var y = document.getElementById("instrument");
