@@ -21,7 +21,7 @@
 /*All of these settings are a ratio of the window size being used.*/
 .Sticky {
     align-items: flex-start;
-    height: 82vh;
+    height: 465px;
 }
 div.Board {
     position: -webkit-sticky;

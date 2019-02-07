@@ -117,7 +117,7 @@
                 <div class="Temp">
                     <div class="moveover">
                         <h3 class="h3">Tempo</h3>
-                        <input id="TEMPOOO" type="number" name="Tempo" class="in1" value="120">
+                        <input id="TEMPOOO" type="number" name="Tempo" class="in1" value="120" max="200" onkeyup="tempoMax()">
                     </div>
                     <div id="PCCC" class="moveover1" onclick="var p = document.getElementById('PCC');if(p.checked){p.checked=false}else{p.checked=true}">
                         <label class="checkword">Play Click</label>
@@ -136,7 +136,7 @@
                 </div>
                 <div class="TSbox">
                     Time Signature
-                    <input type="number" id="TimeNumerator" class="TimeSig" value="4">/
+                    <input type="number" id="TimeNumerator" class="TimeSig" value="4" onchange="changeTimeSig()" min="2">/
                     <input type="number" id="TimeDenominator" class="TimeSig" value="4">
                 </div>
             </div>
@@ -148,7 +148,7 @@
                 <span id="VLB0" class="VolNum Main">50<br>db</span>
             </div>
 
-            <input id="Rul" type="range" min=0 max=479 value=0 onmousemove="Scrub()" onmouseup="Scrub()" onkeyup="Scrub()" onkeydown="Scrub()">
+            <input id="Rul" type="range" min=0 max=479 value=0 onmousemove="Scrub(event)" onmouseup="Scrub(event)" onkeyup="Scrub(event)" onkeydown="Scrub(event)">
 
             <div id="initTrack" class="Multitrack">
                 <div id="TRK1" style="position:absolute;background-color:#6699CC;width:13vw;height:8vw;border-radius:1vw 0 0 1vw;">

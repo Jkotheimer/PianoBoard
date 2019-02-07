@@ -495,7 +495,11 @@ function getVolVal(event) {
     var span = document.getElementById("VLB" + element.id.substr(3));
     span.innerHTML = element.value + "<br>db"; 
 }
-function Scrub(){
+function tempoMax() {
+    if(document.getElementById("TEMPOOO").value > 200) document.getElementById("TEMPOOO").value = 200;
+}
+var beatCount = 1;
+function Scrub(event){
     var TimeSig = document.getElementById("TimeNumerator").value;
     var ruler = document.getElementById("Rul");
     var spot = ruler.value;
@@ -504,15 +508,14 @@ function Scrub(){
     var beats = document.getElementById("Beats");
     var pixelPosition = ruler.clientWidth * (spot/length);
     var pMarker;
+    var spm = 30 * TimeSig;
     for(let item of TRACKS.keys()) {
         pMarker = document.getElementById("pMarker" + item);
         pMarker.style.top = pixelPosition + "px";
     }
-    measures.innerHTML = Math.floor(spot/120);
-    var lastBeat = beats.innerHTML;
-    var click = -1;
+    measures.innerHTML = Math.floor(spot/spm);
     for(var i = 1; i <= TimeSig; i++) {
-        if(spot%120 < (120/TimeSig)*i) {
+        if(spot%spm < (spm/TimeSig)*i) {
             beats.innerHTML = i;
             break;
         }
@@ -520,11 +523,19 @@ function Scrub(){
             beats.innerHTML = 1;
         }
     }
-    if(lastBeat != beats.innerHTML){
-        if(beats.innerHTML == 1) click = 0;
-        else click = 1;
+}
+function changeTimeSig() {
+    var num = document.getElementById("TimeNumerator").value;
+    var den = document.getElementById("TimeDenominator").value;
+    if(trkSelected.size > 0) {
+        popupTimeSigChange(num, den);
+        return false;
     }
-    return click;
+    document.getElementById("Rul").max = (num * 30 * 4) - 1;
+    Scrub(null);
+}
+function popupTimeSigChange(num, den) {
+    return false
 }
 var PlayTime;
 var RecordTime;
@@ -558,7 +569,6 @@ function PauseTrack(ident) {
     clearInterval(PlayTime);
 }
 function PlayTrack(ident){
-    var TimeSig = document.getElementById("TimeNumerator").value;
     var ruler = document.getElementById("Rul");
     var tempo = document.getElementById("TEMPOOO").value;
     clearInterval(PlayTime);
@@ -573,10 +583,15 @@ function PlayTrack(ident){
         hclick.load();
         hclick.play();
     }
+    var click = 1;
+    var TimeSig = document.getElementById("TimeNumerator").value;
     var w = 0;
     var Recordingz;
     var left = ruler.value-1;
     var lastId = -1;
+    var first = true;
+    var first2 = true;
+    var Lholder = 0;
     var movingRecs = new Map();
     if(trkSelected.size > 0) {
         for(let recc of trkSelected.keys()) {
@@ -585,15 +600,22 @@ function PlayTrack(ident){
         }
     }
     PlayTime = setInterval(function() {
+        Scrub(null);
         var track = document.getElementById("RecArea" + ident.substr(2));
         if(isRec && ruler.value >= ruler.max/2){
             ruler.value--;
             left--;
         }
         ruler.value++;
-        var click = Scrub();
-        playClick = document.getElementById("PCC").checked;
-        if(isRec){
+        if(!isRec) first2 = true;
+        else {
+            if(first2) {
+                for(let recc of trkSelected.keys()) {
+                    var top = document.getElementById(recc);
+                    movingRecs.set(top.id, top.style.top);
+                }
+                first2 = false;
+            }
             var idee;
             for(let item of TRACKS.keys()) {
                 if(document.getElementById("RB" + item).classList.contains("StopButton")) idee = item;
@@ -609,24 +631,28 @@ function PlayTrack(ident){
             Recordingz.style.top = left * (ruler.clientWidth/ruler.max) + "px";
             // Move all of the other recordings over with it
             if(ruler.value >= ruler.max/2) {
-                document.getElementById("demo").innerHTML = null;
-                document.getElementById("demo").innerHTML = Recordingz.id + "<br>";
+                if(first) {
+                    first = false;
+                    Lholder = left;
+                }
                 for(let recc of movingRecs.keys()) {
-                    document.getElementById("demo").innerHTML += movingRecs.get(recc) + " ";
                     if(recc == Recordingz.id) continue;
                     var recToMove = document.getElementById(recc);
-                    recToMove.style.top = movingRecs.get(recc) + left * (ruler.clientWidth/ruler.max) + "px";
+                    recToMove.style.cssText += "top: calc(" + movingRecs.get(recc) + " - " + ((Lholder - left) * (ruler.clientWidth/ruler.max) + "px);");
                 }
             }
         }
-        if(click == 0 && playClick) {
+        playClick = document.getElementById("PCC").checked;
+        if(click == 1 && playClick) {
             hclick.load();
             hclick.play();
         }
-        else if(click == 1 && playClick) {
+        else if(playClick) {
             lclick.load();
             lclick.play();
         }
+        if(click%TimeSig == 0) click = 1;
+        else click++;
         if(ruler.value == ruler.max) {
             for(let item of TRACKS.keys()) {
                 if(document.getElementById("RB" + item).classList.contains("StopButton")) isRec = true;
@@ -643,7 +669,7 @@ function PlayTrack(ident){
                 }
             }
         }
-    }, 1000 / (tempo/2) );
+    }, 2000/tempo );
 }
 function CheckMouseAction(event) {
     if(isRec) return false;
@@ -674,6 +700,7 @@ function alertDeleteRec(type, event){
     delType = type;
     popupEvent = event;
     var theTrk;
+    var rulerspot = document.getElementById("Rul").value;
     for(let item of trkSelected.keys()){
         if(trkSelected.get(item)){
             hasSelected = true;
@@ -716,6 +743,7 @@ function alertDeleteRec(type, event){
         i++;
     }
     document.getElementById("RecDelAlert").style.cssText += "top: " + (((theTrk-1) * 8.1) + 38) + "vw;";
+    document.getElementById("Rul").value = rulerspot;
 }
 function removeAlert(a) {
     if(document.getElementById("dsa1").checked) {
