@@ -6,6 +6,8 @@ var DKEYS = new Set();
 var reso = false;
 var letterz = new Set(["Tab","1","q","2","w","e","4","r","5","t","6","y","u","8","i","9","o","p","-","[",
                         "=","]","Backspace","\\","z","s","x","d","c","v","g","b","h","n","j","m",","]);
+var mouseIsDown = false;
+var keyIsDown = false;
 /*
 volFader() is a function called when a pianokey is being released.
 It would sound awfully shitty if the piano sound was immediately cut off, so we need to fade
@@ -14,18 +16,24 @@ so it only takes a second to be faded out. The volume does not fade all the way 
 for some reason the setInterval function bugs out if I try to do it, but 3% volume is good enough.
 */
 document.addEventListener("keydown", function(){
-    if(event.keyCode == 32 && !event.srcElement.id.includes("Tname")) {
+    keyIsDown = true;
+    if(event.keyCode == 32 && !event.srcElement.id.includes("Tname") && !event.srcElement.id.includes("TEMPOOO")) {
         event.preventDefault();
     }
     else if(event.key == "Shift") {
         reso = true;
         event.preventDefault();
     }
-    if(letterz.has(event.key) && !event.srcElement.id.includes("Tname")){
+    else if(letterz.has(event.key) && !event.srcElement.id.includes("Tname") && 
+            !event.srcElement.id.includes("TEMPOOO") && !event.srcElement.id.includes("Numerator")){
         action(event);
+    }
+    else if(event.key.includes("Arrow")) {
+        Scrub(event);
     }
   });
 document.addEventListener("keyup", function() {
+    keyIsDown = false;
     if (event.keyCode == 32) {
         if(!event.srcElement.id.includes("Tname")) {
             event.preventDefault();
@@ -43,6 +51,8 @@ document.addEventListener("keyup", function() {
         action(event);
     }
 });
+document.addEventListener("mousedown", function() {mouseIsDown = true;});
+document.addEventListener("mouseup", function() {mouseIsDown = false;});
 window.addEventListener("contextmenu", e => {
     e.preventDefault();
   });
@@ -71,15 +81,7 @@ source and a key on the virtual piano, and a sound is put out through the speake
 function action(event) {
     // When a key is held down, it continually pushes input, so we check the last key and event type
     // to ensure that the sound of the note doesn't continue reloading and spaz out.
-    if(event.key == "Enter") {
-        return false;
-    }
-    else if(event.keyCode == 32) {
-        return false;
-    }
-    else if(event.key == "Shift") {
-        return false;
-    }
+    if(!letterz.has(event.key) && !event.type.includes("mouse")) return false;
     var lastkey = document.getElementById("lastKey");
     if(event.srcElement.id == "board") return false;
     if(event.key != "hellYeah"){
@@ -246,11 +248,11 @@ function addTrack() {
     "<button id=\"Mut" + TrackNum + "\" title=\"Mute\" class=\"MuteButton\" onclick=\"toggleMB(event)\">M</button>" + 
     "<button id=\"Sol" + TrackNum + "\" title=\"Solo\" class=\"SoloButton\" onclick=\"toggleSB(event)\">S</button></div>" + 
     "<div style=\"position:absolute;top: 6.5vw;left: 1.7vw;width:10vw;\">" + 
-    "<input id=\"Pan" + TrackNum + "\" type=\"range\" title=\"Pan\" min=\"0\" max=\"100\" value=\"50\" class=\"slider\" onmousemove=\"getPanVal(event)\" onmouseup=\"getPanVal(event)\" onkeydown=\"getPanVal(event)\" onkeyup=\"getPanVal(event)\">" +
+    "<input id=\"Pan" + TrackNum + "\" type=\"range\" title=\"Pan\" min=\"0\" max=\"100\" placeholder=\"50\" class=\"slider\" onmousemove=\"getPanVal(event)\" onmouseup=\"getPanVal(event)\" onkeydown=\"getPanVal(event)\" onkeyup=\"getPanVal(event)\">" +
     "<span id=\"PLB" + TrackNum + "\" class=\"PanNum\">0</span>" +
     "<button id=\"Ctr" + TrackNum + "\" class=\"zeroButton\" title=\"Zero Pan\" onclick=\"zero(event)\">0</button></div>" +
     "<div style=\"position:absolute;top: 4.5vw;left: 5.5vw;width:10vw;\">" +
-    "<input id=\"Vol" + TrackNum + "\" type=\"range\" title=\"Volume\" min=\"0\" max=\"100\" value=\"50\" class=\"slider Vol\" onmousemove=\"getVolVal(event)\" onmouseup=\"getVolVal(event)\" onkeydown=\"getVolVal(event)\" onkeyup=\"getVolVal(event)\">" + 
+    "<input id=\"Vol" + TrackNum + "\" type=\"range\" title=\"Volume\" min=\"0\" max=\"100\" placeholder=\"50\" class=\"slider Vol\" onmousemove=\"getVolVal(event)\" onmouseup=\"getVolVal(event)\" onkeydown=\"getVolVal(event)\" onkeyup=\"getVolVal(event)\">" + 
     "<span id=\"VLB" + TrackNum + "\" class=\"VolNum\">50<br>db</span></div>" + 
     "<div id=\"RecArea" + TrackNum + "\" class=\"RecArea\" onmousemove=\"Scrub(event)\" onmouseup=\"Scrub(event)\" onkeyup=\"Scrub(event)\" " + 
     "onkeydown=\"Scrub(event)\" onwheel=\"zoomTracks(event)\"><div id=\"pMarker" + TrackNum + "\" class=\"pmarker\"></div></div>"; 
@@ -496,10 +498,16 @@ function getVolVal(event) {
     var span = document.getElementById("VLB" + element.id.substr(3));
     span.innerHTML = element.value + "<br>db"; 
 }
-function tempoMax() {
+var FinalTempo = 120;
+function tempoChange() {
+    if(trkSelected.size > 0) {
+        document.getElementById("TEMPOOO").value = FinalTempo;
+        document.getElementById("T").title = "You cannot change the tempo\n after having started a project";
+        return false;
+    }
+    FinalTempo = document.getElementById("TEMPOOO").value;
     if(document.getElementById("TEMPOOO").value > 200) document.getElementById("TEMPOOO").value = 200;
 }
-var beatCount = 1;
 var mouseIsDown = false;
 function Scrub(event){
     var TimeSig = document.getElementById("TimeNumerator").value;
@@ -511,6 +519,15 @@ function Scrub(event){
     var pixelPosition = ruler.clientWidth * (spot/length);
     var pMarker;
     var spm = 30 * TimeSig;
+    if(event.key == "ArrowLeft" && event.type == "keydown") {
+        event.preventDefault();
+        ruler.value--;ruler.value--;ruler.value--;ruler.value--;
+    } else if(event.key == "ArrowRight" && event.type == "keydown") {
+        event.preventDefault();
+        ruler.value++;ruler.value++;ruler.value++;ruler.value++;
+    }
+    spot = ruler.value;
+    pixelPosition = ruler.clientWidth * (spot/length);
     for(let item of TRACKS.keys()) {
         pMarker = document.getElementById("pMarker" + item);
         pMarker.style.top = pixelPosition + "px";
@@ -525,15 +542,60 @@ function Scrub(event){
             beats.innerHTML = 1;
         }
     }
-    if(event.type == "mousemove" || mouseIsDown) {
+    if(mouseIsDown) {
         // we are dragging the ruler at the end extremities of the ruler, we want to scroll over to the side to see the other recordings 
         // the further to the extremity that the ruler is dragged, the faster it scrolls.
-
+        switch(ruler.value){
+            case 0: scrollOver(-10);break;
+            case 2: scrollOver(-9);break;
+            case 4: scrollOver(-8);break;
+            case 6: scrollOver(-7);break;
+            case 8: scrollOver(-6);break;
+            case 10: scrollOver(-5);break;
+            case 12: scrollOver(-4);break;
+            case 13: scrollOver(-3);break;
+            case 14: scrollOver(-2);break;
+            case 15: scrollOver(-1);break;
+            case (ruler.max - 15): scrollOver(1);break;
+            case (ruler.max - 14): scrollOver(2);break;
+            case (ruler.max - 13): scrollOver(3);break;
+            case (ruler.max - 12): scrollOver(4);break;
+            case (ruler.max - 10): scrollOver(5);break;
+            case (ruler.max - 8): scrollOver(6);break;
+            case (ruler.max - 6): scrollOver(7);break;
+            case (ruler.max - 4): scrollOver(8);break;
+            case (ruler.max - 2): scrollOver(9);break;
+            case ruler.max: scrollOver(10);break;
+            default: scrollOver(0); break;
+        }
     }
-    else if(event.type == "mousedown" || event.type == "keydown") mouseIsDown = true;
-    else if(event.type == "mouseup" || event.type == "mouseup") mouseIsDown = false;
 }
 var leftMostRec = 0;
+var scrollSpeed;
+function scrollOver(speed) {
+    // we want to change the left value of each of the recordings at a specific speed
+    document.getElementById("demo").innerHTML = speed;
+    clearInterval(scrollSpeed);
+    var direction = 0;
+    if(speed < 0) {
+        speed *= -1;
+        direction = -1
+        speed = (1000/speed);
+    } 
+    else if(speed > 0) {
+        speed = (1000/speed);
+        direction = 1;
+    }
+    else return false;
+    if(speed == 0) return false;
+    scrollSpeed = setInterval(function() {
+        for(let item of trkSelected) {
+            var tak = document.getElementById(item);
+            var currentLeft = tak.style.left;
+            tak.style.cssText += "left: calc((" + currentLeft + " + " + direction + "px);"; 
+        }
+    }, speed);
+}
 function zoomTracks(event) {
     if(trkSelected.size > 0){
         event.preventDefault();
@@ -542,12 +604,13 @@ function zoomTracks(event) {
         var rec = document.getElementById(item);
         var recTop = movingRecs.get(item);
         var recHeight = rec.style.height;
-        rec.style.cssText += "top: calc(" + recTop + " + " +  + "px);";
+        rec.style.cssText +="top: calc(" + recTop + " + " + event.scrollY + "px);" + 
+                            "height: calc(" + recHeight + " - " + event.scrollY + "px);";
     }
 }
 var FinalTimeNum = 4;
 var FinalTimeDen = 4;
-function changeTimeSig(event) {
+function changeTimeSig() {
     var num = document.getElementById("TimeNumerator").value;
     var den = document.getElementById("TimeDenominator").value;
     if(den == 3) {
@@ -566,10 +629,11 @@ function changeTimeSig(event) {
     document.getElementById("TimeDenominator").value = den;
     if(trkSelected.size > 0) {
         document.getElementById("TimeNumerator").value = FinalTimeNum;
-        document.getElementById("TimeNumerator").title = "You cannot change the time signature after having started a recording";
+        document.getElementById("TimeNumerator").title = "You cannot change the beat signature\n after having started a project";
         return false;
     }
     FinalTimeNum = num;
+    document.getElementById("TimeNumerator").title = "";
     document.getElementById("Rul").max = (num * 30 * 4) - 1;
     var EV = {type:"none"};
     Scrub(EV);
@@ -767,6 +831,7 @@ function alertDeleteRec(type, event){
     // reset the time sig and the tempo to their original values because they're gonna flip out for whatever reason
     document.getElementById("TimeNumerator").value = FinalTimeNum;
     document.getElementById("TimeDenominator").value = FinalTimeDen;
+    document.getElementById("TEMPOOO").value = FinalTempo;
     var thing;
     if(type == "recording"){
         thing = theTrk.substr(9);

@@ -49,8 +49,6 @@
     <body style="overflow-x: hidden;">
         <div class="Sticky">
             <div id="board" class="Board"
-                        onkeydown="action(event)" 
-                        onkeyup="action(event)" 
                         onmousedown="action(event)" 
                         onmouseup="action(event)">
             
@@ -114,10 +112,10 @@
                         <option value="Trumpet">Trumpet</option>
                     </select>
                 </div>
-                <div class="Temp">
+                <div id="T" class="Temp">
                     <div class="moveover">
                         <h3 class="h3">Tempo</h3>
-                        <input id="TEMPOOO" type="number" name="Tempo" class="in1" value="120" max="200" onkeyup="tempoMax()">
+                        <input id="TEMPOOO" type="number" name="Tempo" class="in1" value="120" max="200" min="30" onkeypress="tempoChange()" onchange="tempoChange()" onclick="tempoChange()">
                     </div>
                     <div id="PCCC" class="moveover1" onclick="var p = document.getElementById('PCC');if(p.checked){p.checked=false}else{p.checked=true}">
                         <label class="checkword">Play Click</label>
@@ -136,8 +134,8 @@
                 </div>
                 <div id="tsbox" class="TSbox" title="">
                     Time Signature
-                    <input type="number" id="TimeNumerator" class="TimeSig" value="4" onchange="changeTimeSig(event)" onclick="changeTimeSig(event)" onkeypress="changeTimeSig(event)" min=2 max=12>/
-                    <input type="number" id="TimeDenominator" class="TimeSig" value="4" onchange="changeTimeSig(event)" onclick="changeTimeSig(event)" onkeypress="changeTimeSig(event)"min=2 max=16>
+                    <input type="number" id="TimeNumerator" class="TimeSig" value="4" onchange="changeTimeSig()" onclick="changeTimeSig()" onkeydown="changeTimeSig()" min=2 max=12>/
+                    <input type="number" id="TimeDenominator" class="TimeSig" value="4" onchange="changeTimeSig()" onclick="changeTimeSig()" onkeydown="changeTimeSig()"min=2 max=16>
                 </div>
             </div>
 
@@ -148,7 +146,7 @@
                 <span id="VLB0" class="VolNum Main">50<br>db</span>
             </div>
 
-            <input id="Rul" type="range" min=0 max=479 value=0 onmousemove="Scrub(event)" onmouseup="Scrub(event)" onkeyup="Scrub(event)" onkeydown="Scrub(event)">
+            <input id="Rul" type="range" min=0 max=479 value=0 onmousemove="Scrub(event)" onmouseup="Scrub(event)" onmousedown="Scrub(event)" onkeyup="Scrub(event)" onkeydown="Scrub(event)">
 
             <div id="initTrack" class="Multitrack">
                 <div id="TRK1" style="position:absolute;background-color:#6699CC;width:13vw;height:8vw;border-radius:1vw 0 0 1vw;">
@@ -158,12 +156,12 @@
                     <button id="Mut1" class="MuteButton" title="Mute" onclick="toggleMB(event)">M</button>
                     <button id="Sol1" class="SoloButton" title="Solo" onclick="toggleSB(event)">S</button>
                     <div style="position:absolute;top: 6.5vw;left: 1.7vw;width:10vw;">
-                        <input id="Pan1" type="range" title="Pan" min="0" max="100" value="50" class="slider" onmousemove="getPanVal(event)" onmouseup="getPanVal(event)" onkeydown="getPanVal(event)" onkeyup="getPanVal(event)">
+                        <input id="Pan1" type="range" title="Pan" min="0" max="100" placeholder="50" class="slider" onmousemove="getPanVal(event)" onmouseup="getPanVal(event)" onkeydown="getPanVal(event)" onkeyup="getPanVal(event)">
                         <span id="PLB1" class="PanNum">0</span>
                         <button id="Ctr1" class="zeroButton" title="Zero Pan" onclick="zero(event)">0</button>
                     </div>
                     <div style="position:absolute;top: 4.5vw;left: 5.5vw;width:10vw;">
-                        <input id="Vol1" type="range" title="Volume" min="0" max="100" value="50" class="slider Vol" onmousemove="getVolVal(event)" onmouseup="getVolVal(event)" onkeydown="getVolVal(event)" onkeyup="getVolVal(event)">
+                        <input id="Vol1" type="range" title="Volume" min="0" max="100" placeholder="50" class="slider Vol" onmousemove="getVolVal(event)" onmouseup="getVolVal(event)" onkeydown="getVolVal(event)" onkeyup="getVolVal(event)">
                         <span id="VLB1" class="VolNum">50<br>db</span>
                     </div>
                 </div>

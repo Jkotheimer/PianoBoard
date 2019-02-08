@@ -514,7 +514,7 @@ select {
     z-index: 10000;
     transform: rotate(180deg);
     left: 0vw;;
-    width: 8vw;
+    width: 8.5vw;
     height: .2vw;
     background: #000000;
 }
