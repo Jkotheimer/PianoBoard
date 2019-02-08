@@ -134,10 +134,10 @@
                         <span id="Beats" style="position:absolute; top: 4vw; right: 3.5vw;">1</span>
                     </div>
                 </div>
-                <div class="TSbox">
+                <div id="tsbox" class="TSbox" title="">
                     Time Signature
-                    <input type="number" id="TimeNumerator" class="TimeSig" value="4" onchange="changeTimeSig()" min="2">/
-                    <input type="number" id="TimeDenominator" class="TimeSig" value="4">
+                    <input type="number" id="TimeNumerator" class="TimeSig" value="4" onchange="changeTimeSig(event)" onclick="changeTimeSig(event)" onkeypress="changeTimeSig(event)" min=2 max=12>/
+                    <input type="number" id="TimeDenominator" class="TimeSig" value="4" onchange="changeTimeSig(event)" onclick="changeTimeSig(event)" onkeypress="changeTimeSig(event)"min=2 max=16>
                 </div>
             </div>
 
@@ -189,9 +189,7 @@
                 - Time Counter (Measures, Beats) 
                 - **** Get the click track to play along only when selected ****
             6)  Export to Mp3 button
-            7)  Create an alert whenever a track is deleted saying "Are you sure you wish to delete this track?
-                Your progress will not be saved" and an option to not show that warning again.
-                Also another alert when the page is being closed, also saying "your progress will not be saved"
+            7)  Alert when the page is being closed, saying "your progress will not be saved"
                 - figure out how to autosave progress for a specific computer/user
                 - make a reset button at the bottom of the page if you want to clear all tracks and everything.
             -->

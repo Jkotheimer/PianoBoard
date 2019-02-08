@@ -252,7 +252,8 @@ function addTrack() {
     "<div style=\"position:absolute;top: 4.5vw;left: 5.5vw;width:10vw;\">" +
     "<input id=\"Vol" + TrackNum + "\" type=\"range\" title=\"Volume\" min=\"0\" max=\"100\" value=\"50\" class=\"slider Vol\" onmousemove=\"getVolVal(event)\" onmouseup=\"getVolVal(event)\" onkeydown=\"getVolVal(event)\" onkeyup=\"getVolVal(event)\">" + 
     "<span id=\"VLB" + TrackNum + "\" class=\"VolNum\">50<br>db</span></div>" + 
-    "<div id=\"RecArea" + TrackNum + "\" class=\"RecArea\"><div id=\"pMarker" + TrackNum + "\" class=\"pmarker\"></div></div>"; 
+    "<div id=\"RecArea" + TrackNum + "\" class=\"RecArea\" onmousemove=\"Scrub(event)\" onmouseup=\"Scrub(event)\" onkeyup=\"Scrub(event)\" " + 
+    "onkeydown=\"Scrub(event)\" onwheel=\"zoomTracks(event)\"><div id=\"pMarker" + TrackNum + "\" class=\"pmarker\"></div></div>"; 
     newTrack.style.cssText = "top: " + nTop + "vw;";
     var ID = "Tname" + TrackNum;
     var TN = "Track " + TrackNum;
@@ -534,7 +535,9 @@ function Scrub(event){
 }
 var leftMostRec = 0;
 function zoomTracks(event) {
-    event.preventDefault();
+    if(trkSelected.size > 0){
+        event.preventDefault();
+    }
     for(let item of movingRecs.keys()) {
         var rec = document.getElementById(item);
         var recTop = movingRecs.get(item);
@@ -542,19 +545,34 @@ function zoomTracks(event) {
         rec.style.cssText += "top: calc(" + recTop + " + " +  + "px);";
     }
 }
-function changeTimeSig() {
+var FinalTimeNum = 4;
+var FinalTimeDen = 4;
+function changeTimeSig(event) {
     var num = document.getElementById("TimeNumerator").value;
     var den = document.getElementById("TimeDenominator").value;
+    if(den == 3) {
+        if(FinalTimeDen == 2) den = 4;
+        else den = 2;
+    }
+    else if(den > 4 && den < 8){
+        if(FinalTimeDen < 6) den = 8;
+        else den = 4;
+    }
+    else if(den > 8 && den < 16){
+        if(FinalTimeDen < 12) den = 16
+        else den = 8;
+    }
+    FinalTimeDen = den;
+    document.getElementById("TimeDenominator").value = den;
     if(trkSelected.size > 0) {
-        popupTimeSigChange(num, den);
+        document.getElementById("TimeNumerator").value = FinalTimeNum;
+        document.getElementById("TimeNumerator").title = "You cannot change the time signature after having started a recording";
         return false;
     }
+    FinalTimeNum = num;
     document.getElementById("Rul").max = (num * 30 * 4) - 1;
     var EV = {type:"none"};
     Scrub(EV);
-}
-function popupTimeSigChange(num, den) {
-    return false
 }
 var PlayTime;
 var RecordTime;
@@ -658,11 +676,6 @@ function PlayTrack(ident){
                     if(recc == Recordingz.id) continue;
                     var recToMove = document.getElementById(recc);
                     recToMove.style.cssText += "top: calc(" + movingRecs.get(recc) + " - " + ((Lholder - left) * (ruler.clientWidth/ruler.max)) + "px);";
-                    Rarea = recc.substr(9);
-                    Rarea = Rarea.substr(0,1);
-                    Rarea = document.getElementById("RecArea" + Rarea);
-                    document.getElementById("demo").innerHTML = Rarea.style.left;
-                    Rarea.style.cssText += "height: calc(" + Rarea.style.height + " + " + ((Lholder - left) * (ruler.clientWidth/ruler.max)) + "px);";
                 }
             }
         }
@@ -751,6 +764,9 @@ function alertDeleteRec(type, event){
     for(let item of TrkNames.keys()) {
         document.getElementById(item).value = TrkNames.get(item);
     }
+    // reset the time sig and the tempo to their original values because they're gonna flip out for whatever reason
+    document.getElementById("TimeNumerator").value = FinalTimeNum;
+    document.getElementById("TimeDenominator").value = FinalTimeDen;
     var thing;
     if(type == "recording"){
         thing = theTrk.substr(9);
