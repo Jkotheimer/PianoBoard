@@ -504,10 +504,10 @@ select {
     left: 13vw;
     width: 8vw;
     height: 62vw;
+    overflow: hidden;
     transform: rotate(270deg) translatex(-8vw);
     transform-origin: left top;
     background-color: #FFDDBB;
-    overflow-y: auto;
 }
 .pmarker {
     position: absolute;

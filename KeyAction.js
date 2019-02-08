@@ -499,6 +499,7 @@ function tempoMax() {
     if(document.getElementById("TEMPOOO").value > 200) document.getElementById("TEMPOOO").value = 200;
 }
 var beatCount = 1;
+var mouseIsDown = false;
 function Scrub(event){
     var TimeSig = document.getElementById("TimeNumerator").value;
     var ruler = document.getElementById("Rul");
@@ -523,6 +524,23 @@ function Scrub(event){
             beats.innerHTML = 1;
         }
     }
+    if(event.type == "mousemove" || mouseIsDown) {
+        // we are dragging the ruler at the end extremities of the ruler, we want to scroll over to the side to see the other recordings 
+        // the further to the extremity that the ruler is dragged, the faster it scrolls.
+
+    }
+    else if(event.type == "mousedown" || event.type == "keydown") mouseIsDown = true;
+    else if(event.type == "mouseup" || event.type == "mouseup") mouseIsDown = false;
+}
+var leftMostRec = 0;
+function zoomTracks(event) {
+    event.preventDefault();
+    for(let item of movingRecs.keys()) {
+        var rec = document.getElementById(item);
+        var recTop = movingRecs.get(item);
+        var recHeight = rec.style.height;
+        rec.style.cssText += "top: calc(" + recTop + " + " +  + "px);";
+    }
 }
 function changeTimeSig() {
     var num = document.getElementById("TimeNumerator").value;
@@ -532,7 +550,8 @@ function changeTimeSig() {
         return false;
     }
     document.getElementById("Rul").max = (num * 30 * 4) - 1;
-    Scrub(null);
+    var EV = {type:"none"};
+    Scrub(EV);
 }
 function popupTimeSigChange(num, den) {
     return false
@@ -568,6 +587,7 @@ function endRecording(ident) {
 function PauseTrack(ident) {
     clearInterval(PlayTime);
 }
+var movingRecs = new Map();
 function PlayTrack(ident){
     var ruler = document.getElementById("Rul");
     var tempo = document.getElementById("TEMPOOO").value;
@@ -592,15 +612,13 @@ function PlayTrack(ident){
     var first = true;
     var first2 = true;
     var Lholder = 0;
-    var movingRecs = new Map();
-    if(trkSelected.size > 0) {
-        for(let recc of trkSelected.keys()) {
-            var top = document.getElementById(recc);
-            movingRecs.set(top.id, top.style.top);
-        }
+    for(let recc of trkSelected.keys()) {
+        var top = document.getElementById(recc);
+        movingRecs.set(top.id, top.style.top);
     }
     PlayTime = setInterval(function() {
-        Scrub(null);
+        var EV = {type:"none"};
+        Scrub(EV);
         var track = document.getElementById("RecArea" + ident.substr(2));
         if(isRec && ruler.value >= ruler.max/2){
             ruler.value--;
@@ -635,24 +653,29 @@ function PlayTrack(ident){
                     first = false;
                     Lholder = left;
                 }
+                var Rarea;
                 for(let recc of movingRecs.keys()) {
                     if(recc == Recordingz.id) continue;
                     var recToMove = document.getElementById(recc);
-                    recToMove.style.cssText += "top: calc(" + movingRecs.get(recc) + " - " + ((Lholder - left) * (ruler.clientWidth/ruler.max) + "px);");
+                    recToMove.style.cssText += "top: calc(" + movingRecs.get(recc) + " - " + ((Lholder - left) * (ruler.clientWidth/ruler.max)) + "px);";
+                    Rarea = recc.substr(9);
+                    Rarea = Rarea.substr(0,1);
+                    Rarea = document.getElementById("RecArea" + Rarea);
+                    document.getElementById("demo").innerHTML = Rarea.style.left;
+                    Rarea.style.cssText += "height: calc(" + Rarea.style.height + " + " + ((Lholder - left) * (ruler.clientWidth/ruler.max)) + "px);";
                 }
             }
         }
         playClick = document.getElementById("PCC").checked;
-        if(click == 1 && playClick) {
+        if(click%(30 * TimeSig) == 0 && playClick) {
             hclick.load();
             hclick.play();
         }
-        else if(playClick) {
+        else if(click%30 == 0 && playClick) {
             lclick.load();
             lclick.play();
         }
-        if(click%TimeSig == 0) click = 1;
-        else click++;
+        click++;
         if(ruler.value == ruler.max) {
             for(let item of TRACKS.keys()) {
                 if(document.getElementById("RB" + item).classList.contains("StopButton")) isRec = true;
