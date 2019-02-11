@@ -574,7 +574,6 @@ var leftMostRec = 0;
 var scrollSpeed;
 function scrollOver(speed) {
     // we want to change the left value of each of the recordings at a specific speed
-    document.getElementById("demo").innerHTML = speed;
     clearInterval(scrollSpeed);
     var direction = 0;
     if(speed < 0) {
