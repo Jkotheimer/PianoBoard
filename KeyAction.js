@@ -241,7 +241,7 @@ function addTrack() {
     newTrack.id = TrackNum.toString();
     TRACKS.add(newTrack.id);
     newTrack.innerHTML += " <div id=\"TRK" + TrackNum + 
-    "\"style=\"position:absolute;background-color:#6699CC;width:13vw;height:8vw;border-radius:1vw 0 0 1vw;\"> " + 
+    "\"style=\"position:absolute;background-color:#557DA0;width:13vw;height:8vw;border-radius:1vw 0 0 1vw;\"> " + 
     " <input type=\"text\" id=\"Tname" + TrackNum + "\" class=\"TrackName\" value=\"Track " + TrackNum + "\" onkeypress=\"nameChange(event);\">" + 
     "<button id=\"PB" + TrackNum + "\" title=\"Play/Pause\" class=\"PlayButton\" onclick=\"togglePP(event)\"></button>" +
     "<button id=\"RB" + TrackNum + "\" title=\"Record/Stop\" class=\"RecButton\" onclick=\"toggleRS(event)\"></button>" + 
