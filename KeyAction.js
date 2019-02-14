@@ -241,7 +241,7 @@ function addTrack() {
     newTrack.id = TrackNum.toString();
     TRACKS.add(newTrack.id);
     newTrack.innerHTML += " <div id=\"TRK" + TrackNum + 
-    "\"style=\"position:absolute;background-color:#557DA0;width:13vw;height:8vw;border-radius:1vw 0 0 1vw;\"> " + 
+    "\"style=\"position:absolute;background-color:#557DB7;width:13vw;height:8vw;border-radius:1vw 0 0 1vw;\"> " + 
     " <input type=\"text\" id=\"Tname" + TrackNum + "\" class=\"TrackName\" value=\"Track " + TrackNum + "\" onkeypress=\"nameChange(event);\">" + 
     "<button id=\"PB" + TrackNum + "\" title=\"Play/Pause\" class=\"PlayButton\" onclick=\"togglePP(event)\"></button>" +
     "<button id=\"RB" + TrackNum + "\" title=\"Record/Stop\" class=\"RecButton\" onclick=\"toggleRS(event)\"></button>" + 
@@ -295,7 +295,7 @@ function PAPA() {
     if(e.innerHTML == "Play All") {
         e.innerHTML = "Pause All";
         e.style.left = "-2vw";
-        e.style.color = "navy";
+        e.style.color = "#f90";
     }
     else if(e.innerHTML == "Pause All") {
         e.innerHTML = "Play All";
@@ -700,7 +700,6 @@ function PlayTrack(ident){
     PlayTime = setInterval(function() {
         var EV = {type:"none"};
         Scrub(EV);
-        var track = document.getElementById("RecArea" + ident.substr(2));
         if(isRec && ruler.value >= ruler.max/2){
             ruler.value--;
             left--;

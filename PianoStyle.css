@@ -5,18 +5,19 @@
   
   /* Track */
   ::-webkit-scrollbar-track {
-    background: #CCC; 
+    background: #C0C5C2; 
   }
    
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #B1A296; 
+    background: #557DB7; 
     border-radius: 4px;
+    border: 2px solid #C0C5C2;
   }
   
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: #B1A296; 
+    background: #4A6FAB; 
   }
 /*All of these settings are a ratio of the window size being used.*/
 .Sticky {
@@ -29,8 +30,8 @@ div.Board {
     transform: translatey(-1vw);
     top: 1vw;
     padding: 0 2vw;
-    background-color: #557DA0;
-    box-shadow: 0 0 1vw 1vw #557DA0;
+    background-color: #557DB7;
+    box-shadow: 0 0 1vw 1vw #557DB7;
     z-index: 1000000;
 }
 .PianoKey {
@@ -77,7 +78,7 @@ h1 {
     width: 40vw;
     top: -1.5vw;
     font-size: 5vw;
-    color: #557DA0;
+    color: rgb(82, 160, 87);
 }
 p {
     font-size: 1.2vw;
@@ -85,20 +86,20 @@ p {
     top: 1.8vw;
     left: 35vw;
     width: 70vw;
-    color: #557DA0;
+    color: rgb(82, 160, 87);
 }
 h2 {
     position: absolute;
     left: 1vw;
     font-size: 2.5vw;
-    color: #557DA0;
+    color: #557DB7;
 }
 h3{
     position: absolute;
     left: 1vw;
     top: .5vw;
     font-size: 2vw;
-    color: #557DA0;
+    color: #557DB7;
 }
 .inst {
     position: absolute;
@@ -117,7 +118,7 @@ select {
     left: .5vw;
     text-align-last: center;
     font-size: 1.2vw;
-    background-color: #557DA0;
+    background-color: #557DB7;
     border-radius: 1vw;
 }
 .moveover {
@@ -134,19 +135,19 @@ select {
     height: 3vw;
     font-size: 2vw;
     text-align: center;
-    background-color: #557DA0;
+    background-color: #557DB7;
     border-radius: 1vw;
-    border-color: #557DA0;
+    border: .1vw solid #C0C5C2;
     transition: all 0.3s ease;
 }
 .in1:hover {
-    box-shadow: 0 0 1vw #557DA0;
+    box-shadow: 0 0 1vw #557DB7;
 }
 .moveover1 {
     position: absolute;
     top: -6vw;
     left: 39vw;
-    background-color: #557DA0;
+    background-color: #557DB7;
     text-align-last: center;
     font-size: 1vw;
     color: white;
@@ -156,7 +157,7 @@ select {
     transition: all 0.3s ease;
 }
 .moveover1:hover {
-    box-shadow: 0 0 1vw #557DA0;
+    box-shadow: 0 0 1vw #557DB7;
 }
 .largeCheck {
     position: absolute;
@@ -164,7 +165,7 @@ select {
     top: .2vw;
     width: 1.3vw;
     height: 1.3vw;
-    box-shadow: 0 0 1vw #557DA0;
+    box-shadow: 0 0 1vw #557DB7;
     transition: all 0.3s ease;
 }
 .largeCheck:hover {
@@ -189,17 +190,19 @@ select {
     height: 6vw;
     border-radius: 1vw;
     padding: 1vw;
-    Background-color: #B1A296;
+    Background-color: #C0C5C2;
+    border: .1vw solid #557DB7;
     transition: all 0.3s ease;
 }
 .MBbox:hover {
-    box-shadow: 0 0 .5vw #B1A296;
+    box-shadow: 0 0 .5vw #C0C5C2;
 }
 #Instrument {
+    border: .1vw solid #C0C5C2;
     transition: all 0.3s ease;
 }
 #Instrument:hover {
-    box-shadow: 0 0 1vw #557DA0;
+    box-shadow: 0 0 1vw #557DB7;
     cursor: pointer;
 }
 #PCCC {
@@ -215,7 +218,7 @@ select {
     height: 1.5vw;
     top: 38.4vw;
     left: 13.75vw;
-    background: #B1A296;
+    background: #C0C5C2;
     border-top-right-radius: .5vw;
     outline: none;
     opacity: 0.7;
@@ -245,7 +248,7 @@ select {
     height: 2vw;
     font-size: 1.5vw;
     top: 0vw;
-    background-color: #557DA0;
+    background-color: #557DB7;
     border-color: transparent;
     border-radius: 1vw;
     text-align: center;
@@ -258,7 +261,7 @@ select {
     top: 3vw;
     left: 1.5vw;
     border-top: 1vw solid transparent;
-    border-left: 2vw solid #2A8D30;
+    border-left: 2vw solid rgb(82, 160, 87);
     border-bottom: 1vw solid transparent;
     border-right: 0vw;
     background-color: transparent;
@@ -266,14 +269,14 @@ select {
 }
 .PlayButton.Main {
     left: 3vw;
-    top: .5vw;
+    top: 1vw;
     border-top: 1.5vw solid transparent;
-    border-left: 2.5vw solid #2A8D30;
+    border-left: 2.5vw solid rgb(82, 160, 87);
     border-bottom: 1.5vw solid transparent;
 }
 .PlayButton:hover {
     cursor: pointer;
-    border-left-color: green;
+    border-left-color: rgb(29, 119, 35);
 }
 .PauseButton {
     position: absolute;
@@ -292,18 +295,23 @@ select {
     top: 1vw;
     height: 3vw;
     border-width: 0 0 0 2vw;
+    border-color: #f90;
 }
 .PauseButton:hover {
     cursor: pointer;
     border-color: black;
+}.PauseButton.Main:hover {
+    border-color: #f90;
 }
 .PlayAll {
     position: absolute;
-    top:3.2vw;
+    top:3.7vw;
     left: -1vw;
     font-size:3vw;
     color: rgb(82, 160, 87);
     font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    
+    transition: all 0.3s ease;
 }
 .PlayAll:hover {
     color: rgb(29, 119, 35);
@@ -360,6 +368,7 @@ select {
     font-size: 1vw;
     padding-right: 1.2vw;
     border-radius: .5vw;
+    transition: all 0.3s ease;
 }
 .MuteButton:hover {border: .15vw solid red; cursor: pointer;}
 .MuteButton:active {background-color: maroon;}
@@ -375,6 +384,7 @@ select {
     font-size: 1vw;
     padding-right: 1.2vw;
     border-radius: .5vw;
+    transition: all 0.3s ease;
 }
 .SoloButton:hover {border: .15vw solid yellow; cursor: pointer;}
 .SoloButton:active {background-color: #999900;}
@@ -386,10 +396,10 @@ select {
     font-size: 1.5vw;
     top: 50vw;
     border: .1vw solid white;
-    background-color: #557DA0;
+    background-color: #557DB7;
     color: white;
 }
-.AddTrack:hover {border: .1vw solid Black;}
+.AddTrack:hover {border: .1vw solid #AAA;color:#DDD;}
 .AddTrack:active {background-color: #336699;}
 .Export {
     position: absolute;
@@ -400,10 +410,10 @@ select {
     top: 50vw;
     margin-bottom: 20vw;
     border: .1vw solid white;
-    background-color: #557DA0;
+    background-color: #557DB7;
     color: white;
 }
-.Export:hover {border: .1vw solid Black;}
+.Export:hover {border: .1vw solid #AAA;color:#DDD;}
 .Export:active {background-color: #336699;}
 .delete {
     position: absolute;
@@ -413,7 +423,7 @@ select {
     padding: .05vw 0 0 .04vw;
     font-family: "Arial", sans-serif;
     font-size: .8vw;
-    background-color: #557DA0;
+    background-color: #557DB7;
 }
 .delete:hover {cursor: pointer;}
 .slider {
@@ -422,7 +432,7 @@ select {
     width: 5vw;
     height: 1vw;
     border-radius: 1vw;
-    background: #d3d3d3;
+    background: #C0C5C2;
     outline: none;
     opacity: 0.7;
     -webkit-transition: .2s;
@@ -448,7 +458,7 @@ select {
     width: 8vw;
     height:2vw;
     left: 10vw;
-    top: 2.5vw;
+    top: 3vw;
 }
 .slider.Main::-webkit-slider-thumb {
     -webkit-appearance: none;
@@ -473,6 +483,7 @@ select {
     left: 17vw;
     top: 2vw;
     font-size: 2vw;
+    color: #C0C5C2;
 }
 .zeroButton {
     position: absolute;
@@ -498,14 +509,15 @@ select {
     text-align:center;
     font-size:1.3vw;
     padding-top: .5vw;
-    background-color:#557DA0;
+    background-color:#557DB7;
     border-radius: 1vw;
     width: 9vw;
     height: 7.5vw;
+    border: .1vw solid #C0C5C2;
     transition: all 0.3s ease;
 }
 .TSbox:hover {
-    box-shadow:0 0 1vw #557DA0;
+    box-shadow: 0 0 1vw #557DB7;
 }
 .TimeSig {
     text-align: center;
@@ -522,7 +534,7 @@ select {
     overflow: hidden;
     transform: rotate(270deg) translatex(-8vw);
     transform-origin: left top;
-    background-color: #B1A296;
+    background-color: #C0C5C2;
 }
 .pmarker {
     position: absolute;
