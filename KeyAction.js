@@ -56,6 +56,66 @@ document.addEventListener("mouseup", function() {mouseIsDown = false;});
 window.addEventListener("contextmenu", e => {
     e.preventDefault();
   });
+// This will always be running: fades the background on the piano
+var tealR = 28;
+var tealG = 213;
+var tealB = 188;
+var yelR = 252;
+var yelG = 255;
+var yelB = 151;
+var gstop = false;
+var bstop = false;
+var up = true;
+
+var colorFader = setInterval(function() {
+    // TODO: work on getting a singuar grey line to flash across the background.
+    document.getElementById("board").style.backgroundImage = "linear-gradient(to bottom, rgb(" + tealR + ", " + tealG + ", " + tealB + "), " + 
+                                                            "rgb(" + yelR + ", " + yelG + ", " + yelB + "))";
+    document.getElementById("board").style.boxShadow = "0 1vw 1vw rgb(" + yelR + ", " + yelG + ", " + yelB + ")";
+    
+    if(tealG == 255 || tealG == 213)    gstop = true;
+    if(tealB == 151 || tealB == 188)    bstop = true;
+    if(tealR == 252) {
+        up = false;
+        gstop = false;
+        bstop = false;
+    }
+    if(tealR == 28) {
+        up = true
+        gstop = false;
+        bstop = false;
+    }
+    if(up){
+        tealR++;
+        yelR--;
+        tealR++;
+        yelR--;
+        if(!gstop) {
+            tealG++;
+            yelG--;
+        }
+        if(!bstop) {
+            tealB--;
+            yelB++;
+        }
+    }
+    else {
+        tealR--;
+        yelR++;
+        tealR--;
+        yelR++;
+        if(!gstop) {
+            tealG--;
+            yelG++;
+        }
+        if(!bstop) {
+            tealB++;
+            yelB-- ;
+        }
+    }
+    
+}, 20);
+
 function volFader(theNote) {
     var fadePoint = theNote.currentTime + 1;
     var first = false;
@@ -241,7 +301,7 @@ function addTrack() {
     newTrack.id = TrackNum.toString();
     TRACKS.add(newTrack.id);
     newTrack.innerHTML += " <div id=\"TRK" + TrackNum + 
-    "\"style=\"position:absolute;background-color:#557DB7;width:13vw;height:8vw;border-radius:1vw 0 0 1vw;\"> " + 
+    "\"style=\"position:absolute;background-color:#1CD5BC;width:13vw;height:8vw;border-radius:1vw 0 0 1vw;\"> " + 
     " <input type=\"text\" id=\"Tname" + TrackNum + "\" class=\"TrackName\" value=\"Track " + TrackNum + "\" onkeypress=\"nameChange(event);\">" + 
     "<button id=\"PB" + TrackNum + "\" title=\"Play/Pause\" class=\"PlayButton\" onclick=\"togglePP(event)\"></button>" +
     "<button id=\"RB" + TrackNum + "\" title=\"Record/Stop\" class=\"RecButton\" onclick=\"toggleRS(event)\"></button>" + 
@@ -295,12 +355,12 @@ function PAPA() {
     if(e.innerHTML == "Play All") {
         e.innerHTML = "Pause All";
         e.style.left = "-2vw";
-        e.style.color = "#f90";
+        e.style.color = "#1CD5BC";
     }
     else if(e.innerHTML == "Pause All") {
         e.innerHTML = "Play All";
         e.style.left = "-1vw";
-        e.style.color = "#2A8D30";
+        e.style.color = "#F1AB6E";
     }
 }
 function togglePP(event) {

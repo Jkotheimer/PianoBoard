@@ -5,14 +5,14 @@
   
   /* Track */
   ::-webkit-scrollbar-track {
-    background: #C0C5C2; 
+    background: #F1AB6E; 
   }
    
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #557DB7; 
+    background: #1CD5BC; 
     border-radius: 4px;
-    border: 2px solid #C0C5C2;
+    border: 2px solid #F1AB6E;
   }
   
   /* Handle on hover */
@@ -24,14 +24,13 @@
     align-items: flex-start;
     height: 465px;
 }
-div.Board {
+#board {
     position: -webkit-sticky;
     position: sticky;
-    transform: translatey(-1vw);
+    transform: translatey(-1vw) translateX(-1vw);
     top: 1vw;
+    width: 120vw;
     padding: 0 2vw;
-    background-color: #557DB7;
-    box-shadow: 0 0 1vw 1vw #557DB7;
     z-index: 1000000;
 }
 .PianoKey {
@@ -45,8 +44,8 @@ div.Board {
     z-index: 0; position: relative;
     cursor: pointer;
     box-shadow: 0vw .5vw .5vw black;
-    padding: 10vw 1.5% 1vw 1.5%;
-    margin: 0 -.2% 1%;
+    padding: 10vw 1.3% 1vw 1.3%;
+    margin: 0 -.15% 1%;
     font-size: 1.4vw;
     top: 0;
     transition: all 0.1s ease;
@@ -63,7 +62,7 @@ div.Board {
     color: white;
     z-index: 2; position: relative;
     padding: 2vw .3vw 1vw .3vw;
-    margin: 0 -1.45%;
+    margin: 0 -1.15%;
     top: -8vw;
 }
 .sharp:active {
@@ -78,7 +77,7 @@ h1 {
     width: 40vw;
     top: -1.5vw;
     font-size: 5vw;
-    color: rgb(82, 160, 87);
+    color: #FCFF97;
 }
 p {
     font-size: 1.2vw;
@@ -86,20 +85,20 @@ p {
     top: 1.8vw;
     left: 35vw;
     width: 70vw;
-    color: rgb(82, 160, 87);
+    color: #FCFF97;
 }
 h2 {
     position: absolute;
     left: 1vw;
     font-size: 2.5vw;
-    color: #557DB7;
+    color: #1CD5BC;
 }
 h3{
     position: absolute;
     left: 1vw;
     top: .5vw;
     font-size: 2vw;
-    color: #557DB7;
+    color: #1CD5BC;
 }
 .inst {
     position: absolute;
@@ -118,7 +117,7 @@ select {
     left: .5vw;
     text-align-last: center;
     font-size: 1.2vw;
-    background-color: #557DB7;
+    background-color: #1CD5BC;
     border-radius: 1vw;
 }
 .moveover {
@@ -135,29 +134,30 @@ select {
     height: 3vw;
     font-size: 2vw;
     text-align: center;
-    background-color: #557DB7;
     border-radius: 1vw;
-    border: .1vw solid #C0C5C2;
+    border: .1vw solid #F1AB6E;
+    background-color: #1CD5BC;
     transition: all 0.3s ease;
 }
 .in1:hover {
-    box-shadow: 0 0 1vw #557DB7;
+    box-shadow: 0 0 1vw #F1AB6E;
 }
 .moveover1 {
     position: absolute;
     top: -6vw;
     left: 39vw;
-    background-color: #557DB7;
+    background-color: #1CD5BC;
     text-align-last: center;
     font-size: 1vw;
     color: white;
     width: 8.5vw;
     height: 2vw;
     border-radius: 1vw;
+    border: .5vw solid #F1AB6E;
     transition: all 0.3s ease;
 }
 .moveover1:hover {
-    box-shadow: 0 0 1vw #557DB7;
+    box-shadow: 0 0 1vw #F1AB6E;
 }
 .largeCheck {
     position: absolute;
@@ -165,7 +165,6 @@ select {
     top: .2vw;
     width: 1.3vw;
     height: 1.3vw;
-    box-shadow: 0 0 1vw #557DB7;
     transition: all 0.3s ease;
 }
 .largeCheck:hover {
@@ -175,6 +174,7 @@ select {
     position: absolute;
     left: .8vw;
     top: .3vw;
+    color: #000;
     transition: all 0.3s ease;
 }
 .checkword:hover {
@@ -190,19 +190,19 @@ select {
     height: 6vw;
     border-radius: 1vw;
     padding: 1vw;
-    Background-color: #C0C5C2;
-    border: .1vw solid #557DB7;
+    Background-color: #F1AB6E;
+    border: .1vw solid #1CD5BC;
     transition: all 0.3s ease;
 }
 .MBbox:hover {
-    box-shadow: 0 0 .5vw #C0C5C2;
+    box-shadow: 0 0 .5vw #1CD5BC;
 }
 #Instrument {
-    border: .1vw solid #C0C5C2;
+    border: .1vw solid #F1AB6E;
     transition: all 0.3s ease;
 }
 #Instrument:hover {
-    box-shadow: 0 0 1vw #557DB7;
+    box-shadow: 0 0 1vw #F1AB6E;
     cursor: pointer;
 }
 #PCCC {
@@ -218,7 +218,7 @@ select {
     height: 1.5vw;
     top: 38.4vw;
     left: 13.75vw;
-    background: #C0C5C2;
+    background: #F1AB6E;
     border-top-right-radius: .5vw;
     outline: none;
     opacity: 0.7;
@@ -231,7 +231,8 @@ select {
     appearance: none;
     width: .3vw;
     height: 1.5vw;
-    background: #4CAF50;
+    background: #1CD5BC;
+    border: .1vw solid #FCFF97;
     cursor: pointer;
 }
 .Multitrack {
@@ -248,7 +249,7 @@ select {
     height: 2vw;
     font-size: 1.5vw;
     top: 0vw;
-    background-color: #557DB7;
+    background-color: #1CD5BC;
     border-color: transparent;
     border-radius: 1vw;
     text-align: center;
@@ -261,7 +262,7 @@ select {
     top: 3vw;
     left: 1.5vw;
     border-top: 1vw solid transparent;
-    border-left: 2vw solid rgb(82, 160, 87);
+    border-left: 2vw solid green;
     border-bottom: 1vw solid transparent;
     border-right: 0vw;
     background-color: transparent;
@@ -271,12 +272,12 @@ select {
     left: 3vw;
     top: 1vw;
     border-top: 1.5vw solid transparent;
-    border-left: 2.5vw solid rgb(82, 160, 87);
+    border-left: 2.5vw solid #F1AB6E;
     border-bottom: 1.5vw solid transparent;
 }
 .PlayButton:hover {
     cursor: pointer;
-    border-left-color: rgb(29, 119, 35);
+    border-left-color: darkgreen;
 }
 .PauseButton {
     position: absolute;
@@ -295,26 +296,26 @@ select {
     top: 1vw;
     height: 3vw;
     border-width: 0 0 0 2vw;
-    border-color: #f90;
+    border-color: #1CD5BC;
 }
 .PauseButton:hover {
     cursor: pointer;
     border-color: black;
 }.PauseButton.Main:hover {
-    border-color: #f90;
+    border-color: #1CD5BC;
 }
 .PlayAll {
     position: absolute;
     top:3.7vw;
     left: -1vw;
     font-size:3vw;
-    color: rgb(82, 160, 87);
+    color: #F1AB6E;
     font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     
     transition: all 0.3s ease;
 }
 .PlayAll:hover {
-    color: rgb(29, 119, 35);
+    color: #E5804D;
     cursor: pointer;
 }
 .RecButton {
@@ -396,10 +397,10 @@ select {
     font-size: 1.5vw;
     top: 50vw;
     border: .1vw solid white;
-    background-color: #557DB7;
-    color: white;
+    background-color: #1CD5BC;
+    color: #000;
 }
-.AddTrack:hover {border: .1vw solid #AAA;color:#DDD;}
+.AddTrack:hover {border: .1vw solid #555;color:#555;}
 .AddTrack:active {background-color: #336699;}
 .Export {
     position: absolute;
@@ -410,10 +411,10 @@ select {
     top: 50vw;
     margin-bottom: 20vw;
     border: .1vw solid white;
-    background-color: #557DB7;
-    color: white;
+    background-color: #1CD5BC;
+    color: #000;
 }
-.Export:hover {border: .1vw solid #AAA;color:#DDD;}
+.Export:hover {border: .1vw solid #555;color:#555;}
 .Export:active {background-color: #336699;}
 .delete {
     position: absolute;
@@ -423,7 +424,7 @@ select {
     padding: .05vw 0 0 .04vw;
     font-family: "Arial", sans-serif;
     font-size: .8vw;
-    background-color: #557DB7;
+    background-color: #1CD5BC;
 }
 .delete:hover {cursor: pointer;}
 .slider {
@@ -432,7 +433,7 @@ select {
     width: 5vw;
     height: 1vw;
     border-radius: 1vw;
-    background: #C0C5C2;
+    background: #F1AB6E;
     outline: none;
     opacity: 0.7;
     -webkit-transition: .2s;
@@ -445,7 +446,8 @@ select {
     width: 1vw;
     height: 1vw;
     border-radius: 1vw;
-    background: rgb(82, 160, 87);
+    background: #1CD5BC;
+    border: .1vw solid #FCFF97;
     cursor: pointer;
 }
 .slider.Vol {
@@ -483,7 +485,7 @@ select {
     left: 17vw;
     top: 2vw;
     font-size: 2vw;
-    color: #C0C5C2;
+    color: #F1AB6E;
 }
 .zeroButton {
     position: absolute;
@@ -492,15 +494,16 @@ select {
     height:1.5vw;
     width:1.5vw;
     font-size:1vw;
-    background-color: rgb(82, 160, 87);
+    background-color: #F1AB6E;
     border: .1vw solid white;
     border-bottom-left-radius: 1vw;
+    color: black;
 }
 .zeroButton:hover {
     cursor: pointer;
 }
 .zeroButton:active {
-    background-color: rgb(28, 109, 34);
+    background-color: #FCFF97;
 }
 .TSbox {
     position: absolute;
@@ -509,15 +512,15 @@ select {
     text-align:center;
     font-size:1.3vw;
     padding-top: .5vw;
-    background-color:#557DB7;
+    background-color:#1CD5BC;
     border-radius: 1vw;
     width: 9vw;
     height: 7.5vw;
-    border: .1vw solid #C0C5C2;
+    border: .1vw solid #F1AB6E;
     transition: all 0.3s ease;
 }
 .TSbox:hover {
-    box-shadow: 0 0 1vw #557DB7;
+    box-shadow: 0 0 1vw #F1AB6E;
 }
 .TimeSig {
     text-align: center;
@@ -534,7 +537,7 @@ select {
     overflow: hidden;
     transform: rotate(270deg) translatex(-8vw);
     transform-origin: left top;
-    background-color: #C0C5C2;
+    background-color: #F1AB6E;
 }
 .pmarker {
     position: absolute;
@@ -580,7 +583,7 @@ select {
     font-size: 2vw;
     background-color: #CC0000;
     border: .2vw solid black;
-    box-shadow: 0 0 .5vw black;
+    box-shadow: .5vw .5vw .5vw black;
     padding: .5vw;
     z-index: 100000;
 }
