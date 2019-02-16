@@ -5,19 +5,19 @@
   
   /* Track */
   ::-webkit-scrollbar-track {
-    background: #F1AB6E; 
+    background: #fff; 
   }
    
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #1CD5BC; 
+    background: #444; 
     border-radius: 4px;
-    border: 2px solid #F1AB6E;
+    border: 2px solid #fff;
   }
   
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: #4A6FAB; 
+    background: #333; 
   }
 /*All of these settings are a ratio of the window size being used.*/
 .Sticky {
@@ -77,7 +77,7 @@ h1 {
     width: 40vw;
     top: -1.5vw;
     font-size: 5vw;
-    color: #FCFF97;
+    color: #C293D6;
 }
 p {
     font-size: 1.2vw;
@@ -85,7 +85,7 @@ p {
     top: 1.8vw;
     left: 35vw;
     width: 70vw;
-    color: #FCFF97;
+    color: #C293D6;
 }
 h2 {
     position: absolute;
@@ -135,12 +135,12 @@ select {
     font-size: 2vw;
     text-align: center;
     border-radius: 1vw;
-    border: .1vw solid #F1AB6E;
+    border: .1vw solid #fff;
     background-color: #1CD5BC;
     transition: all 0.3s ease;
 }
 .in1:hover {
-    box-shadow: 0 0 1vw #F1AB6E;
+    box-shadow: 0 0 1vw #fff;
 }
 .moveover1 {
     position: absolute;
@@ -153,11 +153,11 @@ select {
     width: 8.5vw;
     height: 2vw;
     border-radius: 1vw;
-    border: .5vw solid #F1AB6E;
+    border: .5vw solid #fff;
     transition: all 0.3s ease;
 }
 .moveover1:hover {
-    box-shadow: 0 0 1vw #F1AB6E;
+    box-shadow: 0 0 1vw #fff;
 }
 .largeCheck {
     position: absolute;
@@ -190,7 +190,7 @@ select {
     height: 6vw;
     border-radius: 1vw;
     padding: 1vw;
-    Background-color: #F1AB6E;
+    Background-color: #fff;
     border: .1vw solid #1CD5BC;
     transition: all 0.3s ease;
 }
@@ -198,11 +198,11 @@ select {
     box-shadow: 0 0 .5vw #1CD5BC;
 }
 #Instrument {
-    border: .1vw solid #F1AB6E;
+    border: .1vw solid #fff;
     transition: all 0.3s ease;
 }
 #Instrument:hover {
-    box-shadow: 0 0 1vw #F1AB6E;
+    box-shadow: 0 0 1vw #fff;
     cursor: pointer;
 }
 #PCCC {
@@ -218,7 +218,7 @@ select {
     height: 1.5vw;
     top: 38.4vw;
     left: 13.75vw;
-    background: #F1AB6E;
+    background: #fff;
     border-top-right-radius: .5vw;
     outline: none;
     opacity: 0.7;
@@ -272,7 +272,7 @@ select {
     left: 3vw;
     top: 1vw;
     border-top: 1.5vw solid transparent;
-    border-left: 2.5vw solid #F1AB6E;
+    border-left: 2.5vw solid #C293D6;
     border-bottom: 1.5vw solid transparent;
 }
 .PlayButton:hover {
@@ -296,20 +296,20 @@ select {
     top: 1vw;
     height: 3vw;
     border-width: 0 0 0 2vw;
-    border-color: #1CD5BC;
+    border-color: #C293D6;
 }
 .PauseButton:hover {
     cursor: pointer;
     border-color: black;
 }.PauseButton.Main:hover {
-    border-color: #1CD5BC;
+    border-color: #C293D6;
 }
 .PlayAll {
     position: absolute;
     top:3.7vw;
     left: -1vw;
     font-size:3vw;
-    color: #F1AB6E;
+    color: #C293D6;
     font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     
     transition: all 0.3s ease;
@@ -433,7 +433,7 @@ select {
     width: 5vw;
     height: 1vw;
     border-radius: 1vw;
-    background: #F1AB6E;
+    background: #fff;
     outline: none;
     opacity: 0.7;
     -webkit-transition: .2s;
@@ -485,7 +485,7 @@ select {
     left: 17vw;
     top: 2vw;
     font-size: 2vw;
-    color: #F1AB6E;
+    color: #fff;
 }
 .zeroButton {
     position: absolute;
@@ -494,7 +494,7 @@ select {
     height:1.5vw;
     width:1.5vw;
     font-size:1vw;
-    background-color: #F1AB6E;
+    background-color: #fff;
     border: .1vw solid white;
     border-bottom-left-radius: 1vw;
     color: black;
@@ -516,11 +516,11 @@ select {
     border-radius: 1vw;
     width: 9vw;
     height: 7.5vw;
-    border: .1vw solid #F1AB6E;
+    border: .1vw solid #fff;
     transition: all 0.3s ease;
 }
 .TSbox:hover {
-    box-shadow: 0 0 1vw #F1AB6E;
+    box-shadow: 0 0 1vw #fff;
 }
 .TimeSig {
     text-align: center;
@@ -537,7 +537,7 @@ select {
     overflow: hidden;
     transform: rotate(270deg) translatex(-8vw);
     transform-origin: left top;
-    background-color: #F1AB6E;
+    background-color: #fff;
 }
 .pmarker {
     position: absolute;

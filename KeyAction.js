@@ -60,9 +60,9 @@ window.addEventListener("contextmenu", e => {
 var tealR = 28;
 var tealG = 213;
 var tealB = 188;
-var yelR = 252;
-var yelG = 255;
-var yelB = 151;
+var coralR = 194;
+var coralG = 147;
+var coralB = 214;
 var gstop = false;
 var bstop = false;
 var up = true;
@@ -70,47 +70,47 @@ var up = true;
 var colorFader = setInterval(function() {
     // TODO: work on getting a singuar grey line to flash across the background.
     document.getElementById("board").style.backgroundImage = "linear-gradient(to bottom, rgb(" + tealR + ", " + tealG + ", " + tealB + "), " + 
-                                                            "rgb(" + yelR + ", " + yelG + ", " + yelB + "))";
-    document.getElementById("board").style.boxShadow = "0 1vw 1vw rgb(" + yelR + ", " + yelG + ", " + yelB + ")";
-    
-    if(tealG == 255 || tealG == 213)    gstop = true;
-    if(tealB == 151 || tealB == 188)    bstop = true;
-    if(tealR == 252) {
+                                                            "rgb(" + coralR + ", " + coralG + ", " + coralB + "))";
+    document.getElementById("board").style.boxShadow = "0 1vw 1vw rgb(" + coralR + ", " + coralG + ", " + coralB + ")";
+
+    if(tealG <= 147 || tealG >= 213)    gstop = true;
+    if(tealB >= 214 || tealB <= 188)    bstop = true;
+    if(tealR >= 194) {
         up = false;
         gstop = false;
         bstop = false;
     }
-    if(tealR == 28) {
+    if(tealR <= 28) {
         up = true
         gstop = false;
         bstop = false;
     }
     if(up){
         tealR++;
-        yelR--;
+        coralR--;
         tealR++;
-        yelR--;
+        coralR--;
         if(!gstop) {
-            tealG++;
-            yelG--;
+            tealG--;
+            coralG++;
         }
         if(!bstop) {
-            tealB--;
-            yelB++;
+            tealB++;
+            coralB--;
         }
     }
     else {
         tealR--;
-        yelR++;
+        coralR++;
         tealR--;
-        yelR++;
+        coralR++;
         if(!gstop) {
-            tealG--;
-            yelG++;
+            tealG++;
+            coralG--;
         }
         if(!bstop) {
-            tealB++;
-            yelB-- ;
+            tealB--;
+            coralB++;
         }
     }
     
@@ -130,7 +130,7 @@ function volFader(theNote) {
         if (theNote.volume < 0.03) {
             clearInterval(fadeAudio);
         }
-    }, 10);
+    }, 20);
     return false;
 }
 /*
@@ -355,12 +355,12 @@ function PAPA() {
     if(e.innerHTML == "Play All") {
         e.innerHTML = "Pause All";
         e.style.left = "-2vw";
-        e.style.color = "#1CD5BC";
+        e.style.color = "#C293D6";
     }
     else if(e.innerHTML == "Pause All") {
         e.innerHTML = "Play All";
         e.style.left = "-1vw";
-        e.style.color = "#F1AB6E";
+        e.style.color = "#C293D6";
     }
 }
 function togglePP(event) {
