@@ -47,7 +47,8 @@ document.addEventListener("keyup", function() {
     else if(event.key == "Delete") {
         alertDeleteRec("recording", event);
     }
-    else if(letterz.has(event.key) && !event.srcElement.id.includes("Tname")){
+    else if(!event.srcElement.id.includes("Tname")){
+        document.getElementById("demo").innerHTML = event.key;
         action(event);
     }
 });
@@ -360,7 +361,7 @@ function PAPA() {
     else if(e.innerHTML == "Pause All") {
         e.innerHTML = "Play All";
         e.style.left = "-1vw";
-        e.style.color = "#C293D6";
+        e.style.color = "#1CD5BC";
     }
 }
 function togglePP(event) {
