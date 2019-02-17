@@ -214,13 +214,13 @@ select {
 #Rul {
     position: relative;
     -webkit-appearance: none;
-    width: 62vw;
+    width: 62.2vw;
     height: 1.5vw;
     left: 23vw;
-    top: -2vw;
-    transform: translatex(-10vw);
+    transform: translatex(-10.15vw) translateY(-1.82vw);
     background: #DDD;
-    border-top-right-radius: .5vw;
+    border-top-right-radius: .1vw;
+    border-top-left-radius: .1vw;
     outline: none;
     opacity: 0.9;
     -webkit-transition: .2s;
@@ -233,6 +233,8 @@ select {
     width: .2vw;
     height: 1.5vw;
     background: #1CD5BC;
+    border-top-right-radius: .2vw;
+    border-top-left-radius: .2vw;
     cursor: pointer;
 }
 .Multitrack {
@@ -368,7 +370,8 @@ select {
     background-color: gray;
     font-size: 1vw;
     padding-right: 1.2vw;
-    border-radius: .5vw;
+    border-top-left-radius: .5vw;
+    border-top-right-radius: .5vw;
     transition: all 0.3s ease;
 }
 .MuteButton:hover {border: .15vw solid red; cursor: pointer;}
@@ -384,7 +387,8 @@ select {
     background-color: gray;
     font-size: 1vw;
     padding-right: 1.2vw;
-    border-radius: .5vw;
+    border-bottom-left-radius: .5vw;
+    border-bottom-right-radius: .5vw;
     transition: all 0.3s ease;
 }
 .SoloButton:hover {border: .15vw solid yellow; cursor: pointer;}
@@ -489,8 +493,8 @@ select {
 }
 .zeroButton {
     position: absolute;
-    top:0;
-    left:-1.7vw;
+    top: 1.5px;
+    left:-1.8vw;
     height:1.5vw;
     width:1.5vw;
     font-size:1vw;
@@ -534,11 +538,14 @@ select {
     position: absolute;
     left: 13vw;
     width: 8vw;
-    height: 62vw;
+    height: 62.2vw;
     overflow: hidden;
-    transform: rotate(270deg) translatex(-6vw);
+    transform: rotate(270deg) translatex(-6.05vw);
     transform-origin: left top;
     background-color: #DDD;
+}
+.RecArea.extra {
+    transform: rotate(270deg) translateX(-8vw);
 }
 .pmarker {
     position: absolute;

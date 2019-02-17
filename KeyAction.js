@@ -17,15 +17,17 @@ for some reason the setInterval function bugs out if I try to do it, but 3% volu
 */
 document.addEventListener("keydown", function(){
     keyIsDown = true;
+    var evkey = event.key.toLowerCase();
     if(event.keyCode == 32 && !event.srcElement.id.includes("Tname") && !event.srcElement.id.includes("TEMPOOO")) {
         event.preventDefault();
     }
-    else if(event.key == "Shift") {
+    else if(evkey == "Shift") {
         reso = true;
         event.preventDefault();
     }
-    else if(letterz.has(event.key) && !event.srcElement.id.includes("Tname") && 
+    else if(letterz.has(evkey) && !event.srcElement.id.includes("Tname") && 
             !event.srcElement.id.includes("TEMPOOO") && !event.srcElement.id.includes("Numerator")){
+        document.getElementById("demo").innerHTML = evkey;
         action(event);
     }
     else if(event.key.includes("Arrow")) {
@@ -34,6 +36,7 @@ document.addEventListener("keydown", function(){
   });
 document.addEventListener("keyup", function() {
     keyIsDown = false;
+    var evkey = event.key.toLowerCase();
     if (event.keyCode == 32) {
         if(!event.srcElement.id.includes("Tname")) {
             event.preventDefault();
@@ -47,8 +50,7 @@ document.addEventListener("keyup", function() {
     else if(event.key == "Delete") {
         alertDeleteRec("recording", event);
     }
-    else if(!event.srcElement.id.includes("Tname")){
-        document.getElementById("demo").innerHTML = event.key;
+    if(!event.srcElement.id.includes("Tname") && !event.srcElement.id.includes("TEMPOOO")){
         action(event);
     }
 });
@@ -61,9 +63,9 @@ window.addEventListener("contextmenu", e => {
 var tealR = 28;
 var tealG = 213;
 var tealB = 188;
-var coralR = 194;
-var coralG = 147;
-var coralB = 214;
+var purpleR = 194;
+var purpleG = 147;
+var purpleB = 214;
 var gstop = false;
 var bstop = false;
 var up = true;
@@ -71,8 +73,8 @@ var up = true;
 var colorFader = setInterval(function() {
     // TODO: work on getting a singuar grey line to flash across the background.
     document.getElementById("board").style.backgroundImage = "linear-gradient(to bottom, rgb(" + tealR + ", " + tealG + ", " + tealB + "), " + 
-                                                            "rgb(" + coralR + ", " + coralG + ", " + coralB + "))";
-    document.getElementById("board").style.boxShadow = "0 1vw 1vw rgb(" + coralR + ", " + coralG + ", " + coralB + ")";
+                                                            "rgb(" + purpleR + ", " + purpleG + ", " + purpleB + "))";
+    document.getElementById("board").style.boxShadow = "0 2vw 1vw rgb(" + purpleR + ", " + purpleG + ", " + purpleB + ")";
 
     if(tealG <= 147 || tealG >= 213)    gstop = true;
     if(tealB >= 214 || tealB <= 188)    bstop = true;
@@ -88,30 +90,30 @@ var colorFader = setInterval(function() {
     }
     if(up){
         tealR++;
-        coralR--;
+        purpleR--;
         tealR++;
-        coralR--;
+        purpleR--;
         if(!gstop) {
             tealG--;
-            coralG++;
+            purpleG++;
         }
         if(!bstop) {
             tealB++;
-            coralB--;
+            purpleB--;
         }
     }
     else {
         tealR--;
-        coralR++;
+        purpleR++;
         tealR--;
-        coralR++;
+        purpleR++;
         if(!gstop) {
             tealG++;
-            coralG--;
+            purpleG--;
         }
         if(!bstop) {
             tealB--;
-            coralB++;
+            purpleB++;
         }
     }
     
@@ -131,7 +133,7 @@ function volFader(theNote) {
         if (theNote.volume < 0.03) {
             clearInterval(fadeAudio);
         }
-    }, 20);
+    }, 10);
     return false;
 }
 /*
@@ -142,7 +144,7 @@ source and a key on the virtual piano, and a sound is put out through the speake
 function action(event) {
     // When a key is held down, it continually pushes input, so we check the last key and event type
     // to ensure that the sound of the note doesn't continue reloading and spaz out.
-    if(!letterz.has(event.key) && !event.type.includes("mouse")) return false;
+    if(!letterz.has(event.key.toLowerCase()) && !event.type.includes("mouse")) return false;
     var lastkey = document.getElementById("lastKey");
     if(event.srcElement.id == "board") return false;
     if(event.key != "hellYeah"){
@@ -315,7 +317,7 @@ function addTrack() {
     "<div style=\"position:absolute;top: 4.5vw;left: 5.5vw;width:10vw;\">" +
     "<input id=\"Vol" + TrackNum + "\" type=\"range\" title=\"Volume\" min=\"0\" max=\"100\" placeholder=\"50\" class=\"slider Vol\" onmousemove=\"getVolVal(event)\" onmouseup=\"getVolVal(event)\" onkeydown=\"getVolVal(event)\" onkeyup=\"getVolVal(event)\">" + 
     "<span id=\"VLB" + TrackNum + "\" class=\"VolNum\">50<br>db</span></div>" + 
-    "<div id=\"RecArea" + TrackNum + "\" class=\"RecArea\" onmousemove=\"Scrub(event)\" onmouseup=\"Scrub(event)\" onkeyup=\"Scrub(event)\" " + 
+    "<div id=\"RecArea" + TrackNum + "\" class=\"RecArea extra\" onmousemove=\"Scrub(event)\" onmouseup=\"Scrub(event)\" onkeyup=\"Scrub(event)\" " + 
     "onkeydown=\"Scrub(event)\" onwheel=\"zoomTracks(event)\"><div id=\"pMarker" + TrackNum + "\" class=\"pmarker\"></div></div>"; 
     newTrack.style.cssText = "top: " + nTop + "vw;";
     var ID = "Tname" + TrackNum;
@@ -588,10 +590,11 @@ function Scrub(event){
         ruler.value++;ruler.value++;ruler.value++;ruler.value++;
     }
     spot = ruler.value;
+    spot = spot / 1.003;
     pixelPosition = ruler.clientWidth * (spot/length);
     for(let item of TRACKS.keys()) {
         pMarker = document.getElementById("pMarker" + item);
-        pMarker.style.top = pixelPosition + "px";
+        pMarker.style.cssText += "transform: translatey(" + pixelPosition + "px);";
     }
     measures.innerHTML = Math.floor(spot/spm);
     for(var i = 1; i <= TimeSig; i++) {
