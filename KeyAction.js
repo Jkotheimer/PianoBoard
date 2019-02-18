@@ -4,8 +4,8 @@ var dcolor = null;
 var ucolor = null;
 var DKEYS = new Set();
 var reso = false;
-var letterz = new Set(["Tab","1","q","2","w","e","4","r","5","t","6","y","u","8","i","9","o","p","-","[",
-                        "=","]","Backspace","\\","z","s","x","d","c","v","g","b","h","n","j","m",","]);
+var letterz = new Set(["tab","1","q","2","w","e","4","r","5","t","6","y","u","8","i","9","o","p","-","[",
+                        "=","]","backspace","\\","z","s","x","d","c","v","g","b","h","n","j","m",","]);
 var mouseIsDown = false;
 var keyIsDown = false;
 /*
@@ -27,7 +27,6 @@ document.addEventListener("keydown", function(){
     }
     else if(letterz.has(evkey) && !event.srcElement.id.includes("Tname") && 
             !event.srcElement.id.includes("TEMPOOO") && !event.srcElement.id.includes("Numerator")){
-        document.getElementById("demo").innerHTML = evkey;
         action(event);
     }
     else if(event.key.includes("Arrow")) {
@@ -144,9 +143,8 @@ source and a key on the virtual piano, and a sound is put out through the speake
 function action(event) {
     // When a key is held down, it continually pushes input, so we check the last key and event type
     // to ensure that the sound of the note doesn't continue reloading and spaz out.
-    if(!letterz.has(event.key.toLowerCase()) && !event.type.includes("mouse")) return false;
+    if(!event.type.includes("mouse") && !letterz.has(event.key.toLowerCase())) return false;
     var lastkey = document.getElementById("lastKey");
-    if(event.srcElement.id == "board") return false;
     if(event.key != "hellYeah"){
         lastkey.value = event.key;
         lastkey.val2 = event.type;
@@ -609,55 +607,35 @@ function Scrub(event){
     if(mouseIsDown) {
         // we are dragging the ruler at the end extremities of the ruler, we want to scroll over to the side to see the other recordings 
         // the further to the extremity that the ruler is dragged, the faster it scrolls.
-        switch(ruler.value){
-            case 0: scrollOver(-10);break;
-            case 2: scrollOver(-9);break;
-            case 4: scrollOver(-8);break;
-            case 6: scrollOver(-7);break;
-            case 8: scrollOver(-6);break;
-            case 10: scrollOver(-5);break;
-            case 12: scrollOver(-4);break;
-            case 13: scrollOver(-3);break;
-            case 14: scrollOver(-2);break;
-            case 15: scrollOver(-1);break;
-            case (ruler.max - 15): scrollOver(1);break;
-            case (ruler.max - 14): scrollOver(2);break;
-            case (ruler.max - 13): scrollOver(3);break;
-            case (ruler.max - 12): scrollOver(4);break;
-            case (ruler.max - 10): scrollOver(5);break;
-            case (ruler.max - 8): scrollOver(6);break;
-            case (ruler.max - 6): scrollOver(7);break;
-            case (ruler.max - 4): scrollOver(8);break;
-            case (ruler.max - 2): scrollOver(9);break;
-            case ruler.max: scrollOver(10);break;
-            default: scrollOver(0); break;
-        }
+        scrollOver();
     }
 }
 var leftMostRec = 0;
 var scrollSpeed;
-function scrollOver(speed) {
+function scrollOver() {
     // we want to change the left value of each of the recordings at a specific speed
-    clearInterval(scrollSpeed);
-    var direction = 0;
-    if(speed < 0) {
-        speed *= -1;
-        direction = -1
-        speed = (1000/speed);
-    } 
-    else if(speed > 0) {
-        speed = (1000/speed);
+    var ruler = document.getElementById("Rul");
+    var speed;
+    if(ruler.value <= 15) {
+        speed = ruler.value;
+        direction = -1;
+    }
+    else if(ruler.value >= (ruler.max - 15)) {
+        speed = (ruler.max - ruler.value);
         direction = 1;
     }
     else return false;
-    if(speed == 0) return false;
+
+    clearInterval(scrollSpeed);
     scrollSpeed = setInterval(function() {
-        for(let item of trkSelected) {
+        for(let item of movingRecs.keys()) {
+            document.getElementById("demo").innerHTML += movingRecs.get(item);
             var tak = document.getElementById(item);
-            var currentLeft = tak.style.left;
+            var currentLeft = movingRecs.get(item);
             tak.style.cssText += "left: calc((" + currentLeft + " + " + direction + "px);"; 
+            movingRecs.set(item, )
         }
-    }, speed);
+    }, (2 * speed) + 10);
 }
 function zoomTracks(event) {
     if(trkSelected.size > 0){
@@ -768,8 +746,17 @@ function PlayTrack(ident){
             ruler.value--;
             left--;
         }
+        if(first) {
+            for(let recc of trkSelected.keys()) {
+                var top = document.getElementById(recc);
+                movingRecs.set(top.id, top.style.top);
+            }
+        }
         ruler.value++;
-        if(!isRec) first2 = true;
+        if(!isRec) {
+            first = true;
+            first2 = true;
+        }
         else {
             if(first2) {
                 for(let recc of trkSelected.keys()) {
@@ -797,7 +784,6 @@ function PlayTrack(ident){
                     first = false;
                     Lholder = left;
                 }
-                var Rarea;
                 for(let recc of movingRecs.keys()) {
                     if(recc == Recordingz.id) continue;
                     var recToMove = document.getElementById(recc);
@@ -831,6 +817,7 @@ function PlayTrack(ident){
                 }
             }
         }
+        Scrub(EV);
     }, 2000/tempo );
 }
 function CheckMouseAction(event) {
