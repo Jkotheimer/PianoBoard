@@ -660,20 +660,25 @@ function scrollOver(speed, direction) {
     }, speed + 10);
 }
 function zoomTracks(event) {
+    var amount = -1;
     if(trkSelected.size > 0){
+        if (event.wheelDelta){
+            amount = event.wheelDelta;
+        }else{
+            amount = -1 * event.deltaY;
+        }
         event.preventDefault();
     }
-    document.getElementById("demo").innerHTML = null;
+    amount = amount / 30;
+    /*
     for(let item of movingRecs.keys()) {
         var rec = document.getElementById(item);
         var recTop = movingRecs.get(item);
         var recHeight = rec.style.height;
-        document.getElementById("demo").innerHTML = recTop + " " + recHeight + "<br>";
-        /*
-        rec.style.cssText +="top: calc(" + recTop + " + " + event.scrollY + "px);" + 
-                            "height: calc(" + recHeight + " - " + event.scrollY + "px);";
-        */
+        rec.style.cssText +="top: calc(" + recTop + " + " + amount + "px);" + 
+                            "height: calc(" + recHeight + " - " + amount + "px);";
     }
+    */
 }
 var FinalTimeNum = 4;
 var FinalTimeDen = 4;
