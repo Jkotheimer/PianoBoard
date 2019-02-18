@@ -119,14 +119,14 @@ var colorFader = setInterval(function() {
 }, 20);
 
 function volFader(theNote) {
-    var fadePoint = theNote.currentTime + 1;
+    var fadePoint = theNote.currentTime + 2;
     var first = false;
     var fadeAudio = setInterval(function () {
         if(theNote.volume == 1.0 && first == true){
             return false;
         }
-        if ((theNote.currentTime <= fadePoint) && (theNote.volume >= 0.03)) {
-            theNote.volume -= 0.01;
+        if ((theNote.currentTime <= fadePoint) && (theNote.volume >= 0.05)) {
+            theNote.volume -= 0.02;
         }
         first = true;
         if (theNote.volume < 0.03) {
@@ -149,6 +149,7 @@ function action(event) {
         lastkey.value = event.key;
         lastkey.val2 = event.type;
     }
+    if(event.srcElement.id == "board") return false;
     //If the mouse is clicked on a note, play that note
     if(event.type == "mousedown") {
         var K;
@@ -333,6 +334,13 @@ function deleteTrack() {
     var TN = "Tname" + track.id;
     TrkNames.delete(TN);
     TRACKS.delete(track.id);
+    for(let item of trkSelected.keys()){
+        if(item.includes("Recording" + track.id)) {
+            trkSelected.delete(item);
+            movingRecs.delete(item);
+            recnums.delete(track.id);
+        }
+    }
     track.parentNode.removeChild(track);
     var nTop = 40.1;
     for(let item of TRACKS.keys()) {
@@ -607,46 +615,64 @@ function Scrub(event){
     if(mouseIsDown) {
         // we are dragging the ruler at the end extremities of the ruler, we want to scroll over to the side to see the other recordings 
         // the further to the extremity that the ruler is dragged, the faster it scrolls.
-        scrollOver();
+        var speed;
+        var direction;
+        if(ruler.value <= 30 && leftMostRec < ruler.max) {
+            speed = ruler.value;
+            direction = -5;
+            scrollOver(speed, direction);
+        }
+        else if(ruler.value >= (ruler.max - 30) && leftMostRec < ruler.max) {
+            speed = (ruler.max - ruler.value);
+            direction = 5;
+            scrollOver(speed, direction);
+        }
+        else clearInterval(scrollSpeed);
     }
 }
-var leftMostRec = 0;
+var leftMostRec = 1;
+var farLeftRecording = null;
 var scrollSpeed;
-function scrollOver() {
+function scrollOver(speed, direction) {
     // we want to change the left value of each of the recordings at a specific speed
-    var ruler = document.getElementById("Rul");
-    var speed;
-    if(ruler.value <= 15) {
-        speed = ruler.value;
-        direction = -1;
+    for(let recc of trkSelected.keys()) {
+        var top = document.getElementById(recc);
+        movingRecs.set(top.id, top.style.top);
     }
-    else if(ruler.value >= (ruler.max - 15)) {
-        speed = (ruler.max - ruler.value);
-        direction = 1;
-    }
-    else return false;
-
     clearInterval(scrollSpeed);
     scrollSpeed = setInterval(function() {
+        if(!mouseIsDown) {
+            clearInterval(scrollSpeed);
+            return false;
+        }
+        leftMostRec = 1;
+        farLeftRecording = null;
         for(let item of movingRecs.keys()) {
-            document.getElementById("demo").innerHTML += movingRecs.get(item);
             var tak = document.getElementById(item);
             var currentLeft = movingRecs.get(item);
-            tak.style.cssText += "left: calc((" + currentLeft + " + " + direction + "px);"; 
-            movingRecs.set(item, )
+            if(currentLeft < leftMostRec) {
+                leftMostRec = currentRec;
+                farLeftRecording = item;
+            }
+            tak.style.cssText += "top: calc(" + currentLeft + " - " + direction + "px);"; 
+            movingRecs.set(item, tak.style.top)
         }
-    }, (2 * speed) + 10);
+    }, speed + 10);
 }
 function zoomTracks(event) {
     if(trkSelected.size > 0){
         event.preventDefault();
     }
+    document.getElementById("demo").innerHTML = null;
     for(let item of movingRecs.keys()) {
         var rec = document.getElementById(item);
         var recTop = movingRecs.get(item);
         var recHeight = rec.style.height;
+        document.getElementById("demo").innerHTML = recTop + " " + recHeight + "<br>";
+        /*
         rec.style.cssText +="top: calc(" + recTop + " + " + event.scrollY + "px);" + 
                             "height: calc(" + recHeight + " - " + event.scrollY + "px);";
+        */
     }
 }
 var FinalTimeNum = 4;
@@ -742,7 +768,7 @@ function PlayTrack(ident){
     PlayTime = setInterval(function() {
         var EV = {type:"none"};
         Scrub(EV);
-        if(isRec && ruler.value >= ruler.max/2){
+        if(isRec && ruler.value >= (ruler.max * 3/4)){
             ruler.value--;
             left--;
         }
@@ -912,6 +938,8 @@ function deleteRecording(){
             var thing = document.getElementById(item);
             thing.parentElement.removeChild(thing);
             trkSelected.delete(item);
+            movingRecs.delete(item);
+            recnums.delete(item);
         }
     }
 }
