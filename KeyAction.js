@@ -590,10 +590,10 @@ function Scrub(event){
     var spm = 30 * TimeSig;
     if(event.key == "ArrowLeft" && event.type == "keydown") {
         event.preventDefault();
-        ruler.value--;ruler.value--;ruler.value--;ruler.value--;
+        ruler.value -= 4;
     } else if(event.key == "ArrowRight" && event.type == "keydown") {
         event.preventDefault();
-        ruler.value++;ruler.value++;ruler.value++;ruler.value++;
+        ruler.value += 4;
     }
     spot = ruler.value;
     spot = spot / 1.003;
@@ -630,8 +630,8 @@ function Scrub(event){
         else clearInterval(scrollSpeed);
     }
 }
-var leftMostRec = 1;
-var farLeftRecording = null;
+var leftMostRec;
+var farLeftRecording;
 var scrollSpeed;
 function scrollOver(speed, direction) {
     // we want to change the left value of each of the recordings at a specific speed
@@ -645,12 +645,11 @@ function scrollOver(speed, direction) {
             clearInterval(scrollSpeed);
             return false;
         }
-        leftMostRec = 1;
-        farLeftRecording = null;
+        leftMostRec = doc.getElementById("Rul").max - 1;
         for(let item of movingRecs.keys()) {
             var tak = document.getElementById(item);
             var currentLeft = movingRecs.get(item);
-            if(currentLeft < leftMostRec) {
+            if(parseFloat(currentLeft) < parseFloat(leftMostRec)) {
                 leftMostRec = currentRec;
                 farLeftRecording = item;
             }
@@ -670,15 +669,16 @@ function zoomTracks(event) {
         event.preventDefault();
     }
     amount = amount / 30;
-    /*
+    //document.getElementById("Rul").max += (amount - 1);
     for(let item of movingRecs.keys()) {
+        if(item == farLeftRecording) continue;
         var rec = document.getElementById(item);
         var recTop = movingRecs.get(item);
         var recHeight = rec.style.height;
-        rec.style.cssText +="top: calc(" + recTop + " + " + amount + "px);" + 
-                            "height: calc(" + recHeight + " - " + amount + "px);";
+        rec.style.cssText +=    "top: calc(" + recTop + " - " + amount + "px);" + 
+                                "height: calc(" + recHeight + " - " + amount + "px);";
+        movingRecs.set(item, rec.style.top);
     }
-    */
 }
 var FinalTimeNum = 4;
 var FinalTimeDen = 4;
@@ -711,13 +711,11 @@ function changeTimeSig() {
     Scrub(EV);
 }
 var PlayTime;
-var RecordTime;
 var isRec = false;
 var recnums = new Map();
 var trkSelected = new Map();
 function Record(ident) {
     isRec = true;
-    RecordTime = false;
     ident = ident.substr(2);
     if(recnums.has(ident)){
         var idnum = recnums.get(ident);
@@ -732,7 +730,6 @@ function Record(ident) {
 }
 function endRecording(ident) {
     isRec = false;
-    clearInterval(RecordTime);
     var finishedRec = document.getElementById("Recording" + ident.substr(2) + ":" + recnums.get(ident.substr(2)));
     finishedRec.className = "finishedRec";
     // we want to check if the track overlapped any other tracks, and delete the overlapped parts and possibly split one recoring into two
@@ -810,15 +807,20 @@ function PlayTrack(ident){
             Recordingz.style.height = w*(ruler.clientWidth/ruler.max) + "px";
             Recordingz.style.top = left * (ruler.clientWidth/ruler.max) + "px";
             // Move all of the other recordings over with it
-            if(ruler.value >= ruler.max/2) {
+            if(ruler.value >= (ruler.max * 3/4)) {
                 if(first) {
                     first = false;
                     Lholder = left;
                 }
                 for(let recc of movingRecs.keys()) {
+                    var leftness = movingRecs.get(recc)
+                    if(leftness < leftMostRec){
+                        leftMostRec = leftness;
+                        farLeftRecording = recc;
+                    }
                     if(recc == Recordingz.id) continue;
                     var recToMove = document.getElementById(recc);
-                    recToMove.style.cssText += "top: calc(" + movingRecs.get(recc) + " - " + ((Lholder - left) * (ruler.clientWidth/ruler.max)) + "px);";
+                    recToMove.style.cssText += "top: calc(" + leftness + " - " + ((Lholder - left) * (ruler.clientWidth/ruler.max)) + "px);";
                 }
             }
         }
