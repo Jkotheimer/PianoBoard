@@ -1,6 +1,37 @@
-.header {
+#header {
+    position: absolute;
     background-color: #444;
-    width: 100vw;
-    height: 10vw;
+    width: 35vw;
+    height: 70vh;
+    left: 30vw;
     font-size: 2vw;
+    padding: 3vw;
+    border-radius: .5vw;
+}
+#username {
+    border-radius: .3vw;
+}
+#pass {
+    border-radius: .3vw;
+}
+
+.lostPass {
+    text-decoration: none;
+    font-size: 1.5vw;
+    color: #FFF;
+    width: 6vw;
+    height: 1.5vw;
+    padding: .3vw;
+    background-color: #C293D6;
+    border-radius: .4vw;
+}
+.createAccount {
+    text-decoration: none;
+    font-size: 1.5vw;
+    color:#FFF;
+    width: 6vw;
+    height: 1.5vw;
+    padding: .3vw;
+    background-color: #1CD5BC;
+    border-radius: .4vw;
 }
