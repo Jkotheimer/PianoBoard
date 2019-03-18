@@ -1,0 +1,37 @@
+#header {
+    position: absolute;
+    background-color: #444;
+    width: 550px;
+    height: 300px;
+    left: 325px;
+    top: 100px;
+    font-size: 28px;
+    padding: 30px;
+    border-radius: 5px;
+}
+#email {
+    position: relative;
+    height: 20px;
+    width: 300px;
+    margin: 0 10px;
+    color: #ccc;
+    font-size: 20px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    left: -10px;
+    background-color: transparent;
+    border-color: transparent;
+    border-bottom-color: #555;
+} #email:focus {outline: none;}
+#submit {
+    border-radius: 5px;
+    margin-top: 10px;
+    padding: 5px;
+    width: 300px;
+    height: 50px;
+    font-size: 20px;
+    background-color: orange;
+    border: 1px solid transparent;
+}#submit:hover{border: 1px solid white;}
+ #submit:active{border: 1px solid black;}
+ #submit:focus{outline: none;}

@@ -2,9 +2,52 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>PianoBoard Login</title>
+    <title>Create New PianoBoard Account</title>
     <link rel="shortcut icon" href="PBicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="accCreator.css">
 </head>
-<body>
-    FUUUUUCCCCKKKKKKKK
+<body style="background-image: url('loginBackground.jpg');background-size: 20vw;background-repeat: repeat;">
+    <div id="header">
+        <img src="PBlogo.png" style="width: 180px; height: 80px; margin: -25px;position:absolute;left: 300px;">
+        <div style="color: #ccc;font-size: 30px;">Create an Account</div>
+        <script>
+            var teal = [28,213,188]; 
+            var purple = [194,147,214];
+            var R = teal[0];
+            var G = teal[1];
+            var B = teal[2];
+            var goingUp = true;
+
+            var colorFader = setInterval(function() {
+                document.getElementById("header").style.border = 
+                        ".4vw solid rgb(" + R + ", " + G + ", " + B + ")";
+                document.getElementById("header").style.color = "rgb(" + R + ", " + G + ", " + B + ")";
+
+                if(goingUp) {
+                    R+=6.385; G-=2.54; B++;
+                }
+                else {
+                    R-=6.385; G+=2.54; B--;
+                }
+
+                if(R >= 194) goingUp = false;
+                else if(R <= 28) goingUp = true;
+            }, 125);
+        </script>
+        <br>
+        <form>
+            <label for="email">E-mail</label> <br>
+            <input type="text" id="email" class="formInput" name="email" required autocomplete="off">
+            <br>
+            <label for="username">Username</label> <br>
+            <input type="text" id="username" class="formInput" name="username" required autocomplete="off">
+            <br>
+            <label for="pass">Password</label> <br>
+            <input type="password" id="pass" class="formInput" name="password" minlength="8" required autocomplete="off">
+            <label for="pass2">Confirm Password</label> <br>
+            <input type="password" id="pass2" class="formInput" name="password2" minlength="8" required autocomplete="off">
+            <br><br>
+            <input type="submit" id="submit" value="Create Account">
+        </form>
+    </div>
 </body>
