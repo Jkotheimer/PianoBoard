@@ -37,14 +37,16 @@
         <br><br>
         <img src="PBicon.ico">
         <br><br>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required autocomplete="off">
+        <form phpThing>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required autocomplete="off">
+            <br>
+            <label for="pass">Password:</label>
+            <input type="password" id="pass" name="password" minlength="8" required autocomplete="off">
+            
+            <input type="submit" id="submit" value="Sign in">
+        </form>
         <br>
-        <label for="pass">Password:</label>
-        <input type="password" id="pass" name="password" minlength="8" required autocomplete="off">
-        <br>
-        <input type="submit" value="Sign in">
-        <br><br>
         <a href="/passFinder" class="lostPass">Forgot password?</a>
         <a href="/createAccount" class="createAccount">Create a new Account</a>
     </div>

@@ -9,10 +9,18 @@
     border-radius: .5vw;
 }
 #username {
+    height: 1.7vw;
     border-radius: .3vw;
+    margin: 0 1vw;
 }
 #pass {
+    height: 1.7vw;
     border-radius: .3vw;
+    margin: 0 1vw 1vw;
+}
+#submit {
+    border-radius: .3vw;
+    margin: 1vw;
 }
 
 .lostPass {
