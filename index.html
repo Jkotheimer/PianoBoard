@@ -8,10 +8,13 @@
 </head>
 <body style="background-image: url('loginBackground.jpg');background-size: 20vw;background-repeat: repeat;">
     <div id="header">
-        Welcome to PianoBoard <br>
-        Please login to continue to the <a href="/studio" style="color:lightslategray">studio.</a>
+        <img src="PBlogo.png" style="width: 500px; height: 200px; margin: -50px;">
+        <br>
+        <div style="color: #ccc;">Please login or create an account to continue to the 
+            <a href="/studio" style="color:#ccc">studio.</a>
+        </div>
         <script>
-            var teal = [28,213,188]; //166, 66, 26
+            var teal = [28,213,188]; 
             var purple = [194,147,214];
             var R = teal[0];
             var G = teal[1];
@@ -32,22 +35,19 @@
 
                 if(R >= 194) goingUp = false;
                 else if(R <= 28) goingUp = true;
-            }, 150);
+            }, 125);
         </script>
-        <br><br>
-        <img src="PBicon.ico">
-        <br><br>
-        <form phpThing>
-            <label for="username">Username:</label>
+        <br>
+        <form action="Hash.php">
+            <label for="username">Username</label> <br>
             <input type="text" id="username" name="username" required autocomplete="off">
             <br>
-            <label for="pass">Password:</label>
+            <label for="pass">Password</label> <br>
             <input type="password" id="pass" name="password" minlength="8" required autocomplete="off">
-            
+            <br>
             <input type="submit" id="submit" value="Sign in">
         </form>
-        <br>
-        <a href="/passFinder" class="lostPass">Forgot password?</a>
-        <a href="/createAccount" class="createAccount">Create a new Account</a>
+        <a href="/passFinder" class="redirect lostPass">Forgot password?</a>
+        <a href="/createAccount" class="redirect createAccount">Create a new Account</a>
     </div>
 </body>
