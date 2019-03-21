@@ -3,12 +3,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Password Reset</title>
-    <link rel="shortcut icon" href="PBicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="../_images/PBicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="ResetStyle.css">
 </head>
-<body style="background-image: url('loginBackground.jpg');background-size: 20vw;background-repeat: repeat;">
+<body style="background-image: url('../_images/loginBackground.jpg');background-size: 20vw;background-repeat: repeat;">
     <div id="header">
-        <img src="PBlogo.png" style="width: 250px; height: 100px; margin: -25px;position:absolute;left:350px;">
+        <img src="../_images/PBlogo.png" style="width: 250px; height: 100px; margin: -25px;position:absolute;left:350px;">
         <div style="color: #ccc;font-size:38px;">Password Reset</div>
         <br>
         <script>
@@ -39,7 +39,7 @@
         <form>
             <label for="email">Please enter your E-mail<br>
                 You will recieve a link to reset your password</label> <br>
-            <input type="text" id="email" name="email" required autocomplete="off">
+            <input type="text" id="email" name="email" placeholder="your.email@something.com" required autocomplete="off">
             <br>
             <input type="submit" id="submit" value="Send Reset Link">
         </form>

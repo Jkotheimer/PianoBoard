@@ -125,14 +125,14 @@ function volFader(theNote) {
         if(theNote.volume == 1.0 && first == true){
             return false;
         }
-        if ((theNote.currentTime <= fadePoint) && (theNote.volume >= 0.05)) {
+        if ((theNote.currentTime <= fadePoint) && (theNote.volume >= 0.02)) {
             theNote.volume -= 0.02;
         }
         first = true;
         if (theNote.volume < 0.03) {
             clearInterval(fadeAudio);
         }
-    }, 10);
+    }, 20);
     return false;
 }
 /*
@@ -236,9 +236,7 @@ function action(event) {
         }
         //If it was a keyup event, change the color back, and fade the soundfile out
         if(event.type == "keyup") {
-            if(reso == false){
-                volFader(note);
-            }
+            volFader(note);
             x.style.background = ucolor;
             DKEYS.delete(x.id);
             x.style.boxShadow = "0vw .5vw .5vw black";

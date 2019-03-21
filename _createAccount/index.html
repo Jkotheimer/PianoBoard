@@ -3,12 +3,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Create New PianoBoard Account</title>
-    <link rel="shortcut icon" href="PBicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="../_images/PBicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="accCreator.css">
 </head>
-<body style="background-image: url('loginBackground.jpg');background-size: 20vw;background-repeat: repeat;">
+<body style="background-image: url('../_images/loginBackground.jpg');background-size: 20vw;background-repeat: repeat;">
     <div id="header">
-        <img src="PBlogo.png" style="width: 180px; height: 80px; margin: -25px;position:absolute;left: 300px;">
+        <img src="../_images/PBlogo.png" style="width: 180px; height: 80px; margin: -25px;position:absolute;left: 300px;">
         <div style="color: #ccc;font-size: 30px;">Create an Account</div>
         <script>
             var teal = [28,213,188]; 
@@ -37,15 +37,15 @@
         <br>
         <form>
             <label for="email">E-mail</label> <br>
-            <input type="text" id="email" class="formInput" name="email" required autocomplete="off">
+            <input type="text" id="email" class="formInput" placeholder="your.email@something.com" name="email" required autocomplete="off">
             <br>
             <label for="username">Username</label> <br>
-            <input type="text" id="username" class="formInput" name="username" required autocomplete="off">
+            <input type="text" id="username" class="formInput" placeholder="Choose a username" name="username" required autocomplete="off">
             <br>
             <label for="pass">Password</label> <br>
-            <input type="password" id="pass" class="formInput" name="password" minlength="8" required autocomplete="off">
+            <input type="password" id="pass" class="formInput" placeholder="Password" name="password" minlength="8" required autocomplete="off">
             <label for="pass2">Confirm Password</label> <br>
-            <input type="password" id="pass2" class="formInput" name="password2" minlength="8" required autocomplete="off">
+            <input type="password" id="pass2" class="formInput" placeholder="Confirm Password" name="password2" minlength="8" required autocomplete="off">
             <br><br>
             <input type="submit" id="submit" value="Create Account">
         </form>
