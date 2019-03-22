@@ -5,6 +5,7 @@
     <title>Create New PianoBoard Account</title>
     <link rel="shortcut icon" href="../images/PBicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="accCreator.css">
+    <script type="text/javascript" src="accounts.js"></script>
 </head>
 <body style="background-image: url('../images/loginBackground.jpg');background-size: 20vw;background-repeat: repeat;">
     <div id="header">
@@ -35,9 +36,10 @@
             }, 125);
         </script>
         <br>
-        <form>
+        <form method="post">
             <label for="email">E-mail</label> <br>
-            <input type="text" id="email" class="formInput" placeholder="your.email@something.com" name="email" required autocomplete="off">
+            <input type="text" id="email" class="formInput" placeholder="your.email@something.com" 
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" name="email" required autocomplete="off">
             <br>
             <label for="username">Username</label> <br>
             <input type="text" id="username" class="formInput" placeholder="Choose a username" name="username" required autocomplete="off">
@@ -47,7 +49,7 @@
             <label for="pass2">Confirm Password</label> <br>
             <input type="password" id="pass2" class="formInput" placeholder="Confirm Password" name="password2" minlength="8" required autocomplete="off">
             <br><br>
-            <input type="submit" id="submit" value="Create Account">
+            <input type="submit" id="submit" value="Create Account" onclick="createAccount()">
         </form>
     </div>
 </body>
