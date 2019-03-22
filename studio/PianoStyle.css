@@ -1,0 +1,646 @@
+/* width */
+::-webkit-scrollbar {
+    width: 13px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #fff; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #444; 
+    border-radius: 4px;
+    border: 2px solid #fff;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #333;
+  }
+/*All of these settings are a ratio of the window size being used.*/
+.Sticky {
+    align-items: flex-start;
+    height: 465px;
+}
+#board {
+    position: -webkit-sticky;
+    position: sticky;
+    transform: translatey(-1vw) translateX(-1vw);
+    top: 1vw;
+    width: 120vw;
+    padding: 0 2vw;
+    z-index: 1000000;
+}
+.PianoKey {
+    background-color: #FFFFFF;
+    outline: none;
+    border: .15vw solid grey;
+    border-radius: 0vw 0vw 1vw 1vw;
+    color: black;
+    font-family: monospace, monospace;
+    text-align: center;
+    z-index: 0; position: relative;
+    cursor: pointer;
+    box-shadow: 0vw .5vw .5vw black;
+    padding: 10vw 1.3% 1vw 1.3%;
+    margin: 0 -.15% 1%;
+    font-size: 1.4vw;
+    top: 0;
+    transition: all 0.1s ease;
+}
+.PianoKey:hover {
+    border: .15vw solid black;
+    z-index: 1; position: relative;
+}
+.PianoKey:active {
+    background-color: #CCCCCC;
+ }
+.sharp {
+    background-color: #000000;
+    color: white;
+    z-index: 2; position: relative;
+    padding: 2vw .3vw 1vw .3vw;
+    margin: 0 -1.15%;
+    top: -8vw;
+}
+.sharp:active {
+    background-color: #333333;
+}
+div.title {
+    font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    position: absolute;
+}
+.logo {
+    position: absolute;
+    left: 2vw;
+    top: 1vw;
+    width:37vw; 
+    height:17vw;
+    margin:-50px;
+}
+p {
+    font-size: 1.2vw;
+    position: absolute;
+    top: 1.8vw;
+    left: 35vw;
+    width: 70vw;
+    color: #DDD;
+}
+h2 {
+    position: absolute;
+    left: 1vw;
+    font-size: 2.5vw;
+    color: #1CD5BC;
+}
+h3{
+    position: absolute;
+    left: 1vw;
+    top: .5vw;
+    font-size: 2vw;
+    color: #1CD5BC;
+}
+.inst {
+    position: absolute;
+    top: 7vw;
+}
+.Temp {
+    position:absolute;
+    top: 16.2vw;
+    left:-10vw;
+}
+select {
+    position: absolute;
+    width: 15vw;
+    height: 3vw;
+    top: 6vw;
+    left: .5vw;
+    text-align-last: center;
+    font-size: 1.2vw;
+    background-color: #1CD5BC;
+    border-radius: 1vw;
+}
+.moveover {
+    position: absolute;
+    left: 30vw;
+    top: -9vw;
+    padding: -1vw 1vw 1vw;
+}
+.in1 {
+    position: relative;
+    left: 1vw;
+    top: 5.5vw;
+    width: 17vw;
+    height: 3vw;
+    font-size: 2vw;
+    text-align: center;
+    border-radius: 1vw;
+    border: .1vw solid #C293D6;
+    background-color: #1CD5BC;
+    transition: all 0.3s ease;
+}
+.in1:hover {
+    box-shadow: 0 0 1vw #C293D6;
+}
+.moveover1 {
+    position: absolute;
+    top: -6vw;
+    left: 39vw;
+    background-color: #1CD5BC;
+    text-align-last: center;
+    font-size: 1vw;
+    color: white;
+    width: 8.5vw;
+    height: 2vw;
+    border-radius: 1vw;
+    border: .5vw solid #C293D6;
+    transition: all 0.3s ease;
+}
+.moveover1:hover {
+    box-shadow: 0 0 1vw #C293D6;
+}
+.largeCheck {
+    position: absolute;
+    left: 6vw;
+    top: .2vw;
+    width: 1.3vw;
+    height: 1.3vw;
+    transition: all 0.3s ease;
+}
+.largeCheck:hover {
+    cursor: pointer;
+}
+.checkword {
+    position: absolute;
+    left: .8vw;
+    top: .3vw;
+    color: #000;
+    transition: all 0.3s ease;
+}
+.checkword:hover {
+    cursor: pointer;
+}
+.MBbox {
+    text-align: center;
+    position: absolute;
+    font-size: 2vw;
+    left: 65vw;
+    top: 10vw;
+    width: 20vw;
+    height: 6vw;
+    border-radius: 1vw;
+    padding: 1vw;
+    Background-color: #DDD;
+    border: .1vw solid #1CD5BC;
+    transition: all 0.3s ease;
+}
+.MBbox:hover {
+    box-shadow: 0 0 .5vw #1CD5BC;
+}
+#Instrument {
+    border: .1vw solid #C293D6;
+    transition: all 0.3s ease;
+}
+#Instrument:hover {
+    box-shadow: 0 0 1vw #C293D6;
+    cursor: pointer;
+}
+#PCCC {
+    border: .1vw solid transparent;
+}
+#PCCC:hover {
+    cursor: pointer;
+}
+#Rul {
+    position: relative;
+    -webkit-appearance: none;
+    width: 62.2vw;
+    height: 1.5vw;
+    left: 23vw;
+    transform: translatex(-10.15vw) translateY(-1.82vw);
+    background: #DDD;
+    border-top-right-radius: .1vw;
+    border-top-left-radius: .1vw;
+    outline: none;
+    opacity: 0.9;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+#Rul:hover {opacity: 1;}
+#Rul::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: .2vw;
+    height: 1.5vw;
+    background: #1CD5BC;
+    border-top-right-radius: .2vw;
+    border-top-left-radius: .2vw;
+    cursor: pointer;
+}
+.Multitrack {
+    position: absolute;
+    width: 75vw;
+    height: 8vw;
+    top: 40vw;
+    background-color: white;
+    border: .17vw solid white;
+    border-radius: 1vw 0 0 1vw;
+}
+.TrackName {
+    width: 10.6vw;
+    height: 2vw;
+    font-size: 1.5vw;
+    top: 0vw;
+    background-color: #1CD5BC;
+    border-color: transparent;
+    border-radius: 1vw;
+    text-align: center;
+}
+.TrackName:hover {
+    border-color: #C293D6;
+}
+.PlayButton {
+    position: absolute;
+    top: 3vw;
+    left: 1.5vw;
+    border-top: 1vw solid transparent;
+    border-left: 2vw solid green;
+    border-bottom: 1vw solid transparent;
+    border-right: 0vw;
+    background-color: transparent;
+    transition: border-left-color 0.3s ease;
+}
+.PlayButton.Main {
+    left: 3vw;
+    top: 1vw;
+    border-top: 1.5vw solid transparent;
+    border-left: 2.5vw solid #1CD5BC;
+    border-bottom: 1.5vw solid transparent;
+}
+.PlayButton:hover {
+    cursor: pointer;
+    border-left-color: darkgreen;
+}
+.PlayButton.Main:hover{border-left-color: #1CD5BC}
+.PauseButton {
+    position: absolute;
+    width: 2vw;
+    height: 2vw;
+    top: 3vw;
+    left: 1.5vw;
+    border-style: double;
+    border-width: 0 0 0 1.5vw;
+    border-color: navy;
+    background-color: transparent;
+    transition: border-left-color 0.3s ease;
+}
+.PauseButton.Main {
+    left: 3vw;
+    top: 1vw;
+    height: 3vw;
+    border-width: 0 0 0 2vw;
+    border-color: #C293D6;
+}
+.PauseButton:hover {
+    cursor: pointer;
+    border-color: black;
+}.PauseButton.Main:hover {
+    border-color: #C293D6;
+}
+.PlayAll {
+    position: absolute;
+    top:3.7vw;
+    left: -1vw;
+    font-size:3vw;
+    color: #1CD5BC;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    
+    transition: all 0.3s ease;
+}
+.PlayAll:hover {
+    cursor: pointer;
+}
+.RecButton {
+    position:absolute;
+    top: 3vw;
+    left: 4.5vw;
+	width: 2vw;
+	height: 2vw;
+	border: .1vw solid white;
+	border-radius: 50%;
+    background-color: #CC0000;
+    transition: all 0.3s ease;
+}
+.RecButton.Main {
+    left: 6vw;
+	width: 3vw;
+	height: 3vw;
+}
+.RecButton:hover {
+    cursor: pointer;
+    background-color: #AA0000;
+}
+.StopButton {
+    position:absolute;
+    top: 3vw;
+    left: 4.5vw;
+	width: 2vw;
+	height: 2vw;
+	border: .1vw solid white;
+	border-radius: 0;
+    background-color: #CC0000;
+    transition: all 0.3s ease;
+}
+.StopButton.Main {
+    left: 6vw;
+	width: 3vw;
+	height: 3vw;
+}
+.StopButton:hover {
+    cursor: pointer;
+    background-color: #AA0000;
+}
+.MuteButton {
+    position: absolute;
+    top: 0;
+    left: 11vw;
+    width: 0vw;
+    height: 4vw;
+    border: .15vw solid white;
+    background-color: gray;
+    font-size: 1vw;
+    padding-right: 1.2vw;
+    border-top-left-radius: .5vw;
+    border-top-right-radius: .5vw;
+    transition: all 0.3s ease;
+}
+.MuteButton:hover {border: .15vw solid red; cursor: pointer;}
+.MuteButton:active {background-color: maroon;}
+.MBon {background-color: red;}
+.SoloButton {
+    position: absolute;
+    top: 4vw;
+    left: 11vw;
+    width: 0vw;
+    height: 4vw;
+    border: .15vw solid white;
+    background-color: gray;
+    font-size: 1vw;
+    padding-right: 1.2vw;
+    border-bottom-left-radius: .5vw;
+    border-bottom-right-radius: .5vw;
+    transition: all 0.3s ease;
+}
+.SoloButton:hover {border: .15vw solid yellow; cursor: pointer;}
+.SoloButton:active {background-color: #999900;}
+.SBon {background-color: yellow;}
+.AddTrack {
+    position: absolute;
+    width: 15vw;
+    height: 4vw;
+    font-size: 1.5vw;
+    top: 50vw;
+    border: .1vw solid white;
+    background-color: #1CD5BC;
+    color: #000;
+}
+.AddTrack:hover {border: .1vw solid #C293D6;}
+.AddTrack:active {background-color: #0CC5AC;}
+.Export {
+    position: absolute;
+    width: 20vw;
+    height: 6vw;
+    font-size: 2vw;
+    left: 56vw;
+    top: 50vw;
+    margin-bottom: 20vw;
+    border: .1vw solid white;
+    background-color: #1CD5BC;
+    color: #000;
+}
+.Export:hover {border: .1vw solid #C293D6;}
+.Export:active {background-color: #0CC5AC;}
+.delete {
+    position: absolute;
+    left: 73.5vw;
+    z-index: 3;
+    width: 1.5vw; height: 1.5vw;
+    padding: .05vw 0 0 .04vw;
+    font-family: "Arial", sans-serif;
+    font-size: .8vw;
+    background-color: #1CD5BC;
+}
+.delete:hover {cursor: pointer;}
+.slider {
+    position: absolute;
+    -webkit-appearance: none;
+    width: 5vw;
+    height: 1vw;
+    border-radius: 1vw;
+    background: #DDD;
+    outline: none;
+    opacity: 0.9;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+.slider:hover {opacity: 1;}
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 1vw;
+    height: 1vw;
+    border-radius: 1vw;
+    background: #C293D6;
+    border: .1vw solid #1CD5BC;
+    cursor: pointer;
+}
+.slider.Vol {
+    transform: rotate(270deg);
+    top: 0vw;
+    left: 0vw;
+}
+.slider.Main {
+    transform: rotate(270deg);
+    width: 8vw;
+    height:2vw;
+    left: 10vw;
+    top: 3.2vw;
+}
+.slider.Main::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 2vw;
+    height: 2vw;
+    border-radius: 1vw;
+}
+.PanNum {
+    position: absolute;
+    top:-1.2vw;
+    left:2.3vw;
+    font-size:1vw;
+}
+.VolNum {
+    position: absolute;
+    top: 0;
+    left: 4vw;
+    font-size: 1vw;
+}
+.VolNum.Main {
+    left: 17vw;
+    top: 2vw;
+    font-size: 2vw;
+    color: #C293D6;
+}
+.zeroButton {
+    position: absolute;
+    top: 1.5px;
+    left:-1.8vw;
+    height:1.5vw;
+    width:1.5vw;
+    font-size:1vw;
+    background-color: #DDD;
+    border: .1vw solid white;
+    border-bottom-left-radius: 1vw;
+    border-top-right-radius: .3vw;
+    color: black;
+}
+.zeroButton:hover {
+    cursor: pointer;
+}
+.zeroButton:active {
+    background-color: #C293D6;
+}
+.TSbox {
+    position: absolute;
+    left: 88vw;
+    top: 10vw;
+    text-align:center;
+    font-size:1.3vw;
+    padding-top: .5vw;
+    background-color:#1CD5BC;
+    border-radius: 1vw;
+    width: 9vw;
+    height: 7.5vw;
+    border: .1vw solid #fff;
+    transition: all 0.3s ease;
+}
+.TSbox:hover {
+    box-shadow: 0 0 1vw #fff;
+}
+.TimeSig {
+    text-align: center;
+    width: 2.7vw;
+    font-size: 1.5vw;
+    background-color: transparent;
+    border: .1vw solid transparent;
+}
+.RecArea {
+    position: absolute;
+    left: 13vw;
+    width: 8vw;
+    height: 62.2vw;
+    overflow: hidden;
+    transform: rotate(270deg) translatex(-6.05vw);
+    transform-origin: left top;
+    background-color: #DDD;
+}
+.RecArea.extra {
+    transform: rotate(270deg) translateX(-8vw);
+}
+.pmarker {
+    position: absolute;
+    z-index: 10000;
+    transform: rotate(180deg);
+    left: 0vw;;
+    width: 8.5vw;
+    height: .2vw;
+    background: #000000;
+}
+.startedRec {
+    position: absolute;
+    background-color: maroon;
+    width: 8vw;
+    border-top: .1vw solid transparent;
+    border-bottom: .1vw solid transparent;
+}
+.finishedRec {
+    position: absolute;
+    background-color: green;
+    width: 8vw;
+    border-top: .1vw solid black;
+    border-bottom: .1vw solid black;
+}
+.finishedRec:hover {
+    cursor: text;
+}
+.finishedRec1 {
+    position: absolute;
+    background-color: darkgreen;
+    width: 8vw;
+    border-top: .1vw solid blue;
+    border-bottom: .1vw solid blue;
+    z-index: 5;
+}
+.finishedRec1:hover {cursor: grab;}
+.finishedRec1:active {cursor: grabbing;}
+#RecDelAlert {
+    position: absolute;
+    left: 20vw;
+    width: 50vw;
+    height: 10vw;
+    font-size: 2vw;
+    background-color: #CC0000;
+    border: .2vw solid black;
+    box-shadow: .5vw .5vw .5vw black;
+    padding: .5vw;
+    z-index: 100000;
+}
+.Abutt {
+    position: relative;
+    top: 2vw;
+    width: 6vw;
+    height: 3vw;
+    font-size: 1vw;
+    margin: 0 .5vw;
+    left: 30vw;
+    background-color: white;
+    border: .05 solid transparent;
+}
+.Abutt:hover{background-color: #DDDDDD;cursor: pointer;}
+.Abutt.trkdel {position: relative; top: 5.5vw; left: -13vw;}
+.Abutt.trkcnl {position: relative; top: 2.3vw; left: 38vw;}
+.Abutt:active{background-color: #555555;color:white;}
+/*When the window gets really small, the margins get fucked up, so its nice to have a safety net to protect it*/
+@media only screen and (max-width: 800px) {
+    .PianoKey {
+        margin: 0 -.2% 1%;
+    }
+    .sharp {
+        margin: 0 -1.5%;
+    }
+}
+@media only screen and (max-width: 650px) {
+    .PianoKey {
+        margin: 0 -.3% 1%;
+    }
+    .sharp {
+        margin: 0 -1.6%;
+    }
+}
+@media only screen and (max-width: 510px) {
+    .PianoKey {
+        margin: 0 -.4% 1%;
+    }
+    .sharp {
+        margin: 0 -1.7%;
+    }
+}
+@media only screen and (max-width: 400px) {
+    .PianoKey {
+        margin: 0 -.5% 1%;
+    }
+    .sharp {
+        margin: 0 -1.8%;
+    }
+}

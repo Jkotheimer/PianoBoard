@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>PianoBoard Studio</title>
+        <link rel="stylesheet" href="PianoStyle.css">
+        <script type="text/javascript" src="KeyAction.js"></script>
+        <link rel="shortcut icon" href="/images/PBicon.ico" type="image/x-icon" />
+        <audio id="HClick"><source src="/samples/Clicks/Hard_Click.mp3" type="audio/mpeg">Audio not supported by your browser</audio>
+        <audio id="LClick"><source src="/samples/Clicks/Low_Click.mp3" type="audio/mpeg">Audio not supported by your browser</audio>
+        <audio id="C2.mp3"><source src="/samples/Piano/Piano.mp3/piano.C2.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.C2.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="C#2.mp3"><source src="/samples/Piano/Piano.mp3/piano.Csh2.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.Csh2.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="D2.mp3"><source src="/samples/Piano/Piano.mp3/piano.D2.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.D2.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="D#2.mp3"><source src="/samples/Piano/Piano.mp3/piano.Dsh2.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.Dsh2.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="E2.mp3"><source src="/samples/Piano/Piano.mp3/piano.E2.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.E2.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="F2.mp3"><source src="/samples/Piano/Piano.mp3/piano.F2.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.F2.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="F#2.mp3"><source src="/samples/Piano/Piano.mp3/piano.Fsh2.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.Fsh2.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="G2.mp3"><source src="/samples/Piano/Piano.mp3/piano.G2.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.G2.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="G#2.mp3"><source src="/samples/Piano/Piano.mp3/piano.Gsh2.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.Gsh2.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="A2.mp3"><source src="/samples/Piano/Piano.mp3/piano.A2.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.A2.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="A#2.mp3"><source src="/samples/Piano/Piano.mp3/piano.Ash2.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.Ash2.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="B2.mp3"><source src="/samples/Piano/Piano.mp3/piano.B2.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.B2.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="C3.mp3"><source src="/samples/Piano/Piano.mp3/piano.C3.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.C3.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="C#3.mp3"><source src="/samples/Piano/Piano.mp3/piano.Csh3.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.Csh3.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="D3.mp3"><source src="/samples/Piano/Piano.mp3/piano.D3.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.D3.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="D#3.mp3"><source src="/samples/Piano/Piano.mp3/piano.Dsh3.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.Dsh3.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="E3.mp3"><source src="/samples/Piano/Piano.mp3/piano.E3.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.E3.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="F3.mp3"><source src="/samples/Piano/Piano.mp3/piano.F3.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.F3.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="F#3.mp3"><source src="/samples/Piano/Piano.mp3/piano.Fsh3.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.Fsh3.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="G3.mp3"><source src="/samples/Piano/Piano.mp3/piano.G3.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.G3.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="G#3.mp3"><source src="/samples/Piano/Piano.mp3/piano.Gsh3.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.Gsh3.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="A3.mp3"><source src="/samples/Piano/Piano.mp3/piano.A3.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.A3.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="A#3.mp3"><source src="/samples/Piano/Piano.mp3/piano.Ash3.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.Ash3.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="B3.mp3"><source src="/samples/Piano/Piano.mp3/piano.B3.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.B3.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="C4.mp3"><source src="/samples/Piano/Piano.mp3/piano.C4.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.C4.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="C#4.mp3"><source src="/samples/Piano/Piano.mp3/piano.Csh4.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.Csh4.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="D4.mp3"><source src="/samples/Piano/Piano.mp3/piano.D4.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.D4.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="D#4.mp3"><source src="/samples/Piano/Piano.mp3/piano.Dsh4.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.Dsh4.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="E4.mp3"><source src="/samples/Piano/Piano.mp3/piano.E4.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.E4.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="F4.mp3"><source src="/samples/Piano/Piano.mp3/piano.F4.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.F4.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="F#4.mp3"><source src="/samples/Piano/Piano.mp3/piano.Fsh4.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.Fsh4.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="G4.mp3"><source src="/samples/Piano/Piano.mp3/piano.G4.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.G4.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="G#4.mp3"><source src="/samples/Piano/Piano.mp3/piano.Gsh4.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.Gsh4.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="A4.mp3"><source src="/samples/Piano/Piano.mp3/piano.A4.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.A4.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="A#4.mp3"><source src="/samples/Piano/Piano.mp3/piano.Ash4.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.Ash4.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="B4.mp3"><source src="/samples/Piano/Piano.mp3/piano.B4.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.B4.wav" type="audio/wav">Audio not supported by your browser</audio>
+        <audio id="C5.mp3"><source src="/samples/Piano/Piano.mp3/piano.C5.mp3" type="audio/mpeg"><source src="/samples/Piano/Piano.wav/piano.C5.wav" type="audio/wav">Audio not supported by your browser</audio>
+    </head>
+    <body style="overflow-x: hidden;background-color: #444">
+        <div class="Sticky">
+            <div id="board" onkeydown="action(event)"
+                            onkeyup="action(event)"
+                            onmousedown="action(event)" 
+                            onmouseup="action(event)">
+            
+                <button id="C2" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">C<br><br><span id="C2" style="color: #1CD5BC">↹</span></button>    
+                <button id="C#2" class="PianoKey sharp" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">C#<br><br><span id="C#2" style="color: #1CD5BC">1</span></button>
+                <button id="D2" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">D<br><br><span id="D2" style="color: #1CD5BC">Q</span></button>
+                <button id="D#2" class="PianoKey sharp" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">D#<br><br><span id="D#2" style="color: #1CD5BC">2</span></button>
+                <button id="E2" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">E<br><br><span id="E2" style="color: #1CD5BC">W</span></button>
+                <button id="F2" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">F<br><br><span id="F2" style="color: #1CD5BC">E</span></button>
+                <button id="F#2" class="PianoKey sharp" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">F#<br><br><span id="F#2" style="color: #1CD5BC">4</span></button>
+                <button id="G2" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">G<br><br><span id="G2" style="color: #1CD5BC">R</span></button>
+                <button id="G#2" class="PianoKey sharp" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">G#<br><br><span id="G#2" style="color: #1CD5BC">5</span></button>
+                <button id="A2" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">A<br><br><span id="A2" style="color: #1CD5BC">T</span></button>
+                <button id="A#2" class="PianoKey sharp" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">A#<br><br><span id="A#2" style="color: #1CD5BC">6</span></button>
+                <button id="B2" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">B<br><br><span id="B2" style="color: #1CD5BC">Y</span></button>
+                <button id="C3" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">C<br><br><span id="C3" style="color: #1CD5BC">U</span></button>
+                <button id="C#3" class="PianoKey sharp" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">C#<br><br><span id="C#3" style="color: #1CD5BC">8</span></button>
+                <button id="D3" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">D<br><br><span id="D3" style="color: #1CD5BC">I</span></button>
+                <button id="D#3" class="PianoKey sharp" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">D#<br><br><span id="D#3" style="color: #1CD5BC">9</span></button>
+                <button id="E3" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">E<br><br><span id="E3" style="color: #1CD5BC">O</span></button>
+                <button id="F3" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">F<br><br><span id="F3" style="color: #1CD5BC">P</span></button>
+                <button id="F#3" class="PianoKey sharp" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">F#<br><br><span id="F#3" style="color: #1CD5BC">-</span></button>
+                <button id="G3" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">G<br><br><span id="G3" style="color: #1CD5BC">[</span></button>
+                <button id="G#3" class="PianoKey sharp" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">G#<br><br><span id="G#3" style="color: #1CD5BC">=</span></button>
+                <button id="A3" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">A<br><br><span id="A3" style="color: #1CD5BC">]</span></button>
+                <button id="A#3" class="PianoKey sharp" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">A#<br><br><span id="A#3" style="color: #1CD5BC">←</span></button>
+                <button id="B3" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">B<br><br><span id="B3" style="color: #1CD5BC">\</span></button>
+                <button id="C4" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">C<br><br><span id="C4" style="color: #1CD5BC">Z</span></button>
+                <button id="C#4" class="PianoKey sharp" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">C#<br><br><span id="c#4" style="color: #1CD5BC">S</span></button>
+                <button id="D4" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">D<br><br><span id="D4" style="color: #1CD5BC">X</span></button>
+                <button id="D#4" class="PianoKey sharp" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">D#<br><br><span id="D#4" style="color: #1CD5BC">D</span></button>
+                <button id="E4" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">E<br><br><span id="E4" style="color: #1CD5BC">C</span></button>
+                <button id="F4" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">F<br><br><span id="F4" style="color: #1CD5BC">V</span></button>
+                <button id="F#4" class="PianoKey sharp" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">F#<br><br><span id="F#4" style="color: #1CD5BC">G</span></button>
+                <button id="G4" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">G<br><br><span id="G4" style="color: #1CD5BC">B</span></button>
+                <button id="G#4" class="PianoKey sharp" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">G#<br><br><span id="G#4" style="color: #1CD5BC">H</span></button>
+                <button id="A4" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">A<br><br><span id="A4" style="color: #1CD5BC">N</span></button>
+                <button id="A#4" class="PianoKey sharp" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">A#<br><br><span id="A#4" style="color: #1CD5BC">J</span></button>
+                <button id="B4" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">B<br><br><span id="B4" style="color: #1CD5BC">M</span></button>
+                <button id="C5" class="PianoKey" onmouseout="sweepout(this.id)" onmouseover="sweep(this.id)">C<br><br><span id="C5" style="color: #1CD5BC">,</span></button>
+                <div id="lastKey" value="xx" val2="yy"></div>
+            </div>
+
+            <div class="title">
+                <img src="/images/PBLogo.png" class="logo">
+                <p> 
+                    Hello, and welcome to PianoBoard!<br>This is a free web-app where you can record multiple tracks of 
+                    music using only your keyboard.  <br>Select a tempo, an instrument to play, then select a track to 
+                    record to. Have fun!<br>
+                </p>
+                <div class="inst">
+                    <h2>Instrument</h2>
+                    <select id="Instrument">
+                        <option value="Piano">Piano</option>
+                        <option value="AGuitar">Acoustic Guitar</option>
+                        <option value="CEGuitar">Clean Electric Guitar</option>
+                        <option value="DEGuitar">Distorted Electric Guitar</option>
+                        <option value="Bass">Bass</option>
+                        <option value="Cello">Cello</option>
+                        <option value="Violin">Violin</option>
+                        <option value="Trumpet">Trumpet</option>
+                    </select>
+                </div>
+                <div id="T" class="Temp">
+                    <div class="moveover">
+                        <h3 class="h3">Tempo</h3>
+                        <input id="TEMPOOO" type="number" name="Tempo" class="in1" value="120" max="200" min="30" onkeypress="tempoChange()" onchange="tempoChange()" onclick="tempoChange()">
+                    </div>
+                    <div id="PCCC" class="moveover1" onclick="var p = document.getElementById('PCC');if(p.checked){p.checked=false}else{p.checked=true}">
+                        <label class="checkword">Play Click</label>
+                        <input type="checkbox" name="PCC" id="PCC" class="largeCheck" onclick="var p = document.getElementById('PCC');if(p.checked){p.checked=false}else{p.checked=true}">
+                    </div>
+                </div>
+                <div class="MBbox">
+                    <div>
+                        <span style="position: absolute; left: 2vw;"><u>Measures</u></span>
+                        <span style="position: absolute; right: 2vw;"><u>Beats</u></span>
+                    </div>
+                    <div>
+                        <span id="Measures" style="position:absolute; top: 4vw; left: 5vw;">0</span>
+                        <span id="Beats" style="position:absolute; top: 4vw; right: 3.5vw;">1</span>
+                    </div>
+                </div>
+                <div id="tsbox" class="TSbox" title="">
+                    Time Signature
+                    <input type="number" id="TimeNumerator" class="TimeSig" value="4" onchange="changeTimeSig()" onclick="changeTimeSig()" onkeydown="changeTimeSig()" min=2 max=12>/
+                    <input type="number" id="TimeDenominator" class="TimeSig" value="4" onchange="changeTimeSig()" onclick="changeTimeSig()" onkeydown="changeTimeSig()"min=2 max=16>
+                </div>
+            </div>
+
+            <div id="inl0" style="position: relative;top:9.4vw;left: 43vw;">
+                <button id="PB0" class="PlayButton Main" title="Play All" onclick="togglePP(event)"></button>
+                <span id="PB0" class="PlayAll" onclick="togglePP(event)">Play All</span>
+                <input id="Vol0" title="Main Volume" type="range" min="0" max="100" value="50" class="slider Main" onmousemove="getVolVal(event)" onmouseup="getVolVal(event)" onkeydown="getVolVal(event)" onkeyup="getVolVal(event)">
+                <span id="VLB0" class="VolNum Main">50<br>db</span>
+            </div>
+
+            <div id="initTrack" class="Multitrack">
+                <div id="TRK1" style="position:absolute;background-color:#1CD5BC;width:13vw;height:8vw;border-radius:1vw 0 0 1vw;">
+                    <input type="text" id="Tname1" value="Track 1" class="TrackName" onkeypress="nameChange(event);">
+                    <button id="PB1" class="PlayButton" title="Play/Pause" onclick="togglePP(event)"></button>
+                    <button id="RB1" class="RecButton" title="Record/Stop" onclick="toggleRS(event)"></button>
+                    <button id="Mut1" class="MuteButton" title="Mute" onclick="toggleMB(event)">M</button>
+                    <button id="Sol1" class="SoloButton" title="Solo" onclick="toggleSB(event)">S</button>
+                    <div style="position:absolute;top: 6.5vw;left: 1.7vw;width:10vw;">
+                        <input id="Pan1" type="range" title="Pan" min="0" max="100" placeholder="50" class="slider" onmousemove="getPanVal(event)" onmouseup="getPanVal(event)" onkeydown="getPanVal(event)" onkeyup="getPanVal(event)">
+                        <span id="PLB1" class="PanNum">0</span>
+                        <button id="Ctr1" class="zeroButton" title="Zero Pan" onclick="zero(event)">0</button>
+                    </div>
+                    <div style="position:absolute;top: 4.5vw;left: 5.5vw;width:10vw;">
+                        <input id="Vol1" type="range" title="Volume" min="0" max="100" placeholder="50" class="slider Vol" onmousemove="getVolVal(event)" onmouseup="getVolVal(event)" onkeydown="getVolVal(event)" onkeyup="getVolVal(event)">
+                        <span id="VLB1" class="VolNum">50<br>db</span>
+                    </div>
+                </div>
+                <input id="Rul" type="range" min=0 max=479 value=0 onmousemove="Scrub(event)" onmouseup="Scrub(event)" 
+                                            onmousedown="Scrub(event)" onkeyup="Scrub(event)" onkeydown="Scrub(event)">
+                <!--Use the Tempo input to define the spaces between ticks-->
+                <div id="RecArea1" class="RecArea" onmousemove="Scrub(event)" onmouseup="Scrub(event)" onkeyup="Scrub(event)" onkeydown="Scrub(event)" onwheel="zoomTracks(event)"> 
+                    <div id="pMarker1" class="pmarker"></div>
+                </div>
+            </div>
+
+            <div id="TrackTemplate" class="Multitrack" style="display: none">
+                <button class="delete" onclick="alertDeleteRec('track', event)">X</button>
+            </div>
+        
+            <button id="AddTrack" class="AddTrack" onclick="addTrack();Scrub(event)">+ Add Track</button>
+            <button id="Export" class="Export">Export Mp3</button>
+            <br>
+            <div id="demo" style="color:white"></div>
+            <!--From here:
+            1) Get the Zoom function to work
+            2) Get the overlap destruction function to work
+            3) Get the record function to work
+            4) Get the Playback function to work
+            5) Refactor
+            6) Figure out how to autosave progress for a specific computer/user
+            7)  Alert when the page is being closed, saying "your progress will not be saved"
+                - make a reset button at the bottom of the page if you want to clear all tracks and everything.
+            -->
+        </div>
+    </body>
+</html>
