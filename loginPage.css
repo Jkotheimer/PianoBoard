@@ -1,0 +1,72 @@
+#header {
+    position: absolute;
+    background-color: #444;
+    width: 675px;
+    height: 400px;
+    left: 250px;
+    top: 5vh;
+    font-size: 28px;
+    padding: 30px;
+    border-radius: 5px;
+}
+#username {
+    position: relative;
+    height: 20px;
+    width: 300px;
+    margin: 0 10px;
+    color: #ccc;
+    font-size: 20px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    left: -10px;
+    background-color: transparent;
+    border-color: transparent;
+    border-bottom-color: #555;
+} #username:focus {outline: none;}
+#pass {
+    position: relative;
+    height: 20px;
+    width: 300px;
+    margin: 0 10px 10px;
+    color: #ccc;
+    font-size: 20px;
+    padding-bottom: 10px;
+    left: -10px;
+    background-color: transparent;
+    border-color: transparent;
+    border-bottom-color: #555;
+} #pass:focus {outline: none;}
+#submit {
+    border-radius: 5px;
+    margin-top: 10px;
+    padding: 5px;
+    width: 300px;
+    height: 50px;
+    font-size: 20px;
+    background-color: orange;
+    border: 1px solid transparent;
+}#submit:hover{border: 1px solid white;}
+ #submit:active{border: 1px solid black;}
+ #submit:focus{outline: none;}
+.redirect {
+    /*first, we want to position the two things to the right*/
+    position: absolute;
+    padding: 5px;
+    left: 400px;
+    bottom: 200px;
+    text-decoration: none;
+    font-size: 20px;
+    width: 200px;
+    color: #FFF;
+    border-radius: 2px;
+    border: 1px solid transparent;
+    text-align: center;
+}.redirect:hover {border: 1px solid #FFF;}
+ .redirect:active {border: 1px solid #333; outline: none;}
+.redirect.lostPass {
+    background-color: #C293D6;
+    bottom: 150px;
+} 
+.redirect.createAccount {
+    background-color: #1CD5BC;
+}
