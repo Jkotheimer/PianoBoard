@@ -1,23 +1,23 @@
 #header {
     position: absolute;
     background-color: #444;
-    width: 400px;
-    height: 500px;
-    left: 400px;
-    top: 1vh;
-    font-size: 28px;
-    padding: 30px;
-    border-radius: 5px;
+    width: 35vw;
+    height: 60vh;
+    left: 30vw;
+    top: 2vh;
+    font-size: 1.8vw;
+    padding: 2vw;
+    border-radius: 1vw;
 }
 .formInput{
     position: relative;
-    height: 20px;
-    width: 300px;
-    margin: 0 10px 10px;
+    height: 2vh;
+    width: 20vw;
+    margin: 0 .8vw .8vw;
     color: #ccc;
-    font-size: 20px;
-    padding-bottom: 10px;
-    left: -10px;
+    font-size: 1.5vw;
+    padding-bottom: 1vw;
+    left: -1vw;
     background-color: transparent;
     border-color: transparent;
     border-bottom-color: #666;
@@ -38,14 +38,14 @@ input:-ms-input-placeholder {color: #666;}
 input:focus:-ms-input-placeholder {color: #999;}
 
 #submit {
-    border-radius: 5px;
-    margin-top: 10px;
-    padding: 5px;
-    width: 300px;
-    height: 50px;
-    font-size: 20px;
+    border-radius: .2vw;
+    margin-top: .5vw;
+    padding: .3vw;
+    width: 15vw;
+    height: 5vh;
+    font-size: 1.6vw;
     background-color: orange;
-    border: 1px solid transparent;
-}#submit:hover{border: 1px solid white;}
- #submit:active{border: 1px solid black;}
+    border: .1vw solid transparent;
+}#submit:hover{border: .1vw solid white;}
+ #submit:active{border: .1vw solid black;}
  #submit:focus{outline: none;}

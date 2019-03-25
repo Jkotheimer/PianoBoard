@@ -1,13 +1,13 @@
 #header {
     position: absolute;
     background-color: #444;
-    width: 675px;
-    height: 400px;
-    left: 250px;
+    width: 65vw;
+    height: 40vh;
+    left: 25vw;
     top: 5vh;
-    font-size: 28px;
-    padding: 30px;
-    border-radius: 5px;
+    font-size: 3vw;
+    padding: 4vw;
+    border-radius: 1vw;
 }
 #username {
     position: relative;

@@ -1,10 +1,14 @@
 function encrypt(pw, salt) {
     for(var i = 0; i < salt.length; i++) {
         var temp = Number(salt.charCodeAt(i));
-        document.getElementById("header").innerHTML += salt;
-        if(temp + pw.charCodeAt(temp % pw.length) < 126)
+        if(temp + pw.charCodeAt(temp % pw.length) < 126) {
+            //document.getElementById("demo").innerHTML += "WE FUCKIN MADE IT HERE";
             salt.charCodeAt(i) = temp + pw.charCodeAt(temp % pw.length);
-        else salt.charCodeAt(i) = temp - pw.charCodeAt(temp % pw.length);
+        }
+        else {
+            //document.getElementById("demo").innerHTML += "IT MADE IT TO HEEEERRREEEE";
+            salt.charCodeAt(i) = temp - pw.charCodeAt(temp % pw.length);
+        }
     }
     return salt;
 }
@@ -41,7 +45,6 @@ function emailIsValid(email) {
         if(email.charAt(i) == '.') dot = i + 1;
     }
     // if the domain or the site type is less than 2 characters, its not valid
-    
     if((dot - at) < 2 || (email.length - dot) < 2 || at == -1 || dot == -1) return false;
     return true;
 }
@@ -49,13 +52,11 @@ function emailIsValid(email) {
 function generateSalt() {
     var tempSalt = "";
     var salt = "";
-    for(var i = 0; i < 10; i++) {
-        tempSalt = Math.round(Math.random() * 10000000000000000).toString();
-        for(var j = 0; j < 16; j+=2) {
-            var temp = Number(tempSalt.charAt(j) + tempSalt.charAt(j+1)) + 32;
-            if(temp > 126) temp = 126 - (Math.random() * 10);
-            salt += String.fromCharCode(temp);
-        }
+    for(var i = 0; i < 30; i++) {
+        // generate a random number between 33 and 126
+        tempSalt = Math.round(33 + Math.random() * 92).toString();
+        // add this keycode's ascii member to the salt
+        salt += String.fromCharCode(tempSalt);
     }
     return salt;
 }
