@@ -24,7 +24,7 @@ function createAccount() {
     var IP = document.getElementById("demo").innerHTML;
     // verify that the ip address hasn't attempted to make more than 10 requests in the past 24 hours.
     //verifyIP(IP);
-    const fs = require(['fs'], (fs){});  
+    const fs = require(['fs']);  
     var data = "We fuckin did it, broski!";
     fs.writeFile('./data.txt', data, (err) => { if (err) throw err;});
     // verify that there are no accounts with the current username/email address
