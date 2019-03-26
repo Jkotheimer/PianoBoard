@@ -1,37 +1,36 @@
 #header {
     position: absolute;
     background-color: #444;
-    width: 550px;
-    height: 300px;
-    left: 325px;
-    top: 100px;
-    font-size: 28px;
-    padding: 30px;
+    width: 40vw;
+    height: 20vw;
+    left: 25vw;
+    top: 15vh;
+    font-size: 2vw;
+    padding: 3vw;
     border-radius: 5px;
+    border: .5vw solid;
 }
 #email {
     position: relative;
-    height: 20px;
-    width: 300px;
-    margin: 0 10px;
+    height: 1vw;
+    width: 25vw;
+    margin: 0 .5vw;
     color: #ccc;
-    font-size: 20px;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-    left: -10px;
+    font-size: 2vw;
+    padding: 1vw 0 .5vw;
+    margin: 1vw 0;
     background-color: transparent;
     border-color: transparent;
     border-bottom-color: #555;
 } #email:focus {outline: none;}
 #submit {
     border-radius: 5px;
-    margin-top: 10px;
-    padding: 5px;
-    width: 300px;
-    height: 50px;
-    font-size: 20px;
+    margin-top: 1vw;
+    width: 25vw;
+    height: 4vw;
+    font-size: 1.5vw;
     background-color: orange;
-    border: 1px solid transparent;
-}#submit:hover{border: 1px solid white;}
- #submit:active{border: 1px solid black;}
+    border: .1vw solid transparent;
+}#submit:hover{border: .1vw solid white;}
+ #submit:active{border: .1vw solid black;}
  #submit:focus{outline: none;}

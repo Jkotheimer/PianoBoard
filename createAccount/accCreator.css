@@ -2,7 +2,7 @@
     position: absolute;
     background-color: #444;
     width: 25vw;
-    height: 37vw;
+    height: 40vw;
     left: 35vw;
     top: 2vh;
     font-size: 1.8vw;
@@ -18,7 +18,7 @@
 }
 .formInput{
     position: relative;
-    height: 2vh;
+    height: 1vw;
     width: 25vw;
     margin: .5vw 1vw 2vw -1.5vw;
     color: #ccc;
@@ -41,7 +41,8 @@
     background-color: orange;
     border: .1vw solid transparent;
     text-align: center;
-    transition: .5s ease;
+    -webkit-transition: border .5s; /* Safari */
+    transition: border .5s;
 }#submit:hover{border: .1vw solid white;}
  #submit:active{border: .1vw solid black;}
  #submit:focus{outline: none;}

@@ -2,24 +2,24 @@
     position: absolute;
     background-color: #444;
     width: 50vw;
-    height: 65vh;
+    height: 30vw;
     left: 25vw;
-    top: 2vh;
+    top: 5vw;
     font-size: 2vw;
-    padding: 2vw;
+    padding: 2vw 2vw;
     border-radius: .5vw;
     border: .4vw solid;
 }
 
 .formInput{
     position: relative;
-    height: 2vh;
+    height: 1.5vw;
     width: 25vw;
-    margin: .5vw 1vw 2vw -1.5vw;
+    margin: -1vw 1vw 2.5vw -1.5vw;
     color: #ccc;
     font-size: 1.5vw;
-    padding-bottom: .8vw;
-    padding-top: .5vw;
+    padding-bottom: .5vw;
+    padding-top: 1vw;
     left: 1.5vw;
     background-color: transparent;
     border-color: transparent;
@@ -27,35 +27,36 @@
 } .formInput:focus {outline: none; border-bottom-color: #999;}
 
 #submit {
-    border-radius: 5px;
-    margin-top: 10px;
-    padding: 5px;
-    width: 300px;
-    height: 50px;
-    font-size: 20px;
+    border-radius: 10px;
+    margin-top: .1vw;
+    padding: 0;
+    width: 25vw;
+    height: 3vw;
+    font-size: 1.8vw;
     background-color: orange;
-    border: 1px solid transparent;
-}#submit:hover{border: 1px solid white;}
- #submit:active{border: 1px solid black;}
+    border: .1vw solid transparent;
+    text-align: center;
+}#submit:hover{border: .1vw solid white;}
+ #submit:active{border: .1vw solid black;}
  #submit:focus{outline: none;}
 
 .redirect {
     position: absolute;
     left: 30vw;
-    bottom: 15vw;
+    bottom: 17vw;
     padding: .5vw;
     text-decoration: none;
     font-size: 1.7vw;
     width: 20vw;
     color: #FFF;
-    border-radius: .4vw;
+    border-radius: 10px;
     border: .1vw solid transparent;
     text-align: center;
 }.redirect:hover {border: .1vw solid #FFF;}
  .redirect:active {border: .1vw solid #333; outline: none;}
 .redirect.lostPass {
     background-color: #C293D6;
-    bottom: 9vw;
+    bottom: 10vw;
 } 
 .redirect.createAccount {
     background-color: #1CD5BC;

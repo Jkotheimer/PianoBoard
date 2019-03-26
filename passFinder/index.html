@@ -5,36 +5,14 @@
     <title>Password Reset</title>
     <link rel="shortcut icon" href="../images/PBicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="ResetStyle.css">
+    <link rel="stylesheet" href="../images/generalStyles.css">
 </head>
 <body style="background-image: url('../images/loginBackground.jpg');background-size: 20vw;background-repeat: repeat;">
+    <div id="logoBox" onclick="window.location.href = '../';">
+        <img src="../images/PBlogo.png" class="logo">
+    </div>
     <div id="header">
-        <img src="../images/PBlogo.png" style="width: 250px; height: 100px; margin: -25px;position:absolute;left:350px;">
-        <div style="color: #ccc;font-size:38px;">Password Reset</div>
-        <br>
-        <script>
-            var teal = [28,213,188]; 
-            var purple = [194,147,214];
-            var R = teal[0];
-            var G = teal[1];
-            var B = teal[2];
-            var goingUp = true;
-
-            var colorFader = setInterval(function() {
-                document.getElementById("header").style.border = 
-                        ".4vw solid rgb(" + R + ", " + G + ", " + B + ")";
-                document.getElementById("header").style.color = "rgb(" + R + ", " + G + ", " + B + ")";
-
-                if(goingUp) {
-                    R+=6.385; G-=2.54; B++;
-                }
-                else {
-                    R-=6.385; G+=2.54; B--;
-                }
-
-                if(R >= 194) goingUp = false;
-                else if(R <= 28) goingUp = true;
-            }, 125);
-        </script>
+        <div style="color: #ccc;font-size:3.5vw;">Password Reset</div>
         <br>
         <form>
             <label for="email">Please enter your E-mail<br>
@@ -43,5 +21,14 @@
             <br>
             <input type="submit" id="submit" value="Send Reset Link">
         </form>
+
+        <script type="text/javascript" src="../images/animations.js"></script>
+        <script>
+                var objects = new Map();
+                objects.set("border", "header");
+                objects.set("color", "header");
+                objects.set("border", "logoBox");
+                colorFade(objects);
+            </script>
     </div>
 </body>
