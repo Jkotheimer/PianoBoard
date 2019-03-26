@@ -58,66 +58,7 @@ document.addEventListener("mouseup", function() {mouseIsDown = false;});
 window.addEventListener("contextmenu", e => {
     e.preventDefault();
   });
-// This will always be running: fades the background on the piano
-var tealR = 28;
-var tealG = 213;
-var tealB = 188;
-var purpleR = 194;
-var purpleG = 147;
-var purpleB = 214;
-var gstop = false;
-var bstop = false;
-var up = true;
-
-var colorFader = setInterval(function() {
-    // TODO: work on getting a singuar grey line to flash across the background.
-    document.getElementById("board").style.backgroundImage = "linear-gradient(to bottom, rgb(" + tealR + ", " + tealG + ", " + tealB + "), " + 
-                                                            "rgb(" + purpleR + ", " + purpleG + ", " + purpleB + "))";
-    document.getElementById("board").style.boxShadow = "0 2vw 1vw rgb(" + purpleR + ", " + purpleG + ", " + purpleB + ")";
-
-    if(tealG <= 147 || tealG >= 213)    gstop = true;
-    if(tealB >= 214 || tealB <= 188)    bstop = true;
-    if(tealR >= 194) {
-        up = false;
-        gstop = false;
-        bstop = false;
-    }
-    if(tealR <= 28) {
-        up = true
-        gstop = false;
-        bstop = false;
-    }
-    if(up){
-        tealR++;
-        purpleR--;
-        tealR++;
-        purpleR--;
-        if(!gstop) {
-            tealG--;
-            purpleG++;
-        }
-        if(!bstop) {
-            tealB++;
-            purpleB--;
-        }
-    }
-    else {
-        tealR--;
-        purpleR++;
-        tealR--;
-        purpleR++;
-        if(!gstop) {
-            tealG++;
-            purpleG--;
-        }
-        if(!bstop) {
-            tealB--;
-            purpleB++;
-        }
-    }
-    
-}, 20);
-
+  
 function volFader(theNote) {
     var fadePoint = theNote.currentTime + 2;
     var first = false;

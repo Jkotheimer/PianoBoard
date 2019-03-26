@@ -1,0 +1,18 @@
+#logoBox {
+    position: absolute;
+    left: 1vw;
+    top: 1vw;
+    width: 15vw;
+    height: 4vw;
+    background-color: #444;
+    border-radius: 2vw;
+    border: .2vw solid transparent;
+} 
+.logo {
+    position: relative;
+    left: 2vw;
+    top: .8vw;
+    margin: -1.8vw;
+    width: 15vw; 
+    height: 6vw; 
+}

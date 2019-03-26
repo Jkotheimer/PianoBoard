@@ -1,21 +1,17 @@
 function encrypt(pw, salt) {
+    var encryption = "";
     for(var i = 0; i < salt.length; i++) {
-        var temp = Number(salt.charCodeAt(i));
-        if(temp + pw.charCodeAt(temp % pw.length) < 126) {
-            //document.getElementById("demo").innerHTML += "WE FUCKIN MADE IT HERE";
-            salt.charCodeAt(i) = temp + pw.charCodeAt(temp % pw.length);
-        }
-        else {
-            //document.getElementById("demo").innerHTML += "IT MADE IT TO HEEEERRREEEE";
-            salt.charCodeAt(i) = temp - pw.charCodeAt(temp % pw.length);
-        }
+        var currentSaltCode = Number(salt.charCodeAt(i));
+        var randomPassCode = Number(pw.charCodeAt(currentSaltCode % pw.length));
+        var newCode = Math.round((currentSaltCode + randomPassCode) / 2);
+        encryption += String.fromCharCode(newCode);
     }
-    return salt;
+    return encryption;
 }
 
-function write_Data_to_File(profile, fileName) {
-    const fs = require('fs'); 
-    fs.writeFile(fileName, profile, (err) => { if (err) throw err; });
+function write(data, fileName) {
+    var fs = require('fs');
+    fs.writeFile(fileName, data, (err) => { if (err) throw err; });
 }
 
 function createAccount() {
@@ -29,12 +25,19 @@ function createAccount() {
         return false;
     } 
     p = encrypt(p, salt);
-    acct = new userAccount(userName, email, p, salt);
-    var IP = " ";
-    $.getJSON("http://smart-ip.net/geoip-json?callback=?", function(data){
-        IP = data.host;
+    var acct = new userAccount(userName, email, p, salt);
+    var IP = document.getElementById("demo").innerHTML;
+    // verify that the ip address hasn't attempted to make more than 10 requests in the past 24 hours.
+    //verifyIP(IP);
+    write('requests.txt', "This has been written!!");
+    // verify that there are no accounts with the current username/email address
+    // create the account
+}
+
+function verifyIP(IP) {
+    $.getJSON( "requests.js", function( json ) {
+        console.log( "JSON Data: " + json.users[ 3 ].name );
     });
-    CR = new creationRequest(userAccount, IP);
 }
 
 function emailIsValid(email) {
@@ -69,6 +72,8 @@ class userAccount {
         this.email = email;
         this.password = password;
         this.salt = salt;
+        // This is a map of ip addresses to the number of requests.
+        this.requests = new Map();
         this.loggedIn = true;
     }
 
@@ -89,6 +94,21 @@ class userAccount {
         return this.loggedIn;
     }
 
+    verifyRequest(IPAddress){
+        if(this.requests.has(IPAddress)){
+            if(this.requests.get(IPAddress) > 10) return false;
+            else {
+                var requestAmount = this.requests.get(IPAddress) + 1;
+                this.requests.set(IPAddress, requestAmount);
+                return true;
+            }
+        }
+        else {
+            this.requests.set(IPAddress, 1);
+            return true;
+        }
+    }
+
     addProject(project) {
         projects.add(project);
     }
@@ -96,20 +116,5 @@ class userAccount {
     getProject(projectName) {
         // return the project object correlated with the name given
         return projects.get(projectName);
-    }
-}
-
-class creationRequest {
-    constructor(account, IPaddress) {
-        this.account = account;
-        this.IPaddress = IPaddress;
-    }
-
-    getUserName() {
-        return this.account.getUserName();
-    }
-
-    getIP() {
-        return this.IPaddress;
     }
 }

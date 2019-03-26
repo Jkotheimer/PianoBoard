@@ -1,41 +1,31 @@
 #header {
     position: absolute;
     background-color: #444;
-    width: 65vw;
-    height: 40vh;
+    width: 50vw;
+    height: 65vh;
     left: 25vw;
-    top: 5vh;
-    font-size: 3vw;
-    padding: 4vw;
-    border-radius: 1vw;
+    top: 2vh;
+    font-size: 2vw;
+    padding: 2vw;
+    border-radius: .5vw;
+    border: .4vw solid;
 }
-#username {
+
+.formInput{
     position: relative;
-    height: 20px;
-    width: 300px;
-    margin: 0 10px;
+    height: 2vh;
+    width: 25vw;
+    margin: .5vw 1vw 2vw -1.5vw;
     color: #ccc;
-    font-size: 20px;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-    left: -10px;
+    font-size: 1.5vw;
+    padding-bottom: .8vw;
+    padding-top: .5vw;
+    left: 1.5vw;
     background-color: transparent;
     border-color: transparent;
-    border-bottom-color: #555;
-} #username:focus {outline: none;}
-#pass {
-    position: relative;
-    height: 20px;
-    width: 300px;
-    margin: 0 10px 10px;
-    color: #ccc;
-    font-size: 20px;
-    padding-bottom: 10px;
-    left: -10px;
-    background-color: transparent;
-    border-color: transparent;
-    border-bottom-color: #555;
-} #pass:focus {outline: none;}
+    border-bottom-color: #666;
+} .formInput:focus {outline: none; border-bottom-color: #999;}
+
 #submit {
     border-radius: 5px;
     margin-top: 10px;
@@ -48,24 +38,24 @@
 }#submit:hover{border: 1px solid white;}
  #submit:active{border: 1px solid black;}
  #submit:focus{outline: none;}
+
 .redirect {
-    /*first, we want to position the two things to the right*/
     position: absolute;
-    padding: 5px;
-    left: 400px;
-    bottom: 200px;
+    left: 30vw;
+    bottom: 15vw;
+    padding: .5vw;
     text-decoration: none;
-    font-size: 20px;
-    width: 200px;
+    font-size: 1.7vw;
+    width: 20vw;
     color: #FFF;
-    border-radius: 2px;
-    border: 1px solid transparent;
+    border-radius: .4vw;
+    border: .1vw solid transparent;
     text-align: center;
-}.redirect:hover {border: 1px solid #FFF;}
- .redirect:active {border: 1px solid #333; outline: none;}
+}.redirect:hover {border: .1vw solid #FFF;}
+ .redirect:active {border: .1vw solid #333; outline: none;}
 .redirect.lostPass {
     background-color: #C293D6;
-    bottom: 150px;
+    bottom: 9vw;
 } 
 .redirect.createAccount {
     background-color: #1CD5BC;

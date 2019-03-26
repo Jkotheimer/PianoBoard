@@ -8,46 +8,33 @@
 </head>
 <body style="background-image: url('./images/loginBackground.jpg');background-size: 20vw;background-repeat: repeat;">
     <div id="header">
-        <img src="./images/PBlogo.png" style="width: 500px; height: 200px; margin: -50px;">
+        <img src="./images/PBlogo.png" style="width: 30vw; height: 13vw; margin: -4vw;">
         <br>
         <div style="color: #ccc;">Please login or create an account to continue to the 
             <a href="./studio" style="color:#ccc">studio.</a>
         </div>
-        <script>
-            var teal = [28,213,188]; 
-            var purple = [194,147,214];
-            var R = teal[0];
-            var G = teal[1];
-            var B = teal[2];
-            var goingUp = true;
-
-            var colorFader = setInterval(function() {
-                document.getElementById("header").style.border = 
-                        ".4vw solid rgb(" + R + ", " + G + ", " + B + ")";
-                document.getElementById("header").style.color = "rgb(" + R + ", " + G + ", " + B + ")";
-
-                if(goingUp) {
-                    R+=6.385; G-=2.54; B++;
-                }
-                else {
-                    R-=6.385; G+=2.54; B--;
-                }
-
-                if(R >= 194) goingUp = false;
-                else if(R <= 28) goingUp = true;
-            }, 125);
-        </script>
         <br>
-        <form>
-            <label for="username">Username</label> <br>
-            <input type="text" id="username" name="username" placeholder="Enter your username" required autocomplete="off">
-            <br>
-            <label for="pass">Password</label> <br>
-            <input type="password" id="pass" name="password" placeholder="Enter your password" minlength="8" required autocomplete="off">
-            <br>
-            <input type="submit" id="submit" value="Sign in">
-        </form>
+
+        <label for="username">Username</label> <br>
+        <input type="text" id="username" class="formInput" placeholder="Enter your username" autocapitalize="off"
+            autocomplete="off" spellcheck="false" autocorrect="off" required>
+        <br>
+
+        <label for="pass">Password</label> <br>
+        <input type="password" id="pass" class="formInput" placeholder="Enter your password" minlength="8" 
+            autocapitalize="off" autocomplete="off" spellcheck="false" autocorrect="off" required>
+        <br>
+        <input id="submit" value="Sign in">
+
         <a href="./passFinder" class="redirect lostPass">Forgot password?</a>
         <a href="./createAccount" class="redirect createAccount">Create a new Account</a>
     </div>
+
+    <script type="text/javascript" src="./images/animations.js"></script>
+    <script>
+        var objects = new Map();
+        objects.set("border", "header");
+        objects.set("color", "header");
+        colorFade(objects);
+    </script>
 </body>
