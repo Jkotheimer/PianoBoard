@@ -2,7 +2,7 @@
     position: absolute;
     background-color: #444;
     width: 25vw;
-    height: 40vw;
+    height: 37vw;
     left: 35vw;
     top: 2vh;
     font-size: 1.8vw;
@@ -33,7 +33,7 @@
 
 #submit {
     border-radius: .2vw;
-    margin-top: .5vw;
+    margin-top: -.1vw;
     padding: .5vw;
     width: 25vw;
     height: 3.5vw;

@@ -9,11 +9,6 @@ function encrypt(pw, salt) {
     return encryption;
 }
 
-function write(data, fileName) {
-    var fs = require('fs');
-    fs.writeFile(fileName, data, (err) => { if (err) throw err; });
-}
-
 function createAccount() {
     var p = document.getElementById("pass").value;
     var p2 = document.getElementById("pass2").value;
@@ -29,7 +24,9 @@ function createAccount() {
     var IP = document.getElementById("demo").innerHTML;
     // verify that the ip address hasn't attempted to make more than 10 requests in the past 24 hours.
     //verifyIP(IP);
-    write('requests.txt', "This has been written!!");
+    const fs = require(['fs'], (fs){});  
+    var data = "We fuckin did it, broski!";
+    fs.writeFile('./data.txt', data, (err) => { if (err) throw err;});
     // verify that there are no accounts with the current username/email address
     // create the account
 }

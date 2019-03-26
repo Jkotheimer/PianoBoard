@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="accCreator.css">
     <link rel="stylesheet" href="../images/generalStyles.css">
     <script type="text/javascript" src="../accounts/accounts.js"></script>
+    <script type="text/javascript" src="../accounts/require.js"></script>
 </head>
 <body style="background-image: url('../images/loginBackground.jpg');background-size: 20vw;background-repeat: repeat;">
     <div id="logoBox" onclick="window.location.href = '../';">
@@ -15,7 +16,7 @@
     <div id="header">
         <span id="label" >Create an Account</span>
         <br> <br>
-
+        
             <label for="email">E-mail</label> <br>
             <input type="text" id="email" class="formInput" placeholder="your.email@something.com" 
                 autocapitalize="off" autocomplete="off" spellcheck="false" autocorrect="off"
@@ -37,15 +38,10 @@
             <input type="password" id="pass2" class="formInput" placeholder="Confirm Password" name="password2" minlength="8" 
                 autocapitalize="off" autocomplete="off" spellcheck="false" autocorrect="off" required>
             <br>
-            <button id="submit" onclick="createAccount()">Create Account</button>
+            <button type="submit" id="submit" value="Create Account" onclick="createAccount()">Create Account</button>
+        
     </div>
-    <div id="demo" style="display:none;"></div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script>
-        $.getJSON("https://api.ipify.org?format=json", function (data) {
-            $("#demo").html(data.ip);
-        });
-    </script>
+    <div id="demo" style="color:red;font-size:5vw;position:absolute;top:75vh"></div>
     <script type="text/javascript" src="../images/animations.js"></script>
     <script>
         var objects = new Map();
