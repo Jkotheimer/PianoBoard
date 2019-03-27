@@ -8,13 +8,7 @@ var letterz = new Set(["tab","1","q","2","w","e","4","r","5","t","6","y","u","8"
                         "=","]","backspace","\\","z","s","x","d","c","v","g","b","h","n","j","m",","]);
 var mouseIsDown = false;
 var keyIsDown = false;
-/*
-volFader() is a function called when a pianokey is being released.
-It would sound awfully shitty if the piano sound was immediately cut off, so we need to fade
-the volume out. Of course this fading needs to be faster than the natural fade of the piano note,
-so it only takes a second to be faded out. The volume does not fade all the way to zero because
-for some reason the setInterval function bugs out if I try to do it, but 3% volume is good enough.
-*/
+
 document.addEventListener("keydown", function(){
     keyIsDown = true;
     var evkey = event.key.toLowerCase();

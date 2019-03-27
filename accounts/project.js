@@ -1,39 +1,49 @@
+/**
+ * A project has settings and tracks
+ * each track has settings and recordings
+ * each recording has notes at different time positions
+ */
 class project {
     constructor() {
-        // recordings will be a set of trackObjects
+        // recordings will be an array of track objects
+        //     0       1       2       3       4    ...
+        // [track1, track2, track3, track4, track5, ...]
         this.tracks = new Set();
         // settings will be a map of studioSettingNames : Values
         this.settings = new Map();
     }
 
-    add(track) {
+    addTrack() {
         // add a track object to the project
+        var trackNum;
+        for(let T of )
+        var track = new track(this);
         this.tracks.add(track);
     }
 
-    delete(track) {
+    deleteTrack(track) {
         this.tracks.remove(track);
     }
 }
 
 class track {
-    constructor(pos) {
+    constructor(project, number) {
         // recordings is a set of recording objects
         this.recordings = new Set();
-        // when constructing a new track, throw the current ruler position to autoset it.
-        this.rulerPosition = pos;
+        const project = project;
+        const number = number;
     }
 
     addRecording(recording) {
-        recordings.add(new recording(this, this.getRulerPosition()));
+        recordings.add(new recording(this.project, this.project.getRulerPosition()));
     }
 
-    getRulerPosition() {
-        return this.rulerPosition;
+    updateRulerPosition() {
+        this.rulerPosition = project.getRulerPosition();
     }
 
-    setRulerPosition(pos) {
-        this.rulerPosition = pos;
+    number() {
+        return this.number;
     }
 }
 
@@ -68,7 +78,6 @@ class recording {
     }
 
     */
-
     stopRecording(endTime) {
         this.endTime = endTime;
     }

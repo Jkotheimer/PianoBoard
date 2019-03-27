@@ -3,26 +3,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Create New Account</title>
-    <link rel="shortcut icon" href="../images/PBicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="../images/Icon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="accCreator.css">
     <link rel="stylesheet" href="../images/generalStyles.css">
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-firestore.js"></script>
-    <script>
-        // Initialize Firebase
-        var config = {
-            apiKey: "AIzaSyBwym8F4l5GlHDMQLHyZOY3dNWKMz_hxKI",
-            authDomain: "pianoboard-d97c2.firebaseapp.com",
-            databaseURL: "https://pianoboard-d97c2.firebaseio.com",
-            projectId: "pianoboard-d97c2",
-            storageBucket: "pianoboard-d97c2.appspot.com",
-            messagingSenderId: "266279955938"
-        };
-        firebase.initializeApp(config);
-    </script>
     <script type="text/javascript" src="../accounts/accounts.js"></script>
+    <script type="text/javascript" src="../firebase/app.js"></script>
 </head>
 <body style="background-image: url('../images/loginBackground.jpg');background-size: 20vw;background-repeat: repeat;">
     <div id="logoBox" onclick="window.location.href = '../';">
@@ -31,7 +21,6 @@
     <div id="header">
         <span id="label" >Create an Account</span>
         <br> <br>
-        <form action="something" method="get">
             <label for="email">E-mail</label> <br>
             <input type="text" id="email" class="formInput" placeholder="your.email@something.com" 
                 autocapitalize="off" autocomplete="off" spellcheck="false" autocorrect="off"
@@ -53,8 +42,7 @@
             <input type="password" id="pass2" class="formInput" placeholder="Confirm Password" name="password2" minlength="8" 
                 autocapitalize="off" autocomplete="off" spellcheck="false" autocorrect="off" required>
             <br>
-            <button type="submit" id="submit" value="Create Account" onclick="createAccount()">Create Account</button>
-        </form>
+            <button type="submit" id="submit" onclick="handleSignUp()">Create Account</button>
     </div>
     <div id="demo" style="color:red;font-size:5vw;position:absolute;top:75vh"></div>
     <script type="text/javascript" src="../images/animations.js"></script>
