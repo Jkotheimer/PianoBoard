@@ -1,3 +1,10 @@
+body {
+    background-image: url('../images/loginBackground.jpg');
+    background-size: 20vw;
+    background-repeat: repeat;
+    overflow: hidden;
+}
+
 #header {
     position: absolute;
     background-color: #444;
@@ -9,6 +16,7 @@
     padding: 2vw;
     border-radius: .5vw;
     border: .4vw solid;
+    transition: left .5s ease;
 }
 #label {
     color: #ccc;
@@ -46,3 +54,24 @@
 }#submit:hover{border: .1vw solid white;}
  #submit:active{border: .1vw solid black;}
  #submit:focus{outline: none;}
+
+.loading_screen {
+    transition: left .5s ease;
+    position: absolute;
+    left: -100vw;
+    top: 40vh;
+    background-color: #444;
+    text-align: center;
+    font-size: 3vw;
+    color: #ccc;
+    border: .5vw solid orange;
+    border-radius: 5vw;
+    padding: 2vw;
+}
+
+#b {
+    position: absolute;
+    top: 10vw;
+    left: 10vw;
+    padding: 3vw;
+}

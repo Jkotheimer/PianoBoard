@@ -19,7 +19,7 @@ function toggleSignIn() {
         // [END signout]
     } else {
         var email = document.getElementById('email').value;
-        var password = document.getElementById('password').value;
+        var password = document.getElementById('pass').value;
         if (email.length < 4) {
             // TODO reveal html element asking for a valid email
             alert('Please enter an email address.');
@@ -86,9 +86,26 @@ function handleSignUp() {
         return;
         // [END_EXCLUDE]
     });
-    window.location.href = "../studio";
+    document.getElementById("header").style.left += "120vw";
+    document.getElementById("loader").style.left += "30vw";
+    var hold = setInterval(function () {
+        var user = firebase.auth().currentUser;
+        if(user) {
+            user.updateProfile({displayName: username});
+            window.location.href = "../userAccount/dashboard";
+            clearInterval(hold);
+        }
+    }, 500);
+    
     // [END createwithemail]
 }
+
+function writeUserData(username, email) {
+    firebase.database().ref('users/' + userId).set({
+      username: username,
+      email: email,
+    });
+  }
 
 /**
 * Sends an email verification to the user.
