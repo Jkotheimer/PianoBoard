@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,20 +18,23 @@
         <img src="../../images/PBlogo.png" class="logo">
     </div>
     <div class="navBar">
-            <span class="navLink P">New Project</span>
+        <span class="navLink P">New Project</span>
         <span class="navLink T">Tutorial</span>
         <span class="navLink S">Settings</span>
     </div>
     <div class="leftPanel">
         <!-- profile pic / username / email / # projects / some other shit maybe-->
     </div>
-    <div class="centralContent">
-        <header>My Projects</header>
-        <span class="projectGuide">Name</span>
-        <span class="projectGuide">Duration</span>
-        <span class="projectGuide">Description</span>
-        <span class="projectGuide">Preview</span>
-    </div>
+    <table class="centralContent">
+        <caption>My Projects</caption>
+        <tr>
+            <th>Name</th>
+            <th>Duration</th>
+            <th>Description</th>
+            <th>Preview</th>
+        </tr>
+    </table>
+
     <script type="text/javascript" src="../../images/animations.js"></script>
     <script>
         var objects = new Map();

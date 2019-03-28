@@ -1,17 +1,16 @@
 .navBar {
     position: absolute;
-    left: -100px;
-    top: -10px;
     width: 1000vw;
-    height: 70px;
+    height: 60px;
     background-color: #ccc;
     border-bottom: 2px solid #444;
+    transform: translate(-10px,-10px);
 }
 
 .navLink {
     position: relative;
     left: 350px;
-    top: 35px;
+    top: 24px;
     padding: 7px 3vw;
     font-size: 25px;
     text-align: center;
@@ -36,14 +35,23 @@
 
 .centralContent {
     position: absolute;
-    left: 30vw;
-    top: 20vh;
+    left: 40vw;
+    top: 10vh;
     border: .1vw solid #444;
+    border-radius: 10px;
+    padding: 0 1vw 300px;
 }
-.projectGuide {
+caption {
+    text-align: center;
+    font-size: 30px;
+    margin: 10px;
+    border: 2px solid black;
+    border-radius: 20px;
+}
+th {
     position: relative;
     font-size: 1vw;
-    padding: 0 1vw;
-    border: rgb(30,30,30,.5);
+    padding: 0 5vw;
+    border: rgba(28, 213, 188, 0.8);
     background: #ccc;
 }
