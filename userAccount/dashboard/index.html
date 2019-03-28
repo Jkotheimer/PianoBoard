@@ -10,34 +10,30 @@
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-firestore.js"></script>
     <script type="text/javascript" src="../firebase/app.js"></script>
 </head>
-<body style="overflow-x: hidden;">
+<body>
     <div id="logoBox" onclick="window.location.reload();">
         <img src="../../images/PBlogo.png" class="logo">
     </div>
     <div class="navBar">
-        <span class="navLink P">New Project</span>
-        <span class="navLink T">Tutorial</span>
-        <span class="navLink S">Settings</span>
+        <span id="welcomeUser" class="welcome">Welcome, User!</span>
+        <span class="navLink P"><img style="width:2vw;height:2vw" src="../../images/plusSign.png"></span>
+        <span class="navLink T"><img style="width:2vw;height:2vw" src="../../images/book.png"></span>
+        <span class="navLink S"><img style="width:2vw;height:2vw" src="../../images/settingsGear.png"></span>
     </div>
     <div class="leftPanel">
         <!-- profile pic / username / email / # projects / some other shit maybe-->
     </div>
-    <table class="centralContent">
-        <caption>My Projects</caption>
-        <tr>
-            <th>Name</th>
-            <th>Duration</th>
-            <th>Description</th>
-            <th>Preview</th>
-        </tr>
-    </table>
+    <div id="centralContent" class="centralContent">
+        <header>Your Projects</header>
+        <button class="createNewProject">Create New Project<span class="plus">+</span></button>
+    </div>
 
     <script type="text/javascript" src="../../images/animations.js"></script>
     <script>
         var objects = new Map();
+        objects.set("gradient", "centralContent");
         objects.set("border", "logoBox");
         colorFade(objects);
     </script>

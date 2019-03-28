@@ -3,6 +3,7 @@ function showBackArrow(event) {
 }
 
 function colorFade(objects) {
+    clearInterval(colorFader);
     var teal = [28,213,188]; // 166, 
     var purple = [194,147,214];
     var TR = teal[0];
@@ -19,16 +20,16 @@ function colorFade(objects) {
                 document.getElementById(objects.get(element)).style.borderColor = 
                 "rgb(" + TR + ", " + TG + ", " + TB + ")";
             }
-            else if(element == "color") {
+            if(element == "color") {
                 document.getElementById(objects.get(element)).style.color = 
                 "rgb(" + TR + ", " + TG + ", " + TB + ")";
             }
-            else if(element == "gradient") {
+            if(element == "gradient") {
                 document.getElementById(objects.get(element)).style.backgroundImage = 
                 "linear-gradient(to bottom, rgb(" + TR + ", " + TG + ", " + TB + "), " + 
                                             "rgb(" + PR + ", " + PG + ", " + PB + "))";
             }
-            else if(element == "shadow") {
+            if(element == "shadow") {
                 document.getElementById(objects.get(element)).style.boxShadow = 
                 "0 1vw 1vw rgb(" + PR + ", " + PG + ", " + PB + ")";
             }
