@@ -111,8 +111,7 @@ header {
     top: 90px;;
     width: 27vw;
     height: 70vh;
-    background-color:orange;
-    border: 2px solid #444;
+    background-color: #444;
     border-radius: 10px 10px 0 0;
 }
 #profilePic {
@@ -123,8 +122,29 @@ header {
     width: 15vw;
     border-radius: 100%;
     border: 2px solid #444;
+    background: #ccc;
 }
-
+#profilePic:hover {
+    opacity: .5;
+    cursor: pointer;
+}
+#drag_and_drop_info {
+    position: relative;
+    left: 18vw;
+    bottom: 16.5vw;
+    padding: 1vw;
+    width: 18vw;
+    font-size: 1.1vw;
+    background-color: orange;
+    border-radius: 20px 20px 20px 0;
+    display: none;
+    z-index: 1000;
+}
+#info {
+    color: red;
+    margin: 5vw;
+    font-size: 30px;
+}
 #footer {
     position: absolute;
     width: 1000vw;

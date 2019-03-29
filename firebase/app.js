@@ -96,16 +96,8 @@ function handleSignUp() {
             clearInterval(hold);
         }
     }, 500);
-    
     // [END createwithemail]
 }
-
-function writeUserData(username, email) {
-    firebase.database().ref('users/' + userId).set({
-      username: username,
-      email: email,
-    });
-  }
 
 /**
 * Sends an email verification to the user.
@@ -234,4 +226,14 @@ function passwordStrength(password) {
         if(cc < 48 || (cc > 90 && cc < 97) || cc > 122) strength+=2;
     }
     return strength;
+}
+
+function showInfo() {
+    var user = firebase.auth().currentUser;
+    var content = document.getElementById("info");
+    if(user) {
+        content.innerHTML = "Username: " + user.displayName + "<br>" + "Email: " + user.email;
+    } else {
+        content.innerHTML = "fucckkk";
+    }
 }
