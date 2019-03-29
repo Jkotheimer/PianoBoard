@@ -16,18 +16,26 @@ body {
 .welcome {
     position: relative;
     left: 250px;
-    top: 20px;
+    top: 0;
     font-size: 25px;
     text-align: center;
     color: #ccc;
 }.welcome::selection {background:transparent;}
 .welcome::-moz-selection {background: transparent;}
 .welcome:hover{cursor: default;}
+.icons {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    top: 10px;
+    -webkit-filter: invert(.9);
+    filter: invert(.9);
+}
 .navLink {
     position: relative;
-    left: 350px;
-    top: 23px;
-    padding: 6px 3vw;
+    left: 300px;
+    top: 4.5px;
+    padding: 6px 1vw 10px;
     font-size: 25px;
     text-align: center;
     color: #ccc;
@@ -53,7 +61,7 @@ body {
 .centralContent {
     position: fixed;
     right: 1vw;
-    top: 9vh;
+    top: 100px;
     padding: 0 1%;
     height: 40vh;
     width: 65%;
@@ -90,6 +98,7 @@ header {
     border-color: #444;
     cursor: pointer;
  }
+ .createNewProject:active {transition: none;background-color: #d90;}
 .plus {
     position: relative;
     left: 60%;
@@ -99,12 +108,31 @@ header {
 .leftPanel {
     position: absolute;
     left: 2vw;
-    top: 8vh;
-    width: 27%;
-    height: 50vh;
+    top: 90px;;
+    width: 27vw;
+    height: 70vh;
     background-color:orange;
+    border: 2px solid #444;
+    border-radius: 10px 10px 0 0;
+}
+#profilePic {
+    position: relative;
+    left: 6vw;
+    top: 2vw;
+    height: 15vw;
+    width: 15vw;
+    border-radius: 100%;
+    border: 2px solid #444;
 }
 
+#footer {
+    position: absolute;
+    width: 1000vw;
+    height: 30px;
+    background-color: #CCC;
+    bottom:0px;
+    left: -20px;
+}
 /* make the view more compact as the screen size gets smaller */
 @media only screen and (max-width: 1000px) {
     .createNewProject {

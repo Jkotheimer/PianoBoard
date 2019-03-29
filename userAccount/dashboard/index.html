@@ -10,7 +10,7 @@
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-database.js"></script>
-    <script type="text/javascript" src="../firebase/app.js"></script>
+    <script type="text/javascript" src="../../firebase/app.js"></script>
 </head>
 <body>
     <div id="logoBox" onclick="window.location.reload();">
@@ -18,18 +18,33 @@
     </div>
     <div class="navBar">
         <span id="welcomeUser" class="welcome">Welcome, User!</span>
-        <span class="navLink P"><img style="width:2vw;height:2vw" src="../../images/plusSign.png"></span>
-        <span class="navLink T"><img style="width:2vw;height:2vw" src="../../images/book.png"></span>
-        <span class="navLink S"><img style="width:2vw;height:2vw" src="../../images/settingsGear.png"></span>
+        <span class="navLink P" onmouseover="show('P')" onmouseout="hide('P')">
+            <img class="icons" src="../../images/plusSign.png">
+            <span id="P"></span>
+        </span>
+        <span class="navLink T" onmouseover="show('T')" onmouseout="hide('T')">
+            <img class="icons" src="../../images/book.png">
+            <span id="T"></span>
+        </span>
+        <span class="navLink S" onmouseover="show('S')" onmouseout="hide('S')">
+            <img class="icons" src="../../images/settingsGear.png">
+            <span id="S"></span>
+        </span>
     </div>
-    <div class="leftPanel">
+    <div id="leftPanel" class="leftPanel">
         <!-- profile pic / username / email / # projects / some other shit maybe-->
+        <div id="profilePic"></div>
+        <div id="info"></div>
     </div>
     <div id="centralContent" class="centralContent">
         <header>Your Projects</header>
         <button class="createNewProject">Create New Project<span class="plus">+</span></button>
     </div>
 
+    <div id="footer">
+        
+    </div>
+    <script type="text/javascript" src="../navbarAnimations.js"></script>
     <script type="text/javascript" src="../../images/animations.js"></script>
     <script>
         var objects = new Map();

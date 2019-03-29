@@ -9,7 +9,7 @@ var letterz = new Set(["tab","1","q","2","w","e","4","r","5","t","6","y","u","8"
 var mouseIsDown = false;
 var keyIsDown = false;
 
-document.addEventListener("keydown", function(){
+document.addEventListener("keydown", function(event){
     keyIsDown = true;
     var evkey = event.key.toLowerCase();
     if(event.keyCode == 32 && !event.srcElement.id.includes("Tname") && !event.srcElement.id.includes("TEMPOOO")) {
@@ -27,7 +27,7 @@ document.addEventListener("keydown", function(){
         Scrub(event);
     }
   });
-document.addEventListener("keyup", function() {
+document.addEventListener("keyup", function(event) {
     keyIsDown = false;
     var evkey = event.key.toLowerCase();
     if (event.keyCode == 32) {
