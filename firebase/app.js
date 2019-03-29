@@ -32,21 +32,31 @@ function toggleSignIn() {
         }
         // Sign in with email and pass.
         // [START authwithemail]
-        firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            // [START_EXCLUDE]
-            if (errorCode === 'auth/wrong-password') {
-                // TODO reveal html element saying 'incorrect username/password'
-                alert('Wrong password.');
-            } else {
-                // TODO reveal html element saying 'incorrect username/password'
-                alert(errorMessage);
-            }
-            console.log(error);
-            // [END_EXCLUDE]
+        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        .then(function() {
+            firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // [START_EXCLUDE]
+                if (errorCode === 'auth/wrong-password') {
+                    // TODO reveal html element saying 'incorrect username/password'
+                    alert('Wrong password.');
+                } else {
+                    // TODO reveal html element saying 'incorrect username/password'
+                    alert(errorMessage);
+                }
+                console.log(error);
+                // [END_EXCLUDE]
+            })
         });
+        var hold = setInterval(function () {
+            var user = firebase.auth().currentUser;
+            if(user) {
+                window.location.href = "./userAccount/dashboard";
+                clearInterval(hold);
+            }
+        }, 10);
         // [END authwithemail]
     }
 }
@@ -54,6 +64,7 @@ function toggleSignIn() {
 * Handles the sign up button press.
 */
 function handleSignUp() {
+    
     var email = document.getElementById('email').value;
     var username = document.getElementById('username').value;
     var password = document.getElementById('pass').value;
@@ -72,19 +83,22 @@ function handleSignUp() {
     }
     // Sign in with email and pass.
     // [START createwithemail]
-    firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // [START_EXCLUDE]
-        if (errorCode == 'auth/weak-password') {
-            alert('The password is too weak.');
-        } else {
-            alert(errorMessage);
-        }
-        console.log(error);
-        return;
-        // [END_EXCLUDE]
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+    .then(function() {
+        firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // [START_EXCLUDE]
+            if (errorCode == 'auth/weak-password') {
+                alert('The password is too weak.');
+            } else {
+                alert(errorMessage);
+            }
+            console.log(error);
+            return;
+            // [END_EXCLUDE]
+        })
     });
     document.getElementById("header").style.left += "120vw";
     document.getElementById("loader").style.left += "30vw";
@@ -230,10 +244,37 @@ function passwordStrength(password) {
 
 function showInfo() {
     var user = firebase.auth().currentUser;
-    var content = document.getElementById("info");
-    if(user) {
-        content.innerHTML = "Username: " + user.displayName + "<br>" + "Email: " + user.email;
-    } else {
-        content.innerHTML = "fucckkk";
-    }
+    var sideBar = document.getElementById("info");
+    var navBar = document.getElementById("welcomeUser");
+    var projects = document.getElementById("projectArea");
+    var wait = setInterval(function() {
+        if(user) {
+            sideBar.innerHTML =  user.displayName + "<br><br>" + user.email;
+            navBar.innerHTML = "Welcome, " + user.displayName + "!";
+            projects.innerHTML = "You're signed in, buddy"; //TODO display all projects as little link items
+            clearInterval(wait);
+        } else {
+            sideBar.innerHTML = "retrieving your information..";
+            navBar.innerHTML = "Welcome, user!";
+            projects.innerHTML = "You dont have any projects yet.";
+        }
+    })
+}
+
+function uploadProfilePic(event) {
+    event.preventDefault();
+    var profPic = document.getElementById("profpic");
+    var cam = document.getElementById("cam");
+    profPic.style.opacity = 1;
+    cam.style.visibility = "hidden";
+    let dt = event.dataTransfer;
+    if(dt == null) return;
+    let file = dt.files[0];
+    var dir = "profilePics/" + file.name;
+    var storage = firebase.storage().ref().child(dir);
+    storage.put(file).then(function(snapshot) {
+        console.log(snapshot);
+    }).catch(function(error) {
+        console.error(error);
+    });
 }

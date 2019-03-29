@@ -79,6 +79,11 @@ header {
     background: #444;
     border-radius: 10px 10px 0 0;
 }
+#projectArea {
+    margin: 1vw;
+    font-size: 2vw;
+    color: #444;
+}
 .createNewProject {
     width: 100%;
     height: 50px;
@@ -114,35 +119,43 @@ header {
     background-color: #444;
     border-radius: 10px 10px 0 0;
 }
-#profilePic {
+#cam {
+    position: fixed;
+    visibility: hidden;
+    cursor: pointer;
+    left: 18vw;
+    top: 19vw;
+    height: 5vw;
+    width: 5vw;
+    margin: -5vw;
+}
+#profilePic #profpic{
     position: relative;
-    left: 6vw;
-    top: 2vw;
+    margin: -7.5vw;
+    left: 13.5vw;
+    top: 8vw;
     height: 15vw;
     width: 15vw;
-    border-radius: 100%;
-    border: 2px solid #444;
-    background: #ccc;
-}
-#profilePic:hover {
-    opacity: .5;
     cursor: pointer;
+    border-radius: 100%;
+    background: transparent;
+    z-index: 10000;
 }
 #drag_and_drop_info {
     position: relative;
     left: 18vw;
-    bottom: 16.5vw;
+    bottom: 3vw;
     padding: 1vw;
     width: 18vw;
     font-size: 1.1vw;
     background-color: orange;
     border-radius: 20px 20px 20px 0;
-    display: none;
+    visibility: hidden;
     z-index: 1000;
 }
 #info {
-    color: red;
-    margin: 5vw;
+    color: #ccc;
+    margin: 13vw 2vw;
     font-size: 30px;
 }
 #footer {

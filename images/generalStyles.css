@@ -11,7 +11,7 @@
     transition: .5s;
 } #logoBox:hover {
     cursor: pointer;
-    background-color: #555;
+    background-color: #666;
 }
 .logo {
     position: absolute;

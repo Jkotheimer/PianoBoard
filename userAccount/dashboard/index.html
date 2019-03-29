@@ -6,18 +6,19 @@
     <link rel="shortcut icon" href="../../images/Icon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="dashboard.css">
     <link rel="stylesheet" href="../../images/generalStyles.css">
-    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-storage.js"></script>
     <script type="text/javascript" src="../../firebase/app.js"></script>
 </head>
-<body onload="showInfo()">
+<body onload="showInfo();">
     <div id="logoBox" onclick="window.location.reload();">
         <img src="../../images/PBlogo.png" class="logo">
     </div>
     <div class="navBar">
-        <span id="welcomeUser" class="welcome">Welcome, User!</span>
+        <span id="welcomeUser" class="welcome"></span>
         <span class="navLink P" onmouseover="show('P')" onmouseout="hide('P')">
             <img class="icons" src="../../images/plusSign.png">
             <span id="P"></span>
@@ -33,42 +34,25 @@
     </div>
     <div id="leftPanel" class="leftPanel">
         <!-- profile pic / username / email / # projects / some other shit maybe-->
-        <div id="profilePic" onclick="showProfilePicHint()"></div>
-        <div id="drag_and_drop_info">Drag and drop your image file here <br>to set your profile picture</div>
+        <div id="profilePic" onclick="showProfilePicHint()" ondragover="showCam(event)"
+                             ondragleave="hideCam()" ondrop="uploadProfilePic(event)">
+            <img id="cam" src="../../images/camera.png">
+            <img id="profpic" src="../../images/Piano.jpg">
+        </div>
+        <div id="drag_and_drop_info">Drag and drop an image file here <br>to set your profile picture</div>
+        <br>
         <div id="info"></div>
     </div>
     <div id="centralContent" class="centralContent">
         <header>Your Projects</header>
+        <div id="projectArea"></div>
         <button class="createNewProject">Create New Project<span class="plus">+</span></button>
     </div>
 
     <div id="footer">
 
     </div>
-    <script>
-        var fade;
-        function showProfilePicHint() {
-            if(fade) return;
-            var item = document.getElementById("drag_and_drop_info");
-            item.style.opacity = 1;
-            item.style.display = "block";
-            var opacity = 1;
-            var ready = 0;
-            fade = setInterval(function() {
-                item.style.opacity = opacity;
-                if(ready > 100) opacity -= .01;
-                if(item.style.opacity < .02) {
-                    item.style.display = "none";
-                    item.style.opacity = 1;
-                    clearInterval(fade);
-                    fade = false;
-                    return;
-                }
-                ready++;
-            }, 20);
-        }
-    </script>
-    <script type="text/javascript" src="../navbarAnimations.js"></script>
+    <script type="text/javascript" src="../dashboardInteractives.js"></script>
     <script type="text/javascript" src="../../images/animations.js"></script>
     <script>
         var objects = new Map();
