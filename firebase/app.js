@@ -77,10 +77,6 @@ function handleSignUp() {
         alert('Please enter an email address.');
         return;
     }
-    if (passwordStrength(password) < 2) {
-        alert('Your password is too weak');
-        return;
-    }
     // Sign in with email and pass.
     // [START createwithemail]
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
@@ -98,18 +94,19 @@ function handleSignUp() {
             console.log(error);
             return;
             // [END_EXCLUDE]
+        }).then(T => {
+            document.getElementById("header").style.left += "120vw";
+            document.getElementById("loader").style.left += "30vw";
+            var hold = setInterval(function () {
+                var user = firebase.auth().currentUser;
+                if(user) {
+                    user.updateProfile({displayName: username});
+                    window.location.href = "../userAccount/dashboard";
+                    clearInterval(hold);
+                }
+            }, 500);
         })
     });
-    document.getElementById("header").style.left += "120vw";
-    document.getElementById("loader").style.left += "30vw";
-    var hold = setInterval(function () {
-        var user = firebase.auth().currentUser;
-        if(user) {
-            user.updateProfile({displayName: username});
-            window.location.href = "../userAccount/dashboard";
-            clearInterval(hold);
-        }
-    }, 500);
     // [END createwithemail]
 }
 
@@ -219,29 +216,6 @@ function emailIsValid(email) {
     return true;
 }
 
-/**
- * Verify that the user's password is strong
- * -1: horrible
- * 0: unacceptable
- * 1: needs more special characters and numbers
- * 2: try to spice things up a little more
- * 3: good
- * 4: great
- * 5: perfect!
- */
-function passwordStrength(password) {
-    if(password.length < 4) return -1;
-    if(password.length < 8) return 0;
-    var strength = Math.round(password.length/10);
-    for(let i = 0; i < password.length; i++) {
-        // if the character is a special character, add one to the strength
-        var cc = password.charCodeAt(i);
-        if(cc > 57 && cc < 65) strength++;
-        if(cc < 48 || (cc > 90 && cc < 97) || cc > 122) strength+=2;
-    }
-    return strength;
-}
-
 function showInfo() {
     var user = firebase.auth().currentUser;
     var sideBar = document.getElementById("info");
@@ -258,7 +232,7 @@ function showInfo() {
             navBar.innerHTML = "Welcome, user!";
             projects.innerHTML = "You dont have any projects yet.";
         }
-    })
+    }, 10);
 }
 
 function uploadProfilePic(event) {

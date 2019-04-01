@@ -1,7 +1,7 @@
 body {
     font-family: Tahoma, Geneva, sans-serif;
     background-image: url('../../images/loginBackground.jpg');
-    overflow-x: hidden;
+    overflow: hidden;
     background-size: 30vw;
     background-repeat: repeat;
 }
@@ -60,7 +60,7 @@ body {
 .navLink.S:hover {background-image: linear-gradient(to right, rgba(28, 213, 188, 0.8), rgba(194, 147, 214, 0.4));}
 
 .centralContent {
-    position: fixed;
+    position: absolute;
     right: 1vw;
     top: 100px;
     padding: 0 1%;
@@ -160,12 +160,12 @@ header {
     font-size: 30px;
 }
 #footer {
-    position: absolute;
-    width: 1000vw;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
     height: 30px;
     background-color: #CCC;
-    bottom:0px;
-    left: -20px;
 }
 /* make the view more compact as the screen size gets smaller */
 @media only screen and (max-width: 1000px) {
