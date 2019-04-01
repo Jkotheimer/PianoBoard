@@ -54,9 +54,9 @@
         </button>
     </div>
 
-    <div id="footer">
+    <div id="footer"></div>
 
-    </div>
+
     <script type="text/javascript" src="./dashboardInteractives.js"></script>
     <script type="text/javascript" src="../images/animations.js"></script>
     <script>
@@ -64,6 +64,7 @@
         objects.set("gradient", "centralContent");
         objects.set("border", "logoBox");
         colorFade(objects);
+        
         var print = setInterval(function() {
             document.getElementById("footer").innerHTML = $(window).width();
             var topLogo = document.getElementById("logoo")
