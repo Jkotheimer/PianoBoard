@@ -9,13 +9,14 @@ var config = {
 };
 firebase.initializeApp(config);
 
+var auth = firebase.auth();
 /**
 * Handles the sign in button press.
 */
 function toggleSignIn() {
-    if (firebase.auth().currentUser) {
+    if (auth.currentUser) {
         // [START signout]
-        firebase.auth().signOut();
+        auth.signOut();
         // [END signout]
     } else {
         var email = document.getElementById('email').value;
@@ -32,9 +33,9 @@ function toggleSignIn() {
         }
         // Sign in with email and pass.
         // [START authwithemail]
-        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
         .then(function() {
-            firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+            auth.signInWithEmailAndPassword(email, password).catch(function(error) {
                 // Handle Errors here.
                 var errorCode = error.code;
                 var errorMessage = error.message;
@@ -48,15 +49,10 @@ function toggleSignIn() {
                 }
                 console.log(error);
                 // [END_EXCLUDE]
+            }).then(function() {
+                window.location.href = "./dashboard";
             })
         });
-        var hold = setInterval(function () {
-            var user = firebase.auth().currentUser;
-            if(user) {
-                window.location.href = "./userAccount/dashboard";
-                clearInterval(hold);
-            }
-        }, 10);
         // [END authwithemail]
     }
 }
@@ -64,7 +60,6 @@ function toggleSignIn() {
 * Handles the sign up button press.
 */
 function handleSignUp() {
-    
     var email = document.getElementById('email').value;
     var username = document.getElementById('username').value;
     var password = document.getElementById('pass').value;
@@ -79,9 +74,9 @@ function handleSignUp() {
     }
     // Sign in with email and pass.
     // [START createwithemail]
-    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
     .then(function() {
-        firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+        auth.createUserWithEmailAndPassword(email, password).catch(function(error) {
             // Handle Errors here.
             var errorCode = error.code;
             var errorMessage = error.message;
@@ -97,14 +92,17 @@ function handleSignUp() {
         }).then(T => {
             document.getElementById("header").style.left += "120vw";
             document.getElementById("loader").style.left += "30vw";
-            var hold = setInterval(function () {
-                var user = firebase.auth().currentUser;
+            var hold = setInterval(function() {
+                var user = auth.currentUser;
                 if(user) {
-                    user.updateProfile({displayName: username});
-                    window.location.href = "../userAccount/dashboard";
-                    clearInterval(hold);
+                    user.updateProfile({
+                        displayName: username
+                    }).then(function() {
+                        window.location.href = "../dashboard";
+                        clearInterval(hold);
+                    });
                 }
-            }, 500);
+            }, 10);
         })
     });
     // [END createwithemail]
@@ -115,7 +113,7 @@ function handleSignUp() {
 */
 function sendEmailVerification() {
     // [START sendemailverification]
-    firebase.auth().currentUser.sendEmailVerification().then(function() {
+    auth.currentUser.sendEmailVerification().then(function() {
         // Email Verification sent!
         // [START_EXCLUDE]
         alert('Email Verification Sent!');
@@ -127,7 +125,7 @@ function sendEmailVerification() {
 function sendPasswordReset() {
     var email = document.getElementById('email').value;
     // [START sendpasswordemail]
-    firebase.auth().sendPasswordResetEmail(email).then(function() {
+    auth.sendPasswordResetEmail(email).then(function() {
         // Password Reset Email Sent!
         // [START_EXCLUDE]
         alert('Password Reset Email Sent!');
@@ -147,63 +145,54 @@ function sendPasswordReset() {
     });
     // [END sendpasswordemail];
 }
+
+function signOut() {
+    auth.signOut().then(function() {
+        window.location.href = "../";
+    }).catch(function(error) {
+        // An error happened.
+        alert("An error occurred: " + error);
+    });
+}
 /**
 * initApp handles setting up UI event listeners and registering Firebase auth listeners:
 *  - firebase.auth().onAuthStateChanged: This listener is called when the user is signed in or
 *    out, and that is where we update the UI.
 */
-/*
+var displayName;
+var email;
+var emailVerified;
+var photoURL;
+
 function initApp() {
     // Listening for auth state changes.
     // [START authstatelistener]
-    firebase.auth().onAuthStateChanged(function(user) {
-        // [START_EXCLUDE silent]
-        document.getElementById('quickstart-verify-email').disabled = true;
-        // [END_EXCLUDE]
-        if (user) {
+    auth.onAuthStateChanged(function(user) {
+        if(user) {
             // User is signed in.
-            var displayName = user.displayName;
-            var email = user.email;
-            var emailVerified = user.emailVerified;
-            var photoURL = user.photoURL;
-            var isAnonymous = user.isAnonymous;
-            var uid = user.uid;
-            var providerData = user.providerData;
-            // [START_EXCLUDE]
-            document.getElementById('quickstart-sign-in-status').textContent = 'Signed in';
-            document.getElementById('quickstart-sign-in').textContent = 'Sign out';
-            document.getElementById('quickstart-account-details').textContent = JSON.stringify(user, null, '  ');
+            displayName = user.displayName;
+            email = user.email;
+            emailVerified = user.emailVerified;
+            photoURL = user.photoURL;
             if (!emailVerified) {
-                document.getElementById('quickstart-verify-email').disabled = false;
+                // TODO have a verified email button to enable/disable
             }
             // [END_EXCLUDE]
         } else {
-            // User is signed out.
-            // [START_EXCLUDE]
-            document.getElementById('quickstart-sign-in-status').textContent = 'Signed out';
-            document.getElementById('quickstart-sign-in').textContent = 'Sign in';
-            document.getElementById('quickstart-account-details').textContent = 'null';
-            // [END_EXCLUDE]
+            // User is signed out, so go to the login page
         }
-        // [START_EXCLUDE silent]
-        document.getElementById('quickstart-sign-in').disabled = false;
-        // [END_EXCLUDE]
     });
-    // [END authstatelistener]
-    document.getElementById('quickstart-sign-in').addEventListener('click', toggleSignIn, false);
-    document.getElementById('quickstart-sign-up').addEventListener('click', handleSignUp, false);
-    document.getElementById('quickstart-verify-email').addEventListener('click', sendEmailVerification, false);
-    document.getElementById('quickstart-password-reset').addEventListener('click', sendPasswordReset, false);
 }
 
 window.onload = function() {
     initApp();
 };
-*/
+
 
 /**
  * Verify that the email provided is in a correct format
  */
+
 function emailIsValid(email) {
     var at = -1;
     var dot = -1;
@@ -217,21 +206,42 @@ function emailIsValid(email) {
 }
 
 function showInfo() {
-    var user = firebase.auth().currentUser;
+    var user = auth.currentUser;
     var sideBar = document.getElementById("info");
     var navBar = document.getElementById("welcomeUser");
     var projects = document.getElementById("projectArea");
+    var profilePicture = document.getElementById("profpic");
+    var j = 0;
     var wait = setInterval(function() {
+        user = auth.currentUser;
         if(user) {
-            sideBar.innerHTML =  user.displayName + "<br><br>" + user.email;
+            sideBar.innerHTML = user.displayName + "<br><br>" + user.email;
             navBar.innerHTML = "Welcome, " + user.displayName + "!";
-            projects.innerHTML = "You're signed in, buddy"; //TODO display all projects as little link items
+            projects.innerHTML = "You haven't started any projects yet";
+            //TODO display all projects as little link items
+
+            // retrieve the users profile picture to show in the lil thingy
+            var dir = "/profilePics/" + user.displayName + "/profilePic";
+            var child = firebase.storage().ref().child(dir);
+            var i = 0;
+            var hold = setInterval(function() {
+                child.getDownloadURL().then(function(url) {
+                    profilePicture.src = url;
+                    clearInterval(hold);
+                }).catch(function(error) {
+                    profilePicture.src = "../images/Piano.jpg";
+                });
+                if(i > 500) clearInterval(hold);
+                i++;
+            }, 10);
             clearInterval(wait);
         } else {
             sideBar.innerHTML = "retrieving your information..";
             navBar.innerHTML = "Welcome, user!";
-            projects.innerHTML = "You dont have any projects yet.";
+            projects.innerHTML = "You're not signed in";
         }
+        if(j > 1000) clearInterval(wait);
+        j++
     }, 10);
 }
 
@@ -244,11 +254,19 @@ function uploadProfilePic(event) {
     let dt = event.dataTransfer;
     if(dt == null) return;
     let file = dt.files[0];
-    var dir = "profilePics/" + file.name;
-    var storage = firebase.storage().ref().child(dir);
-    storage.put(file).then(function(snapshot) {
-        console.log(snapshot);
+    var user = auth.currentUser;
+    var dir = "/profilePics/" + user.displayName + "/profilePic";
+    var child = firebase.storage().ref().child(dir);
+    child.put(file).then(function(snapshot) {
+        console.log(file);
     }).catch(function(error) {
         console.error(error);
     });
+    var hold = setInterval(function() {
+        child.getDownloadURL().then(function(url) {
+            // Insert url into an <img> tag to "download"
+            profPic.src = url;
+            clearInterval(hold);
+        }).catch(function(error) {/**wait*/});
+    }, 10);
 }

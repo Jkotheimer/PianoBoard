@@ -1,0 +1,221 @@
+body {
+    font-family: Tahoma, Geneva, sans-serif;
+    background-image: url('../images/loginBackground.jpg');
+    overflow: hidden;
+    background-size: 30vw;
+    background-repeat: repeat;
+}
+.navBar {
+    position: absolute;
+    width: 1000vw;
+    height: 45px;
+    background-color: #444;
+    border-bottom: 2px solid #ccc;
+    transform: translate(-10px,-10px);
+}
+.welcome {
+    position: relative;
+    left: 200px;
+    top: 5px;
+    font-size: 20px;
+    text-align: center;
+    color: #ccc;
+    transition: .5s;
+}.welcome::selection {background:transparent;}
+.welcome::-moz-selection {background: transparent;}
+.welcome:hover{cursor: default;}
+.icons {
+    position: relative;
+    width: 25px;
+    height: 25px;
+    top: 5px;
+    -webkit-filter: invert(.9);
+    filter: invert(.9);
+}
+.navLink {
+    position: relative;
+    left: 250px;
+    top: 8px;
+    padding: 4px 1vw 8px;
+    font-size: 20px;
+    text-align: center;
+    color: #ccc;
+    z-index: 100;
+    border-bottom: 2px solid #ccc;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    transition-property: left, border, background;
+    transition-duration: .5s, .5s;
+}
+.navLink:hover {
+    cursor: pointer;
+    background-color: #aaa;
+    border-bottom-color: #444;
+    color: white;
+}
+.navLink::selection {background: transparent; /* WebKit/Blink Browsers */}
+.navLink::-moz-selection {background: transparent; /* Gecko Browsers */}
+.navLink.P:hover {background: rgba(28, 213, 188, 0.5);}
+.navLink.T:hover{background: rgba(194, 147, 214, 0.5)} 
+.navLink.S:hover {background-image: linear-gradient(to right, rgba(28, 213, 188, 0.8), rgba(194, 147, 214, 0.4));}
+.navLink:active {background: #999}
+
+.centralContent {
+    position: absolute;
+    right: 1vw;
+    top: 100px;
+    padding: 0 1%;
+    height: 40vh;
+    width: 65%;
+}
+header {
+    position: relative;
+    bottom: 10px;
+    right: 1vw;
+    width: 103%;
+    padding: 5px 0%;
+    text-align: center;
+    font-size: 2.5vw;
+    margin: 0 0 10px;
+    color: white;
+    background: #444;
+    border-radius: 10px 10px 0 0;
+}
+#projectArea {
+    margin: 1vw;
+    font-size: 2vw;
+    color: #444;
+}
+.createNewProject {
+    width: 100%;
+    height: 50px;
+    background: transparent;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    color: #ccc;
+    font-size: 25px;
+    text-align: left;
+    vertical-align: top;
+    padding: 0 40px;
+    transition: .5s;
+}.createNewProject:focus{outline:none;}
+ .createNewProject:hover{
+    background-color: orange;
+    color: #444;
+    border-color: #444;
+    cursor: pointer;
+ }
+ .createNewProject:active {transition: none;background-color: #d90;}
+.plus {
+    position: relative;
+    left: 60%;
+    font-weight: 1000;
+    padding: 0 10px;
+}
+.leftPanel {
+    position: absolute;
+    left: 2vw;
+    top: 90px;;
+    width: 27vw;
+    height: 70vh;
+    background-color: #444;
+    border-radius: 10px;
+}
+#cam {
+    position: fixed;
+    visibility: hidden;
+    cursor: pointer;
+    left: 18vw;
+    top: 19vw;
+    height: 5vw;
+    width: 5vw;
+    margin: -5vw;
+}
+#profilePic #profpic{
+    position: relative;
+    margin: -7.5vw;
+    left: 13.5vw;
+    top: 8vw;
+    height: 15vw;
+    width: 15vw;
+    cursor: pointer;
+    border-radius: 100%;
+    background: transparent;
+    z-index: 10000;
+}
+#drag_and_drop_info {
+    position: relative;
+    left: 18vw;
+    bottom: 3vw;
+    padding: 1vw;
+    width: 18vw;
+    font-size: 1.1vw;
+    background-color: orange;
+    border-radius: 20px 20px 20px 0;
+    visibility: hidden;
+    z-index: 1000;
+}
+#info {
+    position: relative;
+    color: #ccc;
+    margin: 0 2vw;
+    top: 10vw;
+    font-size: 1.5vw;
+}
+#signOut {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-radius: 5px;
+    width: 8vw;
+    height: 30px;
+    background-color: #ccc;
+}#signOut:focus {outline: none;}
+#footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 30px;
+    background-color: #CCC;
+}
+/* make the view more compact as the screen size gets smaller */
+@media only screen and (max-width: 1000px) {
+    .createNewProject {
+        font-size: 20px;
+        height: 40px;
+    }
+}
+@media only screen and (max-width: 800px) {
+    .createNewProject {
+        font-size: 15px;
+        height: 30px;
+        padding: 0 30px;
+    }
+    .welcome {
+        left: 70px;
+    }
+    .navLink {
+        left: 90px;
+    }
+}
+@media only screen and (max-width: 600px) {
+    .createNewProject {
+        font-size: 12px;
+        padding: 0 20px;
+
+    }
+    .plus {left: 50%}
+}
+@media only screen and (max-width: 400px) {
+    .createNewProject {
+        font-size: 8px;
+        padding: 0 13px;
+    }
+}
+@media only screen and (max-width: 200px) {
+    .createNewProject {
+        font-size: 4px;
+        padding: 0 10px;
+    }
+}

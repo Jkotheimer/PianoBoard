@@ -31,7 +31,7 @@ function hide(letter) {
             item.innerHTML = null;
             clearInterval(animation);
         }
-    }, 30)
+    }, 10)
 }
 
 var fade;

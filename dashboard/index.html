@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+    <link rel="shortcut icon" href="../images/Icon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="../images/generalStyles.css">
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-storage.js"></script>
+    <script type="text/javascript" src="../firebase/app.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body onload="showInfo();">
+    <div id="logoBox" class="logoBox dashLogoBox" onclick="window.location.reload();">
+        <img id="logoo" class="logo dashLogo" src="../images/PBlogo.png"></div>
+    </div>
+    <div class="navBar">
+        <span id="welcomeUser" class="welcome"></span>
+        <span class="navLink P" onmouseover="show('P')" onmouseout="hide('P')" 
+                                onclick="window.location.href='../studio'">
+            <img class="icons" src="../images/plusSign.png">
+            <span id="P"></span>
+        </span>
+        <span class="navLink T" onmouseover="show('T')" onmouseout="hide('T')">
+            <img class="icons" src="../images/book.png">
+            <span id="T"></span>
+        </span>
+        <span class="navLink S" onmouseover="show('S')" onmouseout="hide('S')">
+            <img class="icons" src="../images/settingsGear.png">
+            <span id="S"></span>
+        </span>
+    </div>
+    <div id="leftPanel" class="leftPanel">
+        <!-- profile pic / username / email / # projects / some other shit maybe-->
+        <div id="profilePic" onclick="showProfilePicHint()" ondragover="showCam(event)"
+                             ondragleave="hideCam()" ondrop="uploadProfilePic(event)">
+            <img id="cam" src="../images/camera.png">
+            <img id="profpic">
+        </div>
+        <div id="drag_and_drop_info">Drag and drop an image file here <br>to set your profile picture</div>
+        <br>
+        <div id="info"></div>
+        <button id="signOut" onclick="signOut()">Sign out</button>
+    </div>
+    <div id="centralContent" class="centralContent">
+        <header>Your Projects</header>
+        <div id="projectArea"></div>
+        <button class="createNewProject" onclick="window.location.href = '../studio'">
+            Create New Project<span class="plus">+</span>
+        </button>
+    </div>
+
+    <div id="footer">
+
+    </div>
+    <script type="text/javascript" src="./dashboardInteractives.js"></script>
+    <script type="text/javascript" src="../images/animations.js"></script>
+    <script>
+        var objects = new Map();
+        objects.set("gradient", "centralContent");
+        objects.set("border", "logoBox");
+        colorFade(objects);
+        var print = setInterval(function() {
+            document.getElementById("footer").innerHTML = $(window).width();
+            var topLogo = document.getElementById("logoo")
+            if($(window).width() < 800) topLogo.src = "../images/icon.ico";
+            else topLogo.src = "../images/PBlogo.png";
+        }, 10);
+    </script>
+</body>
