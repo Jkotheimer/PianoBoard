@@ -166,11 +166,19 @@ header {
     position: absolute;
     bottom: 0;
     right: 0;
-    border-radius: 5px;
+    border-radius: 5px 0 5px 0;
     width: 8vw;
     height: 30px;
     background-color: #ccc;
+    border: 1px solid transparent;
 }#signOut:focus {outline: none;}
+ #signOut:hover {
+    cursor: pointer;
+    border-color: #fff;
+}
+ #signOut:active {
+     border-color: #444;
+ }
 #footer {
     position: fixed;
     left: 0;

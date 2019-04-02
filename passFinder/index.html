@@ -25,6 +25,7 @@
                 You will recieve a link to reset your password</label> <br>
             <input type="text" id="email" name="email" placeholder="your.email@something.com" required autocomplete="off">
             <br>
+            <div id="email_notification"></div>
             <input type="submit" id="submit" value="Send Reset Link" onclick="sendPasswordReset()">
 
         <script type="text/javascript" src="../images/animations.js"></script>
@@ -36,4 +37,5 @@
             colorFade(objects);
         </script>
     </div>
+    <div id="complete">Password reset link has been sent!<br><div id="timer"></div></div>
 </body>

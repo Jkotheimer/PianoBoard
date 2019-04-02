@@ -9,6 +9,7 @@
     padding: 3vw;
     border-radius: 5px;
     border: .5vw solid;
+    transition: transform .5s;
 }
 #email {
     position: relative;
@@ -17,12 +18,25 @@
     margin: 0 .5vw;
     color: #ccc;
     font-size: 2vw;
-    padding: 1vw 0 .5vw;
+    padding: 1vw 0;
     margin: 1vw 0;
     background-color: transparent;
     border-color: transparent;
     border-bottom-color: #555;
-} #email:focus {outline: none;}
+} #email:focus {outline: none; border-bottom-color: #999;}
+#email_notification {
+    position: absolute;
+    width: 15vw;
+    padding: .5vw;
+    font-size: 1.5vw;
+    background-color: orange;
+    border-radius: 10px 10px 0 10px;
+    right: 44vw;
+    bottom: 9vw;
+    color: #444;
+    transition: transform .3s;
+    visibility: hidden;
+}
 #submit {
     border-radius: 5px;
     margin-top: 1vw;
@@ -34,3 +48,17 @@
 }#submit:hover{border: .1vw solid white;}
  #submit:active{border: .1vw solid black;}
  #submit:focus{outline: none;}
+
+#complete {
+    position: absolute;
+    width: 30vw;
+    padding: 1vw;
+    font-size: 2vw;
+    left: -35vw;
+    top: 30vh;
+    color: #ccc;
+    background-color: #444;
+    border: 2px solid orange;
+    border-radius: 10px;
+    transition: transform .5s;
+}

@@ -1,3 +1,9 @@
+body {
+    background-image: url('./images/loginBackground.jpg');
+    background-size: 30vw;
+    background-repeat: repeat;
+}
+
 #header {
     position: absolute;
     background-color: #444;
@@ -25,6 +31,22 @@
     border-color: transparent;
     border-bottom-color: #666;
 } .formInput:focus {outline: none; border-bottom-color: #999;}
+
+#email_notification,
+#password_notification {
+    position: absolute;
+    width: 15vw;
+    padding: .5vw;
+    font-size: 1.5vw;
+    background-color: orange;
+    border-radius: 10px 10px 0 10px;
+    right: 52.5vw;
+    bottom: 10vw;
+    color: #444;
+    transition: transform .3s;
+    visibility: hidden;
+}
+#email_notification {bottom: 17.5vw;}
 
 #submit {
     border-radius: 10px;

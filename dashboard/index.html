@@ -67,7 +67,6 @@
         colorFade(objects);
         
         var print = setInterval(function() {
-            document.getElementById("footer").innerHTML = $(window).width();
             var topLogo = document.getElementById("logoo")
             if($(window).width() < 800) topLogo.src = "../images/icon.ico";
             else topLogo.src = "../images/PBlogo.png";

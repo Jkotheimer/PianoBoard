@@ -22,13 +22,11 @@ function toggleSignIn() {
         var email = document.getElementById('email').value;
         var password = document.getElementById('pass').value;
         if (email.length < 4) {
-            // TODO reveal html element asking for a valid email
-            alert('Please enter an email address.');
+            showError("email_notification", "Please enter a valid email address", 22);
             return;
         }
         if (password.length < 4) {
-            // TODO reveal an html element asking for a valid password
-            alert('Please enter a password.');
+            showError("password_notification", "Please enter a valid password", 20);
             return;
         }
         // Sign in with email and pass.
@@ -44,13 +42,10 @@ function toggleSignIn() {
                 var errorMessage = error.message;
                 // [START_EXCLUDE]
                 if (errorCode === 'auth/wrong-password') {
-                    // TODO reveal html element saying 'incorrect username/password'
-                    alert('Wrong password.');
+                    showError("password_notification", "Incorrect password", 13)
                 } else {
-                    // TODO reveal html element saying 'incorrect username/password'
-                    alert(errorMessage);
+                    showError("email_notification", "There is no user record corresponding to this email", 20);
                 }
-                console.log(error);
                 // [END_EXCLUDE]
             })
         });
@@ -66,11 +61,15 @@ function handleSignUp() {
     var password = document.getElementById('pass').value;
     var vpass = document.getElementById('pass2').value;
     if(password != vpass) {
-        showError("confirm_password_notification", "Passwords do not match");
+        showError("confirm_password_notification", "Passwords do not match", 15);
         return;
     }
     if (!emailIsValid(email)) {
-        showError("email_notification", "Invalid email address");
+        showError("email_notification", "Invalid email address", 15);
+        return;
+    }
+    if(!isStrong(password)) {
+        showError("password_notification", "Password is too weak", 14);
         return;
     }
     // Sign in with email and pass.
@@ -83,30 +82,23 @@ function handleSignUp() {
             var errorMessage = error.message;
             // [START_EXCLUDE]
             if (errorCode == 'auth/weak-password') {
-                showError("password_notification", "Password is too weak");
+                showError("password_notification", "Password is too weak", 14);
             } else if(errorCode == 'auth/email-already-in-use'){
-                showError("email_notification", "Email is already in use");
+                showError("email_notification", "Email is already in use. <a href='../'>login?</a>", 20);
             }
-            console.log(error);
+            console.log(errorMessage);
             return;
             // [END_EXCLUDE]
         }).then(T => {
-            var i = 0;
+            // TODO make the loader a little form that has you input your fav bands and genres
+            // These bands and genres will give you recommended songs and instruments and stuff
             var hold = setInterval(function() {
                 var user = auth.currentUser;
                 if(user) {
                     document.getElementById("header").style.left += "120vw";
                     document.getElementById("loader").style.left += "30vw";
-                    if(i > 500) {
-                        user.updateProfile({
-                            displayName: username
-                        }).then(function() {
-                            window.location.href = "../dashboard";
-                            clearInterval(hold);
-                        });
-                    }
+                    clearInterval(hold);
                 }
-                i++;
             }, 10);
         })
     });
@@ -131,24 +123,22 @@ function sendPasswordReset() {
     var email = document.getElementById('email').value;
     // [START sendpasswordemail]
     auth.sendPasswordResetEmail(email).then(function() {
-        // Password Reset Email Sent!
-        // [START_EXCLUDE]
-        alert('Password Reset Email Sent!');
-        // [END_EXCLUDE]
+        document.getElementById("header").style.cssText += "transform: translateX(100vw);";
+        document.getElementById("complete").style.cssText += "transform: translateX(70vw);";
+        var i = 5;
+        var sit = setInterval(function() {
+            document.getElementById("timer").innerHTML = "redirecting to login page in " + i;
+            if(i == 0) {
+                window.location.href = "../";
+                clearInterval(sit);
+            }
+            i--;
+        }, 1000)
     }).catch(function(error) {
         // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // [START_EXCLUDE]
-        if (errorCode == 'auth/invalid-email') {
-            // TODO unhide an invalid email element
-            alert(errorMessage);
-        } else if (errorCode == 'auth/user-not-found') {
-            // TODO unhide a user not found element
-            alert(errorMessage);
+        if(error) {
+            showError("email_notification", "There is no user record corresponding to this email", 20);
         }
-        console.log(error);
-        // [END_EXCLUDE]
     });
     // [END sendpasswordemail];
 }
@@ -193,16 +183,19 @@ window.onload = function() {
     initApp();
 };
 
-
-/**
- * Verify that the email provided is in a correct format
- */
 var hold;
-function showError(id, message) {
-    if(hold) return;
+var lastError = false;;
+function showError(id, message, width) {
+    clearInterval(hold);
+    if(lastError != false) {
+        lastError.style.visibility = "hidden";
+        lastError.style.opacity = 1;
+    }
     var error = document.getElementById(id);
+    lastError = error;
     error.innerHTML = message;
     error.style.visibility = "visible";
+    error.style.width = width + "vw";
     var i = 0;
     var opacity = 1;
     var left = true;
@@ -216,12 +209,12 @@ function showError(id, message) {
             hold = false;
             return;
         }
-        if(i <= 100 && i%20 == 0) {
+        if(i <= 50 && i%10 == 0) {
             if(left) {
-                error.style.cssText += "transform: translatex(5px) translatey(-1px);";
+                error.style.cssText += "transform: translatex(4px);";
                 left = false;
             } else {
-                error.style.cssText += "transform: translatex(-5px) translatey(1px);";
+                error.style.cssText += "transform: translatex(-4px);";
                 left = true;
             }
         }
@@ -229,6 +222,9 @@ function showError(id, message) {
     }, 10);
 }
 
+/**
+ * Verify that the email provided is in a correct format
+ */
 function emailIsValid(email) {
     var at = -1;
     var dot = -1;
@@ -239,6 +235,19 @@ function emailIsValid(email) {
     // if the domain or the site type is less than 2 characters, its not valid
     if((dot - at) < 2 || (email.length - dot) < 2 || at == -1 || dot == -1) return false;
     return true;
+}
+
+function isStrong(password) {
+    if(password.length < 8) return false;
+    var strength = 0;
+    for(let i = 0; i < password.length; i++) {
+        var a = password.charCodeAt(i)
+        if(a < 48 || a > 57 && a < 65 || a > 90 && a < 97 || a > 122) strength += 2;
+        else if(a > 47 && a < 58) strength ++;
+        strength ++;
+    }
+    if(strength > 10) return true;
+    else return false;
 }
 
 function showInfo() {
@@ -253,10 +262,14 @@ function showInfo() {
         if(user) {
             // sideBar.innerHTML = user.displayName + "<br><br>" + user.email;
             navBar.innerHTML = "Welcome, " + user.displayName + "!";
+            /**
+             * TODO - make the sidbar a lil info/about me thingy
+             * - Favorite genres
+             * - Favorite bands/artists
+             * - Experience
+             */
             projects.innerHTML = "You haven't started any projects yet";
             //TODO display all projects as little link items
-            
-
 
             // retrieve the users profile picture to show in the lil thingy
             var dir = "/profilePics/" + user.uid + "/profilePic";
@@ -269,9 +282,9 @@ function showInfo() {
                 }).catch(function(error) {
                     profilePicture.src = "../images/Piano.jpg";
                 });
-                if(i > 500) clearInterval(hold);
+                if(i > 10) clearInterval(hold);
                 i++;
-            }, 10);
+            }, 100);
             clearInterval(wait);
         } else {
             //sideBar.innerHTML = "retrieving your information..";
@@ -296,7 +309,7 @@ function uploadProfilePic(event) {
     var dir = "/profilePics/" + user.uid + "/profilePic";
     var child = firebase.storage().ref().child(dir);
     child.put(file).then(function(snapshot) {
-        console.log(file);
+        console.log(snapshot);
     }).catch(function(error) {
         console.error(error);
     });

@@ -12,7 +12,7 @@
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-firestore.js"></script>
     <script type="text/javascript" src="./firebase/app.js"></script>
 </head>
-<body style="background-image: url('./images/loginBackground.jpg');background-size: 30vw;background-repeat: repeat;">
+<body>
     <div id="header">
         <img src="./images/PBlogo.png" style="width: 30vw; height: 13vw; margin: -4vw;">
         <br>
@@ -22,15 +22,18 @@
         </div>
         <br>
 
-        <label for="username">Email</label> <br>
+        <label for="email">Email</label> <br>
         <input type="text" id="email" class="formInput" placeholder="Enter your email address" autocapitalize="off"
                autocomplete="off" spellcheck="false" autocorrect="off" required>
         <br>
+        <div id="email_notification"></div>
 
         <label for="pass">Password</label> <br>
         <input type="password" id="pass" class="formInput" placeholder="Enter your password" minlength="8"
                autocapitalize="off" autocomplete="off" spellcheck="false" autocorrect="off" required>
         <br>
+        <div id="password_notification"></div>
+        
         <button id="submit" onclick="toggleSignIn()">Sign in</button>
         <a href="./passFinder" class="redirect lostPass">Forgot password?</a>
         <a href="./createAccount" class="redirect createAccount">Create a new Account</a>

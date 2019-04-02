@@ -52,22 +52,9 @@ body {
     -webkit-transition: border .5s; /* Safari */
     transition: border .5s;
 }#submit:hover{border: .1vw solid white;}
- #submit:active{border: .1vw solid black;}
+ #submit:active{transition: none; border: .1vw solid black;}
  #submit:focus{outline: none;}
 
-.loading_screen {
-    transition: left .5s ease;
-    position: absolute;
-    left: -100vw;
-    top: 40vh;
-    background-color: #444;
-    text-align: center;
-    font-size: 3vw;
-    color: #ccc;
-    border: .5vw solid orange;
-    border-radius: 5vw;
-    padding: 2vw;
-}
 #email_notification,
 #password_notification,
 #confirm_password_notification {
@@ -79,17 +66,37 @@ body {
     color: #444;
     background-color: orange;
     visibility: hidden;
-    transition: transform .5s;
+    transition: transform .2s;
 }
 #email_notification {
     top: 7vw;
-    width: 17vw;
 }
 #password_notification {
     top: 22vw;
-    width: 16vw;
 }
 #confirm_password_notification {
     top: 29vw;
-    width: 17vw;
+}
+
+
+.loading_screen {
+    transition: left .5s ease;
+    position: absolute;
+    left: 20vw;
+    top: 20vh;
+    background-color: #444;
+    text-align: center;
+    font-size: 2vw;
+    color: #ccc;
+    border: .5vw solid orange;
+    border-radius: 2vw;
+    padding: 1.5vw;
+}
+#genreSelector {
+    background-color: #ccc;
+    color: #444;
+    border-radius: 1vw;
+}
+#bandSelector {
+    display: none;
 }
