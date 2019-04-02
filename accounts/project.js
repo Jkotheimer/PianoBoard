@@ -5,97 +5,108 @@
  */
 class project {
     constructor() {
-        // recordings will be an array of track objects
-        //     0       1       2       3       4    ...
-        // [track1, track2, track3, track4, track5, ...]
-        this.tracks = new Set();
+        this.tracks = new Map();
         // settings will be a map of studioSettingNames : Values
         this.settings = new Map();
+        this.rulerPosition = 0;
     }
 
     addTrack() {
         // add a track object to the project
-        var trackNum;
-        for(let T of )
-        var track = new track(this);
-        this.tracks.add(track);
+        var number = tracks.size() + 1;
+        var track = new track(this, number);
+        this.tracks.set(number.toString(), track);
     }
 
-    deleteTrack(track) {
-        this.tracks.remove(track);
+    deleteTrack(trackNum) {
+        this.tracks.delete(trackNum);
+    }
+
+    updateRulerPosition(pos) {
+        this.rulerPosition = pos;
+    }
+    
+    getRulerPosition(){
+        return this.rulerPosition
     }
 }
 
 class track {
     constructor(project, number) {
         // recordings is a set of recording objects
-        this.recordings = new Set();
-        const project = project;
-        const number = number;
+        this.recordings = new Map();
+        this.number = number;
+        this.name = "Track " + number.toString();
+        this.project = project;
+        this.settings = new Map();
+    }
+
+    /** Track name methods */
+    changeNameTo(name) {this.name = name;}
+    getName() {return this.name;}
+
+    getNumber() {
+        return this.number;
     }
 
     addRecording(recording) {
-        recordings.add(new recording(this.project, this.project.getRulerPosition()));
+        this.recordings.add(new recording(this.project));
     }
 
-    updateRulerPosition() {
-        this.rulerPosition = project.getRulerPosition();
+    writeSetting(setting, value) {
+        this.settings.set(setting, value);
     }
 
-    number() {
-        return this.number;
+    getSettings(){
+        return this.settings;
     }
 }
 
 class recording {
-    constructor(track, startTime) {
-        // the recording is attached to a track
-        this.track = track;
-        // the recording has a start and stop time (stopTime isn't known at construction)
-        this.startTime = startTime;
-        this.endTime = startTime;
+    constructor(project) {
+        // A note map (note : time)
         this.notes = new Map();
         this.isRecording = true;
+        this.project = project;
+        // Start and end times
+        this.startTime = project.getRulerPosition();
+        this.endTime = project.getRulerPosition();
     }
 
-    addNote(time, note) {
+    addNote(note) {
         if(this.isRecording) {
-            notes.add(new Note(time, note));
+            this.notes.add(new Note(note, this.project.getRulerPosition()));
             return true;
         }
-        else return false
-
-    }
-    /*  I want these functions to return the current time that the ruler is at globally
-        and what time the ruler is at relative to the start of the recording
-
-    getGlobalTime() {
-        return **GlobalTime**;
+        else return false;
     }
 
-    getRelativeTime() {
-        return **RelativeTime**;
-    }
-
-    */
-    stopRecording(endTime) {
-        this.endTime = endTime;
+    stopRecording() {
+        this.endTime = project.rulerPosition();
     }
 
     isRecording() {
         return this.isRecording;
     }
-
-    getTrack() {
-        return this.track;
-    }
 }
 
 class Note {
-    constructor(time, note) {
+    constructor(instrument, note, time) {
         // the time is global
         this.time = time;
-        // the note is a char
+        // the note is a string
         this.note = note;
+        // the instrument determines which folder to go into
+        this.instrument = instrument;
     }
+    getTime(){return this.time;}
+    getNote(){return this.note;}
+
+    play() {
+        var file = document.getElementById(note);
+        file.volume = 1.0;
+        file.load();
+        file.play();
+    }
+    
 }

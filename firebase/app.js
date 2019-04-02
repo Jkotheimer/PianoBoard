@@ -35,7 +35,10 @@ function toggleSignIn() {
         // [START authwithemail]
         auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
         .then(function() {
-            auth.signInWithEmailAndPassword(email, password).catch(function(error) {
+            auth.signInWithEmailAndPassword(email, password).then(function() {
+                window.location.href = "./dashboard";
+            })
+            .catch(function(error) {
                 // Handle Errors here.
                 var errorCode = error.code;
                 var errorMessage = error.message;
@@ -49,8 +52,6 @@ function toggleSignIn() {
                 }
                 console.log(error);
                 // [END_EXCLUDE]
-            }).then(function() {
-                window.location.href = "./dashboard";
             })
         });
         // [END authwithemail]
@@ -65,11 +66,11 @@ function handleSignUp() {
     var password = document.getElementById('pass').value;
     var vpass = document.getElementById('pass2').value;
     if(password != vpass) {
-        alert('Your passwords do not match');
+        showError("confirm_password_notification", "Passwords do not match");
         return;
     }
     if (!emailIsValid(email)) {
-        alert('Please enter an email address.');
+        showError("email_notification", "Invalid email address");
         return;
     }
     // Sign in with email and pass.
@@ -82,26 +83,30 @@ function handleSignUp() {
             var errorMessage = error.message;
             // [START_EXCLUDE]
             if (errorCode == 'auth/weak-password') {
-                alert('The password is too weak.');
-            } else {
-                alert(errorMessage);
+                showError("password_notification", "Password is too weak");
+            } else if(errorCode == 'auth/email-already-in-use'){
+                showError("email_notification", "Email is already in use");
             }
             console.log(error);
             return;
             // [END_EXCLUDE]
         }).then(T => {
-            document.getElementById("header").style.left += "120vw";
-            document.getElementById("loader").style.left += "30vw";
+            var i = 0;
             var hold = setInterval(function() {
                 var user = auth.currentUser;
                 if(user) {
-                    user.updateProfile({
-                        displayName: username
-                    }).then(function() {
-                        window.location.href = "../dashboard";
-                        clearInterval(hold);
-                    });
+                    document.getElementById("header").style.left += "120vw";
+                    document.getElementById("loader").style.left += "30vw";
+                    if(i > 500) {
+                        user.updateProfile({
+                            displayName: username
+                        }).then(function() {
+                            window.location.href = "../dashboard";
+                            clearInterval(hold);
+                        });
+                    }
                 }
+                i++;
             }, 10);
         })
     });
@@ -136,8 +141,10 @@ function sendPasswordReset() {
         var errorMessage = error.message;
         // [START_EXCLUDE]
         if (errorCode == 'auth/invalid-email') {
+            // TODO unhide an invalid email element
             alert(errorMessage);
         } else if (errorCode == 'auth/user-not-found') {
+            // TODO unhide a user not found element
             alert(errorMessage);
         }
         console.log(error);
@@ -162,7 +169,6 @@ function signOut() {
 var displayName;
 var email;
 var emailVerified;
-var photoURL;
 
 function initApp() {
     // Listening for auth state changes.
@@ -173,15 +179,14 @@ function initApp() {
             displayName = user.displayName;
             email = user.email;
             emailVerified = user.emailVerified;
-            photoURL = user.photoURL;
             if (!emailVerified) {
                 // TODO have a verified email button to enable/disable
             }
-            // [END_EXCLUDE]
         } else {
-            // User is signed out, so go to the login page
+            // the user is signed out
         }
     });
+    // [END authstatelistener]
 }
 
 window.onload = function() {
@@ -192,6 +197,37 @@ window.onload = function() {
 /**
  * Verify that the email provided is in a correct format
  */
+var hold;
+function showError(id, message) {
+    if(hold) return;
+    var error = document.getElementById(id);
+    error.innerHTML = message;
+    error.style.visibility = "visible";
+    var i = 0;
+    var opacity = 1;
+    var left = true;
+    hold = setInterval(function() {
+        error.style.opacity = opacity;
+        if(i > 500) opacity -= .01;
+        if(error.style.opacity < .02) {
+            error.style.visibility = "hidden";
+            error.style.opacity = 1;
+            clearInterval(hold);
+            hold = false;
+            return;
+        }
+        if(i <= 100 && i%20 == 0) {
+            if(left) {
+                error.style.cssText += "transform: translatex(5px) translatey(-1px);";
+                left = false;
+            } else {
+                error.style.cssText += "transform: translatex(-5px) translatey(1px);";
+                left = true;
+            }
+        }
+        i++;
+    }, 10);
+}
 
 function emailIsValid(email) {
     var at = -1;
@@ -215,13 +251,15 @@ function showInfo() {
     var wait = setInterval(function() {
         user = auth.currentUser;
         if(user) {
-            sideBar.innerHTML = user.displayName + "<br><br>" + user.email;
+            // sideBar.innerHTML = user.displayName + "<br><br>" + user.email;
             navBar.innerHTML = "Welcome, " + user.displayName + "!";
             projects.innerHTML = "You haven't started any projects yet";
             //TODO display all projects as little link items
+            
+
 
             // retrieve the users profile picture to show in the lil thingy
-            var dir = "/profilePics/" + user.displayName + "/profilePic";
+            var dir = "/profilePics/" + user.uid + "/profilePic";
             var child = firebase.storage().ref().child(dir);
             var i = 0;
             var hold = setInterval(function() {
@@ -236,7 +274,7 @@ function showInfo() {
             }, 10);
             clearInterval(wait);
         } else {
-            sideBar.innerHTML = "retrieving your information..";
+            //sideBar.innerHTML = "retrieving your information..";
             navBar.innerHTML = "Welcome, user!";
             projects.innerHTML = "You're not signed in";
         }
@@ -255,7 +293,7 @@ function uploadProfilePic(event) {
     if(dt == null) return;
     let file = dt.files[0];
     var user = auth.currentUser;
-    var dir = "/profilePics/" + user.displayName + "/profilePic";
+    var dir = "/profilePics/" + user.uid + "/profilePic";
     var child = firebase.storage().ref().child(dir);
     child.put(file).then(function(snapshot) {
         console.log(file);
@@ -269,4 +307,19 @@ function uploadProfilePic(event) {
             clearInterval(hold);
         }).catch(function(error) {/**wait*/});
     }, 10);
+}
+
+function updateProject(projectName) {
+    var userId = auth.currentUser.uid;
+    firebase.database().ref('users/' + userId + "/projects/" + projectName).set({
+        // TODO write the project data to the database
+    }, function(error) {
+        if (error) {
+            // The write failed...
+            console.log(error);
+        } else {
+            // Data saved successfully!
+            console.log("success");
+        }
+    });
 }

@@ -68,10 +68,28 @@ body {
     border-radius: 5vw;
     padding: 2vw;
 }
-
-#b {
+#email_notification,
+#password_notification,
+#confirm_password_notification {
     position: absolute;
-    top: 10vw;
-    left: 10vw;
-    padding: 3vw;
+    left: 27vw;
+    padding: .5vw;
+    font-size: 1.5vw;
+    border-radius: 10px 10px 10px 0;
+    color: #444;
+    background-color: orange;
+    visibility: hidden;
+    transition: transform .5s;
+}
+#email_notification {
+    top: 7vw;
+    width: 17vw;
+}
+#password_notification {
+    top: 22vw;
+    width: 16vw;
+}
+#confirm_password_notification {
+    top: 29vw;
+    width: 17vw;
 }

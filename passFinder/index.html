@@ -21,13 +21,11 @@
     <div id="header">
         <div style="color: #ccc;font-size:3.5vw;">Password Reset</div>
         <br>
-        <form>
             <label for="email">Please enter your E-mail<br>
                 You will recieve a link to reset your password</label> <br>
             <input type="text" id="email" name="email" placeholder="your.email@something.com" required autocomplete="off">
             <br>
-            <input type="submit" id="submit" value="Send Reset Link">
-        </form>
+            <input type="submit" id="submit" value="Send Reset Link" onclick="sendPasswordReset()">
 
         <script type="text/javascript" src="../images/animations.js"></script>
         <script>

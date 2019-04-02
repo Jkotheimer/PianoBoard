@@ -25,6 +25,7 @@
                 autocapitalize="off" autocomplete="off" spellcheck="false" autocorrect="off"
                 name="email" required>
             <br>
+            <div id="email_notification"></div>
 
             <label for="username">Username</label> <br>
             <input type="text" id="username" class="formInput" placeholder="Choose a username" 
@@ -36,11 +37,13 @@
             <input type="password" id="pass" class="formInput" placeholder="Choose a password" name="password" minlength="8" 
                 autocapitalize="off" autocomplete="off" spellcheck="false" autocorrect="off" required>
             <br>
+            <div id="password_notification"></div>
 
             <label for="pass2">Confirm Password</label> <br>
             <input type="password" id="pass2" class="formInput" placeholder="Confirm Password" name="password2" minlength="8" 
                 autocapitalize="off" autocomplete="off" spellcheck="false" autocorrect="off" required>
             <br>
+            <div id="confirm_password_notification"></div>
             <button type="submit" id="submit" onclick="handleSignUp()">Create Account</button>
     </div>
     <div id="loader" class="loading_screen">
