@@ -1,61 +1,68 @@
+body {
+    background-image: url('../images/loginBackground.jpg');
+    background-size: 500px;
+    background-repeat: repeat;
+}
+
 #header {
     position: absolute;
     background-color: #444;
-    width: 40vw;
-    height: 20vw;
-    left: 25vw;
-    top: 15vh;
-    font-size: 2vw;
-    padding: 3vw;
+    width: 500px;
+    height: 225px;
+    left: 50%;
+    top: 30%;
+    margin: -113px -250px;
+    font-size: 25px;
+    padding: 30px;
     border-radius: 5px;
-    border: .5vw solid;
+    border: 3px solid;
     transition: transform .5s;
 }
 #email {
     position: relative;
-    height: 1vw;
-    width: 25vw;
-    margin: 0 .5vw;
+    height: 10px;
+    width: 450px;
+    margin: 10px 0;
     color: #ccc;
-    font-size: 2vw;
-    padding: 1vw 0;
-    margin: 1vw 0;
+    font-size: 25px;
+    padding: 10px 0;
     background-color: transparent;
     border-color: transparent;
     border-bottom-color: #555;
 } #email:focus {outline: none; border-bottom-color: #999;}
 #email_notification {
     position: absolute;
-    width: 15vw;
-    padding: .5vw;
-    font-size: 1.5vw;
+    width: 200px;
+    padding: 10px;
+    font-size: 20px;
     background-color: orange;
     border-radius: 10px 10px 0 10px;
-    right: 44vw;
-    bottom: 9vw;
+    right: 540px;
+    bottom: 90px;
     color: #444;
     transition: transform .3s;
     visibility: hidden;
 }
 #submit {
     border-radius: 5px;
-    margin-top: 1vw;
-    width: 25vw;
-    height: 4vw;
-    font-size: 1.5vw;
+    margin-top: 10px;
+    width: 450px;
+    height: 35px;
+    font-size: 20px;
     background-color: orange;
-    border: .1vw solid transparent;
-}#submit:hover{border: .1vw solid white;}
- #submit:active{border: .1vw solid black;}
+    border: 1px solid transparent;
+}#submit:hover{border: 1px solid white;}
+ #submit:active{border: 1px solid black;}
  #submit:focus{outline: none;}
 
 #complete {
     position: absolute;
-    width: 30vw;
-    padding: 1vw;
-    font-size: 2vw;
-    left: -35vw;
-    top: 30vh;
+    width: 500px;
+    padding: 10px;
+    font-size: 30px;
+    left: -400px;
+    top: 50%;
+    margin: -100px -250px;
     color: #ccc;
     background-color: #444;
     border: 2px solid orange;

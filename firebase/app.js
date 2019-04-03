@@ -19,14 +19,17 @@ function toggleSignIn() {
         auth.signOut();
         // [END signout]
     } else {
+        document.getElementById("submit").disabled = true;
         var email = document.getElementById('email').value;
         var password = document.getElementById('pass').value;
         if (email.length < 4) {
-            showError("email_notification", "Please enter a valid email address", 22);
+            document.getElementById("submit").disabled = false;
+            showError("email_notification", "Please enter a valid email address", 270);
             return;
         }
         if (password.length < 4) {
-            showError("password_notification", "Please enter a valid password", 20);
+            document.getElementById("submit").disabled = false;
+            showError("password_notification", "Please enter a valid password", 250);
             return;
         }
         // Sign in with email and pass.
@@ -42,9 +45,10 @@ function toggleSignIn() {
                 var errorMessage = error.message;
                 // [START_EXCLUDE]
                 if (errorCode === 'auth/wrong-password') {
-                    showError("password_notification", "Incorrect password", 13)
-                } else {
-                    showError("email_notification", "There is no user record corresponding to this email", 20);
+                    showError("password_notification", "Incorrect password", 170)
+                } else if(error) {
+                    document.getElementById("submit").disabled = false;
+                    showError("email_notification", "There is no user record corresponding to this email", 250);
                 }
                 // [END_EXCLUDE]
             })
@@ -56,20 +60,25 @@ function toggleSignIn() {
 * Handles the sign up button press.
 */
 function handleSignUp() {
+    document.getElementById("submit").disabled = true;
     var email = document.getElementById('email').value;
     var username = document.getElementById('username').value;
     var password = document.getElementById('pass').value;
     var vpass = document.getElementById('pass2').value;
     if(password != vpass) {
-        showError("confirm_password_notification", "Passwords do not match", 15);
+        showError("confirm_password_notification", "Passwords do not match", 200);
         return;
     }
     if (!emailIsValid(email)) {
-        showError("email_notification", "Invalid email address", 15);
+        showError("email_notification", "Invalid email address", 200);
         return;
     }
     if(!isStrong(password)) {
-        showError("password_notification", "Password is too weak", 14);
+        showError("password_notification", "Password is too weak", 180);
+        return;
+    }
+    if(username.length < 2) {
+        showError("username_notification", "Invalid username", 160);
         return;
     }
     // Sign in with email and pass.
@@ -82,10 +91,11 @@ function handleSignUp() {
             var errorMessage = error.message;
             // [START_EXCLUDE]
             if (errorCode == 'auth/weak-password') {
-                showError("password_notification", "Password is too weak", 14);
+                showError("password_notification", "Password is too weak", 180);
             } else if(errorCode == 'auth/email-already-in-use'){
-                showError("email_notification", "Email is already in use. <a href='../'>login?</a>", 20);
+                showError("email_notification", "Email is already in use. <a href='../'>login?</a>", 250);
             }
+            if(error) document.getElementById("submit").disabled = false;
             console.log(errorMessage);
             return;
             // [END_EXCLUDE]
@@ -95,8 +105,8 @@ function handleSignUp() {
             var hold = setInterval(function() {
                 var user = auth.currentUser;
                 if(user) {
-                    document.getElementById("header").style.left += "120vw";
-                    document.getElementById("loader").style.left += "30vw";
+                    document.getElementById("header").style.cssText += "transform: translateX(1000px);";
+                    document.getElementById("loader").style.cssText += "transform: translateX(800px);";
                     clearInterval(hold);
                 }
             }, 10);
@@ -120,11 +130,12 @@ function sendEmailVerification() {
 }
 
 function sendPasswordReset() {
+    document.getElementById("submit").disabled = true;
     var email = document.getElementById('email').value;
     // [START sendpasswordemail]
     auth.sendPasswordResetEmail(email).then(function() {
-        document.getElementById("header").style.cssText += "transform: translateX(100vw);";
-        document.getElementById("complete").style.cssText += "transform: translateX(70vw);";
+        document.getElementById("header").style.cssText += "transform: translateX(1000px);";
+        document.getElementById("complete").style.cssText += "transform: translateX(800px);";
         var i = 5;
         var sit = setInterval(function() {
             document.getElementById("timer").innerHTML = "redirecting to login page in " + i;
@@ -137,7 +148,8 @@ function sendPasswordReset() {
     }).catch(function(error) {
         // Handle Errors here.
         if(error) {
-            showError("email_notification", "There is no user record corresponding to this email", 20);
+            document.getElementById("submit").disabled = false;
+            showError("email_notification", "There is no user record corresponding to this email", 250);
         }
     });
     // [END sendpasswordemail];
@@ -195,7 +207,7 @@ function showError(id, message, width) {
     lastError = error;
     error.innerHTML = message;
     error.style.visibility = "visible";
-    error.style.width = width + "vw";
+    error.style.width = width + "px";
     var i = 0;
     var opacity = 1;
     var left = true;

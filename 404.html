@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>404</title>
+    <link rel="shortcut icon" href="./images/Icon.ico" type="image/x-icon" />
+    <style>
+        body {
+            font-size: 40px;
+            padding: 20px;
+            text-align: center;
+        }
+        span {
+            position: absolute;
+            top: 20%;
+        }
+        .note {
+            width: 35px;
+            height: 150px;
+            border: 1px solid black;
+            border-radius: 5px;
+            box-shadow: 0 0 10px grey;
+        }
+    </style>
+</head>
+<body>
+    404 Page Not Found<br>
+    <span class="note" data-x-range="28" data-y-range="13"></span>
+    <span class="note" data-x-range="28" data-y-range="13"></span>
+    <span class="sharp" data-x-range="28" data-y-range="13"></span>
+    <span class="note" data-x-range="28" data-y-range="13"></span>
+    <span class="sharp" data-x-range="28" data-y-range="13"></span>
+    <span class="note" data-x-range="28" data-y-range="13"></span>
+    <span class="note" data-x-range="28" data-y-range="13"></span>
+    <span class="sharp" data-x-range="28" data-y-range="13"></span>
+    <span class="note" data-x-range="28" data-y-range="13"></span>
+    <span class="sharp" data-x-range="28" data-y-range="13"></span>
+    <span class="note" data-x-range="28" data-y-range="13"></span>
+    <span class="sharp" data-x-range="28" data-y-range="13"></span>
+    <span class="note" data-x-range="28" data-y-range="13"></span>
+    <script>
+        var winW = window.innerWidth;
+        var winH = window.innerHeight;
+        var pieces = document.getElementsByTagName("span");
+        var calculatePosition = function(piece, percentX, percentY) {
+            var calculatedX = (piece.dataset.xRange / 2) - (piece.dataset.xRange * percentX);
+            var calculatedY = (piece.dataset.yRange / 2) - (piece.dataset.yRange * percentY);
+            piece.style.transform = piece.style.webkitTransform = piece.style.MozTransform = 
+                "translate3d(" + calculatedX + "px, " + calculatedY + "px, 0)";
+            piece.style.boxShadow = calculatedX + "px " + calculatedY + "px 10px grey"
+        };
+        window.onmousemove = function(e) {
+            var percentX = (e.clientX / winW).toFixed(4);
+            var percentY = (e.clientY / winH).toFixed(4);
+    
+            for (var i = 0; i < pieces.length; i++) {
+                calculatePosition(pieces[i], percentX, percentY);
+            }
+        }
+    </script>
+</body>

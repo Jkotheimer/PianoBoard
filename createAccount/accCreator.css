@@ -1,6 +1,6 @@
 body {
     background-image: url('../images/loginBackground.jpg');
-    background-size: 30vw;
+    background-size: 500px;
     background-repeat: repeat;
     overflow: hidden;
 }
@@ -8,60 +8,62 @@ body {
 #header {
     position: absolute;
     background-color: #444;
-    width: 25vw;
-    height: 37vw;
-    left: 35vw;
-    top: 2vh;
-    font-size: 1.8vw;
-    padding: 2vw;
-    border-radius: .5vw;
-    border: .4vw solid;
-    transition: left .5s ease;
+    width: 325px;
+    height: 450px;
+    left: 50%;
+    top: 75px;
+    margin-left: -163px;
+    font-size: 25px;
+    padding: 20px;
+    border-radius: 10px;
+    border: 3px solid;
+    transition: transform .5s;
 }
 #label {
     color: #ccc;
-    font-size: 2.5vw;
+    font-size: 35px;
     position:absolute;
-    left:5vw;
+    left: 20%;
+    margin-left: -18px;
 }
 .formInput{
     position: relative;
-    height: 1vw;
-    width: 25vw;
-    margin: .5vw 1vw 2vw -1.5vw;
+    height: 15px;
+    width: 305px;
+    margin: 5px 10px 25px -25px;
     color: #ccc;
-    font-size: 1.5vw;
-    padding-bottom: .8vw;
-    padding-top: .5vw;
-    left: 1.5vw;
+    font-size: 20px;
+    padding-bottom: 10px;
+    left: 25px;
     background-color: transparent;
     border-color: transparent;
     border-bottom-color: #666;
 } .formInput:focus {outline: none; border-bottom-color: #999;}
 
 #submit {
-    border-radius: .2vw;
-    margin-top: -.1vw;
-    padding: .5vw;
-    width: 25vw;
-    height: 3.5vw;
-    font-size: 1.6vw;
+    border-radius: 5px;
+    margin-top: -5px;
+    padding: 5px;
+    width: 310px;
+    height: 40px;
+    font-size: 20px;
     background-color: orange;
-    border: .1vw solid transparent;
+    border: 1px solid transparent;
     text-align: center;
     -webkit-transition: border .5s; /* Safari */
     transition: border .5s;
-}#submit:hover{border: .1vw solid white;}
- #submit:active{transition: none; border: .1vw solid black;}
+}#submit:hover{border: 1px solid white;}
+ #submit:active{transition: none; border: 1px solid black;}
  #submit:focus{outline: none;}
 
 #email_notification,
+#username_notification,
 #password_notification,
 #confirm_password_notification {
     position: absolute;
-    left: 27vw;
-    padding: .5vw;
-    font-size: 1.5vw;
+    left: 300px;
+    padding: 5px 15px;
+    font-size: 20px;
     border-radius: 10px 10px 10px 0;
     color: #444;
     background-color: orange;
@@ -69,28 +71,34 @@ body {
     transition: transform .2s;
 }
 #email_notification {
-    top: 7vw;
+    top: 80px;
+}
+#username_notification {
+    top: 150px
 }
 #password_notification {
-    top: 22vw;
+    top: 250px;
 }
 #confirm_password_notification {
-    top: 29vw;
+    top: 350px;
 }
 
 
 .loading_screen {
     transition: left .5s ease;
     position: absolute;
-    left: 30vw;
-    top: 10vh;
+    left: 50%;
+    top: 20%;
+    width: 700px;
+    margin-left: -350px;
     background-color: #444;
     text-align: center;
-    font-size: 1.2vw;
+    font-size: 25px;
     color: #ccc;
     border: 3px solid orange;
-    border-radius: 1vw;
-    padding: 1vw 1.5vw;
+    border-radius: 10px;
+    padding: 10px 15px;
+    transition: transform .5s;
 }
 #g-title {
     margin-top: .5vw;
@@ -99,13 +107,15 @@ body {
     color: #444;
     border-radius: 1vw;
 }
-#artists {
+#genres {
     position: relative;
-    background-color: green;
+    background-color: #3f5;
+    border: none;
     border-radius: 10px;
+    padding: 5px;
     width: 100%;
-    height: ;
-}
+    height: 20px;
+} #genres:focus{outline: none;}
 #bandSelector {
     display: none;
 }

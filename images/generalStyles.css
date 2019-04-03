@@ -7,7 +7,7 @@
     background-color: #444;
     border-radius: 30px;
     border: 2px solid transparent;
-    z-index: 10;
+    z-index: 1;
     transition: .5s;
 } .logoBox:hover {
     cursor: pointer;
