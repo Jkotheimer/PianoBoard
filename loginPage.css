@@ -7,26 +7,27 @@ body {
 #header {
     position: absolute;
     background-color: #444;
-    width: 50vw;
-    height: 30vw;
-    left: 25vw;
-    top: 5vw;
-    font-size: 2vw;
-    padding: 2vw 2vw;
-    border-radius: .5vw;
-    border: .4vw solid;
+    width: 600px;
+    height: 300px;
+    left: 50%;
+    top: 30%;
+    margin: -150px -300px;
+    font-size: 20px;
+    padding: 25px;
+    border-radius: 10px;
+    border: 4px solid;
 }
 
 .formInput{
     position: relative;
-    height: 1.5vw;
-    width: 25vw;
-    margin: -1vw 1vw 2.5vw -1.5vw;
+    height: 2%;
+    width: 50%;
+    margin: -10px 5px 15px;
     color: #ccc;
-    font-size: 1.5vw;
-    padding-bottom: .5vw;
-    padding-top: 1vw;
-    left: 1.5vw;
+    font-size: 20px;
+    padding-bottom: 15px;
+    padding-top: 20px;
+    left: -7px;
     background-color: transparent;
     border-color: transparent;
     border-bottom-color: #666;
@@ -35,50 +36,50 @@ body {
 #email_notification,
 #password_notification {
     position: absolute;
-    width: 15vw;
-    padding: .5vw;
-    font-size: 1.5vw;
+    width: 200px;
+    padding: 5px;
+    font-size: 20px;
     background-color: orange;
     border-radius: 10px 10px 0 10px;
-    right: 52.5vw;
-    bottom: 10vw;
+    right: 635px;
+    bottom: 100px;
     color: #444;
     transition: transform .3s;
     visibility: hidden;
 }
-#email_notification {bottom: 17.5vw;}
+#email_notification {bottom: 175px;}
 
 #submit {
     border-radius: 10px;
     margin-top: .1vw;
     padding: 0;
-    width: 25vw;
-    height: 3vw;
-    font-size: 1.8vw;
+    width: 50%;
+    height: 35px;
+    font-size: 20px;
     background-color: orange;
-    border: .1vw solid transparent;
+    border: 1px solid transparent;
     text-align: center;
-}#submit:hover{border: .1vw solid white;}
- #submit:active{border: .1vw solid black;}
+}#submit:hover{border: 1px solid white;}
+ #submit:active{border: 1px solid black;}
  #submit:focus{outline: none;}
 
 .redirect {
     position: absolute;
-    left: 30vw;
-    bottom: 17vw;
-    padding: .5vw;
+    right: 50px;
+    bottom: 165px;
+    padding: 5px;
     text-decoration: none;
-    font-size: 1.7vw;
-    width: 20vw;
+    font-size: 20px;
+    width: 35%;
     color: #FFF;
     border-radius: 10px;
-    border: .1vw solid transparent;
+    border: 1px solid transparent;
     text-align: center;
-}.redirect:hover {border: .1vw solid #FFF;}
- .redirect:active {border: .1vw solid #333; outline: none;}
+}.redirect:hover {border: 1px solid #FFF;}
+ .redirect:active {border: 1px solid #333; outline: none;}
 .redirect.lostPass {
     background-color: #C293D6;
-    bottom: 10vw;
+    bottom: 85px;
 } 
 .redirect.createAccount {
     background-color: #1CD5BC;

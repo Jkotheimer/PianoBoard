@@ -14,7 +14,7 @@
 </head>
 <body>
     <div id="header">
-        <img src="./images/PBlogo.png" style="width: 30vw; height: 13vw; margin: -4vw;">
+        <img src="./images/PBlogo.png" style="width: 250px; height: 115px; margin: -30px;">
         <br>
         <div style="color: #ccc;">
             Please login or create an account to continue to the
@@ -41,6 +41,12 @@
 
     <script type="text/javascript" src="./images/animations.js"></script>
     <script>
+        document.addEventListener("keydown", function() {
+            if(event.keyCode == 13) {
+                event.preventDefault();
+                document.getElementById("submit").click();
+            }
+        });
         var objects = new Map();
         objects.set("border", "header");
         objects.set("color", "header");

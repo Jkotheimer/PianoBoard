@@ -30,6 +30,12 @@
 
         <script type="text/javascript" src="../images/animations.js"></script>
         <script>
+            document.addEventListener("keydown", function() {
+                if(event.keyCode == 13) {
+                    event.preventDefault();
+                    document.getElementById("submit").click();
+                }
+            });
             var objects = new Map();
             objects.set("border", "header");
             objects.set("color", "header");
