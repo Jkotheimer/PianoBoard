@@ -11,14 +11,15 @@
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-firestore.js"></script>
     <script type="text/javascript" src="./firebase/app.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
-<body>
+<body onload="go()">
     <div id="header">
         <img src="./images/PBlogo.png" style="width: 250px; height: 115px; margin: -30px;">
         <br>
-        <div style="color: #ccc;font-size: 25px;">
+        <legend>
             Please login or create an account to continue to the studio
-        </div>
+        </legend>
         <br>
 
         <label for="email">Email</label> <br>
@@ -37,9 +38,14 @@
         <a href="./passFinder" class="redirect lostPass">Forgot password?</a>
         <a href="./createAccount" class="redirect createAccount">Create a new Account</a>
     </div>
+    <div id="footer">WATH THE CUFK</div>
 
     <script type="text/javascript" src="./images/animations.js"></script>
     <script>
+        var print = setInterval(function() {
+            document.getElementById("footer").innerHTML = "Width: " + $(window).width() + "<br>Height: " + $(window).height();
+        }, 10);
+
         document.addEventListener("keydown", function() {
             if(event.keyCode == 13) {
                 event.preventDefault();
