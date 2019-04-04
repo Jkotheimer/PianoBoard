@@ -24,12 +24,12 @@ function toggleSignIn() {
         var password = document.getElementById('pass').value;
         if (email.length < 4) {
             document.getElementById("submit").disabled = false;
-            showError("email_notification", "Please enter a valid email address", 270);
+            showError("email_notification", "Please enter a valid email address", 200);
             return;
         }
         if (password.length < 4) {
             document.getElementById("submit").disabled = false;
-            showError("password_notification", "Please enter a valid password", 250);
+            showError("password_notification", "Please enter a valid password", 180);
             return;
         }
         // Sign in with email and pass.
@@ -37,19 +37,22 @@ function toggleSignIn() {
         auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
         .then(function() {
             auth.signInWithEmailAndPassword(email, password).then(function() {
-                window.location.href = "./dashboard";
+                // sign in successful: redirect to dashboard
+                console.log("success ");
+                console.log(auth.currentUser.displayName);
+                //window.location.href = "./dashboard";
             })
             .catch(function(error) {
                 // Handle Errors here.
                 var errorCode = error.code;
                 var errorMessage = error.message;
                 // [START_EXCLUDE]
-                if (errorCode === 'auth/wrong-password') {
-                    showError("password_notification", "Incorrect password", 170)
-                } else if(error) {
-                    document.getElementById("submit").disabled = false;
-                    showError("email_notification", "There is no user record corresponding to this email", 250);
-                }
+                if (errorCode == 'auth/wrong-password') {
+                    showError("password_notification", "Incorrect password", 200)
+                } else {
+                    showError("email_notification", "There is no user account associated with this email", 300);
+                } 
+                document.getElementById("submit").disabled = false;
                 // [END_EXCLUDE]
             })
         });
@@ -149,7 +152,7 @@ function sendPasswordReset() {
         // Handle Errors here.
         if(error) {
             document.getElementById("submit").disabled = false;
-            showError("email_notification", "There is no user record corresponding to this email", 250);
+            showError("email_notification", "There is no user record corresponding to this email", 300);
         }
     });
     // [END sendpasswordemail];
@@ -200,13 +203,13 @@ var lastError = false;;
 function showError(id, message, width) {
     clearInterval(hold);
     if(lastError != false) {
-        lastError.style.visibility = "hidden";
+        lastError.style.display = "none";
         lastError.style.opacity = 1;
     }
     var error = document.getElementById(id);
     lastError = error;
     error.innerHTML = message;
-    error.style.visibility = "visible";
+    error.style.display = "block";
     error.style.width = width + "px";
     var i = 0;
     var opacity = 1;
@@ -215,7 +218,7 @@ function showError(id, message, width) {
         error.style.opacity = opacity;
         if(i > 500) opacity -= .01;
         if(error.style.opacity < .02) {
-            error.style.visibility = "hidden";
+            error.style.display = "none";
             error.style.opacity = 1;
             clearInterval(hold);
             hold = false;

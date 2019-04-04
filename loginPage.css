@@ -2,6 +2,7 @@ body {
     background-image: url('./images/loginBackground.jpg');
     background-size: 500px;
     background-repeat: repeat;
+    font-family: sans-serif;
 }
 
 #header {
@@ -46,13 +47,13 @@ legend {
     font-size: 20px;
     background-color: orange;
     border-radius: 10px 10px 0 10px;
-    right: 635px;
-    bottom: 100px;
+    right: 775px;
+    bottom: 120px;
     color: #444;
     transition: transform .3s;
-    visibility: hidden;
+    display: none;
 }
-#email_notification {bottom: 175px;}
+#email_notification {bottom: 190px;}
 
 #submit {
     border-radius: 10px;
@@ -89,20 +90,42 @@ legend {
 .redirect.createAccount {
     background-color: #1CD5BC;
 }
+
 #footer {
+    position: absolute;
     background: black;
     color: white;
     position: absolute;
     font-size: 20px;
-    bottom: 200px;
+    bottom: 0px;
     left: 50%;
     padding: 10px;
+}
+
+@media only screen and (max-width: 1400px) {
+    #header {
+        height: auto;
+    }
+    #email_notification,
+    #password_notification {
+        position: relative;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        border-radius: 10px;
+        width: 50% !important;
+        margin-bottom: 10px;
+        background-color: red;
+        color: black;
+        font-size: 12px;
+        font-weight: bold;
+    }
 }
 
 @media only screen and (max-width: 800px) {
     #header {
         width: 94%;
-        height: auto;
         font-size: 16px;
         border: 2px solid;
     }
@@ -120,7 +143,7 @@ legend {
 }
 @media only screen and (max-width: 550px) {
     #header {
-        height: 325px;
+        padding-bottom: 35px;
     }
     legend {
         font-size: 12px;
@@ -128,20 +151,23 @@ legend {
     .formInput {
         width: 90%;
     }
+    #email_notification,
+    #password_notification {
+        width: 90% !important;
+    }
     #submit {
         width: 90%;
     }
     .redirect {
-        padding: 5px 0;
-        left: 20px;
-        bottom: 26px;
-        width: 40%;
-        bottom: 15px;
+        position: relative;
+        padding: 7px 5.5%;
+        left: 0;
+        bottom: -15px;
         border-radius: 5px 0 0 5px;
     }
     .redirect.lostPass {
-        left: 45%;
-        bottom: 15px;
+        margin-left: -5px;
+        bottom: -15px;
         border-radius: 0 5px 5px 0;
     }
 }

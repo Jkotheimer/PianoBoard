@@ -2,6 +2,7 @@ body {
     font-family: Tahoma, Geneva, sans-serif;
     background-image: url('../images/loginBackground.jpg');
     overflow: hidden;
+    font-family: sans-serif;
     background-size: 30vw;
     background-repeat: repeat;
 }

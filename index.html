@@ -13,7 +13,7 @@
     <script type="text/javascript" src="./firebase/app.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
-<body onload="go()">
+<body>
     <div id="header">
         <img src="./images/PBlogo.png" style="width: 250px; height: 115px; margin: -30px;">
         <br>
@@ -35,17 +35,17 @@
         <div id="password_notification"></div>
         
         <button id="submit" onclick="toggleSignIn()">Sign in</button>
-        <a href="./passFinder" class="redirect lostPass">Forgot password?</a>
         <a href="./createAccount" class="redirect createAccount">Create a new Account</a>
+        <a href="./passFinder" class="redirect lostPass">Forgot password?</a>
     </div>
-    <div id="footer">WATH THE CUFK</div>
+    
+    <div id="footer"></div>
 
     <script type="text/javascript" src="./images/animations.js"></script>
     <script>
         var print = setInterval(function() {
             document.getElementById("footer").innerHTML = "Width: " + $(window).width() + "<br>Height: " + $(window).height();
         }, 10);
-
         document.addEventListener("keydown", function() {
             if(event.keyCode == 13) {
                 event.preventDefault();
