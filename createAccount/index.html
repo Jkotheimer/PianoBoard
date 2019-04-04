@@ -53,6 +53,7 @@
         <div id="genreSelector">
             <p id="g-title">What are your favorite genres?</p>
             <input type="text" id="genres">
+            <button onclick="loadDoc()">PRESS ME</button>
         </div>
         <div id="bandSelector">
             <div id="band_search_container">
@@ -70,11 +71,13 @@
             </div>
         </div>
     </div>
-    <div id="demo" style="color:red;font-size:5vw;position:absolute;top:75vh"></div>
+    <div id="footer"></div>
     <script type="text/javascript" src="../images/animations.js"></script>
     <script>
-        // TODO find a way to make sure that this doesnt happen when
-        // the interests thing comes up (disable the button)
+        // fun tip : &#x260A; creates a lil headphone emoji
+        //var print = setInterval(function() {
+            //document.getElementById("footer").innerHTML = "Width: " + $(window).width() + "<br>Height: " + $(window).height();
+        //}, 10);
         document.addEventListener("keydown", function() {
             if(event.keyCode == 13) {
                 event.preventDefault();
@@ -86,17 +89,53 @@
         objects.set("color", "header");
         objects.set("border", "logoBox");
         colorFade(objects);
-        var name = "codemzy";
-        var url = "http://anyorigin.com/go?url=" + 
-            encodeURIComponent("https://www.codewars.com/users/") + 
-            name + "&callback=?";
-        $.get(url, function(response) {
-            console.log(response);
-        });
         var pFade = setInterval(function() {
             // TODO get an API with a list of all the different genres
             // right here, add a part that 
             document.getElementById("genres").placeholder = null
         }, 2000);
+
+        function loadDoc() {
+            var xhttp = new XMLHttpRequest();
+            var input = document.getElementById("genres").value;
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var text = this.responseText;
+                    var similarGenres = new Set();
+                    similarGenres.add("fuckkkk");
+                    var nextGenre = 3;
+                    for(let i = 0; i < text.length; i++) {
+                        var check = '>' + nextGenre.toString() + '<';
+                        if(text.charAt(i) == '>') {
+                            if(text.charAt(i + 1) == nextGenre.toString()) {
+                                
+                                var G = "";
+                                var arrCounter = 0;
+                                while(arrCounter < 5) {
+                                    i++;
+                                    if(text.charAt(i) == '>') {
+                                        arrCounter++;
+                                        console.log(text.substr(i+1,6));
+
+                                    }
+                                }
+                                // Now, we have reached the string containing the genre name
+                                //while(text.charAt(i) != '<') {
+                                //    G += text.charAt(i);
+                                //}
+                                similarGenres.add(G);
+                                nextGenre++;
+                            }
+                        }
+                        if(nextGenre == 5) break;
+                    }
+                    for(let entry of similarGenres.entries()) {
+                        document.getElementById("footer").innerHTML += entry + "  ";
+                    }
+                }
+            };
+            xhttp.open("GET", "https://cors-anywhere.herokuapp.com/http://everynoise.com/everynoise1d.cgi?root=" + input + "&scope=mainstream only", true);
+            xhttp.send();
+        }
     </script>
 </body>

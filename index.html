@@ -39,13 +39,10 @@
         <a href="./passFinder" class="redirect lostPass">Forgot password?</a>
     </div>
     
-    <div id="footer"></div>
+    
 
     <script type="text/javascript" src="./images/animations.js"></script>
     <script>
-        var print = setInterval(function() {
-            document.getElementById("footer").innerHTML = "Width: " + $(window).width() + "<br>Height: " + $(window).height();
-        }, 10);
         document.addEventListener("keydown", function() {
             if(event.keyCode == 13) {
                 event.preventDefault();

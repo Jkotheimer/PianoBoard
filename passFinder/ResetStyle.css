@@ -48,7 +48,7 @@ legend {
     bottom: 100px;
     color: #444;
     transition: transform .3s;
-    display: block;
+    display: none;
 }
 #submit {
     border-radius: 5px;
@@ -85,6 +85,9 @@ legend {
         position: relative;
         border-radius: 5px;
         background-color: red;
+        color: black;
+        font-weight: bold;
+        font-size: 14px;
         left: 0;
         right: 0;
         bottom: 0;
