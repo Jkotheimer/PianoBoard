@@ -51,9 +51,9 @@
     <div id="loader" class="loading_screen">
         While we prepare your account, tell us a little bit about yourself.
         <div id="genreSelector">
-            <p id="g-title">What are your favorite genres?</p>
+            <p id="g-title">What are your favorite music genres?</p>
             <input type="text" id="genres">
-            <button onclick="loadDoc()">PRESS ME</button>
+            <button onclick="grabSimilarGenres()">PRESS ME</button>
         </div>
         <div id="bandSelector">
             <div id="band_search_container">
@@ -99,34 +99,8 @@
             return this.substr(0, index) + replacement+ this.substr(index + replacement.length);
         }
 
-        function loadDoc() {
-            var xhttp = new XMLHttpRequest();
-            var input = document.getElementById("genres").value;
-            input.replaceAt(0, input.charAt(0).toUpperCase())
-            for(let i = 1; i < input.length; i++) {
-                input.replaceAt(i, input.charAt(i).toLowerCase());
-            }
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    var html = this.responseText;
-                    var artist = "";
-                    var artists = new Set();
-                    for(let i = 0; i < html.length; i++) {
-                        if(html.substr(i, 5) != "alt=") continue;
-                        i += 5;
-                        // i is now the position of the first letter of the artist name
-                        while(html.charAt(i) != "\"") {
-                            artist += html.charAt(i);
-                            i++;
-                        }
-                        artists.add(artist);
-                        if(artists.size > 10) break;
-                    }
-                    console.log(artists.size);
-                }
-            };
-            xhttp.open("GET", "https://www.discogs.com/search/?genre_exact=" + input, true);
-            xhttp.send();
+        function grabSimilarGenres() {
+            
         }
     </script>
 </body>
