@@ -95,46 +95,37 @@
             document.getElementById("genres").placeholder = null
         }, 2000);
 
+        String.prototype.replaceAt=function(index, replacement) {
+            return this.substr(0, index) + replacement+ this.substr(index + replacement.length);
+        }
+
         function loadDoc() {
             var xhttp = new XMLHttpRequest();
             var input = document.getElementById("genres").value;
+            input.replaceAt(0, input.charAt(0).toUpperCase())
+            for(let i = 1; i < input.length; i++) {
+                input.replaceAt(i, input.charAt(i).toLowerCase());
+            }
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
-                    var text = this.responseText;
-                    var similarGenres = new Set();
-                    similarGenres.add("fuckkkk");
-                    var nextGenre = 3;
-                    for(let i = 0; i < text.length; i++) {
-                        var check = '>' + nextGenre.toString() + '<';
-                        if(text.charAt(i) == '>') {
-                            if(text.charAt(i + 1) == nextGenre.toString()) {
-                                
-                                var G = "";
-                                var arrCounter = 0;
-                                while(arrCounter < 5) {
-                                    i++;
-                                    if(text.charAt(i) == '>') {
-                                        arrCounter++;
-                                        console.log(text.substr(i+1,6));
-
-                                    }
-                                }
-                                // Now, we have reached the string containing the genre name
-                                //while(text.charAt(i) != '<') {
-                                //    G += text.charAt(i);
-                                //}
-                                similarGenres.add(G);
-                                nextGenre++;
-                            }
+                    var html = this.responseText;
+                    var artist = "";
+                    var artists = new Set();
+                    for(let i = 0; i < html.length; i++) {
+                        if(html.substr(i, 5) != "alt=") continue;
+                        i += 5;
+                        // i is now the position of the first letter of the artist name
+                        while(html.charAt(i) != "\"") {
+                            artist += html.charAt(i);
+                            i++;
                         }
-                        if(nextGenre == 5) break;
+                        artists.add(artist);
+                        if(artists.size > 10) break;
                     }
-                    for(let entry of similarGenres.entries()) {
-                        document.getElementById("footer").innerHTML += entry + "  ";
-                    }
+                    console.log(artists.size);
                 }
             };
-            xhttp.open("GET", "https://cors-anywhere.herokuapp.com/http://everynoise.com/everynoise1d.cgi?root=" + input + "&scope=mainstream only", true);
+            xhttp.open("GET", "https://www.discogs.com/search/?genre_exact=" + input, true);
             xhttp.send();
         }
     </script>
