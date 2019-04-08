@@ -53,8 +53,8 @@
         While we prepare your account, tell us a little bit about yourself.
         <div id="genreSelector">
             <p id="g-title">What are your favorite music genres?</p>
-            <input type="text" id="genres">
-            <button onclick="grabSimilarGenres()">PRESS ME</button>
+            <input onkeypress="grabSimilarGenres()" type="text" id="genres">
+            <div id="genre_autocomplete"></div>
         </div>
         <div id="bandSelector">
             <div id="band_search_container">
