@@ -5,13 +5,13 @@
 */
 
 var genres = readTextFile("../samples/Data/genres.txt");
-var used = new Set([-1]);
+var used = new Set([0]);
 var pFade = setInterval(function() {
     if(used.size == genres.length) {
         used.clear();
-        used.add(-1);
+        used.add(0);
     }
-    var rand = -1;
+    var rand = 0;
     while(used.has(rand)) rand = Math.floor(Math.random() * genres.length);
     used.add(rand);
     document.getElementById("genre_input").placeholder = genres[rand];
@@ -96,8 +96,18 @@ function readTextFile(file) {
         if(xhr.readyState === 4) {
             if(xhr.status === 200 || xhr.status == 0) {
                 var allText = xhr.responseText;
-                console.log(allText);
-                return allText;
+                var genreSet = [" "];
+                var current = "";
+                for(let i = 0; i < allText.length; i++) {
+                    if(allText.charAt(i) != ' ') {
+                        current += allText.charAt(i);
+                    }
+                    else {
+                        genreSet.push(current);
+                        current = "";
+                    }
+                }
+                return genreSet;
             }
         }
     }
