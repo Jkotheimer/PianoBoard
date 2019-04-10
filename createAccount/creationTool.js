@@ -5,17 +5,6 @@
 */
 
 var genres = readTextFile("../samples/Data/genres.txt");
-var used = new Set([0]);
-var pFade = setInterval(function() {
-    if(used.size == genres.length) {
-        used.clear();
-        used.add(0);
-    }
-    var rand = 0;
-    while(used.has(rand)) rand = Math.floor(Math.random() * genres.length);
-    used.add(rand);
-    document.getElementById("genre_input").placeholder = genres[rand];
-}, 2000);
 
 function grabSimilarGenres(event) {
     var infield = document.getElementById("genre_input");
@@ -34,9 +23,9 @@ function grabSimilarGenres(event) {
         infield.style.borderRadius = "10px 10px 0 0";
     }
     var count = 0;
-    for(let item of genres.entries()) {
-        if(item[1].substr(0,input.length).includes(input)) {
-            var newButton = createNewButton(item[1]);
+    for(let i = 0; i < genres.length; i++) {
+        if(genres[i].substr(0,input.length).includes(input)) {
+            var newButton = createNewButton(genres[i]);
             autocomplete.appendChild(newButton);
         }
         count++;
@@ -96,7 +85,7 @@ function readTextFile(file) {
         if(xhr.readyState === 4) {
             if(xhr.status === 200 || xhr.status == 0) {
                 var allText = xhr.responseText;
-                var genreSet = [" "];
+                var genreSet = [" ", " "];
                 var current = "";
                 for(let i = 0; i < allText.length; i++) {
                     if(allText.charAt(i) != ' ') {
@@ -113,3 +102,17 @@ function readTextFile(file) {
     }
     xhr.send();
 }
+
+// This interval constantly cycles through the genres and places random ones as the input placeholder
+var used = new Set([0, 1]);
+var pFade = setInterval(function() {
+    if(used.size == genres.length) {
+        used.clear();
+        used.add(0);
+        used.add(1);
+    }
+    var rand = 0;
+    while(used.has(rand)) rand = Math.floor(Math.random() * genres.length);
+    used.add(rand);
+    document.getElementById("genre_input").placeholder = genres[rand];
+}, 2000);
