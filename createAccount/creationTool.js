@@ -93,7 +93,7 @@ function readTextFile(file) {
                     }
                     else {
                         genreSet.push(current);
-                        console.log("current");
+                        console.log(current);
                         current = "";
                     }
                 }
@@ -107,7 +107,7 @@ function readTextFile(file) {
 // This interval constantly cycles through the genres and places random ones as the input placeholder
 var used = new Set([0, 1]);
 var pFade = setInterval(function() {
-    console.log("Buttsack");
+    console.log("SACKKFACE");
     if(used.size == genres.length) {
         used.clear();
         used.add(0);
