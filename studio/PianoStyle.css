@@ -22,7 +22,7 @@
 /*All of these settings are a ratio of the window size being used.*/
 body {
     overflow-x: hidden;
-    background-color: #444
+    background-color: #444;
     font-family: sans-serif;
 }
 .Sticky {

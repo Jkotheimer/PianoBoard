@@ -53,8 +53,9 @@
         While we prepare your account, tell us a little bit about yourself.
         <div id="genreSelector">
             <p id="g-title">What are your favorite music genres?</p>
-            <input onkeypress="grabSimilarGenres()" type="text" id="genres">
+            <input onkeydown="grabSimilarGenres(event)" type="text" id="genre_input"></br>
             <div id="genre_autocomplete"></div>
+            <span id="selected_genres">FUCK</span>
         </div>
         <div id="bandSelector">
             <div id="band_search_container">
@@ -72,7 +73,7 @@
             </div>
         </div>
     </div>
-    <div id="footer"></div>
+    
     <script type="text/javascript" src="../images/animations.js"></script>
     <script>
         // fun tip : &#x260A; creates a lil headphone emoji
