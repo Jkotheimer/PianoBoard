@@ -110,6 +110,7 @@ function handleSignUp() {
                 if(user) {
                     document.getElementById("header").style.cssText += "transform: translateX(1000px);";
                     document.getElementById("loader").style.cssText += "transform: translateX(800px);";
+                    genrePage();
                     clearInterval(hold);
                 }
             }, 10);

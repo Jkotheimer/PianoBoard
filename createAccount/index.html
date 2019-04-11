@@ -15,7 +15,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="./creationTool.js"></script>
 </head>
-<body>
+<body onload="genrePage()">
     <div id="logoBox" class="logoBox" onclick="window.location.href = '../';">
         <img src="../images/PBlogo.png" class="logo">
     </div>
@@ -53,7 +53,7 @@
         While we prepare your account, tell us a little bit about yourself.
         <div id="genreSelector">
             <p id="g-title">What are your favorite music genres?</p>
-            <input onkeydown="grabSimilarGenres(event)" type="text" id="genre_input"></br>
+            <input type="text" id="genre_input"></br>
             <div id="genre_autocomplete"></div>
             <span id="selected_genres">Shit</span>
         </div>
