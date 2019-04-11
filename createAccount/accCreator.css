@@ -100,7 +100,7 @@ body {
     padding: 10px 15px;
     transition: transform .5s;
 }
-#g-title {
+.c-title {
     margin-top: 10px;
     padding: 5px;
     border-radius: 10px;
@@ -130,6 +130,20 @@ body {
     filter: invert(.9);
 }:focus {
     outline: none;
+}
+#incomplete {
+    position: absolute;
+    top: 92px;
+    right: 20px;
+    width: 43%;
+    padding: 2px;
+    font-size: 16px;
+    border-radius: 5px 5px 0 0;
+    background-color: orange;
+    visibility: hidden;
+ }
+#genreSelector {
+    display: block;
 }
 #g-content {
     position: relative;

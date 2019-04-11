@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -52,11 +52,12 @@
     <div id="loader" class="loading_screen">
         While we prepare your account, tell us a little bit about yourself.
         <div id="genreSelector">
-            <p id="g-title">
+            <p class="c-title">
                 What are your favorite music genres?
                 <button id="genre_done" class="done" onclick="submitGenres()">
                     done <img src="../images/arrow.png" class="arrow">
                 </button>
+                <span id="incomplete">You haven't selected any genres yet!</span>
             </p>
             <div id="g-content">
                 <span id="gib">
@@ -67,8 +68,13 @@
             </div>
         </div>
         <div id="bandSelector">
+            <p class="c-title">
+                What are your favorite bands/artists?
+                <button id="band_done" class="done" onclick="submitGenres()">
+                    done <img src="../images/arrow.png" class="arrow">
+                </button>
+            </p>
             <div id="band_search_container">
-                Who are your favorite bands/artists?
                 <input type="text" id="artists" placeholder="ex: Eminem">
             </div>
             <div id="recommended_container">
