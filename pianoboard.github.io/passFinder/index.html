@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Password Reset</title>
+    <link rel="shortcut icon" href="../images/Icon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="ResetStyle.css">
+    <link rel="stylesheet" href="../images/generalStyles.css">
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-firestore.js"></script>
+    <script type="text/javascript" src="../accounts/accounts.js"></script>
+    <script type="text/javascript" src="../firebase/app.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    <div id="logoBox" class="logoBox" onclick="window.location.href = '../';">
+        <img src="../images/PBlogo.png" class="logo">
+    </div>
+    <div id="header">
+        <legend>Password Reset</legend>
+        <br>
+        <label for="email">Please enter your E-mail<br>
+                        You will recieve a link to reset your password</label> 
+        <input type="text" id="email" name="email" placeholder="your.email@something.com" required autocomplete="off">
+        <br>
+        <div id="email_notification"></div>
+        <input type="submit" id="submit" value="Send Reset Link" onclick="sendPasswordReset()">
+
+    </div>
+
+    <script type="text/javascript" src="../images/animations.js"></script>
+    <script>
+        document.addEventListener("keydown", function() {
+            if(event.keyCode == 13) {
+                event.preventDefault();
+                document.getElementById("submit").click();
+            }
+        });
+        var objects = new Map();
+        objects.set("border", "header");
+        objects.set("color", "header");
+        objects.set("border", "logoBox");
+        colorFade(objects);
+    </script>
+    <div id="complete">Password reset link has been sent!<br><div id="timer"></div></div>
+</body>
