@@ -1,7 +1,8 @@
 // [SETUP}
+
 var express = require('express');
+var http = require('http');
 var path = require('path');
-var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -9,11 +10,9 @@ var usersRouter = require('./routes/users');
 var app = express();
 var port = 80;
 
-app.use(logger('dev'));
+app.use(express.static(path.join(__dirname, '../')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '../')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -29,6 +28,6 @@ app.post('/', function(req, res) {
 	res.send('A post request has been made');
 });
 
-app.listen(port, function() {
-	console.log(`test app listening on port ${port}`)
+var server = app.listen(port, function () {
+    console.log("Server started at http://localhost:%s", port);
 });

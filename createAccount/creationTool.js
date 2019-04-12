@@ -1,9 +1,4 @@
-/**var genres = ["aleatoric music", "alternative country", "alternative dance", "alternative hip hop",
-    "alternative metal", "alternative rock", "ambient", "ambient house", "ambient music", "americana", 
-    "anarcho punk", "anime music", "anti-folk", "apala", "ape haters", "arab pop", "arabesque", "arabic pop", 
-    "argentine rock", "ars antiqua", "ars nova", "art punk", "art rock"];
-*/
-var grabSimilarGenres = function(){}
+var switchedOver = false;
 
 function genrePage() {
     var xhr = new XMLHttpRequest();
@@ -221,6 +216,7 @@ function genrePage() {
                     } else {
                         loader.style.cssText += "height: " + sbox + "px;";
                     }
+                    if (switchedOver) clearInterval(interval);
                 }, 30);
             }
         }
@@ -232,12 +228,45 @@ function submitGenres() {
     var s = document.getElementById("selected_genres");
     if(s.textContent.includes('Genres')) {
         // TODO show an element saying that I have to choose some genres
+        var inc = document.getElementById("incomplete");
+        inc.style.visibility = "visible";
+        inc.style.opacity = 1;
+        var x = 0;
+        var wait = setInterval(function () {
+            if (x > 200) {
+                inc.style.opacity -= .01;
+                if (inc.style.opacity <= .02) {
+                    inc.style.visibility = "hidden";
+                    inc.style.opacity = 1;
+                    clearInterval(wait);
+                }
+            }
+            x++;
+        }, 20);
         return;
     }
+    switchedOver = true;
     s = s.childNodes;
     var g = new Set();
     for(let iter = 0; iter < s.length; iter++) {
         var node = s[iter];
         g.add(node.textContent);
     }
+    document.getElementById("genreSelector").style.display = "none";
+    var h = document.getElementById("loader").clientHeight;
+    var ratio = h / 50;
+    var flip = false;
+    var hold = setInterval(function () {
+        if (h > 250) document.getElementById("loader").style.cssText += "height: " + h + "px;";
+        else {
+            document.getElementById("bandSelector").style.display = "block";
+            clearInterval(hold);
+        }
+        h-=ratio;
+    }, 10);
+    artistPage(g);
+}
+
+function artistPage(g) {
+
 }
