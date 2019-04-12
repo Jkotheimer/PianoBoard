@@ -215,7 +215,7 @@ body {
 }
 @media only screen and (max-width: 575px) {
     #loader{
-        width: 90%;
+        width: 93%;
     }
     .done {
         transform: translate(40px, 0px);
