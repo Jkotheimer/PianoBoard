@@ -10,6 +10,7 @@ var config = {
 firebase.initializeApp(config);
 
 var auth = firebase.auth();
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
 /**
 * Handles the sign in button press.
 */
@@ -34,28 +35,26 @@ function toggleSignIn() {
         }
         // Sign in with email and pass.
         // [START authwithemail]
-        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-        .then(function() {
-            auth.signInWithEmailAndPassword(email, password).then(function() {
-                // sign in successful: redirect to dashboard
-                console.log("success ");
-                console.log(auth.currentUser.displayName);
-                //window.location.href = "./dashboard";
-            })
-            .catch(function(error) {
-                // Handle Errors here.
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                // [START_EXCLUDE]
-                if (errorCode == 'auth/wrong-password') {
-                    showError("password_notification", "Incorrect password", 200)
-                } else {
-                    showError("email_notification", "There is no user account associated with this email", 300);
-                } 
-                document.getElementById("submit").disabled = false;
-                // [END_EXCLUDE]
-            })
-        });
+        
+        auth.signInWithEmailAndPassword(email, password).then(function() {
+            // sign in successful: redirect to dashboard
+            console.log("success ");
+            console.log(auth.currentUser.displayName);
+            window.location.href = "./dashboard";
+        })
+        .catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // [START_EXCLUDE]
+            if (errorCode == 'auth/wrong-password') {
+                showError("password_notification", "Incorrect password", 200)
+            } else {
+                showError("email_notification", "There is no user account associated with this email", 300);
+            } 
+            document.getElementById("submit").disabled = false;
+            // [END_EXCLUDE]
+        })
         // [END authwithemail]
     }
 }
@@ -63,59 +62,73 @@ function toggleSignIn() {
 * Handles the sign up button press.
 */
 function handleSignUp() {
-    document.getElementById("submit").disabled = true;
+    var e = false;
+    var sbutton = document.getElementById("submit");
+    sbutton.disabled = true;
     var email = document.getElementById('email').value;
     var username = document.getElementById('username').value;
     var password = document.getElementById('pass').value;
     var vpass = document.getElementById('pass2').value;
-    if(password != vpass) {
-        showError("confirm_password_notification", "Passwords do not match", 200);
-        return;
-    }
     if (!emailIsValid(email)) {
-        showError("email_notification", "Invalid email address", 200);
-        return;
+        e = true;
+        showError("email_notification", "Invalid email address", -1);
     }
-    if(!isStrong(password)) {
-        showError("password_notification", "Password is too weak", 180);
-        return;
+    else if(!isStrong(password)) {
+        e = true;
+        showError("password_notification", "Password is too weak", -1);
     }
-    if(username.length < 2) {
-        showError("username_notification", "Invalid username", 160);
-        return;
+    else if(password != vpass) {
+        showError("confirm_password_notification", "Passwords do not match", -1);
+        e = true;
+    }
+    else if(username.length < 2) {
+        e = true
+        showError("username_notification", "Invalid username", -1);
     }
     // Sign in with email and pass.
     // [START createwithemail]
-    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-    .then(function() {
-        auth.createUserWithEmailAndPassword(email, password).catch(function(error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            // [START_EXCLUDE]
-            if (errorCode == 'auth/weak-password') {
-                showError("password_notification", "Password is too weak", 180);
-            } else if(errorCode == 'auth/email-already-in-use'){
-                showError("email_notification", "Email is already in use. <a href='../'>login?</a>", 250);
-            }
-            if(error) document.getElementById("submit").disabled = false;
-            console.log(errorMessage);
-            return;
-            // [END_EXCLUDE]
-        }).then(T => {
-            // TODO make the loader a little form that has you input your fav bands and genres
-            // These bands and genres will give you recommended songs and instruments and stuff
-            var hold = setInterval(function() {
-                var user = auth.currentUser;
-                if(user) {
-                    document.getElementById("header").style.cssText += "transform: translateX(1000px);";
-                    document.getElementById("loader").style.cssText += "transform: translateX(800px);";
-                    genrePage();
-                    clearInterval(hold);
+    if(!e){
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        .then(function() {
+            auth.createUserWithEmailAndPassword(email, password).catch(function(error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // [START_EXCLUDE]
+                if (errorCode == 'auth/weak-password') {
+                    showError("password_notification", "Password is too weak", 180);
+                } else if(errorCode == 'auth/email-already-in-use'){
+                    showError("email_notification", "Email is already in use. <a href='../'>login?</a>", 250);
                 }
-            }, 10);
-        })
-    });
+                if(error) {
+                    sbutton.disabled = false;
+                    e = true;
+                    return false;
+                }
+                // [END_EXCLUDE]
+            }).then(function() {
+                if(!e) {
+                    var hold = setInterval(function() {
+                        var user = auth.currentUser;
+                        if(user) {
+                            user.updateProfile({
+                                displayName: username,
+                                email: email
+                            });
+                            document.getElementById("header").style.cssText += "transform: translateX(1000px);";
+                            document.getElementById("loader").style.cssText += "transform: translateX(-50%);";
+                            genrePage();
+                            clearInterval(hold);
+                        }
+                    }, 10);
+                } else {
+                    sbutton.disabled = false;
+                }
+            });
+        });
+    } else {
+        sbutton.disabled = false;
+    }
     // [END createwithemail]
 }
 
@@ -199,6 +212,13 @@ window.onload = function() {
     initApp();
 };
 
+function writeData(data, location) {
+    var uid = auth.currentUser.uid;
+    firebase.database().ref('users/' + uid + location).set({
+        data
+    });
+}
+
 var hold;
 var lastError = false;;
 function showError(id, message, width) {
@@ -211,7 +231,9 @@ function showError(id, message, width) {
     lastError = error;
     error.innerHTML = message;
     error.style.display = "block";
-    error.style.width = width + "px";
+    if(width > 0) {
+        error.style.width = width + "px";
+    }
     var i = 0;
     var opacity = 1;
     var left = true;
@@ -300,7 +322,7 @@ function showInfo() {
                 });
                 if(i > 10) clearInterval(hold);
                 i++;
-            }, 100);
+            }, 200);
             clearInterval(wait);
         } else {
             //sideBar.innerHTML = "retrieving your information..";
@@ -341,7 +363,7 @@ function uploadProfilePic(event) {
 function updateProject(projectName) {
     var userId = auth.currentUser.uid;
     firebase.database().ref('users/' + userId + "/projects/" + projectName).set({
-        // TODO write the project data to the database
+    // TODO write the project data to the database
     }, function(error) {
         if (error) {
             // The write failed...
