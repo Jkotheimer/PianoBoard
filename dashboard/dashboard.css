@@ -3,12 +3,12 @@ body {
     background-image: url('../images/loginBackground.jpg');
     overflow: hidden;
     font-family: sans-serif;
-    background-size: 30vw;
+    background-size: 500px;
     background-repeat: repeat;
 }
 .navBar {
     position: absolute;
-    width: 1000vw;
+    width: 100%;
     height: 45px;
     background-color: #444;
     border-bottom: 2px solid #ccc;
@@ -29,24 +29,24 @@ body {
     position: relative;
     width: 25px;
     height: 25px;
-    top: 5px;
+    transform: translateY(5px);
     -webkit-filter: invert(.9);
     filter: invert(.9);
 }
 .navLink {
     position: relative;
     left: 250px;
-    top: 8px;
-    padding: 4px 1vw 8px;
+    top: 6px;
     font-size: 20px;
+    margin: 10px 0;
+    padding: 5px 10px 10px;
     text-align: center;
     color: #ccc;
-    z-index: 100;
     border-bottom: 2px solid #ccc;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     transition-property: left, border, background;
-    transition-duration: .5s, .5s;
+    transition-duration: .5s;
 }
 .navLink:hover {
     cursor: pointer;
@@ -61,30 +61,30 @@ body {
 .navLink.S:hover {background-image: linear-gradient(to right, rgba(28, 213, 188, 0.8), rgba(194, 147, 214, 0.4));}
 .navLink:active {background: #999}
 
-.centralContent {
+#centralContent {
     position: absolute;
-    right: 1vw;
+    right: 10px;
     top: 100px;
-    padding: 0 1%;
-    height: 40vh;
+    padding: 0 10px 20px;
+    height: auto;
     width: 65%;
 }
 header {
     position: relative;
     bottom: 10px;
-    right: 1vw;
-    width: 103%;
-    padding: 5px 0%;
+    right: 10px;
+    width: 100%;
+    padding: 5px 10px;
     text-align: center;
-    font-size: 2.5vw;
+    font-size: 20px;
     margin: 0 0 10px;
     color: white;
     background: #444;
     border-radius: 10px 10px 0 0;
 }
 #projectArea {
-    margin: 1vw;
-    font-size: 2vw;
+    margin: 10px;
+    font-size: 20px;
     color: #444;
 }
 .createNewProject {
@@ -115,10 +115,10 @@ header {
 }
 .leftPanel {
     position: absolute;
-    left: 2vw;
-    top: 90px;;
-    width: 27vw;
-    height: 70vh;
+    right: 72%;
+    top: 90px;
+    width: 25%;
+    height: auto;
     background-color: #444;
     border-radius: 10px;
 }
@@ -134,15 +134,13 @@ header {
 }
 #profilePic #profpic{
     position: relative;
-    margin: -7.5vw;
-    left: 13.5vw;
-    top: 8vw;
+    display: inline-block;
+    transform: translate(35%, 10%);
     height: 15vw;
     width: 15vw;
     cursor: pointer;
     border-radius: 100%;
     background: transparent;
-    z-index: 10000;
 }
 #drag_and_drop_info {
     position: relative;
@@ -168,17 +166,19 @@ header {
     bottom: 0;
     right: 0;
     border-radius: 5px 0 5px 0;
-    width: 8vw;
+    width: 50%;
     height: 30px;
+    font-size: 16px;
     background-color: #ccc;
     border: 1px solid transparent;
 }#signOut:focus {outline: none;}
  #signOut:hover {
     cursor: pointer;
-    border-color: #fff;
+    border-color: #C293D6;
 }
  #signOut:active {
-     border-color: #444;
+     border-color: #ccc;
+     background-color: #C293D6;
  }
 #footer {
     position: fixed;
@@ -209,22 +209,36 @@ header {
     }
 }
 @media only screen and (max-width: 600px) {
-    .createNewProject {
-        font-size: 12px;
-        padding: 0 20px;
-
+    .navBar {
+        height: 75px;
+        padding-top: 8px;
     }
-    .plus {left: 50%}
+    .navLink {
+        left: 60px;
+        top: 13.5px;
+    }
+    .leftPanel {
+        width: 90%;
+        right: 50%;
+        transform: translateX(50%);
+        padding: 10px;
+    }
+    #centralContent {
+        width: 90%;
+        right: 50%;
+        transform: translateX(50%);
+    }
+    #signOut {
+        width: 20%;
+    }
+    .plus{left: 50%;}
 }
 @media only screen and (max-width: 400px) {
     .createNewProject {
-        font-size: 8px;
+        font-size: 12px;
         padding: 0 13px;
     }
-}
-@media only screen and (max-width: 200px) {
-    .createNewProject {
-        font-size: 4px;
-        padding: 0 10px;
+    #projectArea {
+        font-size: 14px;
     }
 }

@@ -20,16 +20,16 @@
     </div>
     <div class="navBar">
         <span id="welcomeUser" class="welcome"></span>
-        <span class="navLink P" onmouseover="show('P')" onmouseout="hide('P')" 
-                                onclick="createNewProject()">
+        <span id="sixbar"></span>
+        <span class="navLink P" onclick="createNewProject()">
             <img class="icons" src="../images/plusSign.png">
             <span id="P"></span>
         </span>
-        <span class="navLink T" onmouseover="show('T')" onmouseout="hide('T')">
+        <span class="navLink T">
             <img class="icons" src="../images/book.png">
             <span id="T"></span>
         </span>
-        <span class="navLink S" onmouseover="show('S')" onmouseout="hide('S')">
+        <span class="navLink S">
             <img class="icons" src="../images/settingsGear.png">
             <span id="S"></span>
         </span>
@@ -46,7 +46,7 @@
         <div id="info"></div>
         <button id="signOut" onclick="signOut()">Sign out</button>
     </div>
-    <div id="centralContent" class="centralContent">
+    <div id="centralContent">
         <header>Your Projects</header>
         <div id="projectArea"></div>
         <button class="createNewProject" onclick="createNewProject();">
@@ -59,7 +59,7 @@
 
     <script type="text/javascript" src="./dashboardInteractives.js"></script>
     <script type="text/javascript" src="../images/animations.js"></script>
-    <script type="text/javascript" src="../accounts/project.js"></script>
+    <script type="text/javascript" src="./project.js"></script>
     <script>
         var objects = new Map();
         objects.set("gradient", "centralContent");
@@ -67,9 +67,20 @@
         colorFade(objects);
         
         var print = setInterval(function() {
-            var topLogo = document.getElementById("logoo")
+            var topLogo = document.getElementById("logoo");
+            var centralContent = document.getElementById("centralContent");
+            var leftPanel = document.getElementById("leftPanel");
             if($(window).width() < 800) topLogo.src = "../images/icon.ico";
             else topLogo.src = "../images/PBlogo.png";
+            if($(window).width() <= 600) {
+                var t = centralContent.clientHeight + 120;
+                leftPanel.style.top = t + "px";
+                document.getElementById("sixbar").innerHTML = "<br>";
+            }
+            else {
+                leftPanel.style.top = "90px";
+                document.getElementById("sixbar").innerHTML = "";
+            }
         }, 10);
 
         function createNewProject() {
