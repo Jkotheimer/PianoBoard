@@ -10,6 +10,7 @@ var config = {
 firebase.initializeApp(config);
 
 var auth = firebase.auth();
+var db = firebase.database();
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
 /**
 * Handles the sign in button press.
@@ -214,7 +215,7 @@ window.onload = function() {
 
 function writeData(data, location) {
     var uid = auth.currentUser.uid;
-    firebase.database().ref('users/' + uid + location).set({
+    db.ref('users/' + uid + location).set({
         data
     });
 }
@@ -306,6 +307,25 @@ function showInfo() {
              * - Favorite bands/artists
              * - Experience
              */
+            var g = "/users/" + user.uid + "/preferences/Favorite Genres/data";
+            var a = "/users/" + user.uid + "/preferences/Favorite Artists/data";
+            var E = "/users/" + user.uid + "/preferences/Experience/data";
+            db.ref(g).once('value').then(function(snapshot) {
+                g = snapshot.val();
+                createScrolly(g, "Your fav genres are", sideBar, false, true);
+            });
+            db.ref(a).once('value').then(function(snapshot) {
+                a = snapshot.val();
+                createScrolly(a, "Your fav artists are", sideBar, false, true);
+            });
+            db.ref(E).once('value').then(function(snapshot) {
+                E = snapshot.val();
+                var title;
+                if(E.includes("Brand")) title = "You are ";
+                else title = "You have been playing for ";
+                createScrolly(E, title, sideBar, true, false);
+            });
+            
             projects.innerHTML = "You haven't started any projects yet";
             //TODO display all projects as little link items
 
@@ -362,7 +382,7 @@ function uploadProfilePic(event) {
 
 function updateProject(projectName) {
     var userId = auth.currentUser.uid;
-    firebase.database().ref('users/' + userId + "/projects/" + projectName).set({
+    db.ref('users/' + userId + "/projects/" + projectName).set({
     // TODO write the project data to the database
     }, function(error) {
         if (error) {
@@ -373,4 +393,39 @@ function updateProject(projectName) {
             console.log("success");
         }
     });
+}
+
+function createScrolly(data, title, location, last, arr) {
+    var element = document.createElement("div");
+    var tit = document.createElement("p");
+    element.appendChild(tit);
+    var cont = document.createElement("ul");
+    cont.classList.add("infoTitle");
+    if(arr) {
+        data.sort();
+        tit.appendChild(document.createTextNode(title));
+        var even = true;
+        for(let i = 0; i < data.length; i++) {
+            var nextEl = document.createElement("div");
+            var text = document.createTextNode(data[i]);
+            nextEl.appendChild(text);
+            if(even) {
+                nextEl.style.backgroundColor = "#C293D6";
+                even = false;
+            } else {
+                nextEl.style.backgroundColor = "#1CD5BC";
+                even = true;
+            }
+            nextEl.classList.add("scrollableElement");
+            cont.appendChild(nextEl);
+            
+        }
+        cont.classList.add("scrollable");
+    }
+    else {
+        tit.appendChild(document.createTextNode(title + data));
+    }
+    if(last) cont.classList.add("last");
+    element.appendChild(cont);
+    location.appendChild(element);
 }

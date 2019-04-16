@@ -1,7 +1,7 @@
 body {
     font-family: Tahoma, Geneva, sans-serif;
     background-image: url('../images/loginBackground.jpg');
-    overflow: hidden;
+    overflow-x: hidden;
     font-family: sans-serif;
     background-size: 500px;
     background-repeat: repeat;
@@ -118,7 +118,9 @@ header {
     right: 72%;
     top: 90px;
     width: 25%;
+    margin-bottom: 50px;
     height: auto;
+    text-align: center;
     background-color: #444;
     border-radius: 10px;
 }
@@ -135,7 +137,7 @@ header {
 #profilePic #profpic{
     position: relative;
     display: inline-block;
-    transform: translate(35%, 10%);
+    transform: translateY(10%);
     height: 15vw;
     width: 15vw;
     cursor: pointer;
@@ -144,22 +146,54 @@ header {
 }
 #drag_and_drop_info {
     position: relative;
-    left: 18vw;
-    bottom: 3vw;
-    padding: 1vw;
-    width: 18vw;
-    font-size: 1.1vw;
+    text-align: center;
+    right: -80%;
+    transform: translateY(-300%);
+    padding: 5px;
+    width: 250px;
+    font-size: 14px;
     background-color: orange;
     border-radius: 20px 20px 20px 0;
     visibility: hidden;
-    z-index: 1000;
+    z-index: 10000;
 }
 #info {
     position: relative;
+    left: 50%;
+    transform: translate(-50%, -10%);
+    height: auto;
+    width: 85%;
     color: #ccc;
-    margin: 0 2vw;
-    top: 10vw;
-    font-size: 1.5vw;
+    font-size: 20px;
+}.infoTitle {
+    font-size: 16px !important;
+}.scrollable{
+    overflow-y: scroll;
+    overflow-x: hidden;
+    color: #444;
+    font-size: 15px;
+    margin-bottom: 5px;
+    margin-top: -15px;
+    padding-left: 0;
+    height: 75px;
+    border: none;
+    border-radius: 5px;
+}.scrollable::-webkit-scrollbar {
+    width: 8px;
+}
+.scrollable::-webkit-scrollbar-track {
+    background: #ccc; 
+}
+.scrollable::-webkit-scrollbar-thumb {
+    background: #444; 
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+.scrollable::-webkit-scrollbar-thumb:hover {
+    background: #111;
+}
+.last {
+    margin-bottom: 50px;
 }
 #signOut {
     position: absolute;
@@ -180,19 +214,14 @@ header {
      border-color: #ccc;
      background-color: #C293D6;
  }
-#footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 30px;
-    background-color: #CCC;
-}
 /* make the view more compact as the screen size gets smaller */
 @media only screen and (max-width: 1000px) {
     .createNewProject {
         font-size: 20px;
         height: 40px;
+    }
+    #info {
+        font-size: 16px;
     }
 }
 @media only screen and (max-width: 800px) {
@@ -207,6 +236,10 @@ header {
     .navLink {
         left: 90px;
     }
+    #info {
+        font-size: 14px;
+    }
+    .scrollable {margin-top:-5px;}
 }
 @media only screen and (max-width: 600px) {
     .navBar {
@@ -220,8 +253,31 @@ header {
     .leftPanel {
         width: 90%;
         right: 50%;
+        text-align: left;
         transform: translateX(50%);
         padding: 10px;
+    }
+    #drag_and_drop_info {
+        right: -60%;
+        transform: translateY(-400%);
+        width: 150px;
+        font-size: 10px;
+    }
+    #profilePic #profpic {
+        width: 150px;
+        height: 150px;
+        left: 50%;
+        transform: translate(-50%, 10%);
+    }
+    #info {
+        font-size: 20px;
+    }
+    .scrollable {
+        margin-top: -15px;
+        height: 100px;
+    }
+    .scrollableElement {
+        padding-left: 15px;
     }
     #centralContent {
         width: 90%;
@@ -229,7 +285,7 @@ header {
         transform: translateX(50%);
     }
     #signOut {
-        width: 20%;
+        width: 120px;
     }
     .plus{left: 50%;}
 }
@@ -240,5 +296,9 @@ header {
     }
     #projectArea {
         font-size: 14px;
+    }
+    #signOut {
+        font-size: 12px;
+        width: 80px;
     }
 }

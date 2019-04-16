@@ -3,7 +3,7 @@
  * each track has settings and recordings
  * each recording has notes at different time positions
  */
-class project {
+class Project {
     constructor() {
         this.tracks = new Map();
         // settings will be a map of studioSettingNames : Values
@@ -31,7 +31,7 @@ class project {
     }
 }
 
-class track {
+class Track {
     constructor(project, number) {
         // recordings is a set of recording objects
         this.recordings = new Map();
@@ -62,7 +62,7 @@ class track {
     }
 }
 
-class recording {
+class Recording {
     constructor(project) {
         // A note map (note : time)
         this.notes = new Map();

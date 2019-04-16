@@ -40,9 +40,8 @@
                              ondragleave="hideCam()" ondrop="uploadProfilePic(event)">
             <img id="cam" src="../images/camera.png">
             <img id="profpic">
+            <div id="drag_and_drop_info">Drag and drop an image file here <br>to set your profile picture</div>
         </div>
-        <div id="drag_and_drop_info">Drag and drop an image file here <br>to set your profile picture</div>
-        <br>
         <div id="info"></div>
         <button id="signOut" onclick="signOut()">Sign out</button>
     </div>
@@ -54,8 +53,6 @@
         </button>
     </div>
 
-    <div id="footer"></div>
-
 
     <script type="text/javascript" src="./dashboardInteractives.js"></script>
     <script type="text/javascript" src="../images/animations.js"></script>
@@ -66,11 +63,11 @@
         objects.set("border", "logoBox");
         colorFade(objects);
         
-        var print = setInterval(function() {
+        var resizeable = setInterval(function() {
             var topLogo = document.getElementById("logoo");
             var centralContent = document.getElementById("centralContent");
             var leftPanel = document.getElementById("leftPanel");
-            if($(window).width() < 800) topLogo.src = "../images/icon.ico";
+            if($(window).width() <= 800) topLogo.src = "../images/icon.ico";
             else topLogo.src = "../images/PBlogo.png";
             if($(window).width() <= 600) {
                 var t = centralContent.clientHeight + 120;
