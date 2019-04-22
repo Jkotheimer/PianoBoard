@@ -410,10 +410,12 @@ function createScrolly(data, title, location, last, arr) {
             var text = document.createTextNode(data[i]);
             nextEl.appendChild(text);
             if(even) {
-                nextEl.style.backgroundColor = "#C293D6";
+                nextEl.style.backgroundColor = "#ccc";
+                nextEl.style.color = "#444";
                 even = false;
             } else {
-                nextEl.style.backgroundColor = "#1CD5BC";
+                nextEl.style.backgroundColor = "#aaa";
+                nextEl.style.color = "#444";
                 even = true;
             }
             nextEl.classList.add("scrollableElement");

@@ -45,7 +45,7 @@ legend {
     width: 200px;
     padding: 5px;
     font-size: 20px;
-    background-color: orange;
+    background-color:#81dafc;
     border-radius: 10px 10px 0 10px;
     right: 775px;
     bottom: 120px;
@@ -62,7 +62,8 @@ legend {
     width: 50%;
     height: 35px;
     font-size: 20px;
-    background-color: orange;
+    background-color: #81dafc;
+    color: #444;
     border: 1px solid transparent;
     text-align: center;
 }#submit:hover{border: 1px solid white;}

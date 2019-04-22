@@ -47,7 +47,7 @@ body {
     width: 91%;
     height: 40px;
     font-size: 20px;
-    background-color: orange;
+    background-color: #81dafc;
     border: 1px solid transparent;
     text-align: center;
     -webkit-transition: border .5s; /* Safari */
@@ -65,7 +65,7 @@ body {
     font-size: 18px;
     border-radius: 10px 10px 10px 0;
     color: #444;
-    background-color: orange;
+    background-color: red;
     display: none;
     transition: transform .2s;
 }
@@ -94,7 +94,7 @@ body {
     font-size: 25px;
     color: #ccc;
     text-align: center;
-    border: 3px solid orange;
+    border: 3px solid #81dafc;
     border-radius: 10px;
     padding: 10px 15px;
     transition: transform .5s;
@@ -115,11 +115,11 @@ body {
     border: 1px solid transparent;
     color: #444;
 }.done:hover {
-    background-color: orange;
+    background-color: #81dafc;
     border: 1px solid #444;
     cursor: pointer;
 }.done:active {
-    background-color: rgba(255, 166, 0, 0.5);
+    background-color: lightblue;
 }
 .arrow {
     display: inline-block;
@@ -138,7 +138,7 @@ body {
     padding: 2px;
     font-size: 16px;
     border-radius: 5px 5px 0 0;
-    background-color: orange;
+    background-color: red;
     visibility: hidden;
 }
 .incomplete.exp {

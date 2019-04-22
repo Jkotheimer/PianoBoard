@@ -42,6 +42,7 @@
             <img id="profpic">
             <div id="drag_and_drop_info">Drag and drop an image file here <br>to set your profile picture</div>
         </div>
+        <br>
         <div id="info"></div>
         <button id="signOut" onclick="signOut()">Sign out</button>
     </div>
@@ -81,7 +82,36 @@
         }, 10);
 
         function createNewProject() {
-            sessionStorage.setItem("project", JSON.stringify(new Project()));
+            var jsonProject = {
+                name : "Project 1",
+                tracks : [
+                    {
+                        name : "Track 1",
+                        recordings : {},
+                        settings : {
+                            volume : 50,
+                            pan : 0,
+                            mute : false,
+                            solo : false
+                        }
+                    }],
+                settings : {
+                    tempo : 120,
+                    timesig : 4/4,
+                    instrument : "piano",
+                    playClick : false,
+                    mainVolume : 50
+                },
+                rulerPosition : 0
+            };
+            var proj = JSON.stringify(new project(jsonProject), function( key, value) { 
+                if(key == 'project') { 
+                    return value.id;
+                } else {
+                    return value;
+                };
+            });
+            sessionStorage.setItem("project", proj);
             window.location.href='../studio';
         }
     </script>

@@ -4,6 +4,7 @@ var dcolor = null;
 var ucolor = null;
 var DKEYS = new Set();
 var reso = false;
+var isRec = false;
 var letterz = new Set(["tab","1","q","2","w","e","4","r","5","t","6","y","u","8","i","9","o","p","-","[",
                         "=","]","backspace","\\","z","s","x","d","c","v","g","b","h","n","j","m",","]);
 var mouseIsDown = false;
@@ -644,7 +645,6 @@ function changeTimeSig() {
     Scrub(EV);
 }
 var PlayTime;
-var isRec = false;
 var recnums = new Map();
 var trkSelected = new Map();
 function Record(ident) {
