@@ -1,5 +1,5 @@
 var x = null;
-var note = null;
+var notee = null;
 var dcolor = null;
 var ucolor = null;
 var DKEYS = new Set();
@@ -59,10 +59,10 @@ function action(event) {
             document.getElementById(K).style.background = "#CCCCCC";
         }
         document.getElementById(K).style.boxShadow = "0 .2vw .2vw black";
-        note = document.getElementById(K + ".mp3");
-        note.volume = 1.0;
-        note.load();
-        note.play();
+        notee = document.getElementById(K + ".mp3");
+        notee.volume = 1.0;
+        notee.load();
+        notee.play();
     }
     //If the mouse is unclicked, reset the keys back to their original colors and fade out the sounds
     else if(event.type == "mouseup") {
@@ -80,9 +80,9 @@ function action(event) {
             document.getElementById(K).style.background = "#FFFFFF";
         }
         document.getElementById(K).style.boxShadow = "0vw .5vw .5vw black";
-        note = document.getElementById(K + ".mp3");
+        notee = document.getElementById(K + ".mp3");
         if(event.key != "hellYeah"/* && reso == false*/){ //If we are sweeping the notes, a little sustain sounds nicer
-            volFader(note);
+            volFader(notee);
         }
     }
     else if(event.type.includes("key")){
@@ -129,7 +129,7 @@ function action(event) {
         }
         //If it was a keyup event, change the color back, and fade the soundfile out
         if(event.type == "keyup") {
-            volFader(note);
+            volFader(notee);
             x.style.background = ucolor;
             DKEYS.delete(x.id);
             x.style.boxShadow = "0vw .5vw .5vw black";
@@ -143,9 +143,9 @@ function action(event) {
             x.style.background = dcolor;
             x.style.boxShadow = "0vw .2vw .2vw black";
             DKEYS.add(x.id);
-            note.volume = 1.0;
-            note.load();
-            note.play();
+            notee.volume = 1.0;
+            notee.load();
+            notee.play();
         }                     
     }
     return false;
@@ -154,13 +154,13 @@ function action(event) {
 //Set all of the important variables to the correct values based on whether the note is sharp or not
 function getNote(N) {
     x = document.getElementById(N);
-    note = document.getElementById(N + ".mp3");
+    notee = document.getElementById(N + ".mp3");
     dcolor = "#CCCCCC";
     ucolor = "#FFFFFF";
 }
 function getSharpNote(N) {
     x = document.getElementById(N);
-    note = document.getElementById(N + ".mp3");
+    notee = document.getElementById(N + ".mp3");
     dcolor = "#333333";
     ucolor = "#000000";
 }

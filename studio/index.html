@@ -6,11 +6,16 @@
         <title>PianoBoard Studio</title>
         <link rel="shortcut icon" href="../images/Icon.ico" type="image/x-icon" />
         <link rel="stylesheet" href="PianoStyle.css">
+        <script type="text/javascript" src="../dashboard/project.js"></script>
+        <script type="text/javascript">
+            var current_project = JSON.parse(sessionStorage.getItem("project"));
+            current_project = new project(current_project);
+        </script>
         <script type="text/javascript" src="./KeyAction.js"></script>
         <script type="text/javascript" src="./delegations.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     </head>
-    <body onload="includeHTML('1');includeHTML('2');">
+    <body onload="includeHTML('1');includeHTML('2');writeHTML()">
         <div class="Sticky">
             <div w3-include-html2="./buttons.html"></div>
 
@@ -123,6 +128,15 @@
         
         <div w3-include-html1="./audio.html"></div>
         <script>
+            /**
+             * writeHTML()
+             * 
+             * writes all of the html audio elements for the user's selected instrument
+             * writes all of the buttons for the user's current selected octave on the piano
+             */
+            function writeHTML() {
+                console.log(current_project);
+            }
             function includeHTML(num) {
                 var z, i, elmnt, file, xhttp;
                 /* Loop through a collection of all HTML elements: */

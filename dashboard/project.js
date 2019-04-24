@@ -32,6 +32,7 @@ class project {
         this.settings.set("instrument", jsonProject.settings.instrument);
         this.settings.set("playClick", jsonProject.settings.playClick);
         this.settings.set("mainVolume", jsonProject.settings.mainVolume);
+        this.settings.set("octave", jsonProject.settings.octave);
 
         this.rulerPosition = jsonProject.rulerPosition;
         // TODO : push the object to the user's database slot
