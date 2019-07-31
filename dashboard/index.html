@@ -4,14 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard</title>
     <link rel="shortcut icon" href="../images/Icon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="dashboard.css">
-    <link rel="stylesheet" href="../images/generalStyles.css">
-    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-storage.js"></script>
-    <script type="text/javascript" src="../firebase/app.js"></script>
+    <link rel="stylesheet" href="../CSS/dashboard.css">
+    <link rel="stylesheet" href="../CSS/generalStyles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body onload="showInfo();">
@@ -21,6 +15,7 @@
     <div class="navBar">
         <span id="welcomeUser" class="welcome"></span>
         <span id="sixbar"></span>
+        <!-- TODO: Need to reimplement the create project function -->
         <span class="navLink P" onclick="createNewProject()">
             <img class="icons" src="../images/plusSign.png">
             <span id="P"></span>
@@ -44,6 +39,7 @@
         </div>
         <br>
         <div id="info"></div>
+        <!-- TODO: Need to reimplement the sign out function -->
         <button id="signOut" onclick="signOut()">Sign out</button>
     </div>
     <div id="centralContent">
@@ -55,8 +51,8 @@
     </div>
 
 
-    <script type="text/javascript" src="./dashboardInteractives.js"></script>
-    <script type="text/javascript" src="../images/animations.js"></script>
+    <script type="text/javascript" src="../JS/dashboardInteractives.js"></script>
+    <script type="text/javascript" src="../JS/animations.js"></script>
     <script type="text/javascript" src="./project.js"></script>
     <script>
         var objects = new Map();

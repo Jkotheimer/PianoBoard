@@ -5,14 +5,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>PianoBoard Studio</title>
         <link rel="shortcut icon" href="../images/Icon.ico" type="image/x-icon" />
-        <link rel="stylesheet" href="PianoStyle.css">
-        <script type="text/javascript" src="../dashboard/project.js"></script>
+        <link rel="stylesheet" href="../CSS/studio.css">
+        <script type="text/javascript" src="../JS/project.js"></script>
         <script type="text/javascript">
             var current_project = JSON.parse(sessionStorage.getItem("project"));
             current_project = new project(current_project);
         </script>
-        <script type="text/javascript" src="./KeyAction.js"></script>
-        <script type="text/javascript" src="./delegations.js"></script>
+        <script type="text/javascript" src="../JS/KeyAction.js"></script>
+        <script type="text/javascript" src="../JS/delegations.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     </head>
     <body onload="includeHTML('1');includeHTML('2');writeHTML()">
@@ -116,7 +116,7 @@
             7)  Alert when the page is being closed, saying "your progress will not be saved"
                 - make a reset button at the bottom of the page if you want to clear all tracks and everything.
             -->
-            <script type="text/javascript" src="../images/animations.js"></script>
+            <script type="text/javascript" src="../JS/animations.js"></script>
             <script>
                 var objects = new Map();
                 objects.set("gradient", "board");

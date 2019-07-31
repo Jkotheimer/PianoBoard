@@ -4,16 +4,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Create New Account</title>
     <link rel="shortcut icon" href="../images/Icon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="accCreator.css">
-    <link rel="stylesheet" href="../images/generalStyles.css">
-    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-firestore.js"></script>
-    <script type="text/javascript" src="../firebase/app.js"></script>
+    <link rel="stylesheet" href="../CSS/createAccount.css">
+    <link rel="stylesheet" href="../CSS/generalStyles.css">
+    <script type="text/javascript" src="../JS/creationTool.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script type="text/javascript" src="./creationTool.js"></script>
 </head>
 <body onload="experiencePage();">
     <div id="logoBox" class="logoBox" onclick="window.location.href = '../';">
@@ -48,6 +42,7 @@
             <div id="confirm_password_notification" class="notification">passwords do not match</div>
             <br>
 
+            <!-- TODO: Need to reimplement the sign up function -->
             <button type="submit" id="submit" onclick="handleSignUp()">Create Account</button>
     </div>
     <div id="loader">
@@ -55,6 +50,7 @@
         <div id="genreSelector">
             <p class="c-title">
                 What are your favorite music genres?
+                <!-- TODO: Need to reimplement the submit genres thing -->
                 <button id="genre_done" class="done" onclick="submitGenres()">
                     done <img src="../images/arrow.png" class="arrow">
                 </button>
@@ -71,6 +67,7 @@
         <div id="bandSelector">
             <p class="c-title">
                 What are your favorite bands/artists?
+                <!-- TODO: Need to reimplement the band submit function -->
                 <button id="band_done" class="done" onclick="bandDone()">
                     done <img src="../images/arrow.png" class="arrow">
                 </button>
@@ -91,6 +88,7 @@
         <div id="experience">
             <p class="c-title">
                 Tell us about your experience
+                <!-- TODO: Need to reimplement the submit experience function -->
                 <button id="exp_done" class="done" onclick="Years_Done()">
                     done <img src="../images/arrow.png" class="arrow">
                 </button>
@@ -115,7 +113,7 @@
         </div>
     </div>
     
-    <script type="text/javascript" src="../images/animations.js"></script>
+    <script type="text/javascript" src="../JS/animations.js"></script>
     <script>
         // fun tip : &#x260A; creates a lil headphone emoji
         window.addEventListener("keyup", function() {
