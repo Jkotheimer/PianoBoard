@@ -1,5 +1,5 @@
 body {
-    background-image: url('./images/loginBackground.jpg');
+    background-image: url('../images/loginBackground.jpg');
     background-size: 500px;
     background-repeat: repeat;
     font-family: sans-serif;
