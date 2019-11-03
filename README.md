@@ -10,4 +10,8 @@ down box that allows the user to choose the instrument they would like to record
 will be a button that compiles all of the tracks to a single Mp3 file and downloads it
 to the user's computer.
 
+color scheme:
+- purple: #CD9EC5
+- yellow: #FFFB9A
+
 Copywrite© Jack Kotheimer 2019

@@ -1,0 +1,115 @@
+body {
+    background-image: url('../images/loginBackground.jpg');
+    background-size: 500px;
+    background-repeat: repeat;
+    font-family: sans-serif;
+    overflow: hidden;
+}
+
+#header {
+    position: absolute;
+    background-color: #444;
+    width: 600px;
+    height: auto;
+    left: 50%;
+    top: 30%;
+    transform: translate(-50%, -50%);
+    font-size: 25px;
+    padding: 20px;
+    border-radius: 5px;
+    border: 3px solid;
+    transition: transform .5s;
+}
+legend {
+    color: #ccc;
+    font-size: 40px;
+}
+#email {
+    position: relative;
+    height: 10px;
+    width: 90%;
+    margin: 8px 0;
+    color: #ccc;
+    font-size: 25px;
+    padding: 10px 0 15px;
+    background-color: transparent;
+    border-color: transparent;
+    border-bottom-color: #555;
+} #email:focus {outline: none; border-bottom-color: #999;}
+#email_notification {
+    position: absolute;
+    width: auto;
+    height: auto;
+    padding: 10px;
+    font-size: 20px;
+    background-color: orange;
+    border-radius: 10px 10px 0 10px;
+    right: 630px;
+    bottom: 100px;
+    color: #444;
+    transition: transform .3s;
+    display: none;
+}
+#submit {
+    border-radius: 5px;
+    margin-top: 10px;
+    width: 90%;
+    padding: 5px 0;
+    font-size: 20px;
+    background-color: orange;
+    border: 1px solid transparent;
+}#submit:hover{border: 1px solid white;}
+ #submit:active{border: 1px solid black;}
+ #submit:focus{outline: none;}
+
+#complete {
+    position: absolute;
+    width: 500px;
+    padding: 10px;
+    font-size: 30px;
+    left: -400px;
+    top: 50%;
+    margin: -100px -250px;
+    color: #ccc;
+    background-color: #444;
+    border: 2px solid orange;
+    border-radius: 10px;
+    transition: transform .5s;
+}
+
+@media only screen and (max-width: 1300px) {
+    #header {
+        top: 40%;
+    }
+    #email_notification{
+        position: relative;
+        border-radius: 5px;
+        background-color: red;
+        color: black;
+        font-weight: bold;
+        font-size: 14px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        height: auto !important;
+        width: 90% !important;
+    }
+}
+@media only screen and (max-width: 650px) {
+    #header {
+        width: 95%;
+        font-size: 15px;
+    }
+    legend {
+        font-size: 30px;
+    }
+    #email {
+        font-size: 15px;
+    }
+}
+@media only screen and (max-height: 500px) {
+    #header {
+        top: 200px;
+    }
+}
