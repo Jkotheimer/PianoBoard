@@ -1,9 +1,14 @@
 :root {
 	--panel-width: 700px;
 	--panel-height: 350px;
-	--purple: #CD9EC5;
-	--yellow: #FFFB9A;
-	--cream: #FFFDE0;
+	--purple: #D1BAED;
+	/*#CD9EC5*/
+	--yellow: #FFFAB0;
+	--cream: #FFFFEF;
+	/*#FFFDE0*/
+}
+body {
+	background-color: rgba(209,186,237,.05);
 }
 #panel {
 	position: relative;
