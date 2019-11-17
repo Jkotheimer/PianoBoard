@@ -2,8 +2,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Login</title>
-	<link rel="shortcut icon" href="./images/Icon.ico" type="image/x-icon" />
+	<title>PianoBoard Login</title>
+	<link rel="icon" href="/images/favicon-32.png" type="image/png"/>
 	<link href="https://fonts.googleapis.com/css?family=Kalam&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Exo&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="login_page.css">
@@ -11,7 +11,7 @@
 <body>
 	<div id="panel">
 		<div class="logo">
-			<span class="logo_word" style="color:var(--purple)">Piano</span><span class="logo_word" style="color:var(--yellow)">Board</span>
+			<img src="/UI/images/logo.png" srcset="/UI/images/logo.svg"/>
 		</div>
 
 		<div class="link_area">
@@ -37,9 +37,7 @@
 			<input hidden type="submit" id="submit" value="Sign in"/>
 		</form>
 	</div>
-
-	<script type="text/javascript" src="./images/animations.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	
 	<script>
 		document.addEventListener("keydown", function() {
 			if(event.keyCode == 13) {
@@ -51,9 +49,5 @@
 				document.activeElement = document.getElementById("submit");
 			}
 		});
-		var objects = new Map();
-		objects.set("border", "header");
-		objects.set("color", "header");
-		colorFade(objects);
 	</script>
 </body>
