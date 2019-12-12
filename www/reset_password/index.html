@@ -1,49 +1,35 @@
 <!DOCTYPE html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Password Reset</title>
-    <link rel="shortcut icon" href="../images/Icon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="ResetStyle.css">
-    <link rel="stylesheet" href="../images/generalStyles.css">
-    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-firestore.js"></script>
-    <script type="text/javascript" src="../accounts/accounts.js"></script>
-    <script type="text/javascript" src="../firebase/app.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Reset Password</title>
+	<link rel="shortcut icon" href="/UI/images/favicon-32.png" type="image/png" />
+	<link href="https://fonts.googleapis.com/css?family=Exo&display=swap" rel="stylesheet"/>
+	<link rel="stylesheet" href="/UI/css/logo.css"/>
+	<link rel="stylesheet" href="/UI/css/variables.css"/>
+	<link rel="stylesheet" href="reset_password.css">
 </head>
 <body>
-    <div id="logoBox" class="logoBox" onclick="window.location.href = '../';">
-        <img src="../images/PBlogo.png" class="logo">
-    </div>
-    <div id="header">
-        <legend>Password Reset</legend>
-        <br>
-        <label for="email">Please enter your E-mail<br>
-                        You will recieve a link to reset your password</label> 
-        <input type="text" id="email" name="email" placeholder="your.email@something.com" required autocomplete="off">
-        <br>
-        <div id="email_notification"></div>
-        <input type="submit" id="submit" value="Send Reset Link" onclick="sendPasswordReset()">
-
-    </div>
-
-    <script type="text/javascript" src="../images/animations.js"></script>
-    <script>
-        document.addEventListener("keydown", function() {
-            if(event.keyCode == 13) {
-                event.preventDefault();
-                document.getElementById("submit").click();
-            }
-        });
-        var objects = new Map();
-        objects.set("border", "header");
-        objects.set("color", "header");
-        objects.set("border", "logoBox");
-        colorFade(objects);
-    </script>
-    <div id="complete">Password reset link has been sent!<br><div id="timer"></div></div>
+	<a class="logo_box" href="/">
+		<img src="/UI/images/logo.png" class="logo"/>
+	</a>
+	<div class="panel">
+		<h>Reset Password</h>
+		<form action="/reset_password" method="GET">
+			<div class="form_label">Enter your E-mail address</div>
+			<input type="text" name="email" class="form_input" placeholder="your.email@something.com" required/>
+			<div id="email_notification"></div>
+			<input type="submit" class="submit" value="Send Reset Link"/>
+		</form>
+	</div>
+	<div id="complete">Password reset link has been sent!<br><div id="timer"></div></div>
+		
+	<script type="text/javascript">
+		for(let e of document.getElementsByTagName("input")) {
+			e.addEventListener("keyup", function() {
+				if(e.value.length > 1) e.classList.add("complete_form_input");
+				else e.classList.remove("complete_form_input");
+			});
+		}
+	</script>
 </body>

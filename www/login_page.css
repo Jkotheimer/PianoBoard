@@ -1,14 +1,11 @@
 :root {
 	--panel-width: 700px;
 	--panel-height: 350px;
-	--purple: #D1BAED;
-	--yellow: #fffa99;
-	--cream: #FFFFEF;
 }
 body {
-	background-color: rgba(209,186,237,.05);
+	background-color: var(--bgp);
 }
-#panel {
+.panel {
 	position: relative;
 	background-color: #393939;
 	width: var(--panel-width);
@@ -120,3 +117,11 @@ body {
 	display: none;
 }
 #email_notification {bottom: 190px;}
+
+.info {
+	position: relative;
+	width: var(--panel-width);
+	margin: 10px auto 0;
+	text-align: right;
+	font-size: 12px;
+}
