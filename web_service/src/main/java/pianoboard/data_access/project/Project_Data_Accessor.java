@@ -1,49 +1,76 @@
 package pianoboard.data_access.project;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Arrays;
-
-import io.jsondb.annotation.Document;
-import io.jsondb.annotation.Id;
-import io.jsondb.annotation.Secret;
+import java.util.Map;
+import java.util.HashMap;
+import java.io.File;
 
 /**
  * Project_Data_Accessor class
- * 
+ *
  * This class will be used to create, read, update, and delete
- * project resourcesfrom the database using hibernate
+ * project resourcesfrom the database using jsondb
  */
-@Document(collection = "")
+//@Document(collection = "")
 public class Project_Data_Accessor {
-	
+
 	public Project_Data_Accessor() {}
-	
+
 	/**
 	 * CRUD METHODS
 	 * ________________________________________________________________________
 	 */
-	
-	public List<String> getAll() {
-		return Arrays.asList("asdf", "qwer", "zxcv");
+
+	public List<String> getAll (String userID) {
+		String path = "";
+		for(char c : userID.toCharArray()) {
+			path += c + "/"
+		}
+		File f = new File(path);
+		System.out.println(f.getCanonicalPath());
+		return new ArrayList<String>();
+		// Go to the directory path that spells out the userID and parse all the project json files into strings and return the list
 	}
-	
-	public String get(String ID) {
+
+	public String get(String UserID, String ID) {
 		// TODO: grab the project with the ID from the database
+		String path = "";
+		for(char c : userID.toCharArray()) {
+			path += c + "/"
+		}
+		System.out.println(path);
 		return ID;
 	}
-	
-	public int post(String userID, String ID, String projectJSON) {
+
+	public int create(String userID, String ID, String projectJSON) {
 		// TODO: push the given 3 fields to the database
+		String path = "";
+		for(char c : userID.toCharArray()) {
+			path += c + "/"
+		}
+		System.out.println(path);
 		return 201;
 	}
-	
-	public int put(String userID, String ID, String projectJSON) {
+
+	public String update(String userID, String ID, String projectJSON) {
 		// TODO: push the given 3 fields to the database
-		return 201;
+		String path = "";
+		for(char c : userID.toCharArray()) {
+			path += c + "/"
+		}
+		System.out.println(path);
+		return path;
 	}
-	
-	public int delete(String ID) {
+
+	public int delete(String userID, String ID) {
 		// TODO: delete the given id from the database
+		String path = "";
+		for(char c : userID.toCharArray()) {
+			path += c + "/"
+		}
+		System.out.println(path);
 		return 200;
 	}
 }
