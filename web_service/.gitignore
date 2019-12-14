@@ -2,3 +2,4 @@
 deploy
 catalina_log
 catalina_out
+src/main/WebContent/WEB-INF/lib/*
