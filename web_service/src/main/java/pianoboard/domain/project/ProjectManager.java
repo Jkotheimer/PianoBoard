@@ -3,12 +3,12 @@ package pianoboard.domain.project;
 import pianoboard.data_access.project.Project_Data_Accessor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.io.IOException;
 
 /**
  * ProjectManager class
@@ -30,30 +30,32 @@ public class ProjectManager {
 	 */
 
 	// Retrieve all projects from the database
-	public String getAll() {
-		List<String> allProjects = database.getAll();
-		String value = "{";
-		for(int i = 0; i < (allProjects.size() - 1); i++) value += allProjects.get(i) + ",";
-		value += allProjects.get(allProjects.size() - 1) + "}";
-		return value;
+	public List<Project> getAll(String userID) throws IOException, JsonProcessingException {
+		List<Project> projectList = new ArrayList<Project>();
+		List<String> all = database.getAll(userID);
+		for(String p : all) projectList.add(mapper.readValue(p, Project.class));
+
+		return projectList;
 	}
 
-	public String get(String ID) {
-		return mapper.writeValueAsString(database.get(ID)));//mapper.readValue(database.get(ID), Project.class);
+	public Project get(String userID, String projectName) throws IOException, JsonProcessingException {
+		mapper.readValue(database.get(userID, projectName), Project.class);
+		return new Project();
 	}
 
-	public int post(String userID, String name) throws JsonProcessingException {
-		// TODO: generate a unique ID
+	public Project create(String userID, String projectName) throws IOException, JsonProcessingException {
 		String ID = UUID.randomUUID().toString();
-		return database.post(userID, ID, mapper.writeValueAsString(new Project(ID, userID, name)));
+		Project p = new Project(ID, userID, projectName);
+		database.create(userID, ID, mapper.writeValueAsString(p));
+
+		return p;
 	}
 
-	public int put(String userID, String projectJson) throws JsonProcessingException {
-		Project proj = mapper.readValue(projectJson, Project.class);
-		return database.put(userID, proj.getID(), projectJson);
+	public void update(String userID, String ID, Project p) throws IOException, JsonProcessingException {
+		database.update(userID, ID, mapper.writeValueAsString(p));
 	}
 
-	public int delete(String ID) {
-		return database.delete(ID);
+	public void delete(String userID, String ID) throws IOException {
+		database.delete(userID, ID);
 	}
 }

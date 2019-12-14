@@ -1,0 +1,4 @@
+/target/
+deploy
+catalina_log
+catalina_out
