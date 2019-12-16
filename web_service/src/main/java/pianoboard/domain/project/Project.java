@@ -12,7 +12,7 @@ public class Project {
 	private String genre;
 	private String timeSig;
 	private int tempo;
-	private List<String> collaboratorIDs;
+	private List<String> collaborators;
 	private List<Track> tracks;
 
 	public Project() {
@@ -68,11 +68,11 @@ public class Project {
 	}
 
 	public List<String> getCollaborators() {
-		return this.collaboratorIDs;
+		return this.collaborators;
 	}
 
 	public boolean hasCollaborator(String ID) {
-		return this.collaboratorIDs.contains(ID);
+		return this.collaborators.contains(ID);
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class Project {
 	}
 
 	public void addCollaborator(String ID) {
-		this.collaboratorIDs.add(ID);
+		this.collaborators.add(ID);
 	}
 
 	public void setDefaults() {

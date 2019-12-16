@@ -22,7 +22,7 @@ public class Project_Data_Accessor {
 	 */
 
 	public List<String> getAll (String userID) throws IOException {
-		String path = "";
+		String path = "database/";
 		for(char c : userID.toCharArray()) {
 			path += c + "/";
 		}
