@@ -108,7 +108,7 @@ public class ProjectService implements Service {
 	@Produces("application/json")
 	public Response addRecording(@PathParam("userID") String userID, @PathParam("name") String name, @PathParam("track") String track, String recording) {
 		try {
-			return filter.addCORS(Response.ok(activity.addRecording(userID, name, Integer.parseInt(track), recording)));
+			return filter.addCORS(Response.ok(activity.addRecording(userID, name, track, recording)));
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 			return filter.addCORS(Response.status(500));
@@ -125,7 +125,7 @@ public class ProjectService implements Service {
 	@Path("/{name}/")
 	public Response delete(@PathParam("userID") String userID, @PathParam("name") String name) {
 		try {
-			activity.delete(userID, ID);
+			activity.delete(userID, name);
 			return filter.addCORS(Response.ok());
 		} catch (IOException e) {
 			e.printStackTrace();

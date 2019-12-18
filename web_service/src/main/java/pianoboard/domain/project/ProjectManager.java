@@ -55,7 +55,7 @@ public class ProjectManager {
 		database.update(userID, ID, mapper.writeValueAsString(p));
 	}
 
-	public void delete(String userID, String ID) throws IOException {
-		database.delete(userID, ID);
+	public int delete(String userID, String ID) throws IOException {
+		return database.delete(userID, ID);
 	}
 }

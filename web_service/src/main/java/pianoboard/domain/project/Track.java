@@ -2,21 +2,29 @@ package pianoboard.domain.project;
 
 import java.util.List;
 import java.util.ArrayList;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class Track {
 
 	private List<Recording> recordings;
 	private String name;
+	private int ID;
 	private String instrument;
 	private int volume;
 	private int pan;
 	private boolean mute;
 	private boolean solo;
+	private int recordingNum;
 
-	public Track(String name) {
+	public Track() {}
+
+	public Track(int ID, String name) {
+		this.ID = ID;
 		this.name = name;
 		this.recordings = new ArrayList<Recording>();
 		setDefaultSettings();
+		this.recordingNum = 0;
 	}
 
 	/**
@@ -30,6 +38,10 @@ public class Track {
 
 	public Recording getRecording(int index) {
 		return this.recordings.get(index);
+	}
+
+	public int getID() {
+		return this.ID;
 	}
 
 	public String getName() {
@@ -60,6 +72,10 @@ public class Track {
 	 * SETTERS
 	 * ________________________________________________________________________
 	 */
+
+	public void setID(int ID) {
+		this.ID = ID;
+	}
 
 	public void setName(String name) {
 		this.name = name;
@@ -92,5 +108,17 @@ public class Track {
 		this.pan = 0;
 		this.mute = false;
 		this.solo = false;
+	}
+
+	public void addRecording(String r) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		// This recording will come from the client without an ID so we need to give it one
+		Recording recording = mapper.readValue(r, Recording.class);
+		recording.setID(++this.recordingNum);
+		this.recordings.add(recording);
+	}
+
+	public void setRecordings(List<Recording> r) {
+		this.recordings = r;
 	}
 }

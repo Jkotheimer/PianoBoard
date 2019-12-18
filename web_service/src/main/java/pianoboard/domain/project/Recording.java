@@ -8,16 +8,14 @@ public class Recording {
 
 	// A map of absolute times to note strings
 	private Map<Float, String> notes;
+	private int ID;
 	private float start;
 	private float end;
 
-	public Recording(float start, float end) {
-		this.start = start;
-		this.end = end;
-		this.notes = new HashMap<Float, String>();
-	}
+	public Recording() {}
 
-	public Recording(float start, float end, Map<Float, String> notes) {
+	public Recording(int ID, float start, float end, Map<Float, String> notes) {
+		this.ID = ID;
 		this.start = start;
 		this.end = end;
 		this.notes = notes;
@@ -27,6 +25,10 @@ public class Recording {
 	 * GETTERS
 	 * ________________________________________________________________________
 	 */
+
+	public int getID() {
+		return this.ID;
+	}
 
 	public float getStart() {
 		return this.start;
@@ -64,12 +66,22 @@ public class Recording {
 	 * ________________________________________________________________________
 	 */
 
+	public void setID(int ID) {
+		this.ID = ID;
+	}
+
 	public void setStart(float start) {
 		this.start = start;
 	}
 
 	public void setEnd(float end) {
 		this.end = end;
+	}
+
+	public void move(float start) {
+		float diff = this.start - start;
+		this.start = start;
+		this.end -= diff;
 	}
 
 	public void addNote(float time, String note) {

@@ -14,10 +14,12 @@ public class Project {
 	private int tempo;
 	private List<String> collaborators;
 	private List<Track> tracks;
+	private int trackNum;
 
 	public Project() {
-		this.collaboratorIDs = new ArrayList<String>();
-		this.tracks = Arrays.asList(new Track("Track 1"));
+		this.collaborators = new ArrayList<String>();
+		this.trackNum = 1;
+		this.tracks = Arrays.asList(new Track(trackNum, "Track 1"));
 		setDefaults();
 	}
 
@@ -25,8 +27,9 @@ public class Project {
 		this.ID = ID;
 		this.userID = userID;
 		this.name = name;
-		this.collaboratorIDs = new ArrayList<String>();
-		this.tracks = Arrays.asList(new Track("Track 1"));
+		this.collaborators = new ArrayList<String>();
+		this.trackNum = 1;
+		this.tracks = Arrays.asList(new Track(this.trackNum, "Track 1"));
 		setDefaults();
 	}
 
@@ -105,11 +108,16 @@ public class Project {
 	}
 
 	public void addTrack() {
-		this.tracks.add(new Track("Track " + (this.tracks.size() + 1)));
+		this.trackNum++;
+		this.tracks.add(new Track(this.trackNum, "Track " + Integer.toString(this.trackNum)));
 	}
 
 	public void addCollaborator(String ID) {
 		this.collaborators.add(ID);
+	}
+
+	public void setCollaborators(List<String> collaborators) {
+		this.collaborators = collaborators;
 	}
 
 	public void setDefaults() {

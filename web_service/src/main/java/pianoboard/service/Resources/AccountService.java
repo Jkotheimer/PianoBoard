@@ -19,6 +19,6 @@ public class AccountService implements Service {
 	@GET
 	@Produces("application/json")
 	public Response login(@QueryParam("username") String username, @QueryParam("password") String password) {
-
+		return filter.addCORS(Response.ok());
 	}
 }
