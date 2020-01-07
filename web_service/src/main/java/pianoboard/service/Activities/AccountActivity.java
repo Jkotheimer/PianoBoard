@@ -37,11 +37,11 @@ public class AccountActivity {
 		return manager.search(query);
 	}
 
-	public Token authorize(String username, String password, String IP) throws AuthenticationException {
+	public Token authorize(String username, String password, String IP) throws AuthenticationException, IOException {
 		return manager.authorize(username, password, IP);
 	}
 
-	public Token authorize(String token, String IP) {
+	public Token authorize(String token, String IP) throws AuthenticationException {
 		return manager.authorize(token, IP);
 	}
 

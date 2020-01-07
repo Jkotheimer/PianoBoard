@@ -3,6 +3,7 @@ package pianoboard.service.Resources;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.Path;
@@ -66,11 +67,13 @@ public class AccountService implements Service {
 							String data,
 							HttpServletRequest request) {
 		// TODO authorize token with username then update attribute with data if authorization passes
+		return filter.addCORS(Response.ok());
 	}
 
 	@DELETE
 	@Produces("application/json")
 	public Response delete(@PathParam("username") String username, @HeaderParam("authorization") String token) {
 		// TODO authorize token with username then delete account
+		return filter.addCORS(Response.ok());
 	}
 }

@@ -21,6 +21,10 @@ public class Account_Data_Accessor {
 		// Read the contents of the file and return it as a string
 		return Files.readString(f.toPath());
 	}
+	
+	public List<String> search(String query) {
+		return new ArrayList<String>();
+	}
 
 	public void create(String username, String accountJSON) throws IOException {
 

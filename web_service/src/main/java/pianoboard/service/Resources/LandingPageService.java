@@ -33,10 +33,10 @@ public class LandingPageService implements Service {
 
 	@POST
 	@Produces("application/json")
-	public Response createAccount(AuthenticationnRequest a) {
+	public Response createAccount(AuthenticationRequest a) {
 		// TODO make an account from the given username and password in the authorization request
 		try {
-			return filter.addCORS(Response.status(201).entity(activity.create(a.username, a.password)));
+			return filter.addCORS(Response.status(201).entity(activity.create(a.getUsername(), a.getPassword())));
 		} catch(IOException e) {
 			return filter.addCORS(Response.status(500));
 		}

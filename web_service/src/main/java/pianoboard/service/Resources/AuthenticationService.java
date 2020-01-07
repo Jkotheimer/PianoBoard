@@ -18,7 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
-import pianoboard.service.Requests.AuthorizationRequest;
+import pianoboard.service.Requests.AuthenticationRequest;
+import pianoboard.service.Activities.AccountActivity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
@@ -40,10 +41,8 @@ public class AuthenticationService implements Service {
 			return filter.addCORS(Response.ok(activity.authorize(auth.getUsername(), auth.getPassword(), request.getRemoteAddr())));
 		} catch(AuthenticationException e) {
 			return filter.addCORS(Response.status(401));
-		} catch(JsonProcessingException e) {
-			return filter.addCORS(Response.status(500));
 		} catch(IOException e) {
-			return filter.addCORS(Response.status(404));
+			return filter.addCORS(Response.status(500));
 		}
 	}
 
@@ -55,10 +54,6 @@ public class AuthenticationService implements Service {
 			return filter.addCORS(Response.ok(activity.authorize(token, request.getRemoteAddr())));
 		} catch(AuthenticationException e) {
 			return filter.addCORS(Response.status(401));
-		} catch(JsonProcessingException e) {
-			return filter.addCORS(Response.status(500));
-		} catch(IOException e) {
-			return filter.addCORS(Response.status(404));
 		}
 	}
 }

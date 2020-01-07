@@ -4,5 +4,5 @@ public class TokenAccessor {
 
 	public TokenAccessor() {}
 
-
+	public void put(String token) {}
 }
