@@ -18,13 +18,13 @@ public class ProjectRepresentation extends Project {
 
 	public ProjectRepresentation(Project p) {
 		setID(p.getID());
-		setUserID(p.getUserID());
+		setUsername(p.getUsername());
 		setName(p.getName());
 		setGenre(p.getGenre());
 		setTimeSig(p.getTimeSig());
 		setTempo(p.getTempo());
 		setCollaborators(p.getCollaborators());
-		this.tracks = TrackRepresentation.makeList(p.getTracks(), p.getID(), p.getName());
+		this.tracks = TrackRepresentation.makeList(p.getTracks(), p.getUsername(), p.getName());
 		links = new HashMap<String, String>();
 	}
 

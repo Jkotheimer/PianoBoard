@@ -7,7 +7,7 @@ import java.util.Arrays;
 public class Project {
 
 	private String ID;
-	private String userID;
+	private String username;
 	private String name;
 	private String genre;
 	private String timeSig;
@@ -23,9 +23,9 @@ public class Project {
 		setDefaults();
 	}
 
-	public Project(String ID, String userID, String name) {
+	public Project(String ID, String username, String name) {
 		this.ID = ID;
-		this.userID = userID;
+		this.username = username;
 		this.name = name;
 		this.collaborators = new ArrayList<String>();
 		this.trackNum = 1;
@@ -42,8 +42,8 @@ public class Project {
 		return this.ID;
 	}
 
-	public String getUserID() {
-		return this.userID;
+	public String getUsername() {
+		return this.username;
 	}
 
 	public String getName() {
@@ -87,8 +87,8 @@ public class Project {
 		this.ID = ID;
 	}
 
-	public void setUserID(String userID) {
-		this.userID = userID;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public void setName(String name) {

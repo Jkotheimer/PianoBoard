@@ -13,35 +13,35 @@
 	<a class="logo_box" href="/">
 		<img src="/UI/images/logo.png" class="logo"/>
 	</a>
-	
+
 	<div class="panel">
 		<h>Create An Account</h>
-		
-		<form class="form_area" action="/create_account" method="POST" autocomplete="off">
-			<div class="form_section">
+
+		<div class="form_area">
+			<!--div class="form_section">
 				<div class="form_label">Email</div>
 				<input type="text" name="email" class="form_input" placeholder="your.email@something.com"
 					autocapitalize="off" spellcheck="false" autocorrect="off" required/>
 				<div id="email_notification" class="notification"></div>
-			</div>
+			</div-->
 			<div class="form_section">
 				<div class="form_label">Username</div>
-				<input type="text" name="username" class="form_input" placeholder="Choose a username" 
+				<input type="text" id="username" class="form_input" placeholder="Choose a username"
 					autocapitalize="off" spellcheck="false" autocorrect="off" required/>
 				<div id="username_notification" class="notification"></div>
 			</div>
 			<div class="form_section">
 				<div class="form_label">Password</div>
-				<input type="password" name="password" class="form_input" placeholder="Choose a password" required/>
+				<input type="password" id="password" class="form_input" placeholder="Choose a password" required/>
 				<div id="password_notification" class="notification"></div>
 			</div>
 			<div class="form_section">
 				<div class="form_label">Confirm Password</div>
-				<input type="password" name="confirm_password" class="form_input" placeholder="Confirm Password" required/>
+				<input type="password" id="confirm_password" class="form_input" placeholder="Confirm Password" required/>
 				<div id="confirm_password_notification" class="notification"></div>
 			</div>
-			<input type="submit" value="Create Account" class="submit"/>
-		</form>
+			<button class="submit" onclick="create_account()">Create Account</button>
+		</div>
 	</div>
 	<!--div id="loader">
 		While we prepare your account, tell us a little bit about yourself.
@@ -107,18 +107,8 @@
 			</div>
 		</div>
 	</div-->
-	
-	
+
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script type="text/javascript" src="./create_account.js"></script>
-	<script type="text/javascript">
-		$(document).ready(function() {
-			for(let e of document.getElementsByTagName("input")) {
-				e.addEventListener("keyup", function() {
-					if(e.value.length > 1) e.classList.add("complete_form_input");
-					else e.classList.remove("complete_form_input");
-				});
-			}
-		});
-	</script>
 </body>

@@ -17,20 +17,20 @@ public class TrackRepresentation extends Track {
 
 	public TrackRepresentation() {}
 
-	public TrackRepresentation(Track t, String userID, String projectName) {
+	public TrackRepresentation(Track t, String username, String projectName) {
 		setName(t.getName());
 		setInstrument(t.getInstrument());
 		setVolume(t.getVolume());
 		setPan(t.getPan());
 		setMute(t.isMuted());
 		setSolo(t.isSolo());
-		this.recordings = RecordingRepresentation.makeList(t.getRecordings(), userID, projectName, Integer.toString(t.getID()));
-		setLinks(userID, projectName, Integer.toString(t.getID()));
+		this.recordings = RecordingRepresentation.makeList(t.getRecordings(), username, projectName, Integer.toString(t.getID()));
+		setLinks(username, projectName, Integer.toString(t.getID()));
 	}
 
-	public static List<TrackRepresentation> makeList(List<Track> tracks, String userID, String projectName) {
+	public static List<TrackRepresentation> makeList(List<Track> tracks, String username, String projectName) {
 		List<TrackRepresentation> reps = new ArrayList<>();
-		for(Track t : tracks) reps.add(new TrackRepresentation(t, userID, projectName));
+		for(Track t : tracks) reps.add(new TrackRepresentation(t, username, projectName));
 
 		return reps;
 	}
@@ -52,16 +52,16 @@ public class TrackRepresentation extends Track {
 		this.links = links;
 	}
 
-	public void setLinks(String userID, String projectName, String trackID) {
+	public void setLinks(String username, String projectName, String trackID) {
 		links = new HashMap<String, String>() {{
-			put("setName", Resources.rootURL + "/" + userID + "/projects/" + projectName + "/" + trackID + "?action=setName");
-			put("setInstrument", Resources.rootURL + "/" + userID + "/projects/" + projectName + "/" + trackID + "?action=setInstrument");
-			put("setVolume", Resources.rootURL + "/" + userID + "/projects/" + projectName + "/" + trackID + "?action=setVolume");
-			put("setPan", Resources.rootURL + "/" + userID + "/projects/" + projectName + "/" + trackID + "?action=setPan");
-			put("setMute", Resources.rootURL + "/" + userID + "/projects/" + projectName + "/" + trackID + "?action=setMute");
-			put("setSolo", Resources.rootURL + "/" + userID + "/projects/" + projectName + "/" + trackID + "?action=setSolo");
-			put("addRecording", Resources.rootURL + "/" + userID + "/projects/" + projectName + "/" + trackID);
-			put("delete", Resources.rootURL + "/" + userID + "/projects/" + projectName + "/" + trackID);
+			put("setName", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID + "?action=setName");
+			put("setInstrument", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID + "?action=setInstrument");
+			put("setVolume", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID + "?action=setVolume");
+			put("setPan", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID + "?action=setPan");
+			put("setMute", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID + "?action=setMute");
+			put("setSolo", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID + "?action=setSolo");
+			put("addRecording", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID);
+			put("delete", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID);
 		}};
 	}
 

@@ -29,33 +29,47 @@ public class ProjectManager {
 	 * ________________________________________________________________________
 	 */
 
-	// Retrieve all projects from the database
-	public List<Project> getAll(String userID) throws IOException, JsonProcessingException {
-		List<Project> projectList = new ArrayList<Project>();
-		List<String> all = database.getAll(userID);
-		for(String p : all) projectList.add(mapper.readValue(p, Project.class));
-
-		return projectList;
+	/**
+	 * Retrieve the names of all of the projects that belong to the given user
+	 *
+	 * @param username <String> : the username of the account from which to return all the project names
+	 * @return <List>
+	 */
+	public List<String> getAll(String username) throws IOException {
+		return database.getAll(username);
 	}
 
-	public Project get(String userID, String projectName) throws IOException, JsonProcessingException {
-		mapper.readValue(database.get(userID, projectName), Project.class);
-		return new Project();
+	/**
+	 * Retrieve the string value of the json file for the specified username and project ID
+	 * Convert that string value into a Project object and return it
+	 *
+	 * @param username <String> : the username of the account that owns the project
+	 * @param projectName <String> : the name of the project to search for within the users directory
+	 * @return <Project> : the project object parsed from the string returned from the database
+	 */
+	public Project get(String username, String projectName) throws IOException, JsonProcessingException {
+		return mapper.readValue(database.get(username, projectName), Project.class);
 	}
 
-	public Project create(String userID, String projectName) throws IOException, JsonProcessingException {
-		String ID = UUID.randomUUID().toString();
-		Project p = new Project(ID, userID, projectName);
-		database.create(userID, ID, mapper.writeValueAsString(p));
+	/**
+	 * Create a new project from the given username and project name
+	 *
+	 * @param username <String> : The username under which to save the new project
+	 * @param projectName <String> : The name of the project to create
+	 * @return <Project> : The new project
+	 */
+	public Project create(String username, String projectName) throws IOException, JsonProcessingException {
+		Project p = new Project(UUID.randomUUID().toString(), username, projectName);
+		database.create(username, projectName, mapper.writeValueAsString(p));
 
 		return p;
 	}
 
-	public void update(String userID, String ID, Project p) throws IOException, JsonProcessingException {
-		database.update(userID, ID, mapper.writeValueAsString(p));
+	public void update(String username, String projectName, Project p) throws IOException, JsonProcessingException {
+		database.update(username, projectName, mapper.writeValueAsString(p));
 	}
 
-	public int delete(String userID, String ID) throws IOException {
-		return database.delete(userID, ID);
+	public void delete(String username, String projectName) throws IOException {
+		database.delete(username, projectName);
 	}
 }

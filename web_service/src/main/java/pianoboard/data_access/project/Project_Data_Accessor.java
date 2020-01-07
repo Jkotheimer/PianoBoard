@@ -2,7 +2,10 @@ package pianoboard.data_access.project;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.io.IOException;
 
 /**
@@ -21,54 +24,75 @@ public class Project_Data_Accessor {
 	 * ________________________________________________________________________
 	 */
 
-	public List<String> getAll (String userID) throws IOException {
-		String path = "database/";
-		for(char c : userID.toCharArray()) {
-			path += c + "/";
-		}
-		File f = new File(path);
-		System.out.println(f.getCanonicalPath());
-		return new ArrayList<String>();
-		// Go to the directory path that spells out the userID and parse all the project json files into strings and return the list
+	/**
+	 * Get the namess of all of the projects owned by the given username
+	 */
+	public List<String> getAll(String username) throws IOException {
+
+		// Check the database for an account with the given username. If it doesn't exist, throw an exception
+		validateUser(username);
+
+		// Return the names of all of the project files in the directory
+		File f = new File("pianoboard/database/" + username + "/projects/");
+		return Arrays.asList(f.list());
 	}
 
-	public String get(String userID, String ID) {
-		// TODO: grab the project with the ID from the database
-		String path = "";
-		for(char c : userID.toCharArray()) {
-			path += c + "/";
-		}
-		System.out.println(path + ID);
-		return ID;
+	/**
+	 * Return the whole project denoted by the given username and project ID number
+	 */
+	public String get(String username, String projectName) throws IOException {
+
+		// Check the database for an account with the given username. If it doesn't exist, throw an exception
+		validateUser(username);
+
+		// Check for a project with the given name in the users directory
+		File f = new File("pianoboard/database/" + username + "/projects/" + projectName + ".json");
+		if(!f.exists()) throw new IOException(username + " does not have a project with name " + projectName);
+
+		// Return the contents of the file
+		return Files.readString(f.toPath());
 	}
 
-	public int create(String userID, String ID, String projectJSON) {
-		// TODO: push the given 3 fields to the database
-		String path = "";
-		for(char c : userID.toCharArray()) {
-			path += c + "/";
-		}
-		System.out.println(path + ID + " --> " + projectJSON);
-		return 201;
+	public void create(String username, String projectName, String projectJSON) throws IOException {
+
+		// Check the database for a user with the given username. If one does not exist, an IOException will be thrown
+		validateUser(username);
+
+		// Check for a project that already has the given name
+		File f = new File("pianoboard/database/" + username + "/projects/" + projectName + ".json");
+		if(!f.createNewFile()) throw new IOException(username + " already has a project called " + projectName);
+
+		// Write the json string to the file
+		Files.writeString(f.toPath(), projectJSON);
 	}
 
-	public String update(String userID, String ID, String projectJSON) {
-		// TODO: push the given 3 fields to the database
-		String path = "";
-		for(char c : userID.toCharArray()) {
-			path += c + "/";
-		}
-		System.out.println(path + ID + " --> " + projectJSON);
-		return path;
+	public void update(String username, String projectName, String projectJSON) throws IOException {
+
+		// Check the database for a user with the given username. If one does not exist, an IOException will be thrown
+		validateUser(username);
+
+		// Check for a project that already has the given name
+		File f = new File("pianoboard/database/" + username + "/projects/" + projectName + ".json");
+		if(!f.exists()) throw new IOException(username + " does not have a project called " + projectName);
+
+		// Write the json string to the file
+		Files.writeString(f.toPath(), projectJSON);
 	}
 
-	public int delete(String userID, String ID) {
-		// TODO: delete the given id from the database
-		String path = "";
-		for(char c : userID.toCharArray()) {
-			path += c + "/";
-		}
-		System.out.println(path + ID);
-		return 200;
+	public void delete(String username, String projectName) throws IOException {
+
+		// Check the database to ensure the username exists, if not, throw IOException
+		validateUser(username);
+
+		File f = new File("pianoboard/database/" + username + "/projects/" + projectName + ".json");
+		if(!f.exists()) throw new IOException(username + " does not currently have a project called " + projectName);
+
+		// Delete the file
+		Files.delete(f.toPath());
+	}
+
+	private void validateUser(String username) throws IOException {
+		File f = new File("pianoboard/database/" + username + "/");
+		if(!f.exists()) throw new IOException("Account with username " + username + " does not exist");
 	}
 }

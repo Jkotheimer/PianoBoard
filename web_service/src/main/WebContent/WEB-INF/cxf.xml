@@ -17,6 +17,7 @@
 	<jaxrs:server name="pianoboard_API" address="http://localhost:8081">
 		<jaxrs:serviceBeans>
 			<ref bean="ProjectService" />
+			<ref bean="AccountService" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<ref bean="jacksonProvider" />
@@ -24,8 +25,12 @@
 
 		<jaxrs:schemaLocations>
 			<jaxrs:schemaLocation>pianoboard.domain.project.Project</jaxrs:schemaLocation>
+			<jaxrs:schemaLocation>pianoboard.domain.account.Account</jaxrs:schemaLocation>
+			<jaxrs:schemaLocation>pianoboard.domain.service.Representations.AccountRepresentation</jaxrs:schemaLocation>
+			<jaxrs:schemaLocation>pianoboard.domain.service.Representations.ProjectRepresentation</jaxrs:schemaLocation>
 		</jaxrs:schemaLocations>
 
 	</jaxrs:server>
 	<bean id="ProjectService" class="pianoboard.service.Resources.ProjectService" />
+	<bean id="AccountService" class="pianoboard.service.Resources.AccountService" />
 </beans>

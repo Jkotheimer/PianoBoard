@@ -18,43 +18,66 @@
 		<div class="link_area">
 			<a href="./create_account" class="link ca_link">Create a new Account</a>
 			<a href="./reset_password" class="link rp_link">Forgot password?</a>
-			<div class="link s_link" onclick="document.getElementById('submit').click()">Sign In</div>
+			<div class="link s_link" onclick="login()">Sign In</div>
 		</div>
 
-		<form class="form_area" action="/">
-			
+		<div class="form_area">
+
 			<div class="form_section">
-				<div class="form_label">Email or Username</div>
-				<input type="text" name="email" class="form_input" placeholder="Enter your email or username" 
+				<div class="form_label">Username</div>
+				<input type="text" id="username" class="form_input" placeholder="Enter your username"
 					autocapitalize="off" autocomplete="off" spellcheck="false" autocorrect="off" required/>
 				<div id="email_notification"></div>
 			</div>
 			<div class="form_section">
 				<div class="form_label">Password</div>
-				<input type="password" name="password" class="form_input" placeholder="Enter your password" minlength="8"
+				<input type="password" id="password" class="form_input" placeholder="Enter your password" minlength="8"
 					autocapitalize="off" autocomplete="off" spellcheck="false" autocorrect="off" required/>
 				<div id="password_notification"></div>
 			</div>
-			<input hidden type="submit" id="submit"/>
-		</form>
+		</div>
 	</div>
-	
+
 	<div class="info">
 		Developed and maintained by Jack Kotheimer
 		<br/>
 		To learn more about me, visit my <a href="http://67.162.86.57">personal website</a>
 	</div>
-	
+
 	<script>
 		document.addEventListener("keydown", function() {
 			if(event.keyCode == 13) {
 				event.preventDefault();
-				document.getElementById("submit").click();
+				login();
 			}
 			else if(event.keyCode == 9 && document.activeElement.name == "password") {
 				event.preventDefault();
 				document.activeElement = document.getElementById("submit");
 			}
 		});
+
+		function login() {
+			var username = document.getElementById("username").value;
+			var password = document.getElementById("password").value;
+
+			var xhr = new XMLHttpRequest();
+			xhr.open("GET", "http://localhost:8081?username=" + username + "&password=" + password, true);
+			xhr.onload = function() {
+				if(xhr.status == 500) {
+					// TODO display errors
+					console.log(xhr.response);
+				} else if(xhr.status == 404) {
+					console.log(xhr.response);
+				} else if(xhr.status == 401) {
+					console.log(xhr.response);
+				}
+				else if(xhr.status == 201) {
+					localStorage.setItem("account", xhr.response);
+					console.log(xhr.response);
+					window.location.href = "/dashboard";
+				}
+			}
+			xhr.send();
+		}
 	</script>
 </body>

@@ -16,17 +16,17 @@ public class RecordingRepresentation extends Recording {
 
 	public RecordingRepresentation() {}
 
-	public RecordingRepresentation(Recording r, String userID, String projectName, String trackID) {
+	public RecordingRepresentation(Recording r, String username, String projectName, String trackID) {
 		setID(r.getID());
 		setStart(r.getStart());
 		setEnd(r.getEnd());
 		setNotes(r.getNotes());
-		setLinks(userID, projectName, trackID, Integer.toString(r.getID()));
+		setLinks(username, projectName, trackID, Integer.toString(r.getID()));
 	}
 
-	public static List<RecordingRepresentation> makeList(List<Recording> recordings, String userID, String projectName, String trackID) {
+	public static List<RecordingRepresentation> makeList(List<Recording> recordings, String username, String projectName, String trackID) {
 		List<RecordingRepresentation> reps = new ArrayList<>();
-		for(Recording r : recordings) reps.add(new RecordingRepresentation(r, userID, projectName, trackID));
+		for(Recording r : recordings) reps.add(new RecordingRepresentation(r, username, projectName, trackID));
 
 		return reps;
 	}
@@ -45,12 +45,12 @@ public class RecordingRepresentation extends Recording {
 	 * ________________________________________________________________________
 	 */
 
-	public void setLinks(String userID, String projectName, String trackID, String recordingID) {
+	public void setLinks(String username, String projectName, String trackID, String recordingID) {
 		this.links = new HashMap<String, String>() {{
-			put("move", Resources.rootURL + "/" + userID + "/projects/" + projectName + "/" + trackID + "/" + recordingID + "?action=move");
-			put("addNotes", Resources.rootURL + "/" + userID + "/projects/" + projectName + "/" + trackID + "/" + recordingID + "?action=addNotes");
-			put("setNotes", Resources.rootURL + "/" + userID + "/projects/" + projectName + "/" + trackID + "/" + recordingID + "?action=setNotes");
-			put("delete", Resources.rootURL + "/" + userID + "/projects/" + projectName + "/" + trackID + "/" + recordingID);
+			put("move", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID + "/" + recordingID + "?action=move");
+			put("addNotes", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID + "/" + recordingID + "?action=addNotes");
+			put("setNotes", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID + "/" + recordingID + "?action=setNotes");
+			put("delete", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID + "/" + recordingID);
 		}};
 	}
 }
