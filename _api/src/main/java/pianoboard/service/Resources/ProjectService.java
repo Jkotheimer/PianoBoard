@@ -22,7 +22,7 @@ import pianoboard.service.Representations.ProjectRepresentation;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 
-@Path("/{username}/projects")
+@Path("/users/{username}/projects")
 public class ProjectService implements Service {
 
 	private final ProjectActivity activity = new ProjectActivity();
@@ -54,7 +54,8 @@ public class ProjectService implements Service {
 	@GET
 	@Produces("application/json")
 	@Path("/{projectName}")
-	public Response get(@PathParam("username") String username, @PathParam("projectName") String projectName) {
+	public Response get(@PathParam("username") String username,
+						@PathParam("projectName") String projectName) {
 		try {
 			return filter.addCORS(Response.ok(activity.get(username, projectName)));
 		} catch (JsonProcessingException e) {
@@ -71,7 +72,8 @@ public class ProjectService implements Service {
 	 */
 	@POST
 	@Produces("application/json")
-	public Response create(@PathParam("username") String username, @QueryParam("projectName") String projectName) {
+	public Response create(@PathParam("username") String username,
+						   @QueryParam("projectName") String projectName) {
 		try {
 			return filter.addCORS(Response.status(201).entity(activity.create(username, projectName)));
 		} catch (JsonProcessingException e) {
@@ -91,7 +93,10 @@ public class ProjectService implements Service {
 	@Path("/{projectName}/{attribute}")
 	@Consumes("text/plain")
 	@Produces("application/json")
-	public Response update(@PathParam("username") String username, @PathParam("projectName") String projectName, @PathParam("attribute") String attribute, String data) {
+	public Response update(@PathParam("username") String username,
+						   @PathParam("projectName") String projectName,
+						   @PathParam("attribute") String attribute,
+						   String data) {
 		try {
 			return filter.addCORS(Response.ok(activity.update(username, projectName, attribute, data)));
 		} catch (JsonProcessingException e) {
