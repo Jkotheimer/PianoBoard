@@ -15,9 +15,9 @@ import java.io.IOException;
  * project resourcesfrom the database using jsondb
  */
 //@Document(collection = "")
-public class Project_Data_Accessor {
+public class ProjectAccessor {
 
-	public Project_Data_Accessor() {}
+	public ProjectAccessor() {}
 
 	/**
 	 * CRUD METHODS

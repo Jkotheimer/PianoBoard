@@ -12,7 +12,7 @@ import pianoboard.data_access.account.*;
 
 public class AccountManager {
 
-	private Account_Data_Accessor database = new Account_Data_Accessor();
+	private AccountAccessor database = new AccountAccessor();
 	private TokenAccessor tokenDB = new TokenAccessor();
 	private ObjectMapper mapper = new ObjectMapper();
 
