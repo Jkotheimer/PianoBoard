@@ -44,10 +44,11 @@ public class AccountManager {
 		return new Token();
 	}
 
-	public Account create(String username, String password) throws IOException, JsonProcessingException {
+	public Account create(String username, String password, String IP) throws IOException, JsonProcessingException {
 		Calendar c = Calendar.getInstance();
 		long time = c.getTimeInMillis();
 		Account a = new Account(UUID.randomUUID().toString(), username, password, time);
+		a.addIPAddress(IP);
 		database.create(username, mapper.writeValueAsString(a));
 		return a;
 	}

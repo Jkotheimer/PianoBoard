@@ -48,10 +48,10 @@ public class AccountActivity {
 	/**
 	 * Attempt to create an account with the provided username, email, and password
 	 */
-	public AccountRepresentation create(String username, String password) throws IOException, JsonProcessingException {
+	public AccountRepresentation create(String username, String password, String IP) throws IOException, JsonProcessingException {
 		return setLinks(
 			new AccountRepresentation(
-				manager.create(username, password)
+				manager.create(username, password, IP)
 			)
 		);
 	}

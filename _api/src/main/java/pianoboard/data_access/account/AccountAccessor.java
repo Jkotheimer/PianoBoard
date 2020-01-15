@@ -8,12 +8,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.io.IOException;
 
-public class Accountccessor {
+public class AccountAccessor {
 
 	private List<String[]> database;
 
 	public AccountAccessor() {
-		database = new ArrayList<String[]
+		database = new ArrayList<String[]>();
 	}
 
 	public String get(String username) throws IOException {

@@ -23,7 +23,7 @@ import pianoboard.service.Activities.AccountActivity;
 import pianoboard.service.Representations.AccountRepresentation;
 
 @Path("/users")
-public class AccountService implements Service {
+public class AccountService extends Service {
 
 	private AccountActivity activity = new AccountActivity();
 	private CORSFilter filter = new CORSFilter();

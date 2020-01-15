@@ -26,7 +26,7 @@ import java.io.IOException;
 import javax.naming.AuthenticationException;
 
 @Path("/authentication")
-public class AuthenticationService implements Service {
+public class AuthenticationService extends Service {
 
 	private final CORSFilter filter = new CORSFilter();
 	private final AccountActivity activity = new AccountActivity();

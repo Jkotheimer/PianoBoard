@@ -1,6 +1,6 @@
 package pianoboard.domain.project;
 
-import pianoboard.data_access.project.Project_Data_Accessor;
+import pianoboard.data_access.project.ProjectAccessor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,7 +20,7 @@ import java.io.IOException;
 public class ProjectManager {
 
 	private ObjectMapper mapper = new ObjectMapper();
-	private Project_Data_Accessor database = new Project_Data_Accessor();
+	private ProjectAccessor database = new ProjectAccessor();
 
 	public ProjectManager() {}
 
