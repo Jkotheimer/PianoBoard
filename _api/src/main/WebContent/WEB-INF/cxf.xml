@@ -12,7 +12,8 @@
 	<import resource="classpath:META-INF/cxf/cxf.xml" />
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
-	<bean id="jacksonProvider" class="org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider" />
+	<bean id="jacksonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider" /> <!--org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider" />-->
+	<bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" /> <!--org.codehaus.jackson.jaxrs.JacksonJsonProvider" />-->
 
 	<jaxrs:server name="pianoboard_API" address="http://localhost:8081">
 		<jaxrs:serviceBeans>
@@ -20,6 +21,7 @@
 			<ref bean="AccountService" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
+			<ref bean="jsonProvider" />
 			<ref bean="jacksonProvider" />
 		</jaxrs:providers>
 
@@ -28,6 +30,9 @@
 			<jaxrs:schemaLocation>pianoboard.domain.account.Account</jaxrs:schemaLocation>
 			<jaxrs:schemaLocation>pianoboard.domain.service.Representations.AccountRepresentation</jaxrs:schemaLocation>
 			<jaxrs:schemaLocation>pianoboard.domain.service.Representations.ProjectRepresentation</jaxrs:schemaLocation>
+			<jaxrs:schemaLocation>java.util.ArrayList</jaxrs:schemaLocation>
+			<jaxrs:schemaLocation>java.util.Arrays</jaxrs:schemaLocation>
+			<jaxrs:schemaLocation>java.util.List</jaxrs:schemaLocation>
 		</jaxrs:schemaLocations>
 
 	</jaxrs:server>

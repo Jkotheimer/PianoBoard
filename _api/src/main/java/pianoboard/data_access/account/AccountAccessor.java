@@ -22,7 +22,13 @@ public class AccountAccessor {
 
 	public List<String> search(String query) {
 		// TODO search the database for any username matches to the query
-		return Arrays.asList("Username 1", "Username two", "Username tres");
+		System.out.println("Searched for " + query);
+		List<String> thing = new ArrayList<String>();
+		thing.add("ass");
+		thing.add("booty");
+		thing.add(query);
+		thing.add("fuckhole");
+		return thing;
 	}
 
 	public void create(String username, String accountJSON) throws IOException {
