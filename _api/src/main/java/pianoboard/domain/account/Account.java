@@ -100,7 +100,7 @@ public class Account {
 			this.lastFailedLogin = timestamp;
 			throw new AuthenticationException("Only 1 login attempt per second");
 		}
-		if(this.knownIPs.contains(IP) && getFailedLoginAttempts(IP) > 20 || getFailedLoginAttempts(IP) > 10) {
+		if(this.knownIPs.containsKey(IP) && getFailedLoginAttempts(IP) > 20 || getFailedLoginAttempts(IP) > 10) {
 			throw new AuthenticationException("Too many failed login attempts");
 		}
 		else if(this.password.equals(password) && this.username.equals(username)) {

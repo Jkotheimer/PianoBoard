@@ -23,7 +23,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 
 @Path("/users/{username}/projects")
-public class ProjectService implements Service {
+public class ProjectService extends Service {
 
 	private final ProjectActivity activity = new ProjectActivity();
 	private final CORSFilter filter = new CORSFilter();

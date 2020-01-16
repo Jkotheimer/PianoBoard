@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 @WebService
 public abstract class Service {
 
-	private static String getClientIp(HttpServletRequest request) {
+	public String getClientIp(HttpServletRequest request) {
 
 		String remoteAddr = "";
 
