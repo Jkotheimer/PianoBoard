@@ -10,10 +10,10 @@ import java.io.IOException;
 
 public class AccountAccessor {
 
-	private List<String[]> database;
+	private Map<String, String> database;
 
 	public AccountAccessor() {
-		database = new ArrayList<String[]>();
+		database = new HashMap<String, String>();
 	}
 
 	public String get(String username) throws IOException {

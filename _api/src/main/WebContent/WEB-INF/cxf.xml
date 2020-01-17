@@ -19,6 +19,8 @@
 		<jaxrs:serviceBeans>
 			<ref bean="ProjectService" />
 			<ref bean="AccountService" />
+			<ref bean="AuthService" />
+			<ref bean="LandingPageService" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<ref bean="jsonProvider" />
@@ -28,8 +30,8 @@
 		<jaxrs:schemaLocations>
 			<jaxrs:schemaLocation>pianoboard.domain.project.Project</jaxrs:schemaLocation>
 			<jaxrs:schemaLocation>pianoboard.domain.account.Account</jaxrs:schemaLocation>
-			<jaxrs:schemaLocation>pianoboard.domain.service.Representations.AccountRepresentation</jaxrs:schemaLocation>
-			<jaxrs:schemaLocation>pianoboard.domain.service.Representations.ProjectRepresentation</jaxrs:schemaLocation>
+			<jaxrs:schemaLocation>pianoboard.service.Representations.AccountRepresentation</jaxrs:schemaLocation>
+			<jaxrs:schemaLocation>pianoboard.service.Representations.ProjectRepresentation</jaxrs:schemaLocation>
 			<jaxrs:schemaLocation>java.util.ArrayList</jaxrs:schemaLocation>
 			<jaxrs:schemaLocation>java.util.Arrays</jaxrs:schemaLocation>
 			<jaxrs:schemaLocation>java.util.List</jaxrs:schemaLocation>
@@ -38,4 +40,6 @@
 	</jaxrs:server>
 	<bean id="ProjectService" class="pianoboard.service.Resources.ProjectService" />
 	<bean id="AccountService" class="pianoboard.service.Resources.AccountService" />
+	<bean id="AuthService" class="pianoboard.service.Resources.AuthenticationService" />
+	<bean id="LandingPageService" class="pianoboard.service.Resources.LandingPageService" />
 </beans>
