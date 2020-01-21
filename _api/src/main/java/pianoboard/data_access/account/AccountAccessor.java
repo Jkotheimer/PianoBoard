@@ -20,23 +20,29 @@ public class AccountAccessor {
 		database = new ArrayList<>();
 	}
 
-	public Account getAccountByUsername(String username) throws IOException {
-		return "An Account retrieved by username: " + username;
+	public Account getAccountByEmail(String email) throws IOException {
+		for(Account a : database) if(a.getEmail().equals(email)) return a;
+		throw new IOException("Account with email " + email + " does not exist");
 	}
 
 	public Account getAccountById(String ID) throws IOException {
-		return "An Account retrieved by ID: " + ID;
+		for(Account a : database) if(a.getID().equals(ID)) return a;
+		throw new IOException("Account with ID " + ID + " does not exist");
 	}
 
-	public List<Account> search(String query) {
+	public List<Account> searchByUsername(String query) {
 		System.out.println("Searched for " + query);
-		List<Account> accounts = new ArrayList<String>();
+		List<Account> accounts = new ArrayList<>();
 		for(Account a : database)
 			if(a.getUsername().contains(query) || a.getEmail().contains(query)) accounts.add(a);
 		return accounts;
 	}
 
 	public void create(Account a) throws IOException {
+		for(Account acc : database)
+			if(acc.getEmail().equals(a.getEmail()))
+				throw new IOException("Account with email " + a.getEmail() + " already exists");
+
 		database.add(a);
 	}
 
@@ -44,9 +50,10 @@ public class AccountAccessor {
 		for(Account a : database) {
 			if(a.getID().equals(acc.getID())) {
 				database.remove(a);
-				break;
+				database.add(acc);
+				return;
 			}
 		}
-		database.add(acc);
+		throw new IOException("Account with ID " + acc.getID() + " does not exist");
 	}
 }

@@ -21,12 +21,14 @@ public class Account {
 
 	public Account() {}
 
-	public Account(String ID, String email, String username, String Password, long creationDate) {
+	public Account(String ID, String email, String username, String Password, long creationDate, String IP) {
 		this.ID = ID;
 		this.email = email;
 		this.username = username;
 		this.password = Password;
 		this.creationDate = creationDate;
+
+		addSuccessfulLoginAttempt(IP, creationDate);
 
 		this.favoriteGenres = new ArrayList<>();
 		this.favoriteArtists = new ArrayList<>();
@@ -53,15 +55,27 @@ public class Account {
 		for(LoginRecord r : this.failedLoginAttempts)
 			if(r.getIP().equals(IPAddress))
 				return r.getLoginCount();
+		return 0;
 	}
 
 	public long getLastLoginDate()						{
 		long lastLoginDate = 0;
-		for(LoginRecord r : this.knownIPs) {
-			if(r.get)
-		}
+
+		for(LoginRecord r : this.knownIPs)
+			if(r.getLastLoginDate() > lastLoginDate)
+				lastLoginDate = r.getLastLoginDate();
+
+		return lastLoginDate;
 	}
-	public long gelLastFailedLogin()					{ return this.lastFailedLogin;		}
+	public long getLastFailedLogin()					{
+		long lastFailedLogin = 0;
+
+		for(LoginRecord r : this.failedLoginAttempts)
+			if(r.getLastLoginDate() > lastFailedLogin)
+				lastFailedLogin = r.getLastLoginDate();
+
+		return lastFailedLogin;
+	}
 
 	/**
 	 * SETTERS
@@ -73,8 +87,6 @@ public class Account {
 	public void setEmail(String email)							{ this.email = email;					}
 	public void setUsername(String username)					{ this.username = username;				}
 	public void setCreationDate(long creationDate)				{ this.creationDate = creationDate;		}
-	public void setLastLoginDate(long timestamp)				{ this.lastLoginDate = timestamp;		}
-	public void setLastFailedLogin(long timestamp)				{ this.lastFailedLogin = timestamp;		}
 	public void setFavoriteGenres(List<String> genres)			{ this.favoriteGenres = genres;			}
 	public void setFavoriteArtists(List<String> artists)		{ this.favoriteArtists = artists;		}
 	public void setKnownIPs(List<LoginRecord> knownIPs)			{ this.knownIPs = knownIPs;				}
@@ -82,8 +94,16 @@ public class Account {
 
 	public void addFavoriteGenre(String genre)					{ this.favoriteGenres.add(genre);		}
 	public void addFavoriteArtist(String artists)				{ this.favoriteArtists.add(artists);	}
+	public void removeFavoriteGenre(String genre)				{ this.favoriteGenres.remove(genre);	}
+	public void removeFavoriteArtist(String artist)				{ this.favoriteArtists.remove(artist);	}
 
-	private void addIPAddress(String IPAddress, long timestamp)	{
+	/**
+	 * GENERAL METHODS
+	 */
+
+
+
+	private void addSuccessfulLoginAttempt(String IPAddress, long timestamp) {
 		for(LoginRecord r : this.knownIPs) {
 			if(r.getIP().equals(IPAddress)) {
 				r.addLogin();
@@ -94,7 +114,7 @@ public class Account {
 		this.knownIPs.add(new LoginRecord(IPAddress, timestamp));
 	}
 
-	private void addFailedLoginAttempt(String IPAddress)			{
+	private void addFailedLoginAttempt(String IPAddress, long timestamp) {
 		for(LoginRecord r : this.failedLoginAttempts) {
 			if(r.getIP().equals(IPAddress)) {
 				r.addLogin();
@@ -105,19 +125,15 @@ public class Account {
 		this.knownIPs.add(new LoginRecord(IPAddress, timestamp));
 	}
 
-	private void clearFailedLoginAttempts(String IPAddress)		{
+	private void clearFailedLoginAttempts(String IPAddress) {
 		for(LoginRecord r : this.failedLoginAttempts)
 			if(r.getIP().equals(IPAddress))
 				this.failedLoginAttempts.remove(r);
 	}
 
-	/**
-	 * GENERAL METHODS
-	 */
-
 	public boolean hasKnownIP(String IPAddress) {
 		for(LoginRecord r : this.knownIPs)
-			if(r.getIP().equals(IPAddress)
+			if(r.getIP().equals(IPAddress))
 				return true;
 		return false;
 	}
@@ -125,19 +141,21 @@ public class Account {
 	public boolean login(String username, String password, String IP, long timestamp) throws AuthenticationException {
 
 		long timeSinceLastFailedLogin = timestamp - getLastFailedLogin();
+		int failedLoginAttempts = getFailedLoginAttempts(IP);
+
 
 		// If it's been at least 6 hours since the last failed login attempt, clear the failed login attempt log for the provided IP address
 		if(timeSinceLastFailedLogin > 21600000) clearFailedLoginAttempts(IP);
 
 		if(timeSinceLastFailedLogin < 1000) {
-			lastFailedLogin = timestamp;
+			addFailedLoginAttempt(IP, timestamp);
 			throw new AuthenticationException("Only 1 login attempt per second");
 		}
-		else if(hasKnownIP(IP) && getFailedLoginAttempts(IP) > 30 || getFailedLoginAttempts(IP) > 10) {
+		else if(hasKnownIP(IP) && failedLoginAttempts > 30 || failedLoginAttempts > 10) {
 			throw new AuthenticationException("Too many failed login attempts");
 		}
 		else if(this.password.equals(password) && this.username.equals(username)) {
-			addIPAddress(IP, timestamp);
+			addSuccessfulLoginAttempt(IP, timestamp);
 			clearFailedLoginAttempts(IP);
 			return true;
 		}

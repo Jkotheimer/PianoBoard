@@ -42,8 +42,8 @@ public class AccountActivity {
 		return result;
 	}
 
-	public Token authorize(String username, String password, String IP) throws AuthenticationException, IOException {
-		return manager.authorize(username, password, IP);
+	public Token authorize(String email, String password, String IP) throws AuthenticationException, IOException {
+		return manager.authorize(email, password, IP);
 	}
 
 	public Token authorize(String token, String IP) throws AuthenticationException {
@@ -53,10 +53,10 @@ public class AccountActivity {
 	/**
 	 * Attempt to create an account with the provided username, email, and password
 	 */
-	public AccountRepresentation create(String username, String password, String IP) throws IOException {
+	public AccountRepresentation create(String email, String username, String password, String IP) throws IOException {
 		return setLinks(
 			new AccountRepresentation(
-				manager.create(username, password, IP)
+				manager.create(email, username, password, IP)
 			)
 		);
 	}

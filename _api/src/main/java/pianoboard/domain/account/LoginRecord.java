@@ -30,5 +30,5 @@ class LoginRecord {
 
 	public void setIP(String IP)					{ this.IP = IP;						}
 	public void addLogin()							{ this.loginCount++;				}
-	public void setLastLoginDate(String timestamp)	{ this.lastLoginDate = timestamp;	}
+	public void setLastLoginDate(long timestamp)	{ this.lastLoginDate = timestamp;	}
 }

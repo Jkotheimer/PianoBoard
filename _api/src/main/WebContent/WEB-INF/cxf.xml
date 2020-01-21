@@ -28,10 +28,13 @@
 		</jaxrs:providers>
 
 		<jaxrs:schemaLocations>
-			<jaxrs:schemaLocation>pianoboard.domain.project.Project</jaxrs:schemaLocation>
-			<jaxrs:schemaLocation>pianoboard.domain.account.Account</jaxrs:schemaLocation>
 			<jaxrs:schemaLocation>pianoboard.service.Representations.AccountRepresentation</jaxrs:schemaLocation>
 			<jaxrs:schemaLocation>pianoboard.service.Representations.ProjectRepresentation</jaxrs:schemaLocation>
+			<jaxrs:schemaLocation>pianoboard.service.Representations.TrackRepresentation</jaxrs:schemaLocation>
+			<jaxrs:schemaLocation>pianoboard.service.Representations.RecordingRepresentation</jaxrs:schemaLocation>
+			<jaxrs:schemaLocation>pianoboard.service.Representations.NoteRepresentation</jaxrs:schemaLocation>
+			<jaxrs:schemaLocation>pianoboard.service.Representations.AccountSearchResult</jaxrs:schemaLocation>
+			<jaxrs:schemaLocation>pianoboard.service.Requests.AuthenticationRequest</jaxrs:schemaLocation>
 			<jaxrs:schemaLocation>java.util.ArrayList</jaxrs:schemaLocation>
 			<jaxrs:schemaLocation>java.util.Arrays</jaxrs:schemaLocation>
 			<jaxrs:schemaLocation>java.util.List</jaxrs:schemaLocation>

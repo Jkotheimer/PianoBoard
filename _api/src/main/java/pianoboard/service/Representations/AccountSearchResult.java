@@ -1,6 +1,6 @@
 package pianoboard.service.Representations;
 
-class AccountSearchResult {
+public class AccountSearchResult {
 
 	private String username;
 	private String email;

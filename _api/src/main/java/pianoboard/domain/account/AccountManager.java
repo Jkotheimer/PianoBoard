@@ -18,18 +18,18 @@ public class AccountManager {
 
 	public AccountManager() {}
 
-	public Account get(String username) throws IOException, JsonProcessingException {
-		return mapper.readValue(accountDB.get(username), Account.class);
+	public Account get(String ID) throws IOException {
+		return accountDB.getAccountById(ID);
 	}
 
 	public List<Account> search(String query) throws IOException {
-		return accountDB.search(query);
+		return accountDB.searchByUsername(query);
 	}
 
-	public Token authorize(String email, String password, String IP) throws AuthenticationException, IOException, JsonProcessingException {
+	public Token authorize(String email, String password, String IP) throws AuthenticationException, IOException {
 		Calendar c = Calendar.getInstance();
 		long timestamp = c.getTimeInMillis();
-		Account a = mapper.readValue(accountDB.get(email), Account.class);
+		Account a = accountDB.getAccountByEmail(email);
 		if(a.login(email, password, IP, timestamp)) {
 			// Add 2 days onto the current time for the expiration date
 			Token t = new Token(email, UUID.randomUUID().toString(), Long.toString(timestamp + 172800000));
@@ -48,9 +48,8 @@ public class AccountManager {
 		Calendar c = Calendar.getInstance();
 		long timestamp = c.getTimeInMillis();
 
-		Account a = new Account(UUID.randomUUID().toString(), email, username, password, timestamp);
-		a.addIPAddress(IP);
-		accountDB.create(username, mapper.writeValueAsString(a));
+		Account a = new Account(UUID.randomUUID().toString(), email, username, password, timestamp, IP);
+		accountDB.create(a);
 		return a;
 	}
 
@@ -58,7 +57,7 @@ public class AccountManager {
 		Account a = accountDB.getAccountById(AccountID);
 		switch(attribute) {
 			case "username":
-				accountDB.setUsername(AccountID, (String)value);
+				a.setUsername((String)value);
 				break;
 			case "email":
 				a.setEmail((String)value);

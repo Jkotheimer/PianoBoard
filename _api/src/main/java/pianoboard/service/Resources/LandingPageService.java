@@ -37,7 +37,7 @@ public class LandingPageService extends Service {
 	public Response createAccount(AuthenticationRequest a, HttpServletRequest request) {
 		// TODO make an account from the given username and password in the authorization request
 		try {
-			return filter.addCORS(Response.status(201).entity(activity.create(a.getUsername(), a.getPassword(), getClientIp(request))));
+			return filter.addCORS(Response.status(201).entity(activity.create(a.getEmail(), a.getUsername(), a.getPassword(), getClientIp(request))));
 		} catch(IOException e) {
 			return filter.addCORS(Response.status(500));
 		}
