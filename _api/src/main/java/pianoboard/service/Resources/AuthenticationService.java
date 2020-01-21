@@ -38,7 +38,7 @@ public class AuthenticationService extends Service {
 	@Produces("application/json")
 	public Response login(AuthenticationRequest auth, HttpServletRequest request) {
 		try {
-			return filter.addCORS(Response.ok(activity.authorize(auth.getUsername(), auth.getPassword(), request.getRemoteAddr())));
+			return filter.addCORS(Response.ok(activity.authorize(auth.getUsername(), auth.getPassword(), getClientIp(request))));
 		} catch(AuthenticationException e) {
 			return filter.addCORS(Response.status(401));
 		} catch(IOException e) {
@@ -51,7 +51,7 @@ public class AuthenticationService extends Service {
 	@Produces("application/json")
 	public Response verifyToken(String token, HttpServletRequest request) {
 		try {
-			return filter.addCORS(Response.ok(activity.authorize(token, request.getRemoteAddr())));
+			return filter.addCORS(Response.ok(activity.authorize(token, getClientIp(request))));
 		} catch(AuthenticationException e) {
 			return filter.addCORS(Response.status(401));
 		}

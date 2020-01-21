@@ -10,30 +10,43 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.io.IOException;
 
+import pianoboard.domain.account.*;
+
 public class AccountAccessor {
 
-	private Map<String, String> database;
+	private List<Account> database;
 
 	public AccountAccessor() {
-		database = new HashMap<String, String>();
+		database = new ArrayList<>();
 	}
 
-	public String get(String username) throws IOException {
-		return "An Account";
+	public Account getAccountByUsername(String username) throws IOException {
+		return "An Account retrieved by username: " + username;
 	}
 
-	public List<String> search(String query) {
-		// TODO search the database for any username matches to the query
+	public Account getAccountById(String ID) throws IOException {
+		return "An Account retrieved by ID: " + ID;
+	}
+
+	public List<Account> search(String query) {
 		System.out.println("Searched for " + query);
-		List<String> thing = new ArrayList<String>();
-		thing.add("ass");
-		thing.add("booty");
-		thing.add(query);
-		thing.add("fuckhole");
-		return thing;
+		List<Account> accounts = new ArrayList<String>();
+		for(Account a : database)
+			if(a.getUsername().contains(query) || a.getEmail().contains(query)) accounts.add(a);
+		return accounts;
 	}
 
-	public void create(String username, String accountJSON) throws IOException {
-		// TODO create a new entry in the database with the given info
+	public void create(Account a) throws IOException {
+		database.add(a);
+	}
+
+	public void update(Account acc) throws IOException {
+		for(Account a : database) {
+			if(a.getID().equals(acc.getID())) {
+				database.remove(a);
+				break;
+			}
+		}
+		database.add(acc);
 	}
 }

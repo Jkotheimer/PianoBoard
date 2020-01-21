@@ -43,12 +43,12 @@ public class AccountService extends Service {
 	}
 
 	@GET
-	@Path("/{username}")
+	@Path("/{ID}")
 	@Produces("application/json")
-	public Response get(@PathParam("username") String username) {
+	public Response get(@PathParam("ID") String ID) {
 		try {
 			// Attempt to log in to the given account with the provided credentials
-			return filter.addCORS(Response.ok(activity.get(username)));
+			return filter.addCORS(Response.ok(activity.get(ID)));
 		} catch(JsonProcessingException e) {
 			// Something went wrong reading the account and we return a server error code
 			return filter.addCORS(Response.status(500));

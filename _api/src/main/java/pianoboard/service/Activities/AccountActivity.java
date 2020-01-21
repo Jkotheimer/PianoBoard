@@ -20,21 +20,26 @@ public class AccountActivity {
 	public AccountActivity() {}
 
 	/**
-	 * Return the representation of the account object from the database that corresponds with the provided username
+	 * Return the representation of the account object from the database that corresponds with the provided ID
 	 */
-	public AccountRepresentation get(String username) throws IOException, JsonProcessingException {
+	public AccountRepresentation get(String ID) throws IOException {
 		return setLinks(
 			new AccountRepresentation(
-				manager.get(username)
+				manager.get(ID)
 			)
 		);
 	}
 
 	/**
-	 * Retrieve a list of all username matches given the search query substring
+	 * Retrieve a Map containing all username matches for the given query
 	 */
-	public List<String> search(String query) throws IOException {
-		return manager.search(query);
+	public List<AccountSearchResult> search(String query) throws IOException {
+		List<Account> accounts = manager.search(query);
+		List<AccountSearchResult> result = new ArrayList<>();
+
+		for(Account a : accounts) result.add(new AccountSearchResult(a.getID(), a.getEmail(), a.getUsername()));
+
+		return result;
 	}
 
 	public Token authorize(String username, String password, String IP) throws AuthenticationException, IOException {
@@ -48,7 +53,7 @@ public class AccountActivity {
 	/**
 	 * Attempt to create an account with the provided username, email, and password
 	 */
-	public AccountRepresentation create(String username, String password, String IP) throws IOException, JsonProcessingException {
+	public AccountRepresentation create(String username, String password, String IP) throws IOException {
 		return setLinks(
 			new AccountRepresentation(
 				manager.create(username, password, IP)

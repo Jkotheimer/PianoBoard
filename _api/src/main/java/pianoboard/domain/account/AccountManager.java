@@ -12,27 +12,27 @@ import pianoboard.data_access.account.*;
 
 public class AccountManager {
 
-	private AccountAccessor database = new AccountAccessor();
+	private AccountAccessor accountDB = new AccountAccessor();
 	private TokenAccessor tokenDB = new TokenAccessor();
 	private ObjectMapper mapper = new ObjectMapper();
 
 	public AccountManager() {}
 
 	public Account get(String username) throws IOException, JsonProcessingException {
-		return mapper.readValue(database.get(username), Account.class);
+		return mapper.readValue(accountDB.get(username), Account.class);
 	}
 
-	public List<String> search(String query) throws IOException {
-		return database.search(query);
+	public List<Account> search(String query) throws IOException {
+		return accountDB.search(query);
 	}
 
-	public Token authorize(String username, String password, String IP) throws AuthenticationException, IOException, JsonProcessingException {
+	public Token authorize(String email, String password, String IP) throws AuthenticationException, IOException, JsonProcessingException {
 		Calendar c = Calendar.getInstance();
 		long timestamp = c.getTimeInMillis();
-		Account a = mapper.readValue(database.get(username), Account.class);
-		if(a.login(username, password, IP, timestamp)) {
+		Account a = mapper.readValue(accountDB.get(email), Account.class);
+		if(a.login(email, password, IP, timestamp)) {
 			// Add 2 days onto the current time for the expiration date
-			Token t = new Token(username, UUID.randomUUID().toString(), Long.toString(timestamp + 172800000));
+			Token t = new Token(email, UUID.randomUUID().toString(), Long.toString(timestamp + 172800000));
 			//tokenDB.put(t);
 			return t;
 		}
@@ -44,12 +44,42 @@ public class AccountManager {
 		return new Token();
 	}
 
-	public Account create(String username, String password, String IP) throws IOException, JsonProcessingException {
+	public Account create(String email, String username, String password, String IP) throws IOException, JsonProcessingException {
 		Calendar c = Calendar.getInstance();
-		long time = c.getTimeInMillis();
-		Account a = new Account(UUID.randomUUID().toString(), username, password, time);
+		long timestamp = c.getTimeInMillis();
+
+		Account a = new Account(UUID.randomUUID().toString(), email, username, password, timestamp);
 		a.addIPAddress(IP);
-		database.create(username, mapper.writeValueAsString(a));
+		accountDB.create(username, mapper.writeValueAsString(a));
+		return a;
+	}
+
+	public Account update(String AccountID, String attribute, Object value) throws IOException {
+		Account a = accountDB.getAccountById(AccountID);
+		switch(attribute) {
+			case "username":
+				accountDB.setUsername(AccountID, (String)value);
+				break;
+			case "email":
+				a.setEmail((String)value);
+				break;
+			case "password":
+				a.setPassword((String)value);
+				break;
+			case "addGenre":
+				a.addFavoriteGenre((String)value);
+				break;
+			case "removeGenre":
+				a.removeFavoriteGenre((String)value);
+				break;
+			case "addArtist":
+				a.addFavoriteArtist((String)value);
+				break;
+			case "removeArtist":
+				a.removeFavoriteArtist((String)value);
+				break;
+		}
+		accountDB.update(a);
 		return a;
 	}
 }
