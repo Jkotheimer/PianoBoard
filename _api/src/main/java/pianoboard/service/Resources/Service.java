@@ -8,7 +8,7 @@ public abstract class Service {
 
 	public String getClientIp(HttpServletRequest request) {
 
-		String remoteAddr = "";
+		String remoteAddr = "null";
 
 		if (request != null) {
 			remoteAddr = request.getHeader("X-FORWARDED-FOR");

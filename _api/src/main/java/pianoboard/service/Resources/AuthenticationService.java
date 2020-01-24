@@ -37,6 +37,9 @@ public class AuthenticationService extends Service {
 	@Path("/login")
 	@Produces("application/json")
 	public Response login(AuthenticationRequest auth, HttpServletRequest request) {
+
+		System.out.println("GET REQUEST ON /authentication/login - USER LOGIN INITIALIZED");
+		System.out.println("Email: " + auth.getEmail() + "\nUsername: " + auth.getUsername() + "\nPassword: " + auth.getPassword() + "\n");
 		try {
 			return filter.addCORS(Response.ok(activity.authorize(auth.getUsername(), auth.getPassword(), getClientIp(request))));
 		} catch(AuthenticationException e) {
@@ -50,6 +53,9 @@ public class AuthenticationService extends Service {
 	@Path("/token")
 	@Produces("application/json")
 	public Response verifyToken(String token, HttpServletRequest request) {
+
+		System.out.println("GET REQUEST ON /authentication/token - USER VERIFICATION INITIALIZED");
+		System.out.println("token: " + token + "\n");
 		try {
 			return filter.addCORS(Response.ok(activity.authorize(token, getClientIp(request))));
 		} catch(AuthenticationException e) {

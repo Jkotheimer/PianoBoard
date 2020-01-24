@@ -22,6 +22,21 @@ public class AccountManager {
 		return accountDB.getAccountById(ID);
 	}
 
+	public Object getAttribute(String ID, String attribute) throws IOException {
+		Account a = accountDB.getAccountById(ID);
+		switch(attribute) {
+			case "username" : return a.getUsername();
+			case "email" : return a.getEmail();
+			case "ID" : return a.getID();
+			case "creationDate" : return a.getCreationDate();
+			case "favoriteGenres" : return a.getFavoriteGenres();
+			case "favoriteArtists" : return a.getFavoriteArtists();
+			case "lastLoginDate" : return a.getLastLoginDate();
+			case "lastFailedLogin" : return a.getLastFailedLogin();
+			default : throw new IOException("Method not supported");
+		}
+	}
+
 	public List<Account> search(String query) throws IOException {
 		return accountDB.searchByUsername(query);
 	}
@@ -65,16 +80,16 @@ public class AccountManager {
 			case "password":
 				a.setPassword((String)value);
 				break;
-			case "addGenre":
+			case "addgenres":
 				a.addFavoriteGenre((String)value);
 				break;
-			case "removeGenre":
+			case "removegenres":
 				a.removeFavoriteGenre((String)value);
 				break;
-			case "addArtist":
+			case "addartists":
 				a.addFavoriteArtist((String)value);
 				break;
-			case "removeArtist":
+			case "removeartists":
 				a.removeFavoriteArtist((String)value);
 				break;
 		}

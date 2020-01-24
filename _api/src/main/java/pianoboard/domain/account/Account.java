@@ -28,12 +28,12 @@ public class Account {
 		this.password = Password;
 		this.creationDate = creationDate;
 
-		addSuccessfulLoginAttempt(IP, creationDate);
+		this.favoriteGenres = new ArrayList<String>();
+		this.favoriteArtists = new ArrayList<String>();
+		this.knownIPs = new ArrayList<LoginRecord>();
+		this.failedLoginAttempts = new ArrayList<LoginRecord>();
 
-		this.favoriteGenres = new ArrayList<>();
-		this.favoriteArtists = new ArrayList<>();
-		this.knownIPs = new ArrayList<>();
-		this.failedLoginAttempts = new ArrayList<>();
+		addSuccessfulLoginAttempt(IP, creationDate);
 	}
 
 	/**

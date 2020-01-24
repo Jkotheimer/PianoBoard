@@ -8,6 +8,7 @@ $(document).ready(function() {
 });
 
 function create_account() {
+	var email = document.getElementById("email").value;
 	var username = document.getElementById("username").value;
 	var password = document.getElementById("password").value;
 	var confirm_password = document.getElementById("confirm_password").value;
@@ -17,16 +18,26 @@ function create_account() {
 		return;
 	}
 
+	var data = JSON.stringify({
+		"authenticationRequest" : {
+			"email" : email,
+			"username" : username,
+			"password" : password
+		}
+	});
+
 	var xhr = new XMLHttpRequest();
-	xhr.open("POST", "http://localhost:8081?username=" + username + "&password=" + password, true);
+	xhr.open("POST", "http://localhost/api/", true);
+	xhr.setRequestHeader("Content-Type", "application/json");
 	xhr.onload = function() {
 		if(xhr.status != 201) {
 			// TODO display error
+			console.log("error " + xhr.status + ": " + xhr.response);
 		}
 		else {
 			localStorage.setItem("account", xhr.response);
-
+			console.log(xhr.response);
 		}
 	}
-	xhr.send();
+	xhr.send(data);
 }

@@ -14,11 +14,9 @@ import pianoboard.domain.account.*;
 
 public class AccountAccessor {
 
-	private List<Account> database;
+	private static List<Account> database = new ArrayList<>();
 
-	public AccountAccessor() {
-		database = new ArrayList<>();
-	}
+	public AccountAccessor() {}
 
 	public Account getAccountByEmail(String email) throws IOException {
 		for(Account a : database) if(a.getEmail().equals(email)) return a;
@@ -26,6 +24,7 @@ public class AccountAccessor {
 	}
 
 	public Account getAccountById(String ID) throws IOException {
+		System.out.println("Searching for " + ID);
 		for(Account a : database) if(a.getID().equals(ID)) return a;
 		throw new IOException("Account with ID " + ID + " does not exist");
 	}

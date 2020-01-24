@@ -1,6 +1,7 @@
 package pianoboard.service.Requests;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlElement;
 
 @XmlRootElement
 public class AuthenticationRequest {
@@ -16,8 +17,13 @@ public class AuthenticationRequest {
 	 * ________________________________________________________________________
 	 */
 
+	//@XmlElement(name="email")
 	public String getEmail()		{ return this.email;	}
+
+	//@XmlElement(name="username")
 	public String getUsername()		{ return this.username;	}
+
+	//@XmlElement(name="password")
 	public String getPassword()		{ return this.password;	}
 
 	/**

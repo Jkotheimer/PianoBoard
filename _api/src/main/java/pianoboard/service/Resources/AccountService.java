@@ -22,6 +22,8 @@ import javax.naming.AuthenticationException;
 import pianoboard.service.Activities.AccountActivity;
 import pianoboard.service.Representations.AccountRepresentation;
 
+import pianoboard.data_access.account.AccountAccessor;
+
 @Path("/users")
 public class AccountService extends Service {
 
@@ -46,9 +48,28 @@ public class AccountService extends Service {
 	@Path("/{ID}")
 	@Produces("application/json")
 	public Response get(@PathParam("ID") String ID) {
+		System.out.println("GET REQUEST ON USERS PATH TO RETRIEVE DATA FROM USER ID " + ID);
 		try {
 			// Attempt to log in to the given account with the provided credentials
 			return filter.addCORS(Response.ok(activity.get(ID)));
+		} catch(JsonProcessingException e) {
+			// Something went wrong reading the account and we return a server error code
+			return filter.addCORS(Response.status(500));
+		} catch(IOException e) {
+			// The account was not found so we return a not found status
+			System.out.println("Error: " + e.getMessage());
+			return filter.addCORS(Response.status(404));
+		}
+	}
+
+	@GET
+	@Path("/{ID}/{attribute}")
+	@Produces("application/json")
+	public Response get(@PathParam("ID") String ID, @PathParam("attribute") String attribute) {
+		if(attribute.contains("password")) return filter.addCORS(Response.status(405));
+		try {
+			// Attempt to log in to the given account with the provided credentials
+			return filter.addCORS(Response.ok(activity.getAttribute(ID, attribute)));
 		} catch(JsonProcessingException e) {
 			// Something went wrong reading the account and we return a server error code
 			return filter.addCORS(Response.status(500));
@@ -59,10 +80,11 @@ public class AccountService extends Service {
 	}
 
 	@PATCH
-	@Path("/{attribute}")
+	@Path("/{ID}/{attribute}")
 	@Produces("application/json")
-	public Response update(	@PathParam("username") String username,
+	public Response update(	@PathParam("ID") String ID,
 							@PathParam("attribute") String attribute,
+							@QueryParam("a") String action,
 							@HeaderParam("authorization") String token,
 							String data,
 							HttpServletRequest request) {

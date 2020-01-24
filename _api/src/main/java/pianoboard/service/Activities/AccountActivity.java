@@ -23,11 +23,17 @@ public class AccountActivity {
 	 * Return the representation of the account object from the database that corresponds with the provided ID
 	 */
 	public AccountRepresentation get(String ID) throws IOException {
-		return setLinks(
+		AccountRepresentation a = setLinks(
 			new AccountRepresentation(
 				manager.get(ID)
 			)
 		);
+		System.out.println("account recieved: " + a.getID());
+		return a;
+	}
+
+	public Object getAttribute(String ID, String attribute) throws IOException {
+		return manager.getAttribute(ID, attribute);
 	}
 
 	/**
@@ -65,6 +71,12 @@ public class AccountActivity {
 	 * Add HATEOAS links to the representation to be used by the client for further functionality
 	 */
 	private AccountRepresentation setLinks(AccountRepresentation a) {
+		a.setLinks(new HashMap<String, String>() {{
+			put("root", Resources.rootURL);
+			put("authenticateLogin", "/authentication/login");
+			put("authenticateToken", "/authentication/token");
+			put("identifier", "/users/" + a.getID());
+		}});
 		return a;
 	}
 }

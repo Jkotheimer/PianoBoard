@@ -14,6 +14,7 @@
 
 	<bean id="jacksonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider" /> <!--org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider" />-->
 	<bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" /> <!--org.codehaus.jackson.jaxrs.JacksonJsonProvider" />-->
+<!-- 	<bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider" /> -->
 
 	<jaxrs:server name="pianoboard_API" address="http://localhost:8081">
 		<jaxrs:serviceBeans>
@@ -25,6 +26,7 @@
 		<jaxrs:providers>
 			<ref bean="jsonProvider" />
 			<ref bean="jacksonProvider" />
+<!-- 			<ref bean="jaxbProvider" /> -->
 		</jaxrs:providers>
 
 		<jaxrs:schemaLocations>

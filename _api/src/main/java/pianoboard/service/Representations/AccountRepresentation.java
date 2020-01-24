@@ -44,6 +44,7 @@ public class AccountRepresentation {
 	 * ________________________________________________________________________
 	 */
 
+	public void setID(String ID)							{ this.ID = ID;						}
 	public void setUsername(String username)				{ this.username = username;			}
 	public void setEmail(String email)						{ this.email = email;				}
 	public void setFavoriteGenres(List<String> genres)		{ this.favoriteGenres = genres;		}
