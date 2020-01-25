@@ -84,7 +84,7 @@ public class AccountService extends Service {
 	@Produces("application/json")
 	public Response update(	@PathParam("ID") String ID,
 							@PathParam("attribute") String attribute,
-							@QueryParam("a") String action,
+							@QueryParam("action") String action,
 							@HeaderParam("authorization") String token,
 							String data,
 							HttpServletRequest request) {

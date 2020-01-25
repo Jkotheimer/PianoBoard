@@ -2,6 +2,7 @@ package pianoboard.service.Activities;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,12 +73,13 @@ public class AccountActivity {
 	 * Add HATEOAS links to the representation to be used by the client for further functionality
 	 */
 	private AccountRepresentation setLinks(AccountRepresentation a) {
-		a.setLinks(new HashMap<String, String>() {{
-			put("root", Resources.rootURL);
-			put("authenticateLogin", "/authentication/login");
-			put("authenticateToken", "/authentication/token");
-			put("identifier", "/users/" + a.getID());
-		}});
+		a.setLinks(Arrays.asList(
+			new Link("root", Resources.rootURL),
+			new Link("authenticateLogin", "/authentication/login"),
+			new Link("authenticateToken", "/authentication/token"),
+			new Link("get", "/users/" + a.getID()),
+			new Link("updateUsername", "/users/" + a.getID() + "/username")
+		));
 		return a;
 	}
 }
