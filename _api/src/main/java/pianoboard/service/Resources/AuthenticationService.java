@@ -20,10 +20,11 @@ import java.util.Map;
 
 import pianoboard.service.Requests.AuthenticationRequest;
 import pianoboard.service.Activities.AccountActivity;
+import pianoboard.domain.account.Token;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import javax.naming.AuthenticationException;
+import javax.security.auth.login.CredentialExpiredException;
 
 @Path("/authentication")
 public class AuthenticationService extends Service {
@@ -52,13 +53,15 @@ public class AuthenticationService extends Service {
 	@GET
 	@Path("/token")
 	@Produces("application/json")
-	public Response verifyToken(String token, HttpServletRequest request) {
+	public Response verifyToken(Token token, HttpServletRequest request) {
 
 		System.out.println("GET REQUEST ON /authentication/token - USER VERIFICATION INITIALIZED");
 		System.out.println("token: " + token + "\n");
 		try {
 			return filter.addCORS(Response.ok(activity.authorize(token, getClientIp(request))));
 		} catch(AuthenticationException e) {
+			return filter.addCORS(Response.status(401));
+		} catch (CredentialExpiredException e) {
 			return filter.addCORS(Response.status(401));
 		}
 	}

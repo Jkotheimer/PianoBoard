@@ -1,8 +1,7 @@
 package pianoboard.domain.account;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import javax.naming.AuthenticationException;
+import javax.security.auth.login.CredentialExpiredException;
 import java.util.UUID;
 import java.util.List;
 import java.util.Calendar;
@@ -14,7 +13,6 @@ public class AccountManager {
 
 	private AccountAccessor accountDB = new AccountAccessor();
 	private TokenAccessor tokenDB = new TokenAccessor();
-	private ObjectMapper mapper = new ObjectMapper();
 
 	public AccountManager() {}
 
@@ -47,19 +45,21 @@ public class AccountManager {
 		Account a = accountDB.getAccountByEmail(email);
 		if(a.login(email, password, IP, timestamp)) {
 			// Add 2 days onto the current time for the expiration date
-			Token t = new Token(email, UUID.randomUUID().toString(), Long.toString(timestamp + 172800000));
-			//tokenDB.put(t);
+			Token t = new Token(email, UUID.randomUUID().toString(), timestamp + 172800000);
+			tokenDB.put(t);
 			return t;
 		}
 		else throw new AuthenticationException("Invalid Credentials");
 	}
 
-	public Token authorize(String token, String IP) throws AuthenticationException {
-		// TODO validate token and add IP to account
+	public Token authorize(Token t, String IP) throws AuthenticationException, CredentialExpiredException {
+		Calendar c = Calendar.getInstance();
+		long timestamp = c.getTimeInMillis();
+		tokenDB.verify(t, timestamp);
 		return new Token();
 	}
 
-	public Account create(String email, String username, String password, String IP) throws IOException, JsonProcessingException {
+	public Account create(String email, String username, String password, String IP) throws IOException {
 		Calendar c = Calendar.getInstance();
 		long timestamp = c.getTimeInMillis();
 
@@ -80,16 +80,16 @@ public class AccountManager {
 			case "password":
 				a.setPassword((String)value);
 				break;
-			case "addgenres":
+			case "addfavoriteGenres":
 				a.addFavoriteGenre((String)value);
 				break;
-			case "removegenres":
+			case "removefavoriteGenres":
 				a.removeFavoriteGenre((String)value);
 				break;
-			case "addartists":
+			case "addfavoriteArtists":
 				a.addFavoriteArtist((String)value);
 				break;
-			case "removeartists":
+			case "removefavoriteArtists":
 				a.removeFavoriteArtist((String)value);
 				break;
 		}

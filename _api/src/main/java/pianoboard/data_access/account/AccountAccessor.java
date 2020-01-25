@@ -10,7 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.io.IOException;
 
-import pianoboard.domain.account.*;
+import pianoboard.domain.account.Account;
 
 public class AccountAccessor {
 

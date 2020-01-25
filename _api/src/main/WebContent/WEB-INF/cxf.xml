@@ -37,6 +37,7 @@
 			<jaxrs:schemaLocation>pianoboard.service.Representations.NoteRepresentation</jaxrs:schemaLocation>
 			<jaxrs:schemaLocation>pianoboard.service.Representations.AccountSearchResult</jaxrs:schemaLocation>
 			<jaxrs:schemaLocation>pianoboard.service.Requests.AuthenticationRequest</jaxrs:schemaLocation>
+			<jaxrs:schemaLocation>pianoboard.domain.account.Token</jaxrs:schemaLocation>
 
 			<jaxrs:schemaLocation>javax.servlet.http.HttpServletRequest</jaxrs:schemaLocation>
 			<jaxrs:schemaLocation>java.util.ArrayList</jaxrs:schemaLocation>

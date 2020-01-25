@@ -8,6 +8,7 @@ import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import javax.naming.AuthenticationException;
+import javax.security.auth.login.CredentialExpiredException;
 
 import pianoboard.domain.account.*;
 import pianoboard.service.Representations.*;
@@ -52,7 +53,7 @@ public class AccountActivity {
 		return manager.authorize(email, password, IP);
 	}
 
-	public Token authorize(String token, String IP) throws AuthenticationException {
+	public Token authorize(Token token, String IP) throws AuthenticationException, CredentialExpiredException {
 		return manager.authorize(token, IP);
 	}
 
