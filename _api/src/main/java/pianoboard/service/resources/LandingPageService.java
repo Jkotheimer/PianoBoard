@@ -1,4 +1,4 @@
-package pianoboard.service.Resources;
+package pianoboard.service.resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
-import pianoboard.service.Requests.AuthenticationRequest;
-import pianoboard.service.Activities.AccountActivity;
+import pianoboard.service.requests.AuthenticationRequest;
+import pianoboard.service.activities.AccountActivity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;

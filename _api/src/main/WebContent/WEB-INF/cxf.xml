@@ -30,13 +30,13 @@
 		</jaxrs:providers>
 
 		<jaxrs:schemaLocations>
-			<jaxrs:schemaLocation>pianoboard.service.Representations.AccountRepresentation</jaxrs:schemaLocation>
-			<jaxrs:schemaLocation>pianoboard.service.Representations.ProjectRepresentation</jaxrs:schemaLocation>
-			<jaxrs:schemaLocation>pianoboard.service.Representations.TrackRepresentation</jaxrs:schemaLocation>
-			<jaxrs:schemaLocation>pianoboard.service.Representations.RecordingRepresentation</jaxrs:schemaLocation>
-			<jaxrs:schemaLocation>pianoboard.service.Representations.NoteRepresentation</jaxrs:schemaLocation>
-			<jaxrs:schemaLocation>pianoboard.service.Representations.AccountSearchResult</jaxrs:schemaLocation>
-			<jaxrs:schemaLocation>pianoboard.service.Requests.AuthenticationRequest</jaxrs:schemaLocation>
+			<jaxrs:schemaLocation>pianoboard.service.representations.AccountRepresentation</jaxrs:schemaLocation>
+			<jaxrs:schemaLocation>pianoboard.service.representations.ProjectRepresentation</jaxrs:schemaLocation>
+			<jaxrs:schemaLocation>pianoboard.service.representations.TrackRepresentation</jaxrs:schemaLocation>
+			<jaxrs:schemaLocation>pianoboard.service.representations.RecordingRepresentation</jaxrs:schemaLocation>
+			<jaxrs:schemaLocation>pianoboard.service.representations.NoteRepresentation</jaxrs:schemaLocation>
+			<jaxrs:schemaLocation>pianoboard.service.representations.AccountSearchResult</jaxrs:schemaLocation>
+			<jaxrs:schemaLocation>pianoboard.service.requests.AuthenticationRequest</jaxrs:schemaLocation>
 			<jaxrs:schemaLocation>pianoboard.domain.account.Token</jaxrs:schemaLocation>
 
 			<jaxrs:schemaLocation>javax.servlet.http.HttpServletRequest</jaxrs:schemaLocation>
@@ -46,8 +46,8 @@
 		</jaxrs:schemaLocations>
 
 	</jaxrs:server>
-	<bean id="ProjectService" class="pianoboard.service.Resources.ProjectService" />
-	<bean id="AccountService" class="pianoboard.service.Resources.AccountService" />
-	<bean id="AuthService" class="pianoboard.service.Resources.AuthenticationService" />
-	<bean id="LandingPageService" class="pianoboard.service.Resources.LandingPageService" />
+	<bean id="ProjectService" class="pianoboard.service.resources.ProjectService" />
+	<bean id="AccountService" class="pianoboard.service.resources.AccountService" />
+	<bean id="AuthService" class="pianoboard.service.resources.AuthenticationService" />
+	<bean id="LandingPageService" class="pianoboard.service.resources.LandingPageService" />
 </beans>

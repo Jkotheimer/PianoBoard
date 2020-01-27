@@ -1,4 +1,4 @@
-package pianoboard.service.Resources;
+package pianoboard.service.resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
-import pianoboard.service.Requests.AuthenticationRequest;
-import pianoboard.service.Activities.AccountActivity;
+import pianoboard.service.requests.AuthenticationRequest;
+import pianoboard.service.activities.AccountActivity;
 import pianoboard.domain.account.Token;
 
 import java.io.IOException;
@@ -39,10 +39,11 @@ public class AuthenticationService extends Service {
 	@Produces("application/json")
 	public Response login(AuthenticationRequest auth, HttpServletRequest request) {
 
-		System.out.println("GET REQUEST ON /authentication/login - USER LOGIN INITIALIZED");
-		System.out.println("Email: " + auth.getEmail() + "\nUsername (should be null): " + auth.getUsername() + "\nPassword: " + auth.getPassword() + "\n");
+		String IP = getClientIp(request);
+		System.out.println("POST REQUEST ON /authentication/login - USER LOGIN INITIALIZED");
+		System.out.println("Email: " + auth.getEmail() + "\nUsername (should be null): " + auth.getUsername() + "\nPassword: " + auth.getPassword() + "\nIP: " + IP + "\n");
 		try {
-			return filter.addCORS(Response.ok(activity.authorize(auth.getEmail(), auth.getPassword(), getClientIp(request))));
+			return filter.addCORS(Response.ok(activity.authorize(auth.getEmail(), auth.getPassword(), IP)));
 		} catch(AuthenticationException e) {
 			return filter.addCORS(Response.status(401));
 		} catch(IOException e) {
@@ -55,7 +56,7 @@ public class AuthenticationService extends Service {
 	@Produces("application/json")
 	public Response verifyToken(Token token, HttpServletRequest request) {
 
-		System.out.println("GET REQUEST ON /authentication/token - USER VERIFICATION INITIALIZED");
+		System.out.println("POST REQUEST ON /authentication/token - USER VERIFICATION INITIALIZED");
 		System.out.println("token: " + token + "\n");
 		try {
 			return filter.addCORS(Response.ok(activity.authorize(token, getClientIp(request))));

@@ -138,7 +138,7 @@ public class Account {
 		return false;
 	}
 
-	public boolean login(String username, String password, String IP, long timestamp) throws AuthenticationException {
+	public boolean login(String email, String password, String IP, long timestamp) throws AuthenticationException {
 
 		long timeSinceLastFailedLogin = timestamp - getLastFailedLogin();
 		int failedLoginAttempts = getFailedLoginAttempts(IP);
@@ -154,7 +154,7 @@ public class Account {
 		else if(hasKnownIP(IP) && failedLoginAttempts > 30 || failedLoginAttempts > 10) {
 			throw new AuthenticationException("Too many failed login attempts");
 		}
-		else if(this.password.equals(password) && this.username.equals(username)) {
+		else if(this.email.equals(email) && this.password.equals(password)) {
 			addSuccessfulLoginAttempt(IP, timestamp);
 			clearFailedLoginAttempts(IP);
 			return true;

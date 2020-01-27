@@ -60,11 +60,9 @@
 			var email = document.getElementById("email").value;
 			var password = document.getElementById("password").value;
 			var data = JSON.stringify({
-				"authenticationRequest" : {
-					"email" : email,
-					"username" : email,
-					"password" : password
-				}
+				"email" : email,
+				"username" : email,
+				"password" : password
 			});
 
 			var xhr = new XMLHttpRequest();
@@ -82,7 +80,7 @@
 				else if(xhr.status == 201) {
 					localStorage.setItem("account", xhr.response);
 					console.log(xhr.response);
-					window.location.href = "/dashboard";
+					//window.location.href = "/dashboard";
 				}
 			}
 			xhr.send(data);

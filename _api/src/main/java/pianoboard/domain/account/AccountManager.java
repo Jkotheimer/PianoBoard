@@ -45,7 +45,7 @@ public class AccountManager {
 		Account a = accountDB.getAccountByEmail(email);
 		if(a.login(email, password, IP, timestamp)) {
 			// Add 2 days onto the current time for the expiration date
-			Token t = new Token(email, UUID.randomUUID().toString(), timestamp + 172800000);
+			Token t = new Token(a.getID(), UUID.randomUUID().toString(), timestamp + 172800000);
 			tokenDB.put(t);
 			return t;
 		}

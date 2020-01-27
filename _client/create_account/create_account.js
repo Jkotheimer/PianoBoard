@@ -20,11 +20,9 @@ function create_account() {
 	}
 
 	var data = JSON.stringify({
-		"authenticationRequest" : {
-			"email" : email,
-			"username" : username,
-			"password" : password
-		}
+		"email" : email,
+		"username" : username,
+		"password" : password
 	});
 
 	var xhr = new XMLHttpRequest();

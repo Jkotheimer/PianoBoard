@@ -1,4 +1,4 @@
-package pianoboard.service.Resources;
+package pianoboard.service.resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -19,8 +19,8 @@ import java.io.IOException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import javax.naming.AuthenticationException;
 
-import pianoboard.service.Activities.AccountActivity;
-import pianoboard.service.Representations.AccountRepresentation;
+import pianoboard.service.activities.AccountActivity;
+import pianoboard.service.representations.AccountRepresentation;
 
 import pianoboard.data_access.account.AccountAccessor;
 

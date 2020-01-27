@@ -15,7 +15,7 @@ public class TokenAccessor {
 
 	public void put(Token t) {
 		for(Token tok : database)
-			if(tok.getUsername().equals(t.getUsername()))
+			if(tok.getAccountID().equals(t.getAccountID()))
 				database.remove(tok);
 		database.add(t);
 	}

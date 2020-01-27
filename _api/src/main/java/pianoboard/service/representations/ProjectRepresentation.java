@@ -1,4 +1,4 @@
-package pianoboard.service.Representations;
+package pianoboard.service.representations;
 
 import java.util.List;
 import java.util.Map;
@@ -6,9 +6,7 @@ import java.util.HashMap;
 
 import pianoboard.domain.project.Project;
 import pianoboard.resources.Resources;
-import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
 public class ProjectRepresentation extends Project {
 
 	private Map<String, String> links;

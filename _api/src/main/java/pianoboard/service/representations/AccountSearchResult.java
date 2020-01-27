@@ -1,4 +1,4 @@
-package pianoboard.service.Representations;
+package pianoboard.service.representations;
 
 public class AccountSearchResult {
 

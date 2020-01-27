@@ -1,4 +1,4 @@
-package pianoboard.service.Activities;
+package pianoboard.service.activities;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import javax.naming.AuthenticationException;
 import javax.security.auth.login.CredentialExpiredException;
 
 import pianoboard.domain.account.*;
-import pianoboard.service.Representations.*;
+import pianoboard.service.representations.*;
 import pianoboard.resources.Resources;
 
 public class AccountActivity {

@@ -1,4 +1,4 @@
-package pianoboard.service.Activities;
+package pianoboard.service.activities;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -9,7 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 
 import pianoboard.domain.project.*;
-import pianoboard.service.Representations.*;
+import pianoboard.service.representations.*;
 import pianoboard.resources.Resources;
 
 /**

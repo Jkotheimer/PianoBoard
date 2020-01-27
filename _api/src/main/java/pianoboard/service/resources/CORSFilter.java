@@ -1,4 +1,4 @@
-package pianoboard.service.Resources;
+package pianoboard.service.resources;
 
 import javax.ws.rs.core.Response;
 

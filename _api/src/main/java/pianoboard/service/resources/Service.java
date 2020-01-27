@@ -1,4 +1,4 @@
-package pianoboard.service.Resources;
+package pianoboard.service.resources;
 
 import javax.jws.WebService;
 import javax.servlet.http.HttpServletRequest;

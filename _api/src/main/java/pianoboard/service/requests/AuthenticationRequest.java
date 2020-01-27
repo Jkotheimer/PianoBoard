@@ -1,9 +1,5 @@
-package pianoboard.service.Requests;
+package pianoboard.service.requests;
 
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlElement;
-
-@XmlRootElement
 public class AuthenticationRequest {
 
 	private String email;
