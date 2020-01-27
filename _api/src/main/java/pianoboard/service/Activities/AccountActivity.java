@@ -70,15 +70,20 @@ public class AccountActivity {
 	}
 
 	/**
-	 * Add HATEOAS links to the representation to be used by the client for further functionality
+	 * Add HATEOAS links to the representation to be used by the client for all extensible functionality
 	 */
 	private AccountRepresentation setLinks(AccountRepresentation a) {
-		a.setLinks(Arrays.asList(
-			new Link("root", Resources.rootURL),
-			new Link("authenticateLogin", "/authentication/login"),
-			new Link("authenticateToken", "/authentication/token"),
-			new Link("get", "/users/" + a.getID()),
-			new Link("updateUsername", "/users/" + a.getID() + "/username")
+		a.setLinks(Arrays.asList(	new Link("login", "POST", Resources.rootURL + "/authentication/login"),
+									new Link("authenticateToken", "POST", Resources.rootURL + "/authentication/token"),
+									new Link("refresh", "GET", Resources.rootURL + "/users/" + a.getID()),
+									new Link("updateUsername", "PATCH", "/users/" + a.getID() + "/username"),
+									new Link("updateEmail", "PATCH", "/users/" + a.getID() + "/email"),
+									new Link("updatePassword", "PATCH", "/users/" + a.getID() + "/password"),
+									new Link("addFavoriteGenre", "PATCH", "/users/" + a.getID() + "/favoriteGenres"),
+									new Link("addFavoriteArtist", "PATCH", "/users/" + a.getID() + "/favoriteArtists"),
+									new Link("removeFavoriteGenre", "DELETE", "/users/" + a.getID() + "/favoriteGenres"),
+									new Link("removeFavoriteArtist", "DELETE", "/users/" + a.getID() + "/favoriteArtists"),
+									new Link("deleteAccount", "DELETE", "/users/" + a.getID())
 		));
 		return a;
 	}

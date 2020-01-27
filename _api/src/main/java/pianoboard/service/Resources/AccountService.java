@@ -33,18 +33,6 @@ public class AccountService extends Service {
 	public AccountService() {}
 
 	@GET
-	@Produces("application/json")
-	public Response search(@QueryParam("search") String query) {
-		try {
-			// Attempt to log in to the given account with the provided credentials
-			return filter.addCORS(Response.ok(activity.search(query)));
-		} catch(IOException e) {
-			// The account was not found so we return a not found status
-			return filter.addCORS(Response.status(404));
-		}
-	}
-
-	@GET
 	@Path("/{ID}")
 	@Produces("application/json")
 	public Response get(@PathParam("ID") String ID) {
@@ -63,9 +51,21 @@ public class AccountService extends Service {
 	}
 
 	@GET
+	@Produces("application/json")
+	public Response search(@QueryParam("search") String query) {
+		try {
+			// Attempt to log in to the given account with the provided credentials
+			return filter.addCORS(Response.ok(activity.search(query)));
+		} catch(IOException e) {
+			// The account was not found so we return a not found status
+			return filter.addCORS(Response.status(404));
+		}
+	}
+
+	@GET
 	@Path("/{ID}/{attribute}")
 	@Produces("application/json")
-	public Response get(@PathParam("ID") String ID, @PathParam("attribute") String attribute) {
+	public Response getAttribute(@PathParam("ID") String ID, @PathParam("attribute") String attribute) {
 		if(attribute.contains("password")) return filter.addCORS(Response.status(405));
 		try {
 			// Attempt to log in to the given account with the provided credentials

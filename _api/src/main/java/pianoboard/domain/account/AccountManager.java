@@ -80,17 +80,11 @@ public class AccountManager {
 			case "password":
 				a.setPassword((String)value);
 				break;
-			case "addfavoriteGenres":
+			case "favoriteGenres":
 				a.addFavoriteGenre((String)value);
 				break;
-			case "removefavoriteGenres":
-				a.removeFavoriteGenre((String)value);
-				break;
-			case "addfavoriteArtists":
+			case "favoriteArtists":
 				a.addFavoriteArtist((String)value);
-				break;
-			case "removefavoriteArtists":
-				a.removeFavoriteArtist((String)value);
 				break;
 		}
 		accountDB.update(a);

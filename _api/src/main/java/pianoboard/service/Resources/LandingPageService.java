@@ -32,6 +32,13 @@ public class LandingPageService extends Service {
 
 	public LandingPageService() {}
 
+	@GET
+	@Produces("text/plain")
+	public String getApiInfo() {
+		// TODO return html page regarding all documentation info for the api
+		return "PIANOBOARD API DOCUMENTATION";
+	}
+
 	@POST
 	@Consumes("application/json")
 	@Produces("application/json")

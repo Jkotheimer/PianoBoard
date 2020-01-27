@@ -51,7 +51,7 @@ public class AccountRepresentation {
 	public void setFavoriteArtists(List<String> artists)	{ this.favoriteArtists = artists;	}
 	public void setLinks(List<Link> links)					{ this.links = links;				}
 
-	public void addFavoriteGenre(String genre)				{ this.favoriteGenres.add(genre);			}
-	public void addFavoriteArtist(String artists)			{ this.favoriteArtists.add(artists);		}
-	public void addLink(String action, String url)			{ this.links.add(new Link(action, url));	}
+	public void addFavoriteGenre(String genre)						{ this.favoriteGenres.add(genre);					}
+	public void addFavoriteArtist(String artists)					{ this.favoriteArtists.add(artists);				}
+	public void addLink(String action, String method, String url)	{ this.links.add(new Link(action, method, url));	}
 }
