@@ -40,7 +40,7 @@
 				<input type="password" id="confirm_password" class="form_input" placeholder="Confirm Password" required/>
 				<div id="confirm_password_notification" class="notification"></div>
 			</div>
-			<button class="submit" onclick="create_account()">Create Account</button>
+			<button id="submit" onclick="create_account()">Create Account</button>
 		</div>
 	</div>
 	<!--div id="loader">
@@ -108,7 +108,18 @@
 		</div>
 	</div-->
 
-
+	<script>
+		document.addEventListener("keydown", function() {
+			if(event.keyCode == 13) {
+				event.preventDefault();
+				login();
+			}
+			else if(event.keyCode == 9 && document.activeElement.name == "password") {
+				event.preventDefault();
+				document.activeElement = document.getElementById("submit");
+			}
+		});
+	</script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script type="text/javascript" src="./create_account.js"></script>
 </body>

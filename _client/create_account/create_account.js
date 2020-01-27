@@ -1,8 +1,9 @@
 $(document).ready(function() {
 	for(let e of document.getElementsByTagName("input")) {
+		if(e.value.length > 3) e.classList.add("complete_form_input");
 		e.addEventListener("keyup", function() {
-			if(e.value.length > 1) e.classList.add("complete_form_input");
-		   else e.classList.remove("complete_form_input");
+			if(e.value.length > 3) e.classList.add("complete_form_input");
+			else e.classList.remove("complete_form_input");
 		});
 	}
 });
