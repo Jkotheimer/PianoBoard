@@ -35,18 +35,32 @@ public class AccountService extends Service {
 	@GET
 	@Path("/{ID}")
 	@Produces("application/json")
-	public Response get(@PathParam("ID") String ID) {
+	public Response get(@PathParam("ID") String ID,
+						@HeaderParam("authorization") String token,
+						HttpServletRequest request) {
+
 		System.out.println("GET REQUEST ON USERS PATH TO RETRIEVE DATA FROM USER ID " + ID);
-		try {
-			// Attempt to log in to the given account with the provided credentials
-			return filter.addCORS(Response.ok(activity.get(ID)));
-		} catch(JsonProcessingException e) {
-			// Something went wrong reading the account and we return a server error code
-			return filter.addCORS(Response.status(500));
-		} catch(IOException e) {
-			// The account was not found so we return a not found status
-			System.out.println("Error: " + e.getMessage());
-			return filter.addCORS(Response.status(404));
+		if(token == null) {
+			try {
+				return filter.addCORS(Response.ok(activity.get(ID, false)));
+			} catch(IOException e) {
+				return filter.addCORS(Response.status(404));
+			}
+		} else {
+			String IP = getClientIp(request);
+			try {
+				// This function is void - if authorization fails, an exception is thrown
+				activity.authorizeToken(ID, token, IP);
+				return filter.addCORS(Response.ok(activity.get(ID, true)));
+			} catch(IOException e) {
+				return filter.addCORS(Response.status(404));
+			} catch(Exception e) {
+				try {
+					return filter.addCORS(Response.status(203).entity(activity.get(ID, false)));
+				} catch(IOException ex) {
+					return filter.addCORS(Response.status(404));
+				}
+			}
 		}
 	}
 
@@ -83,19 +97,21 @@ public class AccountService extends Service {
 	@Path("/{ID}/{attribute}")
 	@Produces("application/json")
 	public Response update(	@PathParam("ID") String ID,
+							@HeaderParam("authorization") String token,
 							@PathParam("attribute") String attribute,
 							@QueryParam("action") String action,
-							@HeaderParam("authorization") String token,
 							String data,
 							HttpServletRequest request) {
-		// TODO authorize token with username then update attribute with data if authorization passes
+		// TODO authorize token with ID then update attribute with data if authorization passes
 		return filter.addCORS(Response.ok());
 	}
 
 	@DELETE
+	@Path("/{ID}")
 	@Produces("application/json")
-	public Response delete(@PathParam("username") String username, @HeaderParam("authorization") String token) {
-		// TODO authorize token with username then delete account
+	public Response delete(@PathParam("ID") String ID,
+						   @HeaderParam("authorization") String token) {
+		// TODO authorize token with ID then delete account
 		return filter.addCORS(Response.ok());
 	}
 }

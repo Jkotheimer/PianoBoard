@@ -10,6 +10,8 @@ import java.io.IOException;
 
 import pianoboard.domain.project.*;
 import pianoboard.service.representations.*;
+import pianoboard.service.representations.authorized.*;
+import pianoboard.service.representations.unauthorized.*;
 import pianoboard.resources.Resources;
 
 /**

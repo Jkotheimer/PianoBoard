@@ -39,33 +39,37 @@ public class AccountManager {
 		return accountDB.searchByUsername(query);
 	}
 
-	public Token authorize(String email, String password, String IP) throws AuthenticationException, IOException {
+	public Token authorizeLogin(String email, String password, String IP) throws AuthenticationException, IOException {
 		Calendar c = Calendar.getInstance();
 		long timestamp = c.getTimeInMillis();
 		Account a = accountDB.getAccountByEmail(email);
 		if(a.login(email, password, IP, timestamp)) {
-			// Add 2 days onto the current time for the expiration date
-			Token t = new Token(a.getID(), UUID.randomUUID().toString(), timestamp + 172800000);
+			// Add a day onto the current time for the expiration date
+			Token t = new Token(a.getID(), UUID.randomUUID().toString(), timestamp + 86400000);
 			tokenDB.put(t);
 			return t;
 		}
 		else throw new AuthenticationException("Invalid Credentials");
 	}
 
-	public Token authorize(Token t, String IP) throws AuthenticationException, CredentialExpiredException {
+	// This function returns nothing because if verification fails, an exception is thrown, else nothing happens
+	public void authorizeToken(String ID, String token, String IP) throws AuthenticationException, CredentialExpiredException {
 		Calendar c = Calendar.getInstance();
-		long timestamp = c.getTimeInMillis();
-		tokenDB.verify(t, timestamp);
-		return new Token();
+		tokenDB.verify(ID, token, c.getTimeInMillis());
 	}
 
-	public Account create(String email, String username, String password, String IP) throws IOException {
+	public Token create(String email, String username, String password, String IP) throws IOException {
 		Calendar c = Calendar.getInstance();
 		long timestamp = c.getTimeInMillis();
 
 		Account a = new Account(UUID.randomUUID().toString(), email, username, password, timestamp, IP);
 		accountDB.create(a);
-		return a;
+
+		// Create a new token with the ID of the new account, then add a day to the timestamp for the expiration date
+		Token t = new Token(a.getID(), UUID.randomUUID().toString(), timestamp + 86400000);
+		tokenDB.put(t);
+
+		return t;
 	}
 
 	public Account update(String AccountID, String attribute, Object value) throws IOException {

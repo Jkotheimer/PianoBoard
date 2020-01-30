@@ -13,6 +13,7 @@ public class Account {
 	private String username;
 	private String password;
 	private long creationDate;
+	private boolean isPrivate;
 
 	private List<String> favoriteGenres;
 	private List<String> favoriteArtists;
@@ -27,6 +28,8 @@ public class Account {
 		this.username = username;
 		this.password = Password;
 		this.creationDate = creationDate;
+
+		this.isPrivate = false;
 
 		this.favoriteGenres = new ArrayList<String>();
 		this.favoriteArtists = new ArrayList<String>();
@@ -46,6 +49,7 @@ public class Account {
 	public String getEmail()							{ return this.email;				}
 	public String getPassword()							{ return this.password;				}
 	public long getCreationDate()						{ return this.creationDate;			}
+	public boolean isPrivate()							{ return this.isPrivate;			}
 	public List<String> getFavoriteGenres()				{ return this.favoriteGenres;		}
 	public List<String> getFavoriteArtists()			{ return this.favoriteArtists;		}
 	public List<LoginRecord> getFailedLoginAttempts()	{ return this.failedLoginAttempts;	}
@@ -87,6 +91,7 @@ public class Account {
 	public void setEmail(String email)							{ this.email = email;					}
 	public void setUsername(String username)					{ this.username = username;				}
 	public void setCreationDate(long creationDate)				{ this.creationDate = creationDate;		}
+	public void setIsPrivate(boolean privacy)					{ this.isPrivate = privacy;				}
 	public void setFavoriteGenres(List<String> genres)			{ this.favoriteGenres = genres;			}
 	public void setFavoriteArtists(List<String> artists)		{ this.favoriteArtists = artists;		}
 	public void setKnownIPs(List<LoginRecord> knownIPs)			{ this.knownIPs = knownIPs;				}

@@ -29,13 +29,14 @@ function create_account() {
 	xhr.open("POST", "http://localhost/api/", true);
 	xhr.setRequestHeader("Content-Type", "application/json");
 	xhr.onload = function() {
-		if(xhr.status != 201) {
-			// TODO display error
-			console.log("error " + xhr.status + ": " + xhr.response);
+		if(xhr.status == 201) {
+			localStorage.setItem("pianoboard_token", xhr.response);
+			console.log(xhr.response);
+			window.location = "/dashboard";
 		}
 		else {
-			localStorage.setItem("account", xhr.response);
-			console.log(xhr.response);
+			// TODO display error
+			console.log("error " + xhr.status + ": " + xhr.response);
 		}
 	}
 	xhr.send(data);

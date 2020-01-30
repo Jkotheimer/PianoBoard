@@ -43,7 +43,7 @@ public class AuthenticationService extends Service {
 		System.out.println("POST REQUEST ON /authentication/login - USER LOGIN INITIALIZED");
 		System.out.println("Email: " + auth.getEmail() + "\nUsername (should be null): " + auth.getUsername() + "\nPassword: " + auth.getPassword() + "\nIP: " + IP + "\n");
 		try {
-			return filter.addCORS(Response.ok(activity.authorize(auth.getEmail(), auth.getPassword(), IP)));
+			return filter.addCORS(Response.ok(activity.authorizeLogin(auth.getEmail(), auth.getPassword(), IP)));
 		} catch(AuthenticationException e) {
 			return filter.addCORS(Response.status(401));
 		} catch(IOException e) {
@@ -51,6 +51,7 @@ public class AuthenticationService extends Service {
 		}
 	}
 
+	/**
 	@POST
 	@Path("/token")
 	@Produces("application/json")
@@ -66,4 +67,5 @@ public class AuthenticationService extends Service {
 			return filter.addCORS(Response.status(401));
 		}
 	}
+	*/
 }

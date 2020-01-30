@@ -1,6 +1,7 @@
 package pianoboard.domain.account;
 
 import javax.naming.AuthenticationException;
+import javax.security.auth.login.CredentialExpiredException;
 
 public class Token {
 
@@ -32,11 +33,8 @@ public class Token {
 	public void setAccountID(String accountID)	{ this.accountID = accountID;		}
 	public void setExpDate(long expDate)		{ this.expDate = expDate;	}
 
-	public boolean equals(Token t) throws AuthenticationException {
-		if(t.getAccountID().equals(this.accountID)) {
-			if(t.getToken().equals(this.token) && t.getExpDate() == this.expDate) return true;
-			throw new AuthenticationException("Invalid Token");
-		}
-		return false;
+	public void verify(String token, long timestamp) throws AuthenticationException, CredentialExpiredException {
+		if(expDate - timestamp < 0) throw new CredentialExpiredException("Token Expired");
+		if(! this.token.equals(token)) throw new AuthenticationException("Invalid Token");
 	}
 }

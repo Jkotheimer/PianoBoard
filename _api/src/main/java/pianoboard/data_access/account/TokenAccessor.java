@@ -20,12 +20,13 @@ public class TokenAccessor {
 		database.add(t);
 	}
 
-	public void verify(Token t, long timestamp) throws AuthenticationException, CredentialExpiredException {
-		for(Token tok : database) {
-			if(tok.equals(t)) {
-				if((timestamp - tok.getExpDate()) < 7200000) return;
-				throw new CredentialExpiredException("Token Expired");
+	public void verify(String ID, String token, long timestamp) throws AuthenticationException, CredentialExpiredException {
+		for(Token t : database) {
+			if(t.getAccountID().equals(ID)) {
+				t.verify(token, timestamp);
+				return;
 			}
 		}
+		throw new AuthenticationException("Token Not Found");
 	}
 }
