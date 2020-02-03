@@ -43,15 +43,18 @@ public class LandingPageService extends Service {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public Response createAccount(AuthenticationRequest a, HttpServletRequest request) {
-		// TODO make an account from the given username and password in the authorization request
-		String IP = getClientIp(request);
+
 		System.out.println("POST REQUEST TO ROOT: ACCOUNT CREATION INITIALIZED");
-		System.out.println("Email: " + a.getEmail() + "\nUsername: " + a.getUsername() + "\nPassword: " + a.getPassword() + "\nIP: " + IP + "\n");
+
+		String IP = getClientIp(request);
 		try {
 			return filter.addCORS(Response.status(201).entity(activity.create(a.getEmail(), a.getUsername(), a.getPassword(), IP)));
 		} catch(IOException e) {
 			System.out.println(e.getMessage());
-			return filter.addCORS(Response.status(500));
+			return filter.addCORS(Response.status(409).entity(e.getMessage())); // Return conflict code (entity exists)
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+			return filter.addCORS(Response.status(500));  // Return server error code
 		}
 	}
 }

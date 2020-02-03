@@ -77,10 +77,10 @@
 				} else if(xhr.status == 401) {
 					console.log(xhr.response);
 				}
-				else if(xhr.status == 201) {
+				else if(xhr.status == 200) {
 					localStorage.setItem("account", xhr.response);
 					console.log(xhr.response);
-					//window.location.href = "/dashboard";
+					window.location.href = "/dashboard";
 				}
 			}
 			xhr.send(data);
