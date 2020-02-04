@@ -6,13 +6,13 @@
 	<link rel="icon" href="/images/favicon-32.png" type="image/png"/>
 	<link href="https://fonts.googleapis.com/css?family=Kalam&display=swap" rel="stylesheet"/>
 	<link href="https://fonts.googleapis.com/css?family=Exo&display=swap" rel="stylesheet"/>
-	<link rel="stylesheet" href="/UI/css/variables.css"/>
+	<link rel="stylesheet" href="/resources/css/variables.css"/>
 	<link rel="stylesheet" href="login_page.css"/>
 </head>
 <body>
 	<div class="panel">
 		<div class="logo">
-			<img src="/UI/images/logo.png"/>
+			<img src="/resources/images/logo.png"/>
 		</div>
 
 		<div class="link_area">
@@ -44,6 +44,7 @@
 		To learn more about me, visit my <a href="http://67.162.86.57">personal website</a>
 	</div>
 
+	<script type="text/javascript" src="/resources/js/resources.json"></script>
 	<script>
 		document.addEventListener("keydown", function() {
 			if(event.keyCode == 13) {
@@ -78,7 +79,7 @@
 					console.log(xhr.response);
 				}
 				else if(xhr.status == 200) {
-					localStorage.setItem("account", xhr.response);
+					localStorage.setItem(resources.token, xhr.response);
 					console.log(xhr.response);
 					window.location.href = "/dashboard";
 				}

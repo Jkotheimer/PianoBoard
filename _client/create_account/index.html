@@ -3,15 +3,15 @@
 	<meta charset="utf-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>Create Account</title>
-	<link rel="shortcut icon" href="/UI/images/favicon-32.png" type="image/png"/>
+	<link rel="shortcut icon" href="/resources/images/favicon-32.png" type="image/png"/>
 	<link href="https://fonts.googleapis.com/css?family=Exo&display=swap" rel="stylesheet"/>
-	<link rel="stylesheet" href="/UI/css/logo.css"/>
-	<link rel="stylesheet" href="/UI/css/variables.css"/>
+	<link rel="stylesheet" href="/resources/css/logo.css"/>
+	<link rel="stylesheet" href="/resources/css/variables.css"/>
 	<link rel="stylesheet" href="./create_account.css"/>
 </head>
 <body>
 	<a class="logo_box" href="/">
-		<img src="/UI/images/logo.png" class="logo"/>
+		<img src="/resources/images/logo.png" class="logo"/>
 	</a>
 
 	<div class="panel">
@@ -49,7 +49,7 @@
 			<p class="c-title">
 				What are your favorite music genres?
 				<button id="genre_done" class="done" onclick="submitGenres()">
-					done <img src="/UI/images/arrow.png" class="arrow">
+					done <img src="/resources/images/arrow.png" class="arrow">
 				</button>
 				<span id="g_incomplete" class="incomplete">You haven't selected any genres yet!</span>
 			</p>
@@ -65,7 +65,7 @@
 			<p class="c-title">
 				What are your favorite bands/artists?
 				<button id="band_done" class="done" onclick="bandDone()">
-					done <img src="/UI/images/arrow.png" class="arrow">
+					done <img src="/resources/images/arrow.png" class="arrow">
 				</button>
 				<span id="b_incomplete" class="incomplete">You haven't selected any artists yet!</span>
 			</p>
@@ -85,7 +85,7 @@
 			<p class="c-title">
 				Tell us about your experience
 				<button id="exp_done" class="done" onclick="Years_Done()">
-					done <img src="/UI/images/arrow.png" class="arrow">
+					done <img src="/resources/images/arrow.png" class="arrow">
 				</button>
 				<span id="e_incomplete" class="incomplete exp">You must choose an option</span>
 			</p>
@@ -121,5 +121,6 @@
 		});
 	</script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript" src="/resources/js/resources.js"></script>
 	<script type="text/javascript" src="./create_account.js"></script>
 </body>
