@@ -2,21 +2,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dashboard</title>
-    <link rel="shortcut icon" href="../images/Icon.ico" type="image/x-icon" />
+    <title>Pianoboard Dashboard</title>
+    <link rel="shortcut icon" href="/resources/images/favicon-32.png" type="image/x-icon" />
     <link rel="stylesheet" href="dashboard.css">
-    <link rel="stylesheet" href="../images/generalStyles.css">
-    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-storage.js"></script>
-    <script type="text/javascript" src="../firebase/app.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/resources/css/logo.css">
 </head>
 <body onload="showInfo();">
-    <div id="logoBox" class="logoBox dashLogoBox" onclick="window.location.reload();">
-        <img id="logoo" class="logo dashLogo" src="../images/PBlogo.png"></div>
+    <div class="logo_box" onclick="window.location.reload();">
+        <img src="/resources/images/logo.png" class="logo">
     </div>
     <div class="navBar">
         <span id="welcomeUser" class="welcome"></span>
@@ -57,63 +50,4 @@
 
     <script type="text/javascript" src="./dashboardInteractives.js"></script>
     <script type="text/javascript" src="../images/animations.js"></script>
-    <script type="text/javascript" src="./project.js"></script>
-    <script>
-        var objects = new Map();
-        objects.set("gradient", "centralContent");
-        objects.set("border", "logoBox");
-        colorFade(objects);
-        
-        var resizeable = setInterval(function() {
-            var topLogo = document.getElementById("logoo");
-            var centralContent = document.getElementById("centralContent");
-            var leftPanel = document.getElementById("leftPanel");
-            if($(window).width() <= 800) topLogo.src = "../images/icon.ico";
-            else topLogo.src = "../images/PBlogo.png";
-            if($(window).width() <= 600) {
-                var t = centralContent.clientHeight + 120;
-                leftPanel.style.top = t + "px";
-                document.getElementById("sixbar").innerHTML = "<br>";
-            }
-            else {
-                leftPanel.style.top = "90px";
-                document.getElementById("sixbar").innerHTML = "";
-            }
-        }, 10);
-
-        function createNewProject() {
-            var jsonProject = {
-                name : "Project 1",
-                tracks : [
-                    {
-                        name : "Track 1",
-                        recordings : {},
-                        settings : {
-                            volume : 50,
-                            pan : 0,
-                            mute : false,
-                            solo : false
-                        }
-                    }],
-                settings : {
-                    tempo : 120,
-                    timesig : 4/4,
-                    instrument : "piano",
-                    playClick : false,
-                    mainVolume : 50,
-                    octave : 2
-                },
-                rulerPosition : 0
-            };
-            var proj = JSON.stringify(new project(jsonProject), function( key, value) { 
-                if(key == 'project') { 
-                    return value.id;
-                } else {
-                    return value;
-                };
-            });
-            sessionStorage.setItem("project", proj);
-            window.location.href='../studio';
-        }
-    </script>
 </body>

@@ -52,9 +52,6 @@ public class LandingPageService extends Service {
 		} catch(IOException e) {
 			System.out.println(e.getMessage());
 			return filter.addCORS(Response.status(409).entity(e.getMessage())); // Return conflict code (entity exists)
-		} catch(Exception e) {
-			System.out.println(e.getMessage());
-			return filter.addCORS(Response.status(500));  // Return server error code
 		}
 	}
 }

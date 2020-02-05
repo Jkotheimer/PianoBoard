@@ -44,12 +44,12 @@
 		To learn more about me, visit my <a href="http://67.162.86.57">personal website</a>
 	</div>
 
-	<script type="text/javascript" src="/resources/js/resources.json"></script>
+	<script type="text/javascript" src="/resources/js/resources.js"></script>
 	<script>
 		window.addEventListener('load', function(event) {
-			console.log("window loaded");
+			if(localStorage.getItem(resources.token) != null) window.location.href = "/dashboard";
 		});
-		document.addEventListener("keydown", () {
+		document.addEventListener("keydown", function() {
 			if(event.keyCode == 13) {
 				event.preventDefault();
 				login();

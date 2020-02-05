@@ -26,27 +26,31 @@ function create_account() {
 	});
 
 	var xhr = new XMLHttpRequest();
-	xhr.open("POST", "http://localhost/api/", true);
+	xhr.open("POST", resources.api_root, true);
 	xhr.setRequestHeader("Content-Type", "application/json");
 	xhr.onload = function() {
 		if(xhr.status == 201) {
-			localStorage.setItem("pianoboard_token", xhr.response);
+			localStorage.setItem(resources.token, xhr.response);
 			window.location = "/dashboard";
 		}
 		else if(xhr.status == 409) {
-			// TODO display user already exists
-			var notification = document.getElementById("email_notification");
-			notification.innerHTML = xhr.response;
-			notification.style.display = "block";
-			document.getElementById("email").addEventListener("keypress", () => {
-				notification.innerHTML = "";
-				notification.style.display = "none";
-			});
-			console.log("error " + xhr.status + ": " + xhr.response);
+			// display user already exists error
+			display_error("email", xhr.response);
 		} else {
-			// TODO display server error
-			console.log("error " + xhr.status + ": " + xhr.response);
+			// display server error
+			display_error("confirm_password", "There was a server error :/<br/>Try again later.");
 		}
 	}
 	xhr.send(data);
+}
+
+function display_error(field, message) {
+	var notification = document.getElementById(field + "_notification");
+	notification.innerHTML = message;
+	notification.style.display = "block";
+	document.getElementById(field).addEventListener("keypress", () => {
+		notification.innerHTML = "";
+		notification.style.display = "none";
+	});
+	console.log("error: " + message);
 }
