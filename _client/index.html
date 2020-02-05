@@ -46,7 +46,10 @@
 
 	<script type="text/javascript" src="/resources/js/resources.json"></script>
 	<script>
-		document.addEventListener("keydown", function() {
+		window.addEventListener('load', function(event) {
+			console.log("window loaded");
+		});
+		document.addEventListener("keydown", () {
 			if(event.keyCode == 13) {
 				event.preventDefault();
 				login();
