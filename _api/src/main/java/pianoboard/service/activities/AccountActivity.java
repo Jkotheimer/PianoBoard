@@ -65,7 +65,7 @@ public class AccountActivity {
 	/**
 	 * Attempt to create an account with the provided username, email, and password
 	 */
-	public Token create(String email, String username, String password, String IP) throws IOException {
-		return manager.create(email, username, password, IP);
+	public Token create(String email, String password, String IP) throws IOException {
+		return manager.create(email, password, IP);
 	}
 }

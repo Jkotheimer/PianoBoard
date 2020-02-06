@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
-import pianoboard.service.requests.AuthenticationRequest;
+import pianoboard.service.requests.AccountRequest;
 import pianoboard.service.activities.AccountActivity;
 import pianoboard.domain.account.Token;
 
@@ -37,11 +37,11 @@ public class AuthenticationService extends Service {
 	@POST
 	@Path("/login")
 	@Produces("application/json")
-	public Response login(AuthenticationRequest auth, HttpServletRequest request) {
+	public Response login(AccountRequest auth, HttpServletRequest request) {
 
 		String IP = getClientIp(request);
 		System.out.println("POST REQUEST ON /authentication/login - USER LOGIN INITIALIZED");
-		System.out.println("Email: " + auth.getEmail() + "\nUsername (should be null): " + auth.getUsername() + "\nPassword: " + auth.getPassword() + "\nIP: " + IP + "\n");
+		System.out.println("Email: " + auth.getEmail() + "\nPassword: " + auth.getPassword() + "\nIP: " + IP + "\n");
 		try {
 			return filter.addCORS(Response.ok(activity.authorizeLogin(auth.getEmail(), auth.getPassword(), IP)));
 		} catch(AuthenticationException e) {

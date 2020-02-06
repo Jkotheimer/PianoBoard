@@ -58,10 +58,11 @@ public class AccountManager {
 		tokenDB.verify(ID, token, c.getTimeInMillis());
 	}
 
-	public Token create(String email, String username, String password, String IP) throws IOException {
+	public Token create(String email, String password, String IP) throws IOException {
 		Calendar c = Calendar.getInstance();
 		long timestamp = c.getTimeInMillis();
 
+		String username = generateUsername(email);
 		Account a = new Account(UUID.randomUUID().toString(), email, username, password, timestamp, IP);
 		accountDB.create(a);
 
@@ -93,5 +94,20 @@ public class AccountManager {
 		}
 		accountDB.update(a);
 		return a;
+	}
+
+	private String generateUsername(String email) {
+
+		// Extract the username from the email address
+		int index = email.indexOf('@');
+		String username = email.substring(0, index);
+
+		// turn the domain part of the email address into an int by adding all of the ascii values of each char together
+		int sum = 0;
+		String domain = email.substring(index, email.length() - 1);
+		for(int i = 0; i < domain.length(); i++) sum += (int) domain.charAt(i);
+
+		// this value will technically be a unique username (given all emails are unique)
+		return username + Integer.toString(sum);
 	}
 }

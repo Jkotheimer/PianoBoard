@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
-import pianoboard.service.requests.AuthenticationRequest;
+import pianoboard.service.requests.AccountRequest;
 import pianoboard.service.activities.AccountActivity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -42,13 +42,13 @@ public class LandingPageService extends Service {
 	@POST
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response createAccount(AuthenticationRequest a, HttpServletRequest request) {
+	public Response createAccount(AccountRequest a, HttpServletRequest request) {
 
 		System.out.println("POST REQUEST TO ROOT: ACCOUNT CREATION INITIALIZED");
 
 		String IP = getClientIp(request);
 		try {
-			return filter.addCORS(Response.status(201).entity(activity.create(a.getEmail(), a.getUsername(), a.getPassword(), IP)));
+			return filter.addCORS(Response.status(201).entity(activity.create(a.getEmail(), a.getPassword(), IP)));
 		} catch(IOException e) {
 			System.out.println(e.getMessage());
 			return filter.addCORS(Response.status(409).entity(e.getMessage())); // Return conflict code (entity exists)
