@@ -29,6 +29,7 @@ h {
 }
 .form_section {
 	text-align: left;
+	margin-bottom: 25px;
 }
 .form_label {
 	color: var(--purple);
@@ -40,6 +41,7 @@ h {
 	margin: 5px 10px 5px -25px;
 	color: #CCC;
 	font-size: 20px;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 	padding-bottom: 10px;
 	left: 25px;
 	background-color: transparent;
@@ -74,7 +76,7 @@ h {
 	border: 1px solid var(--yellow);
 	background-color: var(--cream);
 }
-.submit:hover { cursor: pointer; }
+#submit:hover { cursor: pointer; }
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,

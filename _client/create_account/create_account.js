@@ -10,18 +10,25 @@ $(document).ready(function() {
 
 function create_account() {
 	var email = document.getElementById("email").value;
-	var username = document.getElementById("username").value;
 	var password = document.getElementById("password").value;
 	var confirm_password = document.getElementById("confirm_password").value;
 
+	const email_regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	if(!email_regex.test(email)) {
+		display_error("email", "Please enter a valid email address");
+		return;
+	}
+	if(password.length < 8) {
+		display_error("password", "Password is too short");
+		return;
+	}
 	if(password != confirm_password) {
-		// TODO show an error message that the passwords do not match
+		display_error("confirm_password", "Passwords do not match");
 		return;
 	}
 
 	var data = JSON.stringify({
 		"email" : email,
-		"username" : username,
 		"password" : password
 	});
 
