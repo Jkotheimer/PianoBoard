@@ -9,7 +9,7 @@ function display_error(field, message) {
 	var notification = document.getElementById(field + "_notification");
 	notification.innerHTML = message;
 	notification.style.display = "block";
-	document.getElementById(field).addEventListener("keypress", () => {
+	document.addEventListener("keypress", () => {
 		notification.innerHTML = "";
 		notification.style.display = "none";
 	});

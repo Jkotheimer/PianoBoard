@@ -26,10 +26,10 @@ public class TokenAccessor {
 		database.add(t);
 	}
 
-	public void authenticate(String ID, String token, long timestamp) throws AuthenticationException, CredentialExpiredException {
+	public void authenticate(String ID, String token) throws AuthenticationException, CredentialExpiredException {
 		for(Token t : database) {
 			if(t.getAccountID().equals(ID)) {
-				t.verify(token, timestamp);
+				t.verify(token);
 				return;
 			}
 		}
@@ -40,7 +40,7 @@ public class TokenAccessor {
 		Token removed_token = null;
 		for(Token t : database) {
 			if(t.getAccountID().equals(t.getAccountID())) {
-				t.verify(token.getToken(), token.getExpDate());
+				t.verify(token.getToken());
 				// Removing the token from within the loop causes a ConcurrentModificationException
 				removed_token = t;
 				break;

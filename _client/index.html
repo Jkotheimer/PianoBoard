@@ -5,9 +5,16 @@
 	<title>PianoBoard Login</title>
 	<script type="text/javascript" src="/resources/js/resources.js"></script>
 	<script>
-		window.addEventListener('load', function(event) {
+		window.addEventListener('load', function() {
 			if(localStorage.getItem(resources.token) != null) {
 				validate_token(localStorage.getItem(resources.token));
+			}
+			for(let e of document.getElementsByTagName("input")) {
+				if(e.value.length > 0) e.classList.add("complete_form_input");
+				e.addEventListener("keyup", function() {
+					if(e.value.length > 0) e.classList.add("complete_form_input");
+					else e.classList.remove("complete_form_input");
+				});
 			}
 		});
 		function validate_token(token) {
@@ -27,11 +34,12 @@
 			xhr.send(token);
 		}
 	</script>
-	<link rel="icon" href="/images/favicon-32.png" type="image/png"/>
+	<link rel="shortcut icon" href="/resources/images/favicon-32.png" type="image/png"/>
 	<link href="https://fonts.googleapis.com/css?family=Kalam" rel="stylesheet"/>
 	<link href="https://fonts.googleapis.com/css?family=Exo" rel="stylesheet"/>
 	<link rel="stylesheet" href="/resources/css/variables.css"/>
-	<link rel="stylesheet" href="login_page.css"/>
+	<link rel="stylesheet" href="/resources/css/form_styles.css"/>
+	<link rel="stylesheet" href="/login_page.css"/>
 </head>
 <body>
 	<div class="panel">
@@ -46,7 +54,6 @@
 		</div>
 
 		<div class="form_area">
-
 			<div class="form_section">
 				<div class="form_label">Email</div>
 				<input type="text" id="email" class="form_input" placeholder="your.email@something.com"
@@ -82,6 +89,17 @@
 		function login() {
 			var email = document.getElementById("email").value;
 			var password = document.getElementById("password").value;
+
+			const email_regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+			if(!email_regex.test(email) || email.length < 3) {
+				display_error("email", "Please enter a valid email address");
+				return;
+			}
+			if(password.length < 8) {
+				display_error("password", "Password is too short");
+				return;
+			}
+
 			var data = JSON.stringify({
 				"email" : email,
 				"password" : password
@@ -92,10 +110,9 @@
 			xhr.setRequestHeader("Content-Type", "application/json");
 			xhr.onload = function() {
 				if(xhr.status == 500) {
-					// TODO display errors
-					display_error("password", "There was a server error :/<br>Try again later.");
+					display_error("password", "There was a server error :/<br/>Try again later.");
 				} else if(xhr.status == 404) {
-					display_error("email", "We couldn't find an account with this email try <a href='/create_account'>creating an account<a>");
+					display_error("email", "We couldn't find an account with this email. Try <a href='/create_account'>creating an account<a>");
 				} else if(xhr.status == 401) {
 					display_error("password", "Incorrect password");
 				}

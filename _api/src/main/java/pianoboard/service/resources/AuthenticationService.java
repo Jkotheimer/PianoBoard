@@ -49,7 +49,7 @@ public class AuthenticationService extends Service {
 		} catch(AuthenticationException e) {
 			return filter.addCORS(Response.status(401));
 		} catch(IOException e) {
-			return filter.addCORS(Response.status(500));
+			return filter.addCORS(Response.status(404));
 		}
 	}
 
@@ -64,9 +64,9 @@ public class AuthenticationService extends Service {
 			// Returns a refreshed token to the client if the authentication passes
 			return filter.addCORS(Response.status(201).entity(activity.refreshToken(token, getClientIp(request))));
 		} catch(AuthenticationException e) {
-			return filter.addCORS(Response.status(401).entity("Invalid Token"));
+			return filter.addCORS(Response.status(401).entity(e.getMessage()));
 		} catch (CredentialExpiredException e) {
-			return filter.addCORS(Response.status(401).entity("Expired Token"));
+			return filter.addCORS(Response.status(401).entity(e.getMessage()));
 		}
 	}
 }

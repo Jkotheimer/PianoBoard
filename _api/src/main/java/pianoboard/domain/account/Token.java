@@ -39,8 +39,8 @@ public class Token {
 	public void setAccountID(String accountID)	{ this.accountID = accountID;		}
 	public void setExpDate(long expDate)		{ this.expDate = expDate;	}
 
-	public void verify(String token, long timestamp) throws AuthenticationException, CredentialExpiredException {
-		if(expDate - timestamp < 0) throw new CredentialExpiredException("Token Expired");
+	public void verify(String token) throws AuthenticationException, CredentialExpiredException {
+		if(expDate - System.currentTimeMillis() < 0) throw new CredentialExpiredException("Token Expired");
 		if(! this.token.equals(token)) throw new AuthenticationException("Invalid Token");
 	}
 }

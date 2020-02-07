@@ -59,7 +59,7 @@ public class AccountManager {
 
 	// This function returns nothing because if verification fails, an exception is thrown, else nothing happens
 	public void authenticateToken(String ID, String token, String IP) throws AuthenticationException, CredentialExpiredException {
-		tokenDB.authenticate(ID, token, System.currentTimeMillis());
+		tokenDB.authenticate(ID, token);
 	}
 
 	public Token create(String email, String password, String IP) throws IOException {

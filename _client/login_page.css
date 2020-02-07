@@ -32,39 +32,13 @@ body {
 .form_area {
 	position: relative;
 	display: inline-block;
-	margin-top: 3%;
 	top: -75%;
 	width: 50%;
 	height: 75%;
+	padding-left: 20px;
 }
 .form_section {
-	position: relative;
-	display: block;
-	width: 100%;
-	height: 45%;
-}
-.form_label {
-	position: absolute;
-	left: 10%;
-	font-size: 28px;
-	color: var(--cream);
-}
-.form_input{
-	position: absolute;
-	top: 25px;
-	right: 0;
-	height: 10px;
-	width: 90%;
-	color: var(--cream);
-	font-size: 20px;
-	padding: 20px 0 15px;
-	background-color: transparent;
-	border-color: transparent;
-	border-bottom-color: #666666;
-}
-.form_input:focus {
-	outline: none;
-	border-bottom-color: var(--cream);
+	margin-bottom: 20px;
 }
 
 /* LINK AREA */
@@ -101,26 +75,13 @@ body {
 	background-color: var(--cream);
 	top: 75%;
 }
-
-.notification {
-	position: relative;
-	text-align: center;
-	width: 100%;
-	padding: 5px 0;
-	margin: 5px 0;
-	font-size: 18px;
-	border-radius: 0px 10px 10px 10px;
-	color: #444;
-	background-color: red;
-	display: none;
-	transition: transform .2s;
-}
-#email_notification {bottom: 190px;}
-
 .info {
 	position: relative;
 	width: var(--panel-width);
 	margin: 10px auto 0;
 	text-align: right;
 	font-size: 12px;
+}
+.notification {
+	--panel-height: 450px;
 }

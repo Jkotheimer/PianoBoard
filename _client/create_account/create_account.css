@@ -7,7 +7,7 @@ body {
 .panel {
 	position: relative;
 	background-color: #393939;
-	width: 325px;
+	width: 350px;
 	height: auto;
 	margin: auto;
 	top: 75px;
@@ -22,49 +22,10 @@ body {
 h {
 	display: block;
 	font-size: 32px;
-	color: var(--cream);
-}
-.form_area {
-	margin-top: 15px;
-}
-.form_section {
-	text-align: left;
-	margin-bottom: 25px;
-}
-.form_label {
 	color: var(--purple);
 }
-.form_input {
-	position: relative;
-	height: 15px;
-	width: 100%;
-	margin: 5px 10px 5px -25px;
-	color: #CCC;
-	font-size: 20px;
-	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-	padding-bottom: 10px;
-	left: 25px;
-	background-color: transparent;
-	border: 2px solid transparent;
-	border-bottom-color: #666;
-}
-.form_input:focus {
-	outline: none;
-	border-bottom-color: #CCC;
-}
-
-.notification {
-    position: relative;
-    text-align: center;
-    width: 100%;
-    padding: 5px 0;
-	margin: 5px 0;
-    font-size: 18px;
-    border-radius: 0px 10px 10px 10px;
-    color: #444;
-    background-color: red;
-    display: none;
-    transition: transform .2s;
+.form_section {
+	margin-bottom: 30px;
 }
 #submit {
 	padding: 5px 20px;
@@ -74,7 +35,7 @@ h {
 	font-family: 'Exo';
 	color: #393939;
 	border: 1px solid var(--yellow);
-	background-color: var(--cream);
+	background-color: var(--yellow);
 }
 #submit:hover { cursor: pointer; }
 
@@ -92,8 +53,4 @@ select:-webkit-autofill:focus {
 	border-bottom-color: var(--yellow);
 	-webkit-text-fill-color: var(--yellow);
 	-webkit-box-shadow: 0 0 0 1000px #393939 inset !important;
-}
-.complete_form_input {
-	border-bottom-color: var(--yellow);
-	color: var(--yellow);
 }
