@@ -8,42 +8,35 @@
 	<link rel="stylesheet" href="/resources/css/logo.css">
 </head>
 <body>
-	<div class="navBar">
+
+	<div class="nav_bar">
 		<div class="logo_box" onclick="window.location.reload()">
 			<img src="/resources/images/logo.png" class="logo">
 		</div>
-		<span id="welcomeUser" class="welcome"></span>
-		<span id="sixbar"></span>
-		<span class="navLink P" onclick="createNewProject()">
-			<img class="icons" src="../images/plusSign.png">
-			<span id="P"></span>
+
+		<span class="nav_link" onclick="create_project()">
+			<img class="icon" src="/resources/images/create.png">
 		</span>
-		<span class="navLink T">
-			<img class="icons" src="../images/book.png">
-			<span id="T"></span>
+		<span class="nav_link">
+			<img class="icon" src="/resources/images/tutorial.png">
 		</span>
-		<span class="navLink S">
-			<img class="icons" src="../images/settingsGear.png">
-			<span id="S"></span>
+		<span class="nav_link">
+			<img class="icon" src="/resources/images/settings.png">
 		</span>
 	</div>
-	<div id="leftPanel" class="leftPanel">
-		<!-- profile pic / username / email / # projects / some other shit maybe-->
-		<div id="profilePic" onclick="showProfilePicHint()" ondragover="showCam(event)"
-							ondragleave="hideCam()" ondrop="uploadProfilePic(event)">
-			<img id="cam" src="../images/camera.png">
-			<img id="profpic">
-			<div id="drag_and_drop_info">Drag and drop an image file here <br>to set your profile picture</div>
+
+	<div class="panel">
+		<div class="profile_picture_container" onclick="show_picture_hint()">
+			<img id="profile_picture">
+			<div id="picture_hint">Drag and drop an image file here <br>to set your profile picture</div>
 		</div>
-		<br>
+
 		<div id="info"></div>
-		<button id="signOut" onclick="signOut()">Sign out</button>
+		<button onclick="sign_out()">Sign out</button>
 	</div>
-	<div id="centralContent">
+
+	<div class="panel">
 		<header>Your Projects</header>
-		<div id="projectArea"></div>
-		<button class="createNewProject" onclick="createNewProject();">
-			Create New Project<span class="plus">+</span>
-		</button>
+		<div id="project_area"></div>
 	</div>
 </body>
