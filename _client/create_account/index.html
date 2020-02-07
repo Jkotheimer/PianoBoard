@@ -4,7 +4,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>Create Account</title>
 	<link rel="shortcut icon" href="/resources/images/favicon-32.png" type="image/png"/>
-	<link href="https://fonts.googleapis.com/css?family=Exo&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Exo" rel="stylesheet">
 	<link rel="stylesheet" href="/resources/css/logo.css"/>
 	<link rel="stylesheet" href="/resources/css/variables.css"/>
 	<link rel="stylesheet" href="./create_account.css"/>
@@ -37,70 +37,6 @@
 			<button id="submit" onclick="create_account()">Create Account</button>
 		</div>
 	</div>
-	<!--div id="loader">
-		While we prepare your account, tell us a little bit about yourself.
-		<div id="genreSelector">
-			<p class="c-title">
-				What are your favorite music genres?
-				<button id="genre_done" class="done" onclick="submitGenres()">
-					done <img src="/resources/images/arrow.png" class="arrow">
-				</button>
-				<span id="g_incomplete" class="incomplete">You haven't selected any genres yet!</span>
-			</p>
-			<div class="gb-content">
-				<span class="gib">
-					<input type="text" id="genre_input" class="creation_input" autocomplete="off" spellcheck="false">
-					<span id="genre_autocomplete" class="autocomplete"></span>
-				</span>
-				<span id="selected_genres" class="selected">Genres you select will appear here</span>
-			</div>
-		</div>
-		<div id="bandSelector">
-			<p class="c-title">
-				What are your favorite bands/artists?
-				<button id="band_done" class="done" onclick="bandDone()">
-					done <img src="/resources/images/arrow.png" class="arrow">
-				</button>
-				<span id="b_incomplete" class="incomplete">You haven't selected any artists yet!</span>
-			</p>
-			<div class="gb-content">
-				<span id="bib" class="gib">
-					<input type="text" id="artists" class="creation_input" autocomplete="off" spellcheck="false">
-					<span id="band_autocomplete" class="autocomplete"></span>
-					<div id="recommended_bands">
-						Based on your favorite genres, we think you might like these artists!
-						<div id="recommendations"></div>
-					</div>
-				</span>
-				<span id="selected_bands" class="selected">The bands you select will go here.</span>
-			</div>
-		</div>
-		<div id="experience">
-			<p class="c-title">
-				Tell us about your experience
-				<button id="exp_done" class="done" onclick="Years_Done()">
-					done <img src="/resources/images/arrow.png" class="arrow">
-				</button>
-				<span id="e_incomplete" class="incomplete exp">You must choose an option</span>
-			</p>
-			<div id="years">
-				How long have you been playing music?
-				<select id="yearsIn" class="selectInput">
-					<option value="error" disabled selected hidden>Choose One</option>
-					<option value="Brand New!">Brand New!</option>
-					<option value="Less than a Year">Less than a Year</option>
-					<option value="1 Year">1 Year</option>
-					<option value="2 Years">2 Years</option>
-					<option value="3 Years">3 Years</option>
-					<option value="4 Years">4 Years</option>
-					<option value="5 Years">5 Years</option>
-					<option value="6 Years">6 Years</option>
-					<option value="7 Years">7 Years</option>
-					<option value="8+ Years">8+ Years</option>
-				</select>
-			</div>
-		</div>
-	</div-->
 
 	<script>
 		document.addEventListener("keydown", function() {
@@ -114,7 +50,6 @@
 			}
 		});
 	</script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script type="text/javascript" src="/resources/js/resources.js"></script>
 	<script type="text/javascript" src="./create_account.js"></script>
 </body>

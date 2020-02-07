@@ -1,4 +1,4 @@
-$(document).ready(function() {
+window.addEventListener('load', function() {
 	for(let e of document.getElementsByTagName("input")) {
 		if(e.value.length > 0) e.classList.add("complete_form_input");
 		e.addEventListener("keyup", function() {
