@@ -25,15 +25,14 @@
 
 			<div class="form_section">
 				<div class="form_label">Email</div>
-				<input type="text" id="email" class="form_input" placeholder="Enter your email"
-					autocapitalize="off" autocomplete="off" spellcheck="false" autocorrect="off" required/>
-				<div id="email_notification"></div>
+				<input type="text" id="email" class="form_input" placeholder="your.email@something.com"
+					autocapitalize="off" spellcheck="false" autocorrect="off" required/>
+				<div id="email_notification" class="notification"></div>
 			</div>
 			<div class="form_section">
 				<div class="form_label">Password</div>
-				<input type="password" id="password" class="form_input" placeholder="Enter your password" minlength="8"
-					autocapitalize="off" autocomplete="off" spellcheck="false" autocorrect="off" required/>
-				<div id="password_notification"></div>
+				<input type="password" id="password" class="form_input" placeholder="Enter your password" required/>
+				<div id="password_notification" class="notification"></div>
 			</div>
 		</div>
 	</div>
@@ -47,8 +46,11 @@
 	<script type="text/javascript" src="/resources/js/resources.js"></script>
 	<script>
 		window.addEventListener('load', function(event) {
-			if(localStorage.getItem(resources.token) != null) window.location.href = "/dashboard";
+			if(localStorage.getItem(resources.token) != null) {
+				validate_token(localStorage.getItem(resources.token));
+			}
 		});
+
 		document.addEventListener("keydown", function() {
 			if(event.keyCode == 13) {
 				event.preventDefault();
@@ -65,29 +67,44 @@
 			var password = document.getElementById("password").value;
 			var data = JSON.stringify({
 				"email" : email,
-				"username" : email,
 				"password" : password
 			});
 
 			var xhr = new XMLHttpRequest();
-			xhr.open("POST", "http://localhost/api/authentication/login", true);
+			xhr.open("POST", resources.api_auth + "login", true);
 			xhr.setRequestHeader("Content-Type", "application/json");
 			xhr.onload = function() {
 				if(xhr.status == 500) {
 					// TODO display errors
-					console.log(xhr.response);
+					display_error("password", "There was a server error :/<br>Try again later.");
 				} else if(xhr.status == 404) {
-					console.log(xhr.response);
+					display_error("email", "We couldn't find an account with this email try <a href='/create_account'>creating an account<a>");
 				} else if(xhr.status == 401) {
-					console.log(xhr.response);
+					display_error("password", "Incorrect password");
 				}
-				else if(xhr.status == 200) {
+				else if(xhr.status == 201) {
 					localStorage.setItem(resources.token, xhr.response);
-					console.log(xhr.response);
 					window.location.href = "/dashboard";
 				}
 			}
 			xhr.send(data);
+		}
+
+		function validate_token(token) {
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST", resources.api_auth + "token", true);
+			xhr.setRequestHeader("Content-Type", "application/json");
+			xhr.onload = function() {
+				if(xhr.status == 201) {
+					localStorage.setItem(resources.token, xhr.response);
+					window.location.href = "/dashboard";
+				}
+				else {
+					// Possibly add a GUI message to convey this?
+					console.log(xhr.response);
+				}
+			}
+			xhr.send(token);
 		}
 	</script>
 </body>

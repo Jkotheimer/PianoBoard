@@ -36,28 +36,35 @@ public class AccountService extends Service {
 	@Path("/{ID}")
 	@Produces("application/json")
 	public Response get(@PathParam("ID") String ID,
-						@HeaderParam("authorization") String token,
+						@HeaderParam("authentication") String token,
 						HttpServletRequest request) {
 
 		System.out.println("GET REQUEST ON USERS PATH TO RETRIEVE DATA FROM USER ID " + ID);
+
+		// If there was no token passed along with the request, just get the account as an unauthorized user
 		if(token == null) {
 			try {
 				return filter.addCORS(Response.ok(activity.get(ID, false)));
 			} catch(IOException e) {
+				// The requested user ID does not exist
 				return filter.addCORS(Response.status(404));
 			}
 		} else {
 			String IP = getClientIp(request);
 			try {
-				// This function is void - if authorization fails, an exception is thrown
-				activity.authorizeToken(ID, token, IP);
+				// This function is void - if authentication fails, an exception is thrown
+				activity.authenticateToken(ID, token, IP);
+				// If authentication passes, attempt to get the user account as an authorized user
 				return filter.addCORS(Response.ok(activity.get(ID, true)));
 			} catch(IOException e) {
+				// The requested user ID does not exist
 				return filter.addCORS(Response.status(404));
 			} catch(Exception e) {
+				// If the token does not pass authentication, we just grab the account as an unauthorized user
 				try {
-					return filter.addCORS(Response.status(203).entity(activity.get(ID, false)));
+					return filter.addCORS(Response.ok(activity.get(ID, false)));
 				} catch(IOException ex) {
+					// The requested user does not exist
 					return filter.addCORS(Response.status(404));
 				}
 			}
@@ -68,7 +75,7 @@ public class AccountService extends Service {
 	@Produces("application/json")
 	public Response search(@QueryParam("search") String query) {
 		try {
-			// Attempt to log in to the given account with the provided credentials
+			// Attempt to search for the provided query
 			return filter.addCORS(Response.ok(activity.search(query)));
 		} catch(IOException e) {
 			// The account was not found so we return a not found status
@@ -80,7 +87,10 @@ public class AccountService extends Service {
 	@Path("/{ID}/{attribute}")
 	@Produces("application/json")
 	public Response getAttribute(@PathParam("ID") String ID, @PathParam("attribute") String attribute) {
+
+		// We dont want anybody trying to get a password. Return a forbidden code
 		if(attribute.contains("password")) return filter.addCORS(Response.status(405));
+
 		try {
 			// Attempt to log in to the given account with the provided credentials
 			return filter.addCORS(Response.ok(activity.getAttribute(ID, attribute)));
@@ -97,7 +107,7 @@ public class AccountService extends Service {
 	@Path("/{ID}/{attribute}")
 	@Produces("application/json")
 	public Response update(	@PathParam("ID") String ID,
-							@HeaderParam("authorization") String token,
+							@HeaderParam("authentication") String token,
 							@PathParam("attribute") String attribute,
 							@QueryParam("action") String action,
 							String data,

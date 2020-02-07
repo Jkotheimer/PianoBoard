@@ -4,10 +4,10 @@ import javax.naming.AuthenticationException;
 import javax.security.auth.login.CredentialExpiredException;
 import java.util.UUID;
 import java.util.List;
-import java.util.Calendar;
 import java.io.IOException;
 
 import pianoboard.data_access.account.*;
+import pianoboard.resources.Resources;
 
 public class AccountManager {
 
@@ -39,35 +39,36 @@ public class AccountManager {
 		return accountDB.searchByUsername(query);
 	}
 
-	public Token authorizeLogin(String email, String password, String IP) throws AuthenticationException, IOException {
-		Calendar c = Calendar.getInstance();
-		long timestamp = c.getTimeInMillis();
+	public Token authenticateLogin(String email, String password, String IP) throws AuthenticationException, IOException {
 		Account a = accountDB.getAccountByEmail(email);
-		if(a.login(email, password, IP, timestamp)) {
+		if(a.login(email, password, IP, System.currentTimeMillis())) {
 			// Add a day onto the current time for the expiration date
-			Token t = new Token(a.getID(), UUID.randomUUID().toString(), timestamp + 86400000);
+			Token t = new Token(a.getID());
 			tokenDB.put(t);
 			return t;
 		}
 		else throw new AuthenticationException("Invalid Credentials");
 	}
 
+	public Token refreshToken(Token token, String IP) throws AuthenticationException, CredentialExpiredException {
+		tokenDB.refresh(token);
+		Token t = new Token(token.getAccountID());
+		tokenDB.put(t);
+		return t;
+	}
+
 	// This function returns nothing because if verification fails, an exception is thrown, else nothing happens
-	public void authorizeToken(String ID, String token, String IP) throws AuthenticationException, CredentialExpiredException {
-		Calendar c = Calendar.getInstance();
-		tokenDB.verify(ID, token, c.getTimeInMillis());
+	public void authenticateToken(String ID, String token, String IP) throws AuthenticationException, CredentialExpiredException {
+		tokenDB.authenticate(ID, token, System.currentTimeMillis());
 	}
 
 	public Token create(String email, String password, String IP) throws IOException {
-		Calendar c = Calendar.getInstance();
-		long timestamp = c.getTimeInMillis();
-
 		String username = generateUsername(email);
-		Account a = new Account(UUID.randomUUID().toString(), email, username, password, timestamp, IP);
+		Account a = new Account(UUID.randomUUID().toString(), email, username, password, System.currentTimeMillis(), IP);
 		accountDB.create(a);
 
 		// Create a new token with the ID of the new account, then add a day to the timestamp for the expiration date
-		Token t = new Token(a.getID(), UUID.randomUUID().toString(), timestamp + 86400000);
+		Token t = new Token(a.getID());
 		tokenDB.put(t);
 
 		return t;

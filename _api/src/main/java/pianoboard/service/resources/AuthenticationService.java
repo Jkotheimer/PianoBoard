@@ -42,8 +42,10 @@ public class AuthenticationService extends Service {
 		String IP = getClientIp(request);
 		System.out.println("POST REQUEST ON /authentication/login - USER LOGIN INITIALIZED");
 		System.out.println("Email: " + auth.getEmail() + "\nPassword: " + auth.getPassword() + "\nIP: " + IP + "\n");
+
 		try {
-			return filter.addCORS(Response.ok(activity.authorizeLogin(auth.getEmail(), auth.getPassword(), IP)));
+			// Returns a token to the client if the authentication goes through
+			return filter.addCORS(Response.status(201).entity(activity.authenticateLogin(auth.getEmail(), auth.getPassword(), IP)));
 		} catch(AuthenticationException e) {
 			return filter.addCORS(Response.status(401));
 		} catch(IOException e) {
@@ -51,21 +53,20 @@ public class AuthenticationService extends Service {
 		}
 	}
 
-	/**
 	@POST
 	@Path("/token")
 	@Produces("application/json")
 	public Response verifyToken(Token token, HttpServletRequest request) {
 
 		System.out.println("POST REQUEST ON /authentication/token - USER VERIFICATION INITIALIZED");
-		System.out.println("token: " + token + "\n");
+		System.out.println("token: " + token.getToken() + "\n");
 		try {
-			return filter.addCORS(Response.ok(activity.authorize(token, getClientIp(request))));
+			// Returns a refreshed token to the client if the authentication passes
+			return filter.addCORS(Response.status(201).entity(activity.refreshToken(token, getClientIp(request))));
 		} catch(AuthenticationException e) {
-			return filter.addCORS(Response.status(401));
+			return filter.addCORS(Response.status(401).entity("Invalid Token"));
 		} catch (CredentialExpiredException e) {
-			return filter.addCORS(Response.status(401));
+			return filter.addCORS(Response.status(401).entity("Expired Token"));
 		}
 	}
-	*/
 }

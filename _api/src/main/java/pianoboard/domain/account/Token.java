@@ -2,6 +2,9 @@ package pianoboard.domain.account;
 
 import javax.naming.AuthenticationException;
 import javax.security.auth.login.CredentialExpiredException;
+import java.util.UUID;
+
+import pianoboard.resources.Resources;
 
 public class Token {
 
@@ -9,12 +12,15 @@ public class Token {
 	private String accountID;
 	private long expDate;
 
-	public Token() {}
+	public Token() {
+		this.token = UUID.randomUUID().toString();
+		this.expDate = System.currentTimeMillis() + Resources.token_expiration_time;
+	}
 
-	public Token(String accountID, String token, long expDate) {
+	public Token(String accountID) {
 		this.accountID = accountID;
-		this.token = token;
-		this.expDate = expDate;
+		this.token = UUID.randomUUID().toString();
+		this.expDate = System.currentTimeMillis() + Resources.token_expiration_time;
 	}
 
 	/**

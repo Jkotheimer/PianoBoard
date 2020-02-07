@@ -14,7 +14,7 @@ function create_account() {
 	var confirm_password = document.getElementById("confirm_password").value;
 
 	const email_regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-	if(!email_regex.test(email)) {
+	if(!email_regex.test(email) || email.length < 3) {
 		display_error("email", "Please enter a valid email address");
 		return;
 	}
@@ -49,15 +49,4 @@ function create_account() {
 		}
 	}
 	xhr.send(data);
-}
-
-function display_error(field, message) {
-	var notification = document.getElementById(field + "_notification");
-	notification.innerHTML = message;
-	notification.style.display = "block";
-	document.getElementById(field).addEventListener("keypress", () => {
-		notification.innerHTML = "";
-		notification.style.display = "none";
-	});
-	console.log("error: " + message);
 }

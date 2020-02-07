@@ -54,12 +54,16 @@ public class AccountActivity {
 		return result;
 	}
 
-	public Token authorizeLogin(String email, String password, String IP) throws AuthenticationException, IOException {
-		return manager.authorizeLogin(email, password, IP);
+	public Token authenticateLogin(String email, String password, String IP) throws AuthenticationException, IOException {
+		return manager.authenticateLogin(email, password, IP);
 	}
 
-	public void authorizeToken(String ID, String token, String IP) throws AuthenticationException, CredentialExpiredException {
-		manager.authorizeToken(ID, token, IP);
+	public void authenticateToken(String ID, String token, String IP) throws AuthenticationException, CredentialExpiredException {
+		manager.authenticateToken(ID, token, IP);
+	}
+
+	public Token refreshToken(Token t, String IP) throws AuthenticationException, CredentialExpiredException {
+		return manager.refreshToken(t, IP);
 	}
 
 	/**
