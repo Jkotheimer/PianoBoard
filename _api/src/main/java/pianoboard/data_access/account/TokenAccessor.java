@@ -2,6 +2,7 @@ package pianoboard.data_access.account;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.io.IOException;
 import javax.security.auth.login.CredentialExpiredException;
 import javax.naming.AuthenticationException;
 
@@ -36,16 +37,13 @@ public class TokenAccessor {
 		throw new AuthenticationException("Token Not Found");
 	}
 
-	public void refresh(Token token) throws AuthenticationException, CredentialExpiredException {
-		Token removed_token = null;
+	public void remove(String ID) throws IOException {
 		for(Token t : database) {
-			if(t.getAccountID().equals(t.getAccountID())) {
-				t.verify(token.getToken());
-				// Removing the token from within the loop causes a ConcurrentModificationException
-				removed_token = t;
-				break;
+			if(t.getAccountID().equals(ID)) {
+				database.remove(t);
+				return;
 			}
 		}
-		database.remove(removed_token);
+		throw new IOException("No token exists for the given ID");
 	}
 }

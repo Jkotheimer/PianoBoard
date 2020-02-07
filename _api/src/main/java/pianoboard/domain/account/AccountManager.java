@@ -51,7 +51,7 @@ public class AccountManager {
 	}
 
 	public Token refreshToken(Token token, String IP) throws AuthenticationException, CredentialExpiredException {
-		tokenDB.refresh(token);
+		tokenDB.authenticate(token.getAccountID(), token.getToken());
 		Token t = new Token(token.getAccountID());
 		tokenDB.put(t);
 		return t;
