@@ -54,22 +54,22 @@ public class AccountActivity {
 		return result;
 	}
 
-	public Token authenticateLogin(String email, String password, String IP) throws AuthenticationException, IOException {
-		return manager.authenticateLogin(email, password, IP);
+	public TokenRepresentation authenticateLogin(String email, String password, String IP) throws AuthenticationException, IOException {
+		return new TokenRepresentation(manager.authenticateLogin(email, password, IP));
 	}
 
 	public void authenticateToken(String ID, String token, String IP) throws AuthenticationException, CredentialExpiredException {
 		manager.authenticateToken(ID, token, IP);
 	}
 
-	public Token refreshToken(Token t, String IP) throws AuthenticationException, CredentialExpiredException {
-		return manager.refreshToken(t, IP);
+	public TokenRepresentation refreshToken(String ID, String token, String IP) throws AuthenticationException, CredentialExpiredException {
+		return new TokenRepresentation(manager.refreshToken(ID, token, IP));
 	}
 
 	/**
 	 * Attempt to create an account with the provided username, email, and password
 	 */
-	public Token create(String email, String password, String IP) throws IOException {
-		return manager.create(email, password, IP);
+	public TokenRepresentation create(String email, String password, String IP) throws IOException {
+		return new TokenRepresentation(manager.create(email, password, IP));
 	}
 }

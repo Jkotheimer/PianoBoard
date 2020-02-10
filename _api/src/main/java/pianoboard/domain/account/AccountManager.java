@@ -50,9 +50,9 @@ public class AccountManager {
 		else throw new AuthenticationException("Invalid Credentials");
 	}
 
-	public Token refreshToken(Token token, String IP) throws AuthenticationException, CredentialExpiredException {
-		tokenDB.authenticate(token.getAccountID(), token.getToken());
-		Token t = new Token(token.getAccountID());
+	public Token refreshToken(String ID, String token, String IP) throws AuthenticationException, CredentialExpiredException {
+		tokenDB.authenticate(ID, token);
+		Token t = new Token(ID);
 		tokenDB.put(t);
 		return t;
 	}

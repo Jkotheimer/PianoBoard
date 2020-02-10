@@ -34,6 +34,7 @@ public class AccountService extends Service {
 
 	@GET
 	@Path("/{ID}")
+	@Consumes("application/json")
 	@Produces("application/json")
 	public Response get(@PathParam("ID") String ID,
 						@HeaderParam("authentication") String token,
@@ -105,6 +106,7 @@ public class AccountService extends Service {
 
 	@PATCH
 	@Path("/{ID}/{attribute}")
+	@Consumes("text/plain")
 	@Produces("application/json")
 	public Response update(	@PathParam("ID") String ID,
 							@HeaderParam("authentication") String token,

@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
-import pianoboard.service.requests.AccountRequest;
+import pianoboard.service.requests.*;
 import pianoboard.service.activities.AccountActivity;
 import pianoboard.domain.account.Token;
 
@@ -56,13 +56,13 @@ public class AuthenticationService extends Service {
 	@POST
 	@Path("/token")
 	@Produces("application/json")
-	public Response verifyToken(Token token, HttpServletRequest request) {
+	public Response verifyToken(@HeaderParam("authentication") TokenRequest token, HttpServletRequest request) {
 
 		System.out.println("POST REQUEST ON /authentication/token - USER VERIFICATION INITIALIZED");
 		System.out.println("token: " + token.getToken() + "\n");
 		try {
 			// Returns a refreshed token to the client if the authentication passes
-			return filter.addCORS(Response.status(201).entity(activity.refreshToken(token, getClientIp(request))));
+			return filter.addCORS(Response.status(201).entity(activity.refreshToken(token.getAccountID(), token.getToken(), getClientIp(request))));
 		} catch(AuthenticationException e) {
 			return filter.addCORS(Response.status(401).entity(e.getMessage()));
 		} catch (CredentialExpiredException e) {

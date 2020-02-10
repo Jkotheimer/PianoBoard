@@ -25,22 +25,23 @@
 			</span>
 		</div>
 
-		<div class="panel_container">
-			<div class="panel left_panel">
-				<div class="profile_picture_container" onclick="show_picture_hint()">
-					<img id="profile_picture">
-					<div id="picture_hint">Drag and drop an image file here <br>to set your profile picture</div>
-				</div>
+		<div class="panel left_panel">
 
-				<div id="info"></div>
-				<button onclick="sign_out()">Sign out</button>
-			</div>
+			<div id="welcome">Welcome, user!</div>
+			<img id="profile_picture" src="/resources/images/default_profile_image_256.png"/>
+			<div id="picture_hint">Drag and drop an image file here to set your profile picture</div>
 
-			<div class="panel right_panel">
-				<header>Your Projects</header>
-				<div id="project_area"></div>
-			</div>
+			<div id="info"></div>
+
+			<div class="sign_out" onclick="sign_out()">Sign out</div>
+		</div>
+
+		<div class="panel right_panel">
+			<header>Your Projects</header>
+			<div id="project_area"></div>
 		</div>
 	</div>
+
+	<script type="text/javascript" src="/resources/js/resources.js"></script>
 	<script type="text/javascript" src="./dashboard.js"></script>
 </body>
