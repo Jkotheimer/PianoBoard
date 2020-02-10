@@ -4,39 +4,43 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Pianoboard Dashboard</title>
 	<link rel="shortcut icon" href="/resources/images/favicon-32.png" type="image/x-icon" />
-	<link rel="stylesheet" href="./dashboard.css">
 	<link rel="stylesheet" href="/resources/css/logo.css">
+	<link rel="stylesheet" href="/resources/css/variables.css">
+	<link rel="stylesheet" href="./dashboard.css">
 </head>
 <body>
-
-	<div class="nav_bar">
-		<div class="logo_box" onclick="window.location.reload()">
-			<img src="/resources/images/logo.png" class="logo">
+	<div class="body_container">
+		<div class="nav_bar">
+			<div class="logo_box" onclick="window.location.reload()">
+				<img src="/resources/images/logo.png" class="logo">
+			</div><span class="nav_link">
+				Settings
+				<img class="icon" src="/resources/images/settings.png">
+			</span><span class="nav_link">
+				Tutorial
+				<img class="icon" src="/resources/images/tutorial.png">
+			</span><span class="nav_link" onclick="create_project()">
+				Create New Project
+				<img class="icon" src="/resources/images/create.png">
+			</span>
 		</div>
 
-		<span class="nav_link" onclick="create_project()">
-			<img class="icon" src="/resources/images/create.png">
-		</span>
-		<span class="nav_link">
-			<img class="icon" src="/resources/images/tutorial.png">
-		</span>
-		<span class="nav_link">
-			<img class="icon" src="/resources/images/settings.png">
-		</span>
-	</div>
+		<div class="panel_container">
+			<div class="panel left_panel">
+				<div class="profile_picture_container" onclick="show_picture_hint()">
+					<img id="profile_picture">
+					<div id="picture_hint">Drag and drop an image file here <br>to set your profile picture</div>
+				</div>
 
-	<div class="panel">
-		<div class="profile_picture_container" onclick="show_picture_hint()">
-			<img id="profile_picture">
-			<div id="picture_hint">Drag and drop an image file here <br>to set your profile picture</div>
+				<div id="info"></div>
+				<button onclick="sign_out()">Sign out</button>
+			</div>
+
+			<div class="panel right_panel">
+				<header>Your Projects</header>
+				<div id="project_area"></div>
+			</div>
 		</div>
-
-		<div id="info"></div>
-		<button onclick="sign_out()">Sign out</button>
 	</div>
-
-	<div class="panel">
-		<header>Your Projects</header>
-		<div id="project_area"></div>
-	</div>
+	<script type="text/javascript" src="./dashboard.js"></script>
 </body>

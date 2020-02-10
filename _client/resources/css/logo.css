@@ -1,21 +1,26 @@
+:root {
+	--logo-width: 200px;
+	--logo-height: 50px;
+}
+
 .logo_box {
-	position: absolute;
-	top: 25px;
-	left: 25px;
-	width: auto;
-	height: auto;
-	padding: 10px 20px;
+	position: relative;
+	width: var(--logo-width);
+	height: var(--logo-height);
 	border-radius: 30px;
 	border: 2px solid;
 	border-top-color: var(--purple);
 	border-left-color: var(--purple);
 	border-bottom-color: var(--yellow);
 	border-right-color: var(--yellow);
-	background-color: #393939;
+	background-color: var(--grey);
+	display: inline-block;
 }
 .logo_box:hover { cursor: pointer; }
 .logo {
 	position: relative;
-	width: 174px;
-	height: 30px;
+	top: 10px;
+	left: 15px;
+	width: calc(var(--logo-width) - 30px);
+	height: calc(var(--logo-height) - 20px);
 }
