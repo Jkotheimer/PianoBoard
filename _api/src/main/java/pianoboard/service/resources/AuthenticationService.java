@@ -55,8 +55,9 @@ public class AuthenticationService extends Service {
 
 	@POST
 	@Path("/token")
+	@Consumes("application/json")
 	@Produces("application/json")
-	public Response verifyToken(@HeaderParam("authentication") TokenRequest token, HttpServletRequest request) {
+	public Response verifyToken(TokenRequest token, HttpServletRequest request) {
 
 		System.out.println("POST REQUEST ON /authentication/token - USER VERIFICATION INITIALIZED");
 		System.out.println("token: " + token.getToken() + "\n");

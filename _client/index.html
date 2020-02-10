@@ -7,7 +7,7 @@
 	<script>
 		window.addEventListener('load', function() {
 			if(localStorage.getItem(resources.token) != null) {
-				validate_token(localStorage.getItem(resources.token));
+				validate_token(JSON.parse(localStorage.getItem(resources.token)));
 			}
 			for(let e of document.getElementsByTagName("input")) {
 				if(e.value.length > 0) e.classList.add("complete_form_input");
@@ -18,12 +18,13 @@
 			}
 		});
 		function validate_token(token) {
+			console.log(token);
 			var data = JSON.stringify({
-				token.token,
-				token.accountID
+				"token" : token.token,
+				"accountID" : token.accountID
 			});
 			var link;
-			for(let item : token.links) if(item.action == "verify") link = item.url;
+			token.links.forEach(item => {if(item.action == "verify") link = item.url;});
 			if(link == undefined) console.log("Token does not contain verificaition url");
 			var xhr = new XMLHttpRequest();
 			xhr.open("POST", link, true);
@@ -39,7 +40,7 @@
 					console.log(xhr.response);
 				}
 			}
-			xhr.send();
+			xhr.send(data);
 		}
 	</script>
 	<link rel="shortcut icon" href="/resources/images/favicon-32.png" type="image/png"/>
