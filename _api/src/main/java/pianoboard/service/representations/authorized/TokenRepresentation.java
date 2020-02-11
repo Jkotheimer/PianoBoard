@@ -17,7 +17,7 @@ public class TokenRepresentation {
 		this.token = t.getToken();
 		this.accountID = t.getAccountID();
 		this.expiration_date = t.getExpDate();
-		this.links = Arrays.asList(	new Link("get_account", "POST", Resources.rootURL + "/users/" + t.getAccountID()),
+		this.links = Arrays.asList(	new Link("get_account", "GET", Resources.rootURL + "/users/" + t.getAccountID()),
 									new Link("verify", "POST", Resources.rootURL + "/authentication/token")
 		);
 	}

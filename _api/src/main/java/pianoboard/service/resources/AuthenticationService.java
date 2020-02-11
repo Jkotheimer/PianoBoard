@@ -60,7 +60,7 @@ public class AuthenticationService extends Service {
 	public Response verifyToken(TokenRequest token, HttpServletRequest request) {
 
 		System.out.println("POST REQUEST ON /authentication/token - USER VERIFICATION INITIALIZED");
-		System.out.println("token: " + token.getToken() + "\n");
+
 		try {
 			// Returns a refreshed token to the client if the authentication passes
 			return filter.addCORS(Response.status(201).entity(activity.refreshToken(token.getAccountID(), token.getToken(), getClientIp(request))));
@@ -68,6 +68,27 @@ public class AuthenticationService extends Service {
 			return filter.addCORS(Response.status(401).entity(e.getMessage()));
 		} catch (CredentialExpiredException e) {
 			return filter.addCORS(Response.status(401).entity(e.getMessage()));
+		}
+	}
+
+	@DELETE
+	@Path("/token")
+	@Consumes("application/json")
+	@Produces("application/json")
+	public Response logout(TokenRequest token, HttpServletRequest request) {
+
+		System.out.println("DELETE REQUEST ON /authentication/token - USER LOGOUT INITIALIZED");
+
+		try {
+			activity.logout(token.getAccountID(), token.getToken(), getClientIp(request));
+			return filter.addCORS(Response.ok());
+		} catch(AuthenticationException e) {
+			return filter.addCORS(Response.status(401).entity(e.getMessage()));
+		} catch(IOException e) {
+			return filter.addCORS(Response.status(404).entity(e.getMessage()));
+		} catch(CredentialExpiredException e) {
+			// If the credentials are expired, the user is technically already logged out so we return an okay status
+			return filter.addCORS(Response.ok());
 		}
 	}
 }

@@ -72,4 +72,8 @@ public class AccountActivity {
 	public TokenRepresentation create(String email, String password, String IP) throws IOException {
 		return new TokenRepresentation(manager.create(email, password, IP));
 	}
+
+	public void logout(String ID, String token, String IP) throws AuthenticationException, CredentialExpiredException, IOException {
+		manager.logout(ID, token, IP);
+	}
 }

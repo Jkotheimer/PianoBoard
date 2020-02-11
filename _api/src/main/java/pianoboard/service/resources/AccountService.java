@@ -34,11 +34,8 @@ public class AccountService extends Service {
 
 	@GET
 	@Path("/{ID}")
-	@Consumes("application/json")
 	@Produces("application/json")
-	public Response get(@PathParam("ID") String ID,
-						@HeaderParam("authentication") String token,
-						HttpServletRequest request) {
+	public Response get(@PathParam("ID") String ID, @HeaderParam("authentication") String token) {
 
 		System.out.println("GET REQUEST ON USERS PATH TO RETRIEVE DATA FROM USER ID " + ID);
 
@@ -51,7 +48,7 @@ public class AccountService extends Service {
 				return filter.addCORS(Response.status(404));
 			}
 		} else {
-			String IP = getClientIp(request);
+			String IP = "null_IP_Address";
 			try {
 				// This function is void - if authentication fails, an exception is thrown
 				activity.authenticateToken(ID, token, IP);
@@ -109,11 +106,10 @@ public class AccountService extends Service {
 	@Consumes("text/plain")
 	@Produces("application/json")
 	public Response update(	@PathParam("ID") String ID,
-							@HeaderParam("authentication") String token,
 							@PathParam("attribute") String attribute,
+							@HeaderParam("authentication") String token,
 							@QueryParam("action") String action,
-							String data,
-							HttpServletRequest request) {
+							String data) {
 		// TODO authorize token with ID then update attribute with data if authorization passes
 		return filter.addCORS(Response.ok());
 	}

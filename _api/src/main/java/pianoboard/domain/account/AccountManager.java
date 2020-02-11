@@ -97,6 +97,11 @@ public class AccountManager {
 		return a;
 	}
 
+	public void logout(String ID, String token, String IP) throws AuthenticationException, CredentialExpiredException, IOException {
+		tokenDB.authenticate(ID, token);
+		tokenDB.remove(ID);
+	}
+
 	private String generateUsername(String email) {
 
 		// Extract the username from the email address

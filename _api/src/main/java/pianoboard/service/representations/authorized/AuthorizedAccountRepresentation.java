@@ -31,6 +31,32 @@ public class AuthorizedAccountRepresentation extends AccountRepresentation {
 		this.setLinks();
 	}
 
+	/**
+	 * GETTERS
+	 * ________________________________________________________________________
+	 */
+	public String getID()					{ return this.ID;				}
+	public String getEmail()				{ return this.email;			}
+	public String getUsername()				{ return this.username;			}
+	public long getCreationDate()			{ return this.creationDate;		}
+	public boolean isPrivate()				{ return this.isPrivate;		}
+	public List<String> getFavoriteGenres()	{ return this.favoriteGenres;	}
+	public List<String> getFavoriteArtists(){ return this.favoriteArtists;	}
+
+	/**
+	 * SETTERS
+	 * ________________________________________________________________________
+	 */
+	public void setID(String ID)					{ this.ID = ID;				}
+	public void setEmail(String email)				{ this.email = email;		}
+	public void setUsername(String username)		{ this.username = username;	}
+	public void setIsPrivate(boolean value)			{ this.isPrivate = value;	}
+	public void setFavoriteGenres(List<String> g)	{ this.favoriteGenres = g;	}
+	public void setFavoriteArtists(List<String> a)	{ this.favoriteArtists = a;	}
+
+	public void addFavoriteGenre(String g)			{ this.favoriteGenres.add(g);	}
+	public void addFavoriteArtists(String a)		{ this.favoriteArtists.add(a);	}
+
 	private void setLinks() {
 		this.setLinks(Arrays.asList	(	new Link("login", "POST", Resources.rootURL + "/authentication/login"),
 										new Link("refresh", "GET", Resources.rootURL + "/users/" + this.ID),
