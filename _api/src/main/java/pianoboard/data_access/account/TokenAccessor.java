@@ -47,13 +47,13 @@ public class TokenAccessor {
 	 * ________________________________________________________________________
 	 */
 	public void remove(String ID) throws IOException {
-		boolean exists = false;
+		Token to_remove = null;
 		for(Token t : database) {
 			if(t.getAccountID().equals(ID)) {
-				database.remove(t);
-				exists = true;
+				to_remove = t;
 			}
 		}
-		if(!exists) throw new IOException("No token exists for the given ID");
+		if(to_remove == null) throw new IOException("No token exists for the given ID");
+		else database.remove(to_remove);
 	}
 }

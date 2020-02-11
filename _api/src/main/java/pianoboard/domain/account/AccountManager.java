@@ -34,11 +34,13 @@ public class AccountManager {
 
 	// Grab the given account by email, then attempt to login given the provided credentials
 	public Token authenticateLogin(String email, String password, String IP) throws AuthenticationException, IOException {
-		return new Token(
+		Token t = new Token(
 			accountDB.getAccountByEmail(email)	// Grab the account from the database
 			.login(email, password, IP)			// Attempt a login (failure will throw an exception, success will return the account object)
 			.getID()							// Get the ID from the account and pass it to a new token to be returned to the client
 		);
+		tokenDB.put(t);
+		return t;
 	}
 
 	// This function returns nothing because if verification fails, an exception is thrown, else nothing happens

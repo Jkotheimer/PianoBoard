@@ -1,34 +1,37 @@
-var token, account;
+var account;
 window.addEventListener("load", () => {
-	// Performe an authentication get request
-	var accountXHR = new XMLHttpRequest();
-	var link = getLink(token, "get_account");
-	console.log(JSON.stringify(link));
-	accountXHR.open(link.method, link.url, true);
-	accountXHR.setRequestHeader("authentication", token.token);
-	accountXHR.setRequestHeader("Content-Type", "application/json");
-	accountXHR.onload = function() {
-		if(accountXHR.status == 200) {
-			account = accountXHR.response;
-			localStorage.setItem(resources.account, account);
-			console.log("account: " + account);
+	// Get the account object from the server
+	var xhr = new XMLHttpRequest();
+	var ID = getCookie(resources.uid);
+	xhr.open("GET", resources.api_user + "/" + ID, true);
+	xhr.onload = function() {
+		if(xhr.status == 200) {
+			account = JSON.parse(xhr.response);
 		}
-		else if(accountXHR.status == 404) {
-			// TODO display error that for whatever reason, an account with your ID cannot be found
-			// We panic if any of this code executes
-			console.log("There is no account with this ID");
+		else {
+			alert("Sorry, but we could not sign you in at this time");
 		}
 	}
-	accountXHR.send();
+	xhr.send();
 });
 function sign_out() {
-	localStorage.removeItem(resources.token);
-	localStorage.removeItem(resources.account);
 	var xhr = new XMLHttpRequest();
-	var link = getLink("logout");
-	xhr.open()
+	var link = getLink(account, "logout");
+	xhr.open(link.method, link.url, true);
+	xhr.onload = function() {
+		if(xhr.status == 200) {
+			document.cookie = null;
+			window.location.href = "/";
+		}
+		else {
+			// TODO implement error dialogue
+			alert(xhr.response);
+		}
+	}
+	xhr.send();
 }
 function getLink(item, action) {
+	console.log(item);
 	var value;
 	item.links.forEach(element => {
 		if(element.action == action) value = element;

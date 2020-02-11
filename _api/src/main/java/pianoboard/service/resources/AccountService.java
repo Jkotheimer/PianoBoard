@@ -68,13 +68,12 @@ public class AccountService extends Service {
 	@Produces("application/json")
 	public Response get(@PathParam("ID") String ID,
 						@CookieParam("pianoboard_token") String token,
-						@QueryParam("auth") boolean auth,
 						@Context HttpServletRequestWrapper request) {
 
 		System.out.println("GET REQUEST ON USERS PATH TO RETRIEVE DATA FROM USER ID " + ID);
 
 		// If there was no token passed along with the request, just get the account as an unauthorized user
-		if(token == null || !auth) {
+		if(token == null) {
 			try {
 				return filter.addCORS(Response.ok(activity.get(ID, false)));
 			} catch(IOException e) {

@@ -67,6 +67,7 @@ public class AuthorizedAccountRepresentation extends AccountRepresentation {
 										new Link("addFavoriteArtist", "PATCH",  Resources.apiURL + "/users/" + this.ID + "/favoriteArtists"),
 										new Link("removeFavoriteGenre", "DELETE",  Resources.apiURL + "/users/" + this.ID + "/favoriteGenres"),
 										new Link("removeFavoriteArtist", "DELETE",  Resources.apiURL + "/users/" + this.ID + "/favoriteArtists"),
+										new Link("logout", "DELETE", Resources.apiURL + "/authentication/token"),
 										new Link("deleteAccount", "DELETE",  Resources.apiURL + "/users/" + this.ID)
 									)
 		);
