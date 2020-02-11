@@ -37,8 +37,8 @@ function create_account() {
 	xhr.setRequestHeader("Content-Type", "application/json");
 	xhr.onload = function() {
 		if(xhr.status == 201) {
-			// Do nothing because hopefully that shit works on the server side
-			//window.location = "/dashboard";
+			// The account has been created and the cookies have been set, so we just need to navigate to the dashboard
+			window.location.href = "/dashboard";
 		}
 		else if(xhr.status == 409) {
 			// display user already exists error

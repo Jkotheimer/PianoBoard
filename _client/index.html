@@ -6,7 +6,15 @@
 	<script type="text/javascript" src="/resources/js/resources.js"></script>
 	<script>
 		window.addEventListener('load', function() {
-			// TODO check if a cookie exists, and if so, send an xhr request to verify it
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST", resources.api_auth + "/token", true);
+			xhr.onload = function() {
+				if(xhr.status == 201) {
+					// The cookies were authorized and we are logged in
+					window.location.href = "/dashboard";
+				}
+			}
+			xhr.send();
 			for(let e of document.getElementsByTagName("input")) {
 				if(e.value.length > 0) e.classList.add("complete_form_input");
 				e.addEventListener("keyup", function() {
