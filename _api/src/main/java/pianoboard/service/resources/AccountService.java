@@ -51,8 +51,8 @@ public class AccountService extends Service {
 
 		try {
 			Token t = activity.create(a.getEmail(), a.getPassword(), IP);
-			NewCookie token_cookie = new NewCookie("pianoboard_token", t.getToken());
-			NewCookie uid_cookie = new NewCookie("pianoboard_uid", t.getAccountID());
+			NewCookie token_cookie = new NewCookie(new Cookie("pianoboard_token", t.getToken(), "/", Resources.domain));
+			NewCookie uid_cookie = new NewCookie(new Cookie("pianoboard_uid", t.getAccountID(), "/", Resources.domain));
 			return filter.addCORS(Response.status(201).cookie(token_cookie, uid_cookie));
 		} catch(IOException e) {
 			return filter.addCORS(Response.status(409).entity(e.getMessage())); // Return conflict code (entity exists)

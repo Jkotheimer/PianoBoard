@@ -50,8 +50,9 @@ public class AuthenticationService extends Service {
 		try {
 			// Returns a token to the client if the authentication goes through
 			Token token = activity.authenticateLogin(auth.getEmail(), auth.getPassword(), IP);
-			NewCookie token_cookie = new NewCookie("pianoboard_token", token.getToken());
-			NewCookie uid_cookie = new NewCookie("pianoboard_uid", token.getAccountID());
+			System.out.println("RETURNING TOKEN " + token.getToken() + " FOR USER ID " + token.getAccountID());
+			NewCookie token_cookie = new NewCookie(new Cookie("pianoboard_token", token.getToken(), "/", Resources.domain));
+			NewCookie uid_cookie = new NewCookie(new Cookie("pianoboard_uid", token.getAccountID(), "/", Resources.domain));
 			return filter.addCORS(Response.status(201).cookie(token_cookie, uid_cookie));
 		} catch(AuthenticationException e) {
 			return filter.addCORS(Response.status(401));
