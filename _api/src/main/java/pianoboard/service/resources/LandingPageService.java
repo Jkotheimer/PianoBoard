@@ -38,20 +38,4 @@ public class LandingPageService extends Service {
 		// TODO return html page regarding all documentation info for the api
 		return "PIANOBOARD API DOCUMENTATION";
 	}
-
-	@POST
-	@Consumes("application/json")
-	@Produces("application/json")
-	public Response createAccount(AccountRequest a, HttpServletRequest request) {
-
-		System.out.println("POST REQUEST TO ROOT: ACCOUNT CREATION INITIALIZED");
-
-		String IP = getClientIp(request);
-		try {
-			return filter.addCORS(Response.status(201).entity(activity.create(a.getEmail(), a.getPassword(), IP)));
-		} catch(IOException e) {
-			System.out.println(e.getMessage());
-			return filter.addCORS(Response.status(409).entity(e.getMessage())); // Return conflict code (entity exists)
-		}
-	}
 }

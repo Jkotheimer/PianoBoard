@@ -24,7 +24,24 @@ public class AccountActivity {
 	public AccountActivity() {}
 
 	/**
-	 * Return the representation of the account object from the database that corresponds with the provided ID
+	 * CREATE
+	 * ________________________________________________________________________
+	 * @return String: the ID of the user to generate a token from
+	 */
+	public String create(String email, String password, String IP) throws IOException {
+		return manager.create(email, password, IP);
+	}
+	public String authenticateLogin(String email, String password, String IP) throws AuthenticationException, IOException {
+		manager.authenticateLogin(email, password, IP);
+	}
+
+	public String authenticateToken(String ID, String token, String IP) throws AuthenticationException, CredentialExpiredException {
+		manager.authenticateToken(ID, token, IP);
+	}
+
+	/**
+	 * READ
+	 * ________________________________________________________________________
 	 */
 	public AccountRepresentation get(String ID, boolean isAuthorized) throws IOException {
 		Account a = manager.get(ID);
@@ -34,13 +51,6 @@ public class AccountActivity {
 		else return new PublicAccountRepresentation(a);
 	}
 
-	public Object getAttribute(String ID, String attribute) throws IOException {
-		return manager.getAttribute(ID, attribute);
-	}
-
-	/**
-	 * Retrieve a Map containing all username matches for the given query
-	 */
 	public List<AccountRepresentation> search(String query) throws IOException {
 		List<Account> accounts = manager.search(query);
 		List<AccountRepresentation> result = new ArrayList<>();
@@ -54,25 +64,23 @@ public class AccountActivity {
 		return result;
 	}
 
-	public TokenRepresentation authenticateLogin(String email, String password, String IP) throws AuthenticationException, IOException {
-		return new TokenRepresentation(manager.authenticateLogin(email, password, IP));
-	}
-
-	public void authenticateToken(String ID, String token, String IP) throws AuthenticationException, CredentialExpiredException {
-		manager.authenticateToken(ID, token, IP);
-	}
-
-	public TokenRepresentation refreshToken(String ID, String token, String IP) throws AuthenticationException, CredentialExpiredException {
-		return new TokenRepresentation(manager.refreshToken(ID, token, IP));
+	public Object getAttribute(String ID, String attribute) throws IOException {
+		return manager.getAttribute(ID, attribute);
 	}
 
 	/**
-	 * Attempt to create an account with the provided username, email, and password
+	 * UPDATE
+	 * ________________________________________________________________________
+	 * @return AccountRepresentation: the new updated authorized representation because this method is only called when the user is authorized
 	 */
-	public TokenRepresentation create(String email, String password, String IP) throws IOException {
-		return new TokenRepresentation(manager.create(email, password, IP));
+	public AccountRepresentation update(String ID, String attribute, Object value) throws IOException {
+		return new AuthorizedAccountRepresentation(manager.update(ID, attribute, value));
 	}
 
+	/**
+	 * DELETE
+	 * ________________________________________________________________________
+	 */
 	public void logout(String ID, String token, String IP) throws AuthenticationException, CredentialExpiredException, IOException {
 		manager.logout(ID, token, IP);
 	}

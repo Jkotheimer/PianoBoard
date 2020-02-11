@@ -18,33 +18,48 @@ public class AccountAccessor {
 
 	public AccountAccessor() {}
 
-	public Account getAccountByEmail(String email) throws IOException {
-		for(Account a : database) if(a.getEmail().equals(email)) return a;
-		throw new IOException("Account with email " + email + " does not exist");
-	}
-
-	public Account getAccountById(String ID) throws IOException {
-		System.out.println("Searching for " + ID);
-		for(Account a : database) if(a.getID().equals(ID)) return a;
-		throw new IOException("Account with ID " + ID + " does not exist");
-	}
-
-	public List<Account> searchByUsername(String query) {
-		System.out.println("Searched for " + query);
-		List<Account> accounts = new ArrayList<>();
-		for(Account a : database)
-			if(a.getUsername().contains(query) || a.getEmail().contains(query)) accounts.add(a);
-		return accounts;
-	}
-
+	/**
+	 * CREATE
+	 * ________________________________________________________________________
+	 */
 	public void create(Account a) throws IOException {
 		for(Account acc : database)
 			if(acc.getEmail().equals(a.getEmail()))
 				throw new IOException("Account with email " + a.getEmail() + " already exists");
 
-		database.add(a);
+			database.add(a);
 	}
 
+	/**
+	 * READ
+	 * ________________________________________________________________________
+	 */
+	public Account getAccountByEmail(String email) throws IOException {
+		for(Account a : database)
+			if(a.getEmail().equals(email))
+				return a;
+		throw new IOException("Account with email " + email + " does not exist");
+	}
+
+	public Account getAccountById(String ID) throws IOException {
+		for(Account a : database)
+			if(a.getID().equals(ID))
+				return a;
+		throw new IOException("Account with ID " + ID + " does not exist");
+	}
+
+	public List<Account> search(String query) {
+		List<Account> accounts = new ArrayList<>();
+		for(Account a : database)
+			if(a.getUsername().contains(query) || a.getEmail().contains(query))
+				accounts.add(a);
+		return accounts;
+	}
+
+	/**
+	 * UPDATE
+	 * ________________________________________________________________________
+	 */
 	public void update(Account acc) throws IOException {
 		for(Account a : database) {
 			if(a.getID().equals(acc.getID())) {
@@ -54,5 +69,19 @@ public class AccountAccessor {
 			}
 		}
 		throw new IOException("Account with ID " + acc.getID() + " does not exist");
+	}
+
+	/**
+	 * DELETE
+	 * ________________________________________________________________________
+	 */
+	public void delete(String ID) throws IOException {
+		for(Account a : database) {
+			if(a.getID().equals(ID)) {
+				database.remove(a);
+				return;
+			}
+		}
+		throw new IOException("Account with ID " + ID + " does not exist");
 	}
 }

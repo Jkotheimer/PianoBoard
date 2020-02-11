@@ -106,8 +106,6 @@ public class Account {
 	 * GENERAL METHODS
 	 */
 
-
-
 	private void addSuccessfulLoginAttempt(String IPAddress, long timestamp) {
 		for(LoginRecord r : this.knownIPs) {
 			if(r.getIP().equals(IPAddress)) {
@@ -143,11 +141,11 @@ public class Account {
 		return false;
 	}
 
-	public boolean login(String email, String password, String IP, long timestamp) throws AuthenticationException {
+	public void login(String email, String password, String IP) throws AuthenticationException {
 
+		long timestamp = System.currentTimeMillis();
 		long timeSinceLastFailedLogin = timestamp - getLastFailedLogin();
 		int failedLoginAttempts = getFailedLoginAttempts(IP);
-
 
 		// If it's been at least 6 hours since the last failed login attempt, clear the failed login attempt log for the provided IP address
 		if(timeSinceLastFailedLogin > 21600000) clearFailedLoginAttempts(IP);
@@ -162,11 +160,11 @@ public class Account {
 		else if(this.email.equals(email) && this.password.equals(password)) {
 			addSuccessfulLoginAttempt(IP, timestamp);
 			clearFailedLoginAttempts(IP);
-			return true;
+			return;
 		}
 		else {
 			addFailedLoginAttempt(IP, timestamp);
-			return false;
+			throw new AuthenticationException("Invalid Credentials");
 		}
 	}
 }
