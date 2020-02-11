@@ -45,10 +45,10 @@ public class RecordingRepresentation extends Recording {
 
 	public void setLinks(String username, String projectName, String trackID, String recordingID) {
 		this.links = new HashMap<String, String>() {{
-			put("move", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID + "/" + recordingID + "?action=move");
-			put("addNotes", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID + "/" + recordingID + "?action=addNotes");
-			put("setNotes", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID + "/" + recordingID + "?action=setNotes");
-			put("delete", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID + "/" + recordingID);
+			put("move", Resources.apiURL + "/" + username + "/projects/" + projectName + "/" + trackID + "/" + recordingID + "?action=move");
+			put("addNotes", Resources.apiURL + "/" + username + "/projects/" + projectName + "/" + trackID + "/" + recordingID + "?action=addNotes");
+			put("setNotes", Resources.apiURL + "/" + username + "/projects/" + projectName + "/" + trackID + "/" + recordingID + "?action=setNotes");
+			put("delete", Resources.apiURL + "/" + username + "/projects/" + projectName + "/" + trackID + "/" + recordingID);
 		}};
 	}
 }

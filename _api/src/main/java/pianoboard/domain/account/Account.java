@@ -141,7 +141,7 @@ public class Account {
 		return false;
 	}
 
-	public void login(String email, String password, String IP) throws AuthenticationException {
+	public Account login(String email, String password, String IP) throws AuthenticationException {
 
 		long timestamp = System.currentTimeMillis();
 		long timeSinceLastFailedLogin = timestamp - getLastFailedLogin();
@@ -160,7 +160,7 @@ public class Account {
 		else if(this.email.equals(email) && this.password.equals(password)) {
 			addSuccessfulLoginAttempt(IP, timestamp);
 			clearFailedLoginAttempts(IP);
-			return;
+			return this;
 		}
 		else {
 			addFailedLoginAttempt(IP, timestamp);

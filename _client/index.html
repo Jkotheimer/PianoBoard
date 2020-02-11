@@ -19,10 +19,6 @@
 		});
 		function validate_token(token) {
 			console.log(token);
-			var data = JSON.stringify({
-				"token" : token.token,
-				"accountID" : token.accountID
-			});
 			var link;
 			token.links.forEach(item => {if(item.action == "verify") link = item.url;});
 			if(link == undefined) console.log("Token does not contain verificaition url");
@@ -203,7 +199,7 @@
 			});
 
 			var xhr = new XMLHttpRequest();
-			xhr.open("POST", resources.api_auth + "login", true);
+			xhr.open("POST", resources.api_auth + "/login", true);
 			xhr.setRequestHeader("Content-Type", "application/json");
 			xhr.onload = function() {
 				if(xhr.status == 500) {

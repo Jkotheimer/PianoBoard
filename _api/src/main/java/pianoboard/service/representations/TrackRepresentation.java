@@ -52,14 +52,14 @@ public class TrackRepresentation extends Track {
 
 	public void setLinks(String username, String projectName, String trackID) {
 		links = new HashMap<String, String>() {{
-			put("setName", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID + "?action=setName");
-			put("setInstrument", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID + "?action=setInstrument");
-			put("setVolume", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID + "?action=setVolume");
-			put("setPan", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID + "?action=setPan");
-			put("setMute", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID + "?action=setMute");
-			put("setSolo", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID + "?action=setSolo");
-			put("addRecording", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID);
-			put("delete", Resources.rootURL + "/" + username + "/projects/" + projectName + "/" + trackID);
+			put("setName", Resources.apiURL + "/" + username + "/projects/" + projectName + "/" + trackID + "?action=setName");
+			put("setInstrument", Resources.apiURL + "/" + username + "/projects/" + projectName + "/" + trackID + "?action=setInstrument");
+			put("setVolume", Resources.apiURL + "/" + username + "/projects/" + projectName + "/" + trackID + "?action=setVolume");
+			put("setPan", Resources.apiURL + "/" + username + "/projects/" + projectName + "/" + trackID + "?action=setPan");
+			put("setMute", Resources.apiURL + "/" + username + "/projects/" + projectName + "/" + trackID + "?action=setMute");
+			put("setSolo", Resources.apiURL + "/" + username + "/projects/" + projectName + "/" + trackID + "?action=setSolo");
+			put("addRecording", Resources.apiURL + "/" + username + "/projects/" + projectName + "/" + trackID);
+			put("delete", Resources.apiURL + "/" + username + "/projects/" + projectName + "/" + trackID);
 		}};
 	}
 

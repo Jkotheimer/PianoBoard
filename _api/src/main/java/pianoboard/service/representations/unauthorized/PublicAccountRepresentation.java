@@ -50,7 +50,7 @@ public class PublicAccountRepresentation extends AccountRepresentation {
 	public void setFavoriteGenres(List<String> genres)		{ this.favoriteGenres = genres;		}
 	public void setFavoriteArtists(List<String> artists)	{ this.favoriteArtists = artists;	}
 	public void setLinks()							{
-		this.setLinks(Arrays.asList(	new Link("refresh", "GET", Resources.rootURL + "/users/" + this.ID)));
+		this.setLinks(Arrays.asList(	new Link("refresh", "GET", Resources.apiURL + "/users/" + this.ID)));
 	}
 
 	public void addFavoriteGenre(String genre)						{ this.favoriteGenres.add(genre);					}

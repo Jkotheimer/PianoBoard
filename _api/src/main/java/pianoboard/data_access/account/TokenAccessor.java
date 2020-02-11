@@ -34,10 +34,11 @@ public class TokenAccessor {
 	 * READ
 	 * ________________________________________________________________________
 	 */
-	public Token get(String ID) {
+	public Token get(String ID) throws IOException {
 		for(Token t : database)
 			if(t.getAccountID().equals(ID))
 				return t;
+		throw new IOException("Token with user ID " + ID + " does not exist");
 	}
 
 

@@ -12,19 +12,24 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.HeaderParam;
+import javax.ws.rs.CookieParam;
 import javax.ws.rs.core.Response;
-import javax.servlet.http.HttpServletRequest;
-
+import javax.ws.rs.core.Context;
+import javax.servlet.http.HttpServletRequestWrapper;
+import javax.ws.rs.core.Cookie;
+import javax.ws.rs.core.NewCookie;
+import javax.naming.AuthenticationException;
+import javax.security.auth.login.CredentialExpiredException;
+import java.net.URISyntaxException;
+import java.net.URI;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import pianoboard.resources.Resources;
 import pianoboard.service.requests.*;
 import pianoboard.service.activities.AccountActivity;
 import pianoboard.domain.account.Token;
-
-import java.io.IOException;
-import javax.naming.AuthenticationException;
-import javax.security.auth.login.CredentialExpiredException;
 
 @Path("/authentication")
 public class AuthenticationService extends Service {
@@ -36,16 +41,20 @@ public class AuthenticationService extends Service {
 
 	@POST
 	@Path("/login")
+	@Consumes("application/json")
 	@Produces("application/json")
-	public Response login(AccountRequest auth, HttpServletRequest request) {
+	public Response login(AccountRequest auth, @Context HttpServletRequestWrapper request) {
 
 		String IP = getClientIp(request);
 		System.out.println("POST REQUEST ON /authentication/login - USER LOGIN INITIALIZED");
-		System.out.println("Email: " + auth.getEmail() + "\nPassword: " + auth.getPassword() + "\nIP: " + IP + "\n");
+		System.out.println("VERIFYING THAT " + auth.getEmail() + " HAS PASSWORD " + auth.getPassword());
 
 		try {
 			// Returns a token to the client if the authentication goes through
-			return filter.addCORS(Response.status(201).entity(activity.authenticateLogin(auth.getEmail(), auth.getPassword(), IP)));
+			Token token = activity.authenticateLogin(auth.getEmail(), auth.getPassword(), IP);
+			NewCookie token_cookie = new NewCookie("pianoboard_token", token.getToken());
+			NewCookie uid_cookie = new NewCookie("pianoboard_uid", token.getAccountID());
+			return filter.addCORS(Response.status(201).cookie(token_cookie, uid_cookie));
 		} catch(AuthenticationException e) {
 			return filter.addCORS(Response.status(401));
 		} catch(IOException e) {
@@ -55,40 +64,55 @@ public class AuthenticationService extends Service {
 
 	@POST
 	@Path("/token")
-	@Consumes("application/json")
 	@Produces("application/json")
-	public Response verifyToken(TokenRequest token, HttpServletRequest request) {
+	public Response verifyToken(@CookieParam("pianoboard_token") String token,
+								@CookieParam("pianoboard_uid") String ID,
+								@Context HttpServletRequestWrapper request) {
 
 		System.out.println("POST REQUEST ON /authentication/token - USER VERIFICATION INITIALIZED");
+		System.out.println("VERIFYING THAT " + ID + " HAS TOKEN " + token);
 
 		try {
 			// Returns a refreshed token to the client if the authentication passes
-			return filter.addCORS(Response.status(201).entity(activity.refreshToken(token.getAccountID(), token.getToken(), getClientIp(request))));
+			Token t = activity.authenticateToken(ID, token, getClientIp(request));
+			NewCookie token_cookie = new NewCookie("pianoboard_token", t.getToken());
+			NewCookie uid_cookie = new NewCookie("pianoboard_uid", t.getAccountID());
+			return filter.addCORS(Response.status(201).cookie(token_cookie, uid_cookie));
 		} catch(AuthenticationException e) {
 			return filter.addCORS(Response.status(401).entity(e.getMessage()));
-		} catch (CredentialExpiredException e) {
+		} catch(CredentialExpiredException e) {
 			return filter.addCORS(Response.status(401).entity(e.getMessage()));
+		} catch(IOException e) {
+			return filter.addCORS(Response.status(404).entity(e.getMessage()));
 		}
 	}
 
 	@DELETE
 	@Path("/token")
-	@Consumes("application/json")
 	@Produces("application/json")
-	public Response logout(TokenRequest token, HttpServletRequest request) {
+	public Response logout(@CookieParam("pianoboard_token") String token,
+						   @CookieParam("pianoboard_uid") String ID,
+						   @Context HttpServletRequestWrapper request) {
 
 		System.out.println("DELETE REQUEST ON /authentication/token - USER LOGOUT INITIALIZED");
+		System.out.println("VERIFYING THAT " + ID + " HAS TOKEN " + token);
 
 		try {
-			activity.logout(token.getAccountID(), token.getToken(), getClientIp(request));
-			return filter.addCORS(Response.ok());
+			activity.logout(ID, token, getClientIp(request));
+			return filter.addCORS(Response.ok().contentLocation(new URI(Resources.rootURL)));
 		} catch(AuthenticationException e) {
 			return filter.addCORS(Response.status(401).entity(e.getMessage()));
 		} catch(IOException e) {
 			return filter.addCORS(Response.status(404).entity(e.getMessage()));
 		} catch(CredentialExpiredException e) {
 			// If the credentials are expired, the user is technically already logged out so we return an okay status
-			return filter.addCORS(Response.ok());
+			try {
+				return filter.addCORS(Response.ok().contentLocation(new URI(Resources.rootURL)));
+			} catch(URISyntaxException ex) {
+				return filter.addCORS(Response.status(500).entity("There was a server error :/"));
+			}
+		} catch(URISyntaxException e) {
+			return filter.addCORS(Response.status(500).entity("There was a server error :/"));
 		}
 	}
 }

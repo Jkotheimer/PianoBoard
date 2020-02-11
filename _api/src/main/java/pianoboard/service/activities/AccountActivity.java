@@ -28,15 +28,15 @@ public class AccountActivity {
 	 * ________________________________________________________________________
 	 * @return String: the ID of the user to generate a token from
 	 */
-	public String create(String email, String password, String IP) throws IOException {
+	public Token create(String email, String password, String IP) throws IOException {
 		return manager.create(email, password, IP);
 	}
-	public String authenticateLogin(String email, String password, String IP) throws AuthenticationException, IOException {
-		manager.authenticateLogin(email, password, IP);
+	public Token authenticateLogin(String email, String password, String IP) throws AuthenticationException, IOException {
+		return manager.authenticateLogin(email, password, IP);
 	}
 
-	public String authenticateToken(String ID, String token, String IP) throws AuthenticationException, CredentialExpiredException {
-		manager.authenticateToken(ID, token, IP);
+	public Token authenticateToken(String ID, String token, String IP) throws AuthenticationException, CredentialExpiredException, IOException {
+		return manager.authenticateToken(ID, token, IP);
 	}
 
 	/**

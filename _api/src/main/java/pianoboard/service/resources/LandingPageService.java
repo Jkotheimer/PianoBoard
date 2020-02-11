@@ -13,22 +13,16 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.core.Response;
-import javax.servlet.http.HttpServletRequest;
 
 import java.util.List;
 import java.util.Map;
 
-import pianoboard.service.requests.AccountRequest;
-import pianoboard.service.activities.AccountActivity;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 
 @Path("/")
 public class LandingPageService extends Service {
 
 	private final CORSFilter filter = new CORSFilter();
-	private AccountActivity activity = new AccountActivity();
 
 	public LandingPageService() {}
 

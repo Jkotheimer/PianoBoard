@@ -33,7 +33,7 @@ function create_account() {
 	});
 
 	var xhr = new XMLHttpRequest();
-	xhr.open("POST", resources.api_root, true);
+	xhr.open("POST", resources.api_user, true);
 	xhr.setRequestHeader("Content-Type", "application/json");
 	xhr.onload = function() {
 		if(xhr.status == 201) {

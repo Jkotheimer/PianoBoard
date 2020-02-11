@@ -42,6 +42,6 @@ public class PrivateAccountRepresentation extends AccountRepresentation {
 	public void setEmail(String email)						{ this.email = email;				}
 
 	public void setLinks()					{
-		this.setLinks(Arrays.asList(	new Link("refresh", "GET", Resources.rootURL + "users/" + this.ID)));
+		this.setLinks(Arrays.asList(	new Link("refresh", "GET", Resources.apiURL + "users/" + this.ID)));
 	}
 }

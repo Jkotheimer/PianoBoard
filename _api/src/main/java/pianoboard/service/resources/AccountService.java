@@ -11,18 +11,23 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.CookieParam;
 import javax.ws.rs.HeaderParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Cookie;
+import javax.ws.rs.core.NewCookie;
+import javax.servlet.http.HttpServletRequestWrapper;
 
 import java.io.IOException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import javax.naming.AuthenticationException;
 
+import pianoboard.domain.account.Token;
 import pianoboard.service.activities.AccountActivity;
 import pianoboard.service.representations.AccountRepresentation;
-
 import pianoboard.data_access.account.AccountAccessor;
+import pianoboard.service.requests.AccountRequest;
 
 @Path("/users")
 public class AccountService extends Service {
@@ -39,15 +44,18 @@ public class AccountService extends Service {
 	@POST
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response createAccount(AccountRequest a, HttpServletRequest request) {
-
-		System.out.println("POST REQUEST TO ROOT: ACCOUNT CREATION INITIALIZED");
+	public Response createAccount(AccountRequest a, HttpServletRequestWrapper request) {
 
 		String IP = getClientIp(request);
+		System.out.println("POST REQUEST TO /users: ACCOUNT CREATION INITIALIZED");
+		System.out.println("ACCOUNT BEING CREATED WITH EMAIL " + a.getEmail() + " AND PASSWORD " + a.getPassword() + " FROM IP " + IP);
+
 		try {
-			return filter.addCORS(Response.status(201).entity(activity.create(a.getEmail(), a.getPassword(), IP)));
+			Token t = activity.create(a.getEmail(), a.getPassword(), IP);
+			NewCookie token_cookie = new NewCookie("pianoboard_token", t.getToken());
+			NewCookie uid_cookie = new NewCookie("pianoboard_uid", t.getAccountID());
+			return filter.addCORS(Response.status(201).cookie(token_cookie, uid_cookie));
 		} catch(IOException e) {
-			System.out.println(e.getMessage());
 			return filter.addCORS(Response.status(409).entity(e.getMessage())); // Return conflict code (entity exists)
 		}
 	}
@@ -59,12 +67,15 @@ public class AccountService extends Service {
 	@GET
 	@Path("/{ID}")
 	@Produces("application/json")
-	public Response get(@PathParam("ID") String ID, @HeaderParam("authentication") String token) {
+	public Response get(@PathParam("ID") String ID,
+						@CookieParam("pianoboard_token") String token,
+						@QueryParam("auth") boolean auth,
+						@Context HttpServletRequestWrapper request) {
 
 		System.out.println("GET REQUEST ON USERS PATH TO RETRIEVE DATA FROM USER ID " + ID);
 
 		// If there was no token passed along with the request, just get the account as an unauthorized user
-		if(token == null) {
+		if(token == null || !auth) {
 			try {
 				return filter.addCORS(Response.ok(activity.get(ID, false)));
 			} catch(IOException e) {
@@ -72,7 +83,7 @@ public class AccountService extends Service {
 				return filter.addCORS(Response.status(404));
 			}
 		} else {
-			String IP = "null_IP_Address";
+			String IP = getClientIp(request);
 			try {
 				// This function is void - if authentication fails, an exception is thrown
 				activity.authenticateToken(ID, token, IP);

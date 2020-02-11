@@ -21,11 +21,11 @@ public class AccountManager {
 	 * ________________________________________________________________________
 	 */
 	public Token create(String email, String password, String IP) throws IOException {
+
 		String username = generateUsername(email);
 		Account a = new Account(UUID.randomUUID().toString(), email, username, password, System.currentTimeMillis(), IP);
 		accountDB.create(a);
 
-		// Create a new token with the ID of the new account, then add a day to the timestamp for the expiration date
 		Token t = new Token(a.getID());
 		tokenDB.put(t);
 
@@ -33,13 +33,17 @@ public class AccountManager {
 	}
 
 	// Grab the given account by email, then attempt to login given the provided credentials
-	public void authenticateLogin(String email, String password, String IP) throws AuthenticationException, IOException {
-		accountDB.getAccountByEmail(email).login(email, password, IP);
+	public Token authenticateLogin(String email, String password, String IP) throws AuthenticationException, IOException {
+		return new Token(
+			accountDB.getAccountByEmail(email)	// Grab the account from the database
+			.login(email, password, IP)			// Attempt a login (failure will throw an exception, success will return the account object)
+			.getID()							// Get the ID from the account and pass it to a new token to be returned to the client
+		);
 	}
 
 	// This function returns nothing because if verification fails, an exception is thrown, else nothing happens
-	public void authenticateToken(String ID, String token, String IP) throws AuthenticationException, CredentialExpiredException {
-		tokenDB.authenticate(ID, token);
+	public Token authenticateToken(String ID, String token, String IP) throws AuthenticationException, CredentialExpiredException, IOException {
+		return tokenDB.get(ID).verify(token);
 	}
 
 	// Generate a unique username based on the provided unique email
@@ -118,7 +122,7 @@ public class AccountManager {
 	 * ________________________________________________________________________
 	 */
 	public void logout(String ID, String token, String IP) throws AuthenticationException, CredentialExpiredException, IOException {
-		tokenDB.authenticate(ID, token);
+		authenticateToken(ID, token, IP);
 		tokenDB.remove(ID);
 	}
 }

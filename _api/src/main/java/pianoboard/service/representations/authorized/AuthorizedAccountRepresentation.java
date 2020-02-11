@@ -58,16 +58,16 @@ public class AuthorizedAccountRepresentation extends AccountRepresentation {
 	public void addFavoriteArtists(String a)		{ this.favoriteArtists.add(a);	}
 
 	private void setLinks() {
-		this.setLinks(Arrays.asList	(	new Link("login", "POST", Resources.rootURL + "/authentication/login"),
-										new Link("refresh", "GET", Resources.rootURL + "/users/" + this.ID),
+		this.setLinks(Arrays.asList	(	new Link("login", "POST", Resources.apiURL + "/authentication/login"),
+										new Link("refresh", "GET", Resources.apiURL + "/users/" + this.ID),
 										new Link("updateUsername", "PATCH", "/users/" + this.ID + "/username"),
-										new Link("updateEmail", "PATCH", "/users/" + this.ID + "/email"),
-										new Link("updatePassword", "PATCH", "/users/" + this.ID + "/password"),
-										new Link("addFavoriteGenre", "PATCH", "/users/" + this.ID + "/favoriteGenres"),
-										new Link("addFavoriteArtist", "PATCH", "/users/" + this.ID + "/favoriteArtists"),
-										new Link("removeFavoriteGenre", "DELETE", "/users/" + this.ID + "/favoriteGenres"),
-										new Link("removeFavoriteArtist", "DELETE", "/users/" + this.ID + "/favoriteArtists"),
-										new Link("deleteAccount", "DELETE", "/users/" + this.ID)
+										new Link("updateEmail", "PATCH",  Resources.apiURL + "/users/" + this.ID + "/email"),
+										new Link("updatePassword", "PATCH",  Resources.apiURL + "/users/" + this.ID + "/password"),
+										new Link("addFavoriteGenre", "PATCH",  Resources.apiURL + "/users/" + this.ID + "/favoriteGenres"),
+										new Link("addFavoriteArtist", "PATCH",  Resources.apiURL + "/users/" + this.ID + "/favoriteArtists"),
+										new Link("removeFavoriteGenre", "DELETE",  Resources.apiURL + "/users/" + this.ID + "/favoriteGenres"),
+										new Link("removeFavoriteArtist", "DELETE",  Resources.apiURL + "/users/" + this.ID + "/favoriteArtists"),
+										new Link("deleteAccount", "DELETE",  Resources.apiURL + "/users/" + this.ID)
 									)
 		);
 	}
