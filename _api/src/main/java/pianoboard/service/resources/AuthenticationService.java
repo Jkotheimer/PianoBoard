@@ -20,8 +20,6 @@ import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.NewCookie;
 import javax.naming.AuthenticationException;
 import javax.security.auth.login.CredentialExpiredException;
-import java.net.URISyntaxException;
-import java.net.URI;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -99,20 +97,14 @@ public class AuthenticationService extends Service {
 
 		try {
 			activity.logout(ID, token, getClientIp(request));
-			return filter.addCORS(Response.ok().contentLocation(new URI(Resources.rootURL)));
+			return filter.addCORS(Response.ok());
 		} catch(AuthenticationException e) {
 			return filter.addCORS(Response.status(401).entity(e.getMessage()));
 		} catch(IOException e) {
 			return filter.addCORS(Response.status(404).entity(e.getMessage()));
 		} catch(CredentialExpiredException e) {
 			// If the credentials are expired, the user is technically already logged out so we return an okay status
-			try {
-				return filter.addCORS(Response.ok().contentLocation(new URI(Resources.rootURL)));
-			} catch(URISyntaxException ex) {
-				return filter.addCORS(Response.status(500).entity("There was a server error :/"));
-			}
-		} catch(URISyntaxException e) {
-			return filter.addCORS(Response.status(500).entity("There was a server error :/"));
+			return filter.addCORS(Response.ok());
 		}
 	}
 }

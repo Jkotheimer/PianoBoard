@@ -18,11 +18,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.NewCookie;
 import javax.servlet.http.HttpServletRequestWrapper;
-
 import java.io.IOException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import javax.naming.AuthenticationException;
 
+import pianoboard.resources.Resources;
 import pianoboard.domain.account.Token;
 import pianoboard.service.activities.AccountActivity;
 import pianoboard.service.representations.AccountRepresentation;
@@ -127,9 +126,6 @@ public class AccountService extends Service {
 		try {
 			// Attempt to log in to the given account with the provided credentials
 			return filter.addCORS(Response.ok(activity.getAttribute(ID, attribute)));
-		} catch(JsonProcessingException e) {
-			// Something went wrong reading the account and we return a server error code
-			return filter.addCORS(Response.status(500));
 		} catch(IOException e) {
 			// The account was not found so we return a not found status
 			return filter.addCORS(Response.status(404));

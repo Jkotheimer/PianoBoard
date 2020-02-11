@@ -37,8 +37,8 @@ function create_account() {
 	xhr.setRequestHeader("Content-Type", "application/json");
 	xhr.onload = function() {
 		if(xhr.status == 201) {
-			localStorage.setItem(resources.token, xhr.response);
-			window.location = "/dashboard";
+			// Do nothing because hopefully that shit works on the server side
+			//window.location = "/dashboard";
 		}
 		else if(xhr.status == 409) {
 			// display user already exists error
