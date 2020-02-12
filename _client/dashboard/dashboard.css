@@ -14,6 +14,7 @@ body {
 	position: relative;
 	display: inline-block;
 	margin-left: 10px;
+	font-size: 16px;
 	padding: calc(var(--logo-height)/4);
 	border: 2px solid var(--grey);
 	border-radius: 30px;
@@ -29,6 +30,7 @@ body {
 	width: auto;
 	height: auto;
 	margin-top: 25px;
+	padding: 25px;
 	display: inline-block;
 	vertical-align: top;
 	background-color: var(--grey);
@@ -39,28 +41,39 @@ body {
 	border-radius: 10px;
 }
 .left_panel {
+	text-align: center;
 	width: 256px;
-	padding: 25px;
 	float: left;
 }
 .right_panel {
 	float: right;
 	margin-left: 25px;
-	width: calc(100% - 350px);
-}
-#welcome {
+	width: calc(100% - 400px);
 	text-align: center;
-	margin-bottom: 25px;
+}
+h, input {
 	color: var(--cream);
-	font-size: 24px;
+	font-size: 20px;
+}
+input {
+	border-radius: 10px;
+	width: 100%;
+	text-align: center;
+	background-color: transparent;
+	border: none;
+}
+input:hover { cursor: pointer; }
+input:focus {
+	background-color: var(--lightgrey) !important;
+	cursor: text;
 }
 #profile_picture {
 	position: relative;
 	width: 256px;
 	height: 256px;
-
 }
 #picture_hint {
+	position: absolute;
 	padding: 5px 10px;
 	text-align: center;
 	background-color: var(--yellow);
@@ -68,6 +81,39 @@ body {
 	font-size: 14px;
 	display: none;
 }
+#info {
+
+}
+.info_container {
+	width: 100%;
+	margin-bottom: 25px;
+}
+.info_label {
+	color: var(--purple);
+}
+.favorite_container {
+	margin-top: 5px;
+}
+.favorite_element {
+	width: auto;
+	padding: 0 10px;
+	margin: 2px;
+	border-radius: 5px;
+	font-size: 14px;
+	display: inline-block;
+	background-color: var(--lightgrey);
+}
+.favorite_element:hover {
+	cursor: pointer;
+	background-color: var(--cream);
+}
+.add_favorite {
+	font-size: 14px;
+}
+.add_favorite::placeholder {
+	color: var(--yellow);
+}
+
 .sign_out {
 	width: 100px;
 	margin-top: 50px;

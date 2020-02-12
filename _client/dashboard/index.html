@@ -13,13 +13,16 @@
 		<div class="nav_bar">
 			<div class="logo_box" onclick="window.location.reload()">
 				<img src="/resources/images/logo.png" class="logo">
-			</div><span class="nav_link">
+			</div>
+			<span class="nav_link">
 				Settings
 				<img class="icon" src="/resources/images/settings.png">
-			</span><span class="nav_link">
+			</span>
+			<span class="nav_link">
 				Tutorial
 				<img class="icon" src="/resources/images/tutorial.png">
-			</span><span class="nav_link" onclick="create_project()">
+			</span>
+			<span class="nav_link" onclick="create_project()">
 				Create New Project
 				<img class="icon" src="/resources/images/create.png">
 			</span>
@@ -27,17 +30,49 @@
 
 		<div class="panel left_panel">
 
-			<div id="welcome">Welcome, user!</div>
 			<img id="profile_picture" src="/resources/images/default_profile_image_256.png"/>
 			<div id="picture_hint">Drag and drop an image file here to set your profile picture</div>
 
-			<div id="info"></div>
+			<div id="info">
+
+				<div class="info_container">
+					<input type="text" id="username"/>
+					<div id="username_notification"></div>
+				</div>
+
+				<div class="info_container">
+					<div class="info_label">My Favorite Genres</div>
+					<div class="favorite_container" id="favoriteGenres">
+						<!--The genres get listed here in the following form: -->
+						<!--span class='favorite_element'> Genre </span-->
+					</div>
+					<input type="text" id="addFavoriteGenre" class="add_favorite" placeholder="Add more favorite genres"/>
+					<div id="genre_search">
+						<!--As the user types in the above input bar, this populates with API search results-->
+					</div>
+					<div id="genre_notification"></div>
+				</div>
+
+				<div class="info_container">
+					<div class="info_label">My Favorite Artists</div>
+					<div class="favorite_container" id="favoriteArtists">
+						<!--The artists get listed here in the following form: -->
+						<!--span class='favorite_element'> Artist </span-->
+					</div>
+					<input type="text" id="addFavoriteArtist" class="add_favorite" placeholder="Add more favorite artists"/>
+					<div id="artist_search">
+						<!--As the user types in the above input bar, this populates with API search results-->
+					</div>
+					<div id="artist_notification"></div>
+				</div>
+
+			</div>
 
 			<div class="sign_out" onclick="sign_out()">Sign out</div>
 		</div>
 
 		<div class="panel right_panel">
-			<header>Your Projects</header>
+			<h>Your Projects</h>
 			<div id="project_area"></div>
 		</div>
 	</div>

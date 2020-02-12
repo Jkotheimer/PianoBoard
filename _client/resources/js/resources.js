@@ -1,9 +1,10 @@
 var resources = {
+	"account"	: "pianoboard_account",
 	"token"		: "pianoboard_token",
 	"uid"		: "pianoboard_uid",
 	"api_root"	: "http://localhost/api",
 	"api_user"	: "http://localhost/api/users",
-	"api_auth"	: "http://localhost/api/authentication"
+	"api_auth"	: "http://localhost/api/authentication",
 }
 
 function display_error(field, message) {

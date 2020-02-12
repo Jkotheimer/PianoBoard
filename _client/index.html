@@ -13,6 +13,8 @@
 					// The cookies were authorized and we are logged in
 					window.location.href = "/dashboard";
 				}
+				// If authentication fails for the cookies fails,
+				// don't do anything because we are already on the login page
 			}
 			xhr.send();
 			for(let e of document.getElementsByTagName("input")) {
