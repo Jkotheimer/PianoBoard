@@ -1,0 +1,5 @@
+target/
+
+# We dont want the log files or cxf library files
+_api/catalina.out
+_api/src/main/WebContent/WEB-INF/lib/*

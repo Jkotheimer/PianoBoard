@@ -1,5 +1,0 @@
-/target/
-deploy
-reset
-catalina.out
-src/main/WebContent/WEB-INF/lib/
