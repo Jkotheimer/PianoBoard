@@ -1,10 +1,10 @@
 #include <X11/Xlib.h>
 
 // Console colors
-#define BLUE printf("\033[0;34m")
-#define GREEN printf("\033[0;32m")
-#define RED printf("\033[0;31m")
-#define NC printf("\033[0m")
+#define BLUE printf("\033[0;34m");
+#define GREEN printf("\033[0;32m");
+#define RED printf("\033[0;31m");
+#define NC printf("\033[0m");
 
 // Window colors
 #define YELLOW 0xFFFA99
@@ -16,7 +16,7 @@
 // Window dimensions
 #define WIN_W 700
 #define WIN_H 200
-#define WIN_X 600
+//#define WIN_X 600
 #define WIN_Y 400
 
 // Generic button dimensions
@@ -35,10 +35,13 @@
 #define N_COMMAND "node ../_api/node.js_api/app.js"
 
 // Message dimensions
-#define MSG_X ((WIN_X/2) - 175)
-#define MSG_Y 50
+#define MSG_SIZE 175
+#define MSG_X ((WIN_W/2) - (MSG_SIZE*2) + 25)
+#define MSG_Y 75
 
 Display *init_window(Window *w);
 int event_loop(Window w, Display *d);
 void draw_gui(Display *d, Window w, int s);
 int clicked(int x, int y, int button_x);
+int isScalableFont(char* name);
+XFontStruct *LoadQueryScalableFont(Display *display, int screen, char* name, int size);
