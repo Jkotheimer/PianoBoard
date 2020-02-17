@@ -41,25 +41,23 @@ int event_loop(Window window, Display *display) {
 
 		XNextEvent(display, &e);
 
-
 		if (e.type == Expose) {
 			draw_gui(display, window, screen_num);
 			position_window(display, window, screen_num);
 		}
 		if (e.type == MotionNotify) {
 			XMotionEvent mouse = e.xmotion;
-			if(mouse_over (mouse.x, mouse.y, J_BUTTON_X)) {
-				hovering = 'J';
-			}
-			else if(mouse_over(mouse.x, mouse.y, P_BUTTON_X)) {
-				hovering = 'P';
-			}
-			else if(mouse_over(mouse.x, mouse.y, N_BUTTON_X)) {
-				hovering = 'N';
-			}
-			else {
-				hovering = '\0';
-			}
+			char old = hovering;
+
+			// Get the character associated with the button the mouse is hovering (if any)
+			if(mouse_over (mouse.x, mouse.y, J_BUTTON_X))		hovering = 'J';
+			else if(mouse_over(mouse.x, mouse.y, P_BUTTON_X))	hovering = 'P';
+			else if(mouse_over(mouse.x, mouse.y, N_BUTTON_X))	hovering = 'N';
+			else hovering = '\0';
+
+			// if there was a change in the hovering state, reflect that in the GUI
+			if(hovering && !old)		draw_button(display, window, hovering, LIGHTPURPLE, GREY);
+			else if(!hovering && old)	draw_gui(display, window, screen_num);
 		}
 		if (e.type == ButtonPress) {
 			XButtonEvent click = e.xbutton;
