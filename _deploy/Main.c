@@ -1,10 +1,7 @@
 #include <X11/Xlib.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include "Window.h"
-#include "FontHelper.h"
 
 int WIN_X;
 
@@ -14,12 +11,12 @@ int main(void) {
 	Window window;
 	Display *display = init_window(&window);
 
-	GREEN printf("Window is officially mapped: %lu \n", window);
+	GREEN printf("Window is officially mapped: %lu \n\n", window);
 
 	BLUE printf("Starting event loop...\n");
 
 	int exit_code = -1;
-	exit_code = event_loop(window, display);
+	exit_code = event_loop(window, display); // Event loop starts here (see Window.h)
 
 	NC printf("\nEvent loop exited with exit code %d\n\n", exit_code);
 
