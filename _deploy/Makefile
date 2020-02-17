@@ -20,7 +20,7 @@ run: build
 	@./${EXE}
 
 # Compile the source
-compile: Main.c Window.c FontHandler.c Window.h FontHandler.h
+compile: Main.c Window.c FontHandler.c DrawHelper.c Window.h FontHandler.h DrawHelper.h
 	$(call print, ${BLUE}, "Compiling source to object files...")
 	
 	${CC} ${CFLAG} $^ ${XLIB} -o ${EXE}

@@ -4,28 +4,24 @@
 #include <string.h>
 
 #include "Window.h"
-#include "FontHandler.h"
+#include "FontHelper.h"
 
 int WIN_X;
 
 int main(void) {
 
-	BLUE
-	printf("\nInitializing window...\n");
+	BLUE printf("\nInitializing window...\n");
 	Window window;
 	Display *display = init_window(&window);
 
-	GREEN
-	printf("Window is officially mapped: %lu \n", window);
+	GREEN printf("Window is officially mapped: %lu \n", window);
 
-	BLUE
-	printf("Starting event loop...\n");
+	BLUE printf("Starting event loop...\n");
 
 	int exit_code = -1;
 	exit_code = event_loop(window, display);
 
-	NC
-	printf("\nEvent loop exited with exit code %d\n\n", exit_code);
+	NC printf("\nEvent loop exited with exit code %d\n\n", exit_code);
 
 	XCloseDisplay(display);
 
