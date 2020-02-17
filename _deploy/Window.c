@@ -91,26 +91,27 @@ void draw_gui(Display *display, Window window, int screen_num) {
 	// Iterate through the available fonts and find one that is scalable
 	int count = 54;
 	char** fontlist = XListFonts(display, "-*-*-*-*-*-*-*-*-*-*-*-*-iso8859-1", 1000, &count);
-	XFontStruct *fontinfo;
+	char* font_name;
 	for(int i = 0; i < 54; i++) {
 		if(isScalableFont(fontlist[i])) {
-			fontinfo = LoadQueryScalableFont(display, screen_num, fontlist[i], MSG_SIZE);
+			font_name = fontlist[i];
 			break;
 		}
 	}
+	XFontStruct *fontinfo = LoadQueryScalableFont(display, screen_num, font_name, MSG_SIZE);
 
 	// Display the text prompt
-	char *msg = "With which tool would you like to deploy PianoBoard?";
 	XGCValues gr_values;
     gr_values.font = fontinfo->fid;
     gr_values.foreground = GREY;
     gr_values.background = 0xFFFFFF;
+
 	XDrawImageString(display, window,
 					 XCreateGC(display, window, GCFont | GCForeground | GCBackground, &gr_values),
-					 MSG_X, MSG_Y, msg, strlen(msg)
+					 MSG_X, MSG_Y, MSG, strlen(MSG)
 					);
 
-	// Draw the buttons
+	//Draw the buttons
 	XSetForeground(display, DefaultGC(display, screen_num), PURPLE);
 	XFillRectangle(display, window, DefaultGC(display, screen_num), J_BUTTON_X, BUTTON_Y, BUTTON_W, BUTTON_H);
 	XFillRectangle(display, window, DefaultGC(display, screen_num), P_BUTTON_X, BUTTON_Y, BUTTON_W, BUTTON_H);
@@ -120,6 +121,24 @@ void draw_gui(Display *display, Window window, int screen_num) {
 	XDrawRectangle(display, window, DefaultGC(display, screen_num), J_BUTTON_X, BUTTON_Y, BUTTON_W, BUTTON_H);
 	XDrawRectangle(display, window, DefaultGC(display, screen_num), P_BUTTON_X, BUTTON_Y, BUTTON_W, BUTTON_H);
 	XDrawRectangle(display, window, DefaultGC(display, screen_num), N_BUTTON_X, BUTTON_Y, BUTTON_W, BUTTON_H);
+
+	fontinfo = LoadQueryScalableFont(display, screen_num, font_name, LABEL_SIZE);
+	gr_values.font = fontinfo->fid;
+	gr_values.background = PURPLE;
+	XDrawImageString(display, window,
+					 XCreateGC(display, window, GCFont | GCForeground | GCBackground, &gr_values),
+					 JLX, LABEL_Y, J_LABEL, strlen(J_LABEL)
+					);
+
+	XDrawImageString(display, window,
+					 XCreateGC(display, window, GCFont | GCForeground | GCBackground, &gr_values),
+					 PLX, LABEL_Y, P_LABEL, strlen(P_LABEL)
+					);
+
+	XDrawImageString(display, window,
+					 XCreateGC(display, window, GCFont | GCForeground | GCBackground, &gr_values),
+					 NLX, LABEL_Y, N_LABEL, strlen(N_LABEL)
+					);
 }
 
 // Determine if the mouse is currently over a specific button

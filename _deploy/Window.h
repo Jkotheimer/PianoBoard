@@ -32,7 +32,19 @@
 #define P_COMMAND "python3 ../_api/python_api/app.py"
 #define N_COMMAND "node ../_api/node.js_api/app.js"
 
+// Specific button labels
+#define J_LABEL "Java Apache Server"
+#define JLX J_BUTTON_X + 20
+#define P_LABEL "Python Flask Server"
+#define PLX P_BUTTON_X + 15
+#define N_LABEL "Node.js Server"
+#define NLX N_BUTTON_X + 40
+
+#define LABEL_SIZE 125
+#define LABEL_Y BUTTON_Y + 30
+
 // Message dimensions
+#define MSG "With which tool would you like to deploy PianoBoard?"
 #define MSG_SIZE 175
 #define MSG_X ((WIN_W/2) - (MSG_SIZE*2) + 25)
 #define MSG_Y 75
