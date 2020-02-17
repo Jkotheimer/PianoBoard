@@ -21,7 +21,7 @@ run: build
 
 # Compile the source
 compile: Main.c Window.c FontHelper.c DrawHelper.c Window.h FontHelper.h DrawHelper.h
-	$(call print, ${BLUE}, "Compiling source to object files...")
+	$(call print, ${BLUE}, "Compiling source...")
 	
 	${CC} ${CFLAG} $^ ${XLIB} -o ${EXE}
 	
