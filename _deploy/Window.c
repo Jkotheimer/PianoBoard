@@ -20,7 +20,7 @@ Display *init_window(Window *window) {
 
 	*window = XCreateSimpleWindow(display, RootWindow(display, screen_num), 0, 0, WIN_W, WIN_H, screen_num, GREY, CREAM);
 
-	XSelectInput(display, *window, ExposureMask | ButtonPressMask);
+	XSelectInput(display, *window, ExposureMask | ButtonPressMask | PointerMotionMask);
 	NC printf("Event listeners set\n");
 
 	XMapWindow(display, *window);
@@ -31,6 +31,7 @@ Display *init_window(Window *window) {
 int event_loop(Window window, Display *display) {
 
 	int screen_num = DefaultScreen(display);
+	int is_hovering = 0;
 	XEvent e;
 
 	BLUE printf("Listening for events...\n\n");
@@ -44,6 +45,30 @@ int event_loop(Window window, Display *display) {
 
 		if (e.type == Expose) {
 			draw_gui(display, window, screen_num);
+		}
+		if (e.type == MotionNotify) {
+			XMotionEvent mouse = e.xmotion;
+			if(mouse_over(mouse.x, mouse.y, J_BUTTON_X) && !is_hovering) {
+				draw_button(display, window, screen_num, LIGHTPURPLE, J_BUTTON_X);
+				is_hovering = 1;
+			} else if(!mouse_over(mouse.x, mouse.y, J_BUTTON_X) && is_hovering) {
+				draw_button(display, window, screen_num, PURPLE, J_BUTTON_X);
+				is_hovering = 0;
+			}
+			if(mouse_over(mouse.x, mouse.y, P_BUTTON_X) && !is_hovering) {
+				draw_button(display, window, screen_num, PURPLE, P_BUTTON_X);
+				is_hovering = 1;
+			} else if(!mouse_over(mouse.x, mouse.y, P_BUTTON_X) && is_hovering) {
+				draw_button(display, window, screen_num, LIGHTPURPLE, P_BUTTON_X);
+				is_hovering = 0;
+			}
+			if(mouse_over(mouse.x, mouse.y, N_BUTTON_X) && !is_hovering) {
+				draw_button(display, window, screen_num, PURPLE, N_BUTTON_X);
+				is_hovering = 1;
+			} else if(!mouse_over(mouse.x, mouse.y, N_BUTTON_X) && is_hovering) {
+				draw_button(display, window, screen_num, LIGHTPURPLE, N_BUTTON_X);
+				is_hovering = 0;
+			}
 		}
 		if (e.type == ButtonPress) {
 			XButtonEvent click = e.xbutton;
@@ -139,6 +164,11 @@ void draw_gui(Display *display, Window window, int screen_num) {
 					 XCreateGC(display, window, GCFont | GCForeground | GCBackground, &gr_values),
 					 NLX, LABEL_Y, N_LABEL, strlen(N_LABEL)
 					);
+}
+
+void draw_button(Display *display, Window window, int screen_num, long color, int button_x) {
+	XSetForeground(display, DefaultGC(display, screen_num), color);
+	XFillRectangle(display, window, DefaultGC(display, screen_num), button_x, BUTTON_Y, BUTTON_W, BUTTON_H);
 }
 
 // Determine if the mouse is currently over a specific button

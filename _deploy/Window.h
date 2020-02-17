@@ -9,6 +9,7 @@
 // Window colors
 #define YELLOW 0xFFFA99
 #define PURPLE 0xD1BAED
+#define LIGHTPURPLE 0xF1DAFF
 #define CREAM 0xFFFFEF
 #define GREY 0x393939
 #define LIGHTGREY 0x696969
@@ -53,4 +54,5 @@ Display *init_window(Window *w);
 int event_loop(Window w, Display *d);
 void position_window(Display *d, Window w, int s);
 void draw_gui(Display *d, Window w, int s);
+void draw_button(Display *d, Window w, int s, long color, int button_x);
 int mouse_over(int x, int y, int button_x);
