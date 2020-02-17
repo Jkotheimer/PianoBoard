@@ -34,17 +34,17 @@ int event_loop(Window window, Display *display) {
 	char hovering = '\0';
 	XEvent e;
 
-	BLUE printf("Listening for events...\n\n");
+	GREEN printf("Listening for events...\n\n");
 	NC
 
 	while(1) {
 
 		XNextEvent(display, &e);
 
-		position_window(display, window, screen_num);
 
 		if (e.type == Expose) {
 			draw_gui(display, window, screen_num);
+			position_window(display, window, screen_num);
 		}
 		if (e.type == MotionNotify) {
 			XMotionEvent mouse = e.xmotion;
