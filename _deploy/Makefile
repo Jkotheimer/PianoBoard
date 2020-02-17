@@ -4,8 +4,8 @@
 # BUILD VARIABLES
 CC = gcc
 XLIB = -lX11
-DEP = -L/usr/X11R6/lib
-EXE = myWindow
+FLAG = -I.
+EXE = Deploy
 
 # COLORS
 RED = "\033[0;31m"
@@ -16,24 +16,24 @@ NC = "\033[0m"
 build: clean compile
 
 run: build
-	./${EXE}
+	@./${EXE}
 
 # Clean out any previously built modules
 clean:
 	$(call print, ${BLUE}, "Cleaning up...")
-
+	
 	@touch ${EXE}
 	rm ${EXE}
-
+	
 	$(call print, ${GREEN}, "Build directory clean")
 	$(call end)
 
 # Compile the source
-compile:
+compile: %.c %.h
 	$(call print, ${BLUE}, "Compiling source...")
-
-	${CC} window.c ${XLIB} -o ${EXE}
-
+	
+	${CC} ${FLAG} %.c ${XLIB} -o ${EXE}
+	
 	$(call print, ${GREEN}, "Source compiled")
 	$(call end)
 

@@ -43,5 +43,3 @@ Display *init_window(Window *w);
 int event_loop(Window w, Display *d);
 void draw_gui(Display *d, Window w, int s);
 int clicked(int x, int y, int button_x);
-int isScalableFont(char* name);
-XFontStruct *LoadQueryScalableFont(Display *display, int screen, char* name, int size);

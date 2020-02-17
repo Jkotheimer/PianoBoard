@@ -1,39 +1,9 @@
 #include <X11/Xlib.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
-#include "window.h"
-
-int WIN_X;
-
-int main(void) {
-
-	Window window;
-	BLUE
-	printf("\nInitializing window...\n");
-	Display *display = init_window(&window);
-
-	XWindowAttributes attribute;
-	XGetWindowAttributes(display, window, &attribute);
-	WIN_X = (attribute.width/2) - (WIN_W/2);
-
-	GREEN
-	printf("Window is officially mapped: %lu \n", window);
-
-	BLUE
-	printf("Starting event loop...\n");
-
-	int exit_code = -1;
-	exit_code = event_loop(window, display);
-
-	NC
-	printf("\nEvent loop exited with exit code %d\n\n", exit_code);
-
-	XCloseDisplay(display);
-
-	return exit_code;
-}
+#include "Window.h"
+#include "FontHandler.h"
 
 Display *init_window(Window *window) {
 
@@ -49,7 +19,10 @@ Display *init_window(Window *window) {
 
 	int screen_num = DefaultScreen(display);
 
-
+	// We need the width of the display to determine the WIN_X value
+	XWindowAttributes attribute;
+	XGetWindowAttributes(display, *window, &attribute);
+	int WIN_X = (attribute.width/2) - (WIN_W/2);
 
 	*window = XCreateSimpleWindow(display, RootWindow(display, screen_num), WIN_X, WIN_Y, WIN_W, WIN_H, screen_num, GREY, CREAM);
 	NC
@@ -153,64 +126,3 @@ int clicked(int x, int y, int button_x) {
 	}
 }
 
-int isScalableFont(char *name) {
-    int i, field;
-
-    if ((name == NULL) || (name[0] != '-')) return 0;
-
-    for(i = field = 0; name[i] != '\0' && field <= 14; i++) {
-		if (name[i] == '-') {
-	    	field++;
-	    	if ((field == 7) || (field == 8) || (field == 12))
-			if ((name[i+1] != '0') || (name[i+2] != '-'))
-				return 0;
-		}
-    }
-
-    if (field != 14) return 0;
-    else return 1;
-}
-
-XFontStruct *LoadQueryScalableFont(Display *display, int screen, char* name, int size) {
-    int i,j, field;
-    char newname[500];    /* big enough for a long font name */
-    int res_x, res_y;     /* resolution values for this screen */
-    /* catch obvious errors */
-    if ((name == NULL) || (name[0] != '-')) return NULL;
-    /* calculate our screen resolution in dots per inch. 25.4mm = 1 inch */
-    res_x = DisplayWidth(display, screen)/(DisplayWidthMM(display, screen)/25.4);
-    res_y = DisplayHeight(display, screen)/(DisplayHeightMM(display, screen)/25.4);
-    /* copy the font name, changing the scalable fields as we do so */
-    for(i = j = field = 0; name[i] != '\0' && field <= 14; i++) {
-        newname[j++] = name[i];
-        if (name[i] == '-') {
-            field++;
-            switch(field) {
-            case 7:  /* pixel size */
-            case 12: /* average width */
-                /* change from "-0-" to "-*-" */
-                newname[j] = '*';
-                j++;
-                if (name[i+1] != '\0') i++;
-                break;
-            case 8:  /* point size */
-                /* change from "-0-" to "-<size>-" */
-                sprintf(&newname[j], "%d", size);
-                while (newname[j] != '\0') j++;
-                if (name[i+1] != '\0') i++;
-                break;
-            case 9:  /* x-resolution */
-            case 10: /* y-resolution */
-                /* change from an unspecified resolution to res_x or res_y */
-                sprintf(&newname[j], "%d", (field == 9) ? res_x : res_y);
-                while(newname[j] != '\0') j++;
-                while((name[i+1] != '-') && (name[i+1] != '\0')) i++;
-                break;
-            }
-        }
-    }
-    newname[j] = '\0';
-    /* if there aren't 14 hyphens, it isn't a well formed name */
-    if (field != 14) return NULL;
-    return XLoadQueryFont(display, newname);
-}
