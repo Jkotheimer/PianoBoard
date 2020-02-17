@@ -1,5 +1,4 @@
 #include <X11/Xlib.h>
-#include <stdio.h>
 #include <string.h>
 
 #include "Window.h"
