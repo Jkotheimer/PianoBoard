@@ -1,5 +1,5 @@
 .PHONY: clean compile end run ${EXE}
-#.DEFAULT_GOAL := build
+.DEFAULT_GOAL := build
 
 # COLORS
 RED = "\033[0;31m"
@@ -14,22 +14,23 @@ CFLAG = -I.
 BFLAG = -Wall
 EXE = deploy
 
-# Compile the source
-${EXE}: Main.c Window.c FontHandler.c Window.h FontHandler.h
-	$(call print, ${BLUE}, "Compiling source to object files...")
-	
-	${CC} ${CFLAG} $^ ${XLIB} -o $@
-	
-	$(call print, ${GREEN}, "Source compiled")
-	$(call end)
+build: clean compile
 
 run: build
 	@./${EXE}
 
+# Compile the source
+compile: Main.c Window.c FontHandler.c Window.h FontHandler.h
+	$(call print, ${BLUE}, "Compiling source to object files...")
+	
+	${CC} ${CFLAG} $^ ${XLIB} -o ${EXE}
+	
+	$(call print, ${GREEN}, "Source compiled")
+	$(call end)
+
 # Clean out any previously built modules
 clean:
-	$(call print, ${BLUE}, "Cleaning up...")
-	
+	$(call print, ${BLUE}, "\nCleaning up...")
 	@touch ${EXE}
 	rm ${EXE}
 	
