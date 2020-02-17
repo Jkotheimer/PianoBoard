@@ -20,11 +20,9 @@ Display *init_window(Window *window) {
 
 	int screen_num = DefaultScreen(display);
 
-	int WIN_X = 500;
-
 	BLUE
 	printf("Instantiating window...\n");
-	*window = XCreateSimpleWindow(display, RootWindow(display, screen_num), WIN_X, WIN_Y, WIN_W, WIN_H, screen_num, GREY, CREAM);
+	*window = XCreateSimpleWindow(display, RootWindow(display, screen_num), 0, 0, WIN_W, WIN_H, screen_num, GREY, CREAM);
 
 	NC
 	printf("Window instantiated\n");
@@ -46,6 +44,10 @@ int event_loop(Window window, Display *display) {
 
 	while(1) {
 		XNextEvent(display, &e);
+		int WIN_X = (DisplayWidth (display, screen_num)/2) - (WIN_W/2);
+		int WIN_Y = (DisplayHeight (display, screen_num)/2) - WIN_H;
+		XMoveWindow(display, window, WIN_X, WIN_Y);
+		XSync(display, 0);
 		if (e.type == Expose) {
 			draw_gui(display, window, screen_num);
 		}
@@ -80,6 +82,7 @@ int event_loop(Window window, Display *display) {
 
 void draw_gui(Display *display, Window window, int screen_num) {
 
+	// Iterate through the available fonts and find one that is scalable
 	int count = 54;
 	char** fontlist = XListFonts(display, "-*-*-*-*-*-*-*-*-*-*-*-*-iso8859-1", 1000, &count);
 	XFontStruct *fontinfo;

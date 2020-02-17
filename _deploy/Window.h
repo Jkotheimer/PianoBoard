@@ -16,8 +16,6 @@
 // Window dimensions
 #define WIN_W 700
 #define WIN_H 200
-//#define WIN_X 600
-#define WIN_Y 400
 
 // Generic button dimensions
 #define BUTTON_W 200
