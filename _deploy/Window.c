@@ -8,26 +8,21 @@
 
 Display *init_window(Window *window) {
 
-	BLUE
-	printf("Opening display...\n");
+	BLUE printf("Opening display...\n");
 	Display *display = XOpenDisplay(NULL);
 	if (display == NULL) {
 		fprintf(stderr, "Cannot open display\n");
 		return NULL;
 	}
-	GREEN
-	printf("Display is opened properly\n");
+	GREEN printf("Display is opened properly\n");
 
 	int screen_num = DefaultScreen(display);
 
-	BLUE
-	printf("Instantiating window...\n");
 	*window = XCreateSimpleWindow(display, RootWindow(display, screen_num), 0, 0, WIN_W, WIN_H, screen_num, GREY, CREAM);
 
-	NC
-	printf("Window instantiated\n");
 	XSelectInput(display, *window, ExposureMask | ButtonPressMask);
-	printf("Event listeners set\n");
+	NC printf("Event listeners set\n");
+
 	XMapWindow(display, *window);
 
 	return display;
@@ -38,48 +33,59 @@ int event_loop(Window window, Display *display) {
 	int screen_num = DefaultScreen(display);
 	XEvent e;
 
-	BLUE
-	printf("Listening for events...\n\n");
+	BLUE printf("Listening for events...\n\n");
 	NC
 
 	while(1) {
+
 		XNextEvent(display, &e);
-		int WIN_X = (DisplayWidth (display, screen_num)/2) - (WIN_W/2);
-		int WIN_Y = (DisplayHeight (display, screen_num)/2) - WIN_H;
-		XMoveWindow(display, window, WIN_X, WIN_Y);
-		XSync(display, 0);
+
+		position_window(display, window, screen_num);
+
 		if (e.type == Expose) {
 			draw_gui(display, window, screen_num);
 		}
-		if (e.type == ButtonPress || e.type == ButtonRelease) {
+		if (e.type == ButtonPress) {
 			XButtonEvent click = e.xbutton;
 
-			if(clicked(click.x, click.y, J_BUTTON_X)) {
-				GREEN
-				printf("Java implementation selected\n\n");
+			if(mouse_over(click.x, click.y, J_BUTTON_X)) {
+				GREEN printf("Java implementation selected\n\n");
 				NC
 				system(J_COMMAND);
 				return 0;
 			}
-			else if(clicked(click.x, click.y, P_BUTTON_X)) {
-				GREEN
-				printf("Python implementation selected\n\n");
+			else if(mouse_over(click.x, click.y, P_BUTTON_X)) {
+				GREEN printf("Python implementation selected\n\n");
 				NC
 				system(P_COMMAND);
 				return 0;
 			}
-			else if(clicked(click.x, click.y, N_BUTTON_X)) {
-				GREEN
-				printf("Node.js implemenation selected\n\n");
+			else if(mouse_over(click.x, click.y, N_BUTTON_X)) {
+				GREEN printf("Node.js implemenation selected\n\n");
 				NC
 				system(N_COMMAND);
 				return 0;
 			}
 		}
 	}
-	return 0;
+	return -1;
 }
 
+// Position the window in the center of the display
+void position_window(Display *display, Window window, int screen_num) {
+
+	int WIN_X = (DisplayWidth (display, screen_num)/2) - (WIN_W/2);
+	int WIN_Y = (DisplayHeight (display, screen_num)/2) - WIN_H;
+	XMoveWindow(display, window, WIN_X, WIN_Y);
+	XSync(display, 0);
+}
+
+/**
+ * Draw the GUI
+ * - Find a system scalable font
+ * - Display the text prompt
+ * - Draw the 3 buttons
+ */
 void draw_gui(Display *display, Window window, int screen_num) {
 
 	// Iterate through the available fonts and find one that is scalable
@@ -93,8 +99,8 @@ void draw_gui(Display *display, Window window, int screen_num) {
 		}
 	}
 
+	// Display the text prompt
 	char *msg = "With which tool would you like to deploy PianoBoard?";
-
 	XGCValues gr_values;
     gr_values.font = fontinfo->fid;
     gr_values.foreground = GREY;
@@ -104,6 +110,7 @@ void draw_gui(Display *display, Window window, int screen_num) {
 					 MSG_X, MSG_Y, msg, strlen(msg)
 					);
 
+	// Draw the buttons
 	XSetForeground(display, DefaultGC(display, screen_num), PURPLE);
 	XFillRectangle(display, window, DefaultGC(display, screen_num), J_BUTTON_X, BUTTON_Y, BUTTON_W, BUTTON_H);
 	XFillRectangle(display, window, DefaultGC(display, screen_num), P_BUTTON_X, BUTTON_Y, BUTTON_W, BUTTON_H);
@@ -115,7 +122,8 @@ void draw_gui(Display *display, Window window, int screen_num) {
 	XDrawRectangle(display, window, DefaultGC(display, screen_num), N_BUTTON_X, BUTTON_Y, BUTTON_W, BUTTON_H);
 }
 
-int clicked(int x, int y, int button_x) {
+// Determine if the mouse is currently over a specific button
+int mouse_over(int x, int y, int button_x) {
 	if (x > button_x && x < (button_x + BUTTON_W) &&
 		y > BUTTON_Y &&	y < (BUTTON_Y + BUTTON_H)) {
 		return 1;

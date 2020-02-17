@@ -39,5 +39,6 @@
 
 Display *init_window(Window *w);
 int event_loop(Window w, Display *d);
+void position_window(Display *d, Window w, int s);
 void draw_gui(Display *d, Window w, int s);
-int clicked(int x, int y, int button_x);
+int mouse_over(int x, int y, int button_x);
