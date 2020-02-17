@@ -1,3 +1,6 @@
+# DEPLOYMENT IGNORABLES
+deploy
+
 # JAVA IGNORABLES: logs, mvn output directory, and CXF library
 _api/java_api/target
 _api/java_api/catalina.out
