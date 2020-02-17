@@ -1,11 +1,5 @@
-.PHONY: clean compile end run build
-.DEFAULT_GOAL := build
-
-# BUILD VARIABLES
-CC = gcc
-XLIB = -lX11
-FLAG = -I.
-EXE = Deploy
+.PHONY: clean compile end run ${EXE}
+#.DEFAULT_GOAL := build
 
 # COLORS
 RED = "\033[0;31m"
@@ -13,7 +7,21 @@ GREEN = "\033[0;32m"
 BLUE = "\033[0;34m"
 NC = "\033[0m"
 
-build: clean compile
+# BUILD VARIABLES
+CC = gcc
+XLIB = -lX11
+CFLAG = -I.
+BFLAG = -Wall
+EXE = deploy
+
+# Compile the source
+${EXE}: Main.c Window.c FontHandler.c Window.h FontHandler.h
+	$(call print, ${BLUE}, "Compiling source to object files...")
+	
+	${CC} ${CFLAG} $^ ${XLIB} -o $@
+	
+	$(call print, ${GREEN}, "Source compiled")
+	$(call end)
 
 run: build
 	@./${EXE}
@@ -26,15 +34,6 @@ clean:
 	rm ${EXE}
 	
 	$(call print, ${GREEN}, "Build directory clean")
-	$(call end)
-
-# Compile the source
-compile: %.c %.h
-	$(call print, ${BLUE}, "Compiling source...")
-	
-	${CC} ${FLAG} %.c ${XLIB} -o ${EXE}
-	
-	$(call print, ${GREEN}, "Source compiled")
 	$(call end)
 
 # Print the given string ${2} in the provided color ${1} then CRLF, and finally reset the color to default

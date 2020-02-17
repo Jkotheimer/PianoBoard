@@ -1,4 +1,5 @@
 #include <X11/Xlib.h>
+#include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 
@@ -19,12 +20,12 @@ Display *init_window(Window *window) {
 
 	int screen_num = DefaultScreen(display);
 
-	// We need the width of the display to determine the WIN_X value
-	XWindowAttributes attribute;
-	XGetWindowAttributes(display, *window, &attribute);
-	int WIN_X = (attribute.width/2) - (WIN_W/2);
+	int WIN_X = 500;
 
+	BLUE
+	printf("Instantiating window...\n");
 	*window = XCreateSimpleWindow(display, RootWindow(display, screen_num), WIN_X, WIN_Y, WIN_W, WIN_H, screen_num, GREY, CREAM);
+
 	NC
 	printf("Window instantiated\n");
 	XSelectInput(display, *window, ExposureMask | ButtonPressMask);
@@ -79,31 +80,26 @@ int event_loop(Window window, Display *display) {
 
 void draw_gui(Display *display, Window window, int screen_num) {
 
-	int count = 10;
+	int count = 54;
 	char** fontlist = XListFonts(display, "-*-*-*-*-*-*-*-*-*-*-*-*-iso8859-1", 1000, &count);
-	char* font_name;
+	XFontStruct *fontinfo;
 	for(int i = 0; i < 54; i++) {
 		if(isScalableFont(fontlist[i])) {
-			printf("%s is scalable\n\n", fontlist[i]);
-			font_name = fontlist[i];
+			fontinfo = LoadQueryScalableFont(display, screen_num, fontlist[i], MSG_SIZE);
 			break;
 		}
 	}
 
 	char *msg = "With which tool would you like to deploy PianoBoard?";
 
-	printf("Loading font...\n");
-	XFontStruct *fontinfo = LoadQueryScalableFont(display, screen_num, font_name, MSG_SIZE);
-	printf("%d\n%d\n\n", fontinfo->ascent, fontinfo->descent);
 	XGCValues gr_values;
     gr_values.font = fontinfo->fid;
     gr_values.foreground = GREY;
     gr_values.background = 0xFFFFFF;
-	//gr_values.line_width = 1;
-    GC gr_context1 = XCreateGC(display, window, GCFont | GCForeground | GCBackground, &gr_values);
-	printf("Drawing String...\n");
-	XDrawImageString(display, window, gr_context1, MSG_X, MSG_Y, msg, strlen(msg));
-	printf("String drawn\n");
+	XDrawImageString(display, window,
+					 XCreateGC(display, window, GCFont | GCForeground | GCBackground, &gr_values),
+					 MSG_X, MSG_Y, msg, strlen(msg)
+					);
 
 	XSetForeground(display, DefaultGC(display, screen_num), PURPLE);
 	XFillRectangle(display, window, DefaultGC(display, screen_num), J_BUTTON_X, BUTTON_Y, BUTTON_W, BUTTON_H);
