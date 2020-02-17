@@ -64,3 +64,25 @@ XFontStruct *LoadQueryScalableFont(Display *display, int screen, char* name, int
     if (field != 14) return NULL;
     return XLoadQueryFont(display, newname);
 }
+
+// Create a font with the given size, color, and background color
+XGCValues set_font(Display *display, int size, long color, long background) {
+
+	// Iterate through the available fonts and find one that is scalable
+	int count = 54;
+	char** fontlist = XListFonts(display, "-*-*-*-*-*-*-*-*-*-*-*-*-iso8859-1", 1000, &count);
+	char* font_name;
+	for(int i = 0; i < sizeof(fontlist); i++) {
+		if(isScalableFont(fontlist[i])) {
+			font_name = fontlist[i];
+			break;
+		}
+	}
+
+	XFontStruct *fontinfo = LoadQueryScalableFont(display, DefaultScreen(display), font_name, size);
+	XGCValues gr_values;
+    gr_values.font = fontinfo->fid;
+    gr_values.foreground = color;
+    gr_values.background = background;
+	return gr_values;
+}

@@ -13,6 +13,7 @@
 #define CREAM 0xFFFFEF
 #define GREY 0x393939
 #define LIGHTGREY 0x696969
+#define WHITE 0xFFFFFF
 
 // Window dimensions
 #define WIN_W 700
@@ -47,12 +48,14 @@
 // Message dimensions
 #define MSG "With which tool would you like to deploy PianoBoard?"
 #define MSG_SIZE 175
-#define MSG_X ((WIN_W/2) - (MSG_SIZE*2) + 25)
+#define MSG_X ((WIN_W/2) - (MSG_SIZE*2) + 30)
 #define MSG_Y 75
 
 Display *init_window(Window *w);
 int event_loop(Window w, Display *d);
 void position_window(Display *d, Window w, int s);
 void draw_gui(Display *d, Window w, int s);
-void draw_button(Display *d, Window w, int s, long color, int button_x);
+void draw_button(Display *d, Window w, char button, long color, long border_color);
+void draw_string(Display *d, Window w, char* msg, int x, int y, XGCValues font);
+void draw_rectangle(Display *display, Window window, int x, int y, long color, long border_color);
 int mouse_over(int x, int y, int button_x);

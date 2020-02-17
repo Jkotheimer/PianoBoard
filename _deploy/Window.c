@@ -31,7 +31,7 @@ Display *init_window(Window *window) {
 int event_loop(Window window, Display *display) {
 
 	int screen_num = DefaultScreen(display);
-	int is_hovering = 0;
+	char hovering = '\0';
 	XEvent e;
 
 	BLUE printf("Listening for events...\n\n");
@@ -48,26 +48,17 @@ int event_loop(Window window, Display *display) {
 		}
 		if (e.type == MotionNotify) {
 			XMotionEvent mouse = e.xmotion;
-			if(mouse_over(mouse.x, mouse.y, J_BUTTON_X) && !is_hovering) {
-				draw_button(display, window, screen_num, LIGHTPURPLE, J_BUTTON_X);
-				is_hovering = 1;
-			} else if(!mouse_over(mouse.x, mouse.y, J_BUTTON_X) && is_hovering) {
-				draw_button(display, window, screen_num, PURPLE, J_BUTTON_X);
-				is_hovering = 0;
+			if(mouse_over (mouse.x, mouse.y, J_BUTTON_X)) {
+				hovering = 'J';
 			}
-			if(mouse_over(mouse.x, mouse.y, P_BUTTON_X) && !is_hovering) {
-				draw_button(display, window, screen_num, PURPLE, P_BUTTON_X);
-				is_hovering = 1;
-			} else if(!mouse_over(mouse.x, mouse.y, P_BUTTON_X) && is_hovering) {
-				draw_button(display, window, screen_num, LIGHTPURPLE, P_BUTTON_X);
-				is_hovering = 0;
+			else if(mouse_over(mouse.x, mouse.y, P_BUTTON_X)) {
+				hovering = 'P';
 			}
-			if(mouse_over(mouse.x, mouse.y, N_BUTTON_X) && !is_hovering) {
-				draw_button(display, window, screen_num, PURPLE, N_BUTTON_X);
-				is_hovering = 1;
-			} else if(!mouse_over(mouse.x, mouse.y, N_BUTTON_X) && is_hovering) {
-				draw_button(display, window, screen_num, LIGHTPURPLE, N_BUTTON_X);
-				is_hovering = 0;
+			else if(mouse_over(mouse.x, mouse.y, N_BUTTON_X)) {
+				hovering = 'N';
+			}
+			else {
+				hovering = '\0';
 			}
 		}
 		if (e.type == ButtonPress) {
@@ -113,66 +104,67 @@ void position_window(Display *display, Window window, int screen_num) {
  */
 void draw_gui(Display *display, Window window, int screen_num) {
 
-	// Iterate through the available fonts and find one that is scalable
-	int count = 54;
-	char** fontlist = XListFonts(display, "-*-*-*-*-*-*-*-*-*-*-*-*-iso8859-1", 1000, &count);
-	char* font_name;
-	for(int i = 0; i < 54; i++) {
-		if(isScalableFont(fontlist[i])) {
-			font_name = fontlist[i];
-			break;
-		}
+	XGCValues font = set_font(display, MSG_SIZE, GREY, WHITE);
+	NC printf("Drawing prompt string...\n");
+	draw_string(display, window, MSG, MSG_X, MSG_Y, font);
+	printf("Prompt string drawn\n");
+
+	printf("Drawing buttons...\n");
+	draw_button(display, window, 'J', PURPLE, GREY);
+	draw_button(display, window, 'P', PURPLE, GREY);
+	draw_button(display, window, 'N', PURPLE, GREY);
+	printf("Buttons drawn\n");
+}
+
+// Draw either the J, P, or N button in the specified color and border color
+void draw_button(Display *display, Window window, char button, long color, long border_color) {
+
+	int button_x = 0;
+	int label_x = 0;
+	char* label = "\0";
+	if(button == 'J') {
+		button_x = J_BUTTON_X;
+		label_x = JLX;
+		label = J_LABEL;
 	}
-	XFontStruct *fontinfo = LoadQueryScalableFont(display, screen_num, font_name, MSG_SIZE);
+	else if(button == 'P') {
+		button_x = P_BUTTON_X;
+		label_x = PLX;
+		label = P_LABEL;
+	}
+	else if(button == 'N') {
+		button_x = N_BUTTON_X;
+		label_x = NLX;
+		label = N_LABEL;
+	}
+	else return;
 
-	// Display the text prompt
-	XGCValues gr_values;
-    gr_values.font = fontinfo->fid;
-    gr_values.foreground = GREY;
-    gr_values.background = 0xFFFFFF;
+	draw_rectangle(display, window, button_x, BUTTON_Y, color, border_color);
+	draw_string(display, window, label, label_x, LABEL_Y, set_font(display, LABEL_SIZE, border_color, color));
 
-	XDrawImageString(display, window,
-					 XCreateGC(display, window, GCFont | GCForeground | GCBackground, &gr_values),
-					 MSG_X, MSG_Y, MSG, strlen(MSG)
-					);
+}
 
-	//Draw the buttons
-	XSetForeground(display, DefaultGC(display, screen_num), PURPLE);
-	XFillRectangle(display, window, DefaultGC(display, screen_num), J_BUTTON_X, BUTTON_Y, BUTTON_W, BUTTON_H);
-	XFillRectangle(display, window, DefaultGC(display, screen_num), P_BUTTON_X, BUTTON_Y, BUTTON_W, BUTTON_H);
-	XFillRectangle(display, window, DefaultGC(display, screen_num), N_BUTTON_X, BUTTON_Y, BUTTON_W, BUTTON_H);
-
-	XSetForeground(display, DefaultGC(display, screen_num), GREY);
-	XDrawRectangle(display, window, DefaultGC(display, screen_num), J_BUTTON_X, BUTTON_Y, BUTTON_W, BUTTON_H);
-	XDrawRectangle(display, window, DefaultGC(display, screen_num), P_BUTTON_X, BUTTON_Y, BUTTON_W, BUTTON_H);
-	XDrawRectangle(display, window, DefaultGC(display, screen_num), N_BUTTON_X, BUTTON_Y, BUTTON_W, BUTTON_H);
-
-	fontinfo = LoadQueryScalableFont(display, screen_num, font_name, LABEL_SIZE);
-	gr_values.font = fontinfo->fid;
-	gr_values.background = PURPLE;
-	XDrawImageString(display, window,
-					 XCreateGC(display, window, GCFont | GCForeground | GCBackground, &gr_values),
-					 JLX, LABEL_Y, J_LABEL, strlen(J_LABEL)
-					);
+// Draw the given message at the provided x,y coordinates in the specified font
+void draw_string(Display *display, Window window, char* msg, int x, int y, XGCValues font) {
 
 	XDrawImageString(display, window,
-					 XCreateGC(display, window, GCFont | GCForeground | GCBackground, &gr_values),
-					 PLX, LABEL_Y, P_LABEL, strlen(P_LABEL)
-					);
-
-	XDrawImageString(display, window,
-					 XCreateGC(display, window, GCFont | GCForeground | GCBackground, &gr_values),
-					 NLX, LABEL_Y, N_LABEL, strlen(N_LABEL)
+					 XCreateGC(display, window, GCFont | GCForeground | GCBackground, &font),
+					 x, y, msg, strlen(msg)
 					);
 }
 
-void draw_button(Display *display, Window window, int screen_num, long color, int button_x) {
-	XSetForeground(display, DefaultGC(display, screen_num), color);
-	XFillRectangle(display, window, DefaultGC(display, screen_num), button_x, BUTTON_Y, BUTTON_W, BUTTON_H);
+// Draw a rectangle at the given x,y coordinates with the provided color and border color
+void draw_rectangle(Display *display, Window window, int x, int y, long color, long border_color) {
+
+	XSetForeground(display, DefaultGC(display, DefaultScreen(display)), color);
+	XFillRectangle(display, window, DefaultGC(display, DefaultScreen(display)), x, y, BUTTON_W, BUTTON_H);
+	XSetForeground(display, DefaultGC(display, DefaultScreen(display)), border_color);
+	XDrawRectangle (display, window, DefaultGC(display, DefaultScreen(display)), x, y, BUTTON_W, BUTTON_H);
 }
 
 // Determine if the mouse is currently over a specific button
 int mouse_over(int x, int y, int button_x) {
+
 	if (x > button_x && x < (button_x + BUTTON_W) &&
 		y > BUTTON_Y &&	y < (BUTTON_Y + BUTTON_H)) {
 		return 1;
