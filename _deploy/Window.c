@@ -5,6 +5,7 @@
 #include "Window.h"
 #include "FontHelper.h"
 #include "DrawHelper.h"
+#include "DeploymentHelper.h"
 
 Display *init_window(Window *window) {
 
@@ -65,19 +66,19 @@ int event_loop(Window window, Display *display) {
 			if(mouse_over(click.x, click.y, J_BUTTON_X)) {
 				GREEN printf("Java implementation selected\n\n");
 				NC
-				system(J_COMMAND);
+				deploy_java();
 				return 0;
 			}
 			else if(mouse_over(click.x, click.y, P_BUTTON_X)) {
 				GREEN printf("Python implementation selected\n\n");
 				NC
-				system(P_COMMAND);
+				deploy_python();
 				return 0;
 			}
 			else if(mouse_over(click.x, click.y, N_BUTTON_X)) {
 				GREEN printf("Node.js implemenation selected\n\n");
 				NC
-				system(N_COMMAND);
+				deploy_node();
 				return 0;
 			}
 		}

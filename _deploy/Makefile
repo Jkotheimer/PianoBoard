@@ -9,7 +9,7 @@ NC = "\033[0m"
 
 # BUILD VARIABLES
 CC = gcc
-XLIB = -lX11
+XLIB = -lX11 -lconfig
 CFLAG = -I.
 BFLAG = -Wall
 EXE = deploy
@@ -20,11 +20,11 @@ run: build
 	@./${EXE}
 
 # Compile the source
-compile: Main.c Window.c FontHelper.c DrawHelper.c Window.h FontHelper.h DrawHelper.h
+compile: Main.c Window.c FontHelper.c DrawHelper.c DeploymentHelper.c Window.h FontHelper.h DrawHelper.h DeploymentHelper.h
 	$(call print, ${BLUE}, "Compiling source...")
-	
+
 	${CC} ${CFLAG} $^ ${XLIB} -o ${EXE}
-	
+
 	$(call print, ${GREEN}, "Source compiled")
 	$(call end)
 
@@ -33,7 +33,7 @@ clean:
 	$(call print, ${BLUE}, "\nCleaning up...")
 	@touch ${EXE}
 	rm ${EXE}
-	
+
 	$(call print, ${GREEN}, "Build directory clean")
 	$(call end)
 
