@@ -125,4 +125,4 @@ printf "${GREEN}Deployment script created${NC}\n"
 printf "Deploying Pianoboard...\n"
 sh ./deploy.sh
 
-xdg-open localhost
+xdg-open "http://localhost:80"
