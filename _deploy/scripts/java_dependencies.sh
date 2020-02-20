@@ -73,6 +73,7 @@ ln -sf ${CLIENT}/* ${DOCROOT} > /dev/null
 printf "${GREEN}Client files configured${NC}\n\n"
 
 printf "Starting HTTPD server...\n"
+fuser -k 80/tcp
 sudo ${HTTPD_HOME}/bin/apachectl -k start
 printf "${GREEN}HTTPD started, listening at localhost:80${NC}\n\n"
 

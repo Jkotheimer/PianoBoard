@@ -7,31 +7,21 @@
 
 int deploy_java() {
 
-	config_t cfg;
-	config_setting_t *root, *setting;
-	const char *str;
-
-	config_init(&cfg);
-	root = config_root_setting(&cfg);
-
-	setting = config_setting_add(root, "CATALINA_HOME", CONFIG_TYPE_STRING);
-	config_setting_set_string(setting, "/opt/apache-tomcat-directory");
-
-	setting = config_setting_add(root, "CXF_HOME", CONFIG_TYPE_STRING);
-	config_setting_set_string(setting, "/opt/apache-cxf-directory");
-
-	setting = config_setting_add(root, "HTTPD_HOME", CONFIG_TYPE_STRING);
-	config_setting_set_string(setting, "/opt/apache-httpd-directory");
+	system("sh ./scripts/java_dependencies.sh");
 
 	return 0;
 }
 
 int deploy_python() {
-	FILE *conf = fopen(CONFIGFILE, "W");
+
+	// TODO Create a script to deploy the python implementation
+
 	return 0;
 }
 
 int deploy_node() {
-	FILE *conf = fopen(CONFIGFILE, "W");
+
+	// TODO Create a script to deploy the node.js implementation
+
 	return 0;
 }
