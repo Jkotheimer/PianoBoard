@@ -83,7 +83,7 @@ int event_loop(Window window, Display *display) {
 			}
 		}
 		if(e.type == DestroyNotify) {
-			NC;
+			return 0;
 		}
 	}
 	return -1;
@@ -109,4 +109,3 @@ int mouse_over(int x, int y, int button_x) {
 		return 0;
 	}
 }
-

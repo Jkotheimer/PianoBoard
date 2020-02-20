@@ -1,10 +1,10 @@
 #include <X11/Xlib.h>
 
 // Console colors
-#define BLUE printf("\033[0;34m\0");
-#define GREEN printf("\033[0;32m\0");
-#define RED printf("\033[0;31m\0");
-#define NC printf("\033[0m\0");
+#define BLUE printf("\033[0;34m");
+#define GREEN printf("\033[0;32m");
+#define RED printf("\033[0;31m");
+#define NC printf("\033[0m");
 
 // Window colors
 #define YELLOW 0xFFFA99

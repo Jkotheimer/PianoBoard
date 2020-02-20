@@ -1,16 +1,17 @@
 GREEN="\033[0;32m"
 RED="\033[0;31m"
 NC="\033[0m"
-
+sudo systemctl stop httpd 2> /dev/null
+sudo systemctl stop apache2 2> /dev/null
 printf "\n${RED}Downloading dependencies...${NC}\n"
 printf "Downloading CXF...\n"
-#wget -O /tmp/cxf		http://apache.mirrors.pair.com/cxf/3.3.5/apache-cxf-3.3.5.tar.gz
+wget -O /tmp/cxf		http://apache.mirrors.pair.com/cxf/3.3.5/apache-cxf-3.3.5.tar.gz
 printf "${GREEN}CXF download complete${NC}\n"
 printf "Downloading Tomcat...\n"
-#wget -O /tmp/tomcat		http://mirror.metrocast.net/apache/tomcat/tomcat-8/v8.5.51/bin/apache-tomcat-8.5.51.tar.gz
+wget -O /tmp/tomcat		http://mirror.metrocast.net/apache/tomcat/tomcat-8/v8.5.51/bin/apache-tomcat-8.5.51.tar.gz
 printf "${GREEN}Tomcat download complete${NC}\n"
 printf "Downloading HTTPD...\n"
-#wget -O /tmp/httpd		http://mirrors.gigenet.com/apache//httpd/httpd-2.4.41.tar.gz
+wget -O /tmp/httpd		http://mirrors.gigenet.com/apache//httpd/httpd-2.4.41.tar.gz
 printf "${GREEN}HTTPD download complete\n\n"
 printf "All dependencies downloaded successfully${NC}\n\n"
 
@@ -122,4 +123,6 @@ chmod +x deploy.sh
 printf "${GREEN}Deployment script created${NC}\n"
 
 printf "Deploying Pianoboard...\n"
-sh deploy.sh
+sh ./deploy.sh
+
+xdg-open localhost

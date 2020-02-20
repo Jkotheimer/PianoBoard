@@ -1,2 +1,2 @@
 cd ./_deploy
-make run
+sudo make run
