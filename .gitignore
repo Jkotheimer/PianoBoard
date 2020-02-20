@@ -8,6 +8,7 @@ _api/java_api/target
 _api/java_api/catalina.out
 _api/java_api/src/main/WebContent/WEB-INF/lib
 _api/java_api/dependencies
+_api/java_api/deploy.sh
 
 # PYTHON IGNORABLES:
 
