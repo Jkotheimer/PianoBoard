@@ -9,7 +9,7 @@ NC = "\033[0m"
 
 # BUILD VARIABLES
 CC = gcc
-XLIB = -lX11 -lconfig
+XLIB = -lX11
 CFLAG = -I.
 BFLAG = -Wall
 EXE = deploy
