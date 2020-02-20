@@ -4,20 +4,25 @@ NC="\033[0m"
 
 printf "\n${RED}Downloading dependencies...${NC}\n"
 printf "Downloading CXF...\n"
-wget -O /tmp/cxf		http://apache.mirrors.pair.com/cxf/3.3.5/apache-cxf-3.3.5.tar.gz
+#wget -O /tmp/cxf		http://apache.mirrors.pair.com/cxf/3.3.5/apache-cxf-3.3.5.tar.gz
 printf "${GREEN}CXF download complete${NC}\n"
 printf "Downloading Tomcat...\n"
-wget -O /tmp/tomcat		http://mirror.metrocast.net/apache/tomcat/tomcat-8/v8.5.51/bin/apache-tomcat-8.5.51.tar.gz
+#wget -O /tmp/tomcat		http://mirror.metrocast.net/apache/tomcat/tomcat-8/v8.5.51/bin/apache-tomcat-8.5.51.tar.gz
 printf "${GREEN}Tomcat download complete${NC}\n"
 printf "Downloading HTTPD...\n"
-wget -O /tmp/httpd		http://mirrors.gigenet.com/apache//httpd/httpd-2.4.41.tar.gz
+#wget -O /tmp/httpd		http://mirrors.gigenet.com/apache//httpd/httpd-2.4.41.tar.gz
 printf "${GREEN}HTTPD download complete\n\n"
 printf "All dependencies downloaded successfully${NC}\n\n"
 
 # Find the java_api directory (This script may be called from multiple different sources)
-cd ../../
-JDIR=$(readlink -f $(find . -type d -name 'java_api') | tr -d '\r')
-CLIENT=$(readlink -f $(find . -type d -name '_client') | tr -d '\r')
+while [ ! -d ./_api ]
+do
+	cd ..
+done
+# We are now in the pianoboard root directory
+
+JDIR="$(pwd)/_api/java_api"
+CLIENT="$(pwd)/_client"
 cd ${JDIR}
 
 rm -rf	dependencies/ 2> /dev/null

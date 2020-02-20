@@ -1,9 +1,16 @@
 #include <X11/Xlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
 
 #include "Window.h"
 
 int WIN_X;
+
+void interrupt() {
+	NC printf("Exiting...\n");
+	exit(0);
+}
 
 int main(void) {
 
@@ -14,6 +21,8 @@ int main(void) {
 	GREEN printf("Window is officially mapped: %lu \n\n", window);
 
 	BLUE printf("Starting event loop...\n");
+
+	signal(SIGINT, interrupt);
 
 	int exit_code = -1;
 	exit_code = event_loop(window, display); // Event loop starts here (see Window.h)

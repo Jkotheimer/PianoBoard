@@ -21,7 +21,7 @@ Display *init_window(Window *window) {
 
 	*window = XCreateSimpleWindow(display, RootWindow(display, screen_num), 0, 0, WIN_W, WIN_H, screen_num, GREY, CREAM);
 
-	XSelectInput(display, *window, ExposureMask | ButtonPressMask | PointerMotionMask);
+	XSelectInput(display, *window, ExposureMask | ButtonPressMask | PointerMotionMask | SubstructureNotifyMask);
 	NC printf("Event listeners set\n");
 
 	XMapWindow(display, *window);
@@ -81,6 +81,9 @@ int event_loop(Window window, Display *display) {
 				deploy_node();
 				return 0;
 			}
+		}
+		if(e.type == DestroyNotify) {
+			NC;
 		}
 	}
 	return -1;
