@@ -1,5 +1,7 @@
 # DEPLOYMENT IGNORABLES
-deploy
+_deploy/deploy
+*.cfg
+logs/
 
 # JAVA IGNORABLES: logs, mvn output directory, and CXF library
 _api/java_api/target
