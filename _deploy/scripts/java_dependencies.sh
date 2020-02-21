@@ -1,8 +1,7 @@
 GREEN="\033[0;32m"
 RED="\033[0;31m"
 NC="\033[0m"
-sudo systemctl stop httpd 2> /dev/null
-sudo systemctl stop apache2 2> /dev/null
+
 printf "\n${RED}Downloading dependencies...${NC}\n"
 printf "Downloading CXF...\n"
 wget -O /tmp/cxf		http://apache.mirrors.pair.com/cxf/3.3.5/apache-cxf-3.3.5.tar.gz
@@ -22,12 +21,12 @@ do
 done
 # We are now in the pianoboard root directory
 
+ROOT_DIR=$(pwd)
 JDIR="$(pwd)/_api/java_api"
-CLIENT="$(pwd)/_client"
 cd ${JDIR}
 
-rm -rf	dependencies/ 2> /dev/null
-mkdir	dependencies/
+rm -rf dependencies/ 2> /dev/null
+mkdir -m 777 dependencies/
 
 printf "${RED}Extracting dependencies...${NC}\n"
 printf "Extracting CXF...\n"
@@ -40,6 +39,8 @@ printf "Extracting HTTPD...\n"
 tar -xvzf /tmp/httpd	-C dependencies/ > /dev/null
 printf "${GREEN}HTTPD extracted${NC}\n\n"
 
+chmod -R 777 dependencies/
+
 CATALINA_HOME=${JDIR}/dependencies/apache-tomcat-8.5.51
 CXF_HOME=${JDIR}/dependencies/apache-cxf-3.3.5
 HTTPD_SRC=${JDIR}/dependencies/httpd-2.4.41
@@ -47,7 +48,7 @@ HTTPD_HOME=${JDIR}/dependencies/httpd
 
 # Set up the cxf library in the source directory
 rm -rf ${JDIR}/src/main/WebContent/WEB-INF/lib 2> /dev/null
-mkdir ${JDIR}/src/main/WebContent/WEB-INF/lib
+mkdir -m 777 ${JDIR}/src/main/WebContent/WEB-INF/lib
 printf "Copying CXF library into Java source dependency directory...\n"
 cp -avr ${CXF_HOME}/lib/* ${JDIR}/src/main/WebContent/WEB-INF/lib > /dev/null
 printf "${GREEN}CXF configuration complete${NC}\n\n"
@@ -70,32 +71,43 @@ LoadModule proxy_http_module modules/mod_proxy_http.so
 LoadModule proxy_connect_module modules/mod_proxy_connect.so
 ProxyPass			/api	http://localhost:8081/
 ProxyPassReverse	/api	http://localhost:8081/
-" >>${HTTPD_CONF}
+" >> ${HTTPD_CONF}
+
 DOCROOT=$(grep 'DocumentRoot "' ${HTTPD_CONF} | cut -d '"' -f 2 | tr -d '\r')
 rm -f ${DOCROOT}/index.html 2> /dev/null
 
 printf "Creating symlink from client to HTTPD document root...\n"
-ln -sf ${CLIENT}/* ${DOCROOT} > /dev/null
+ln -sf ${ROOT_DIR}/_client/* ${DOCROOT} > /dev/null
 printf "${GREEN}Client files configured${NC}\n\n"
 
 printf "Starting HTTPD server...\n"
 fuser -k 80/tcp
+sudo systemctl stop httpd 2> /dev/null
+sudo systemctl stop apache2 2> /dev/null
+
 sudo ${HTTPD_HOME}/bin/apachectl -k start
 printf "${GREEN}HTTPD started, listening at localhost:80${NC}\n\n"
 
-printf "Creating configuration file for deployment script...\n"
+printf "Creating configuration files for deployment script...\n"
+cd $ROOT_DIR
+rm -f ./deploy.cfg 2> /dev/null
+install -m 777 /dev/null ./deploy.cfg
+echo "IMPL=${JDIR}
+SCRIPT=\"sh deploy.sh\"" > ./deploy.cfg
+
 cd ${JDIR}
-rm -f deploy.cfg 2> /dev/null
-touch deploy.cfg
+rm -f ./deploy.cfg 2> /dev/null
+install -m 777 /dev/null ./deploy.cfg
 echo "CATALINA_HOME=${JDIR}/dependencies/apache-tomcat-8.5.51
 CXF_HOME=${JDIR}/dependencies/apache-cxf-3.3.5
 HTTPD_HOME=${JDIR}/dependencies/httpd
-JDIR=${JDIR}" > deploy.cfg
-printf "${GREEN}Configuration file created${NC}\n\n"
+JDIR=${JDIR}" > ./deploy.cfg
+
+printf "${GREEN}Configuration files created${NC}\n\n"
 
 printf "Creating deployment script...\n"
-rm -f deploy.sh 2> /dev/null
-touch deploy.sh
+rm -f ./deploy.sh 2> /dev/null
+install -m 777 /dev/null ./deploy.sh
 echo "source ./deploy.cfg
 
 # Kill anything running on ports 8080 and 8081
@@ -118,11 +130,10 @@ sleep 3
 # Copy the new war file into Cataline and start the servlet
 cp \${JDIR}/target/web_service-1.0-SNAPSHOT.war webapps/
 sh bin/startup.sh" > deploy.sh
-chmod -w deploy.sh
-chmod +x deploy.sh
+chmod +x ./deploy.sh
 printf "${GREEN}Deployment script created${NC}\n"
 
 printf "Deploying Pianoboard...\n"
-sh ./deploy.sh
+./deploy.sh
 
-xdg-open "http://localhost:80"
+xdg-open "http://localhost:80" & echo "All done!"
