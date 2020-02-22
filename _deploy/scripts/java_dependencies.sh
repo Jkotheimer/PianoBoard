@@ -9,7 +9,7 @@ T="\t"
 # cd into the scripts directory from either the root or _deploy directory
 cd ./_deploy/scripts 2> /dev/null
 cd ./scripts 2> /dev/null
-source ./functions.sh
+source functions.sh
 
 if [ ! ${1} ]; then
 	printf "${RED}\nPlease pass \$USER environment variable as an argument${NC}\n"
@@ -27,7 +27,7 @@ printf "${BLUE}Your mirror is ${MIRROR}${NC}\n"
 printf "${BLUE}Checking for dependencies...${NC}\n"
 if [ ! -f /tmp/cxf.tar.gz ]; then
 	printf "${T}Downloading CXF..."
-	sudo -u ${1} -H wget -O /tmp/cxf.tar.gz		${MIRROR}/cxf/3.3.5/apache-cxf-3.3.5.tar.gz > /dev/null
+	sudo -u ${1} -H wget -O /tmp/cxf.tar.gz			${MIRROR}/cxf/3.3.5/apache-cxf-3.3.5.tar.gz > /dev/null
 	printf ${DONE}
 fi
 
@@ -46,6 +46,12 @@ fi
 if [[ ! $(exists mvn) ]]; then
 	printf "${T}Downloading Maven..."
 	sudo -u ${1} -H wget -O /tmp/maven.tar.gz		${MIRROR}/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz > /dev/null
+	printf ${DONE}
+fi
+
+if [[ ! $(exists pcre-config) ]]; then
+	printf "${T}Downloading pcre..."
+	sudo -u ${1} -H wget -O /tmp/pcre.tar.gz		https://ftp.pcre.org/pub/pcre/pcre-8.44.tar.gz > /dev/null
 	printf ${DONE}
 fi
 
@@ -91,7 +97,26 @@ if [[ ! $(exists mvn) ]]; then
 	chmod -R 777 /opt/apache-maven-3.6.3
 	printf ${DONE}
 	printf "${T}Linking maven binaries to /usr/bin ..."
-	ln -s /opt/apache-maven-3.6.3/bin/* /usr/bin/ > /dev/null
+	ln -sf /opt/apache-maven-3.6.3/bin/* /usr/bin/ > /dev/null
+	printf ${DONE}
+fi
+
+if [[ ! $(exists pcre-config) ]]; then
+	printf "${T}Extracting pcre..."
+	sudo -u ${1} -H tar -xvzf /tmp/pcre.tar.gz -C /opt/ > /dev/null
+	chmod -R 777 /opt/pcre-8.44
+	printf ${DONE}
+	printf "${T}Building pcre source ..."
+	rm -rf /opt/pcre 2> /dev/null
+	mkdir -m 777 /opt/pcre
+	cd /opt/pcre-8.44
+	./configure --prefix=/opt/pcre/ > /dev/null 2>&1
+	make > /dev/null 2>&1
+	make install > /dev/null 2>&1
+	rm -rf /opt/pcre-8.44 2> /dev/null
+	printf ${DONE}
+	printf "${T}Linking pcre binaries to /usr/bin ..."
+	ln -sf /opt/pcre/bin/* /usr/bin/ > /dev/null
 	printf ${DONE}
 fi
 
@@ -108,7 +133,7 @@ printf ${DONE}
 printf "${T}Installing Apache Http Server..."
 cd ${HTTPD_SRC}/
 ./configure --prefix=${HTTPD_HOME}/ > /dev/null
-make > /dev/null
+make > /dev/null 2>&1
 make install > /dev/null 2>&1
 printf ${DONE}
 
@@ -130,7 +155,7 @@ printf ${DONE}
 printf "${T}Creating symlink from client to HTTPD document root..."
 DOCROOT=$(grep 'DocumentRoot "' ${HTTPD_CONF} | cut -d '"' -f 2 | tr -d '\r')
 rm -f ${DOCROOT}/index.html 2> /dev/null
-ln -s ${ROOT_DIR}/_client/* ${DOCROOT}
+ln -sf ${ROOT_DIR}/_client/* ${DOCROOT}
 printf ${DONE}
 
 printf "${T}Starting HTTPD server..."
@@ -148,7 +173,7 @@ cd $ROOT_DIR
 rm -f ./deploy.cfg 2> /dev/null
 install -m 777 /dev/null ./deploy.cfg
 echo "IMPL=${JDIR}
-SCRIPT=\"sh deploy.sh
+SCRIPT=\"./deploy.sh
 ${HTTPD_HOME}/bin/apachectl -k start\"
 " > ./deploy.cfg
 printf ${DONE}
@@ -166,7 +191,8 @@ printf ${DONE}
 printf "${T}Creating deployment script..."
 rm -f ./deploy.sh 2> /dev/null
 install -m 777 /dev/null ./deploy.sh
-echo "if [ \$USER = \"root\" ]; then
+echo "#!/bin/bash
+if [ \$USER != \"${1}\" ]; then
 	printf \"${RED}ERROR${NC}: You are running as root\nTry again as a non-root user\n\"
 	exit -1
 fi
@@ -177,7 +203,7 @@ mvn clean compile war:war
 
 # Remove any previous reminants of the previous build
 cd \${CATALINA_HOME}
-sh ./bin/shutdown.sh > /dev/null 2>&1
+./bin/shutdown.sh > /dev/null 2>&1
 rm -f webapps/web_service-1.0-SNAPSHOT.war 2> /dev/null
 rm -rf webapps/web_service-1.0-SNAPSHOT/ 2> /dev/null
 rm -rf work/* 2> /dev/null
@@ -194,8 +220,8 @@ sleep 2
 
 # Copy the new war file into Cataline and start the servlet
 cp \${JDIR}/target/web_service-1.0-SNAPSHOT.war webapps/
-sh ./bin/startup.sh" > deploy.sh
-chmod 777 ./deploy.sh
+./bin/startup.sh" > deploy.sh
+chmod +x ./deploy.sh
 printf ${DONE}
 
 printf "${T}Deploying Pianoboard..."
