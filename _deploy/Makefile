@@ -14,10 +14,12 @@ CFLAG = -I.
 BFLAG = -Wall
 EXE = deploy
 
+# USER NAME FOR EXECUTION ARGS
+
 build: clean compile
 
 run: build
-	@./${EXE}
+	@./${EXE} ${USER}
 
 # Compile the source
 compile: Main.c Window.c FontHelper.c DrawHelper.c DeploymentHelper.c Window.h FontHelper.h DrawHelper.h DeploymentHelper.h

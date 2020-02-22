@@ -4,6 +4,7 @@
 #include <signal.h>
 
 #include "Window.h"
+#include "DeploymentHelper.h"
 
 int WIN_X;
 
@@ -12,7 +13,13 @@ void interrupt() {
 	exit(0);
 }
 
-int main(void) {
+int main(int argc, char** args) {
+
+	if(argc != 2) {
+		RED printf("\nPlease pass $USER environment variable as an argument\n");
+		exit(-1);
+	}
+	set_user(args[1]);
 
 	BLUE printf("\nInitializing window...\n");
 	Window window;

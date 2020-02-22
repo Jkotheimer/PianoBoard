@@ -5,5 +5,6 @@ then
 	$SCRIPT
 else
 	cd ./_deploy
-	make run
+	PAST_USER=$USER
+	sudo make USER=${PAST_USER} run
 fi

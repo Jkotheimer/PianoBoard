@@ -64,20 +64,20 @@ int event_loop(Window window, Display *display) {
 			XButtonEvent click = e.xbutton;
 
 			if(mouse_over(click.x, click.y, J_BUTTON_X)) {
-				GREEN printf("Java implementation selected\n\n");
-				NC
+				GREEN printf("Java implementation selected");
+				NC printf("\n\n");
 				deploy_java();
 				return 0;
 			}
 			else if(mouse_over(click.x, click.y, P_BUTTON_X)) {
-				GREEN printf("Python implementation selected\n\n");
-				NC
+				GREEN printf("Python implementation selected");
+				NC printf("\n\n");
 				deploy_python();
 				return 0;
 			}
 			else if(mouse_over(click.x, click.y, N_BUTTON_X)) {
-				GREEN printf("Node.js implemenation selected\n\n");
-				NC
+				GREEN printf("Node.js implemenation selected");
+				NC printf("\n\n");
 				deploy_node();
 				return 0;
 			}

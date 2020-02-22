@@ -1,139 +1,227 @@
+#!/bin/bash
 GREEN="\033[0;32m"
+BLUE="\033[0;34m"
 RED="\033[0;31m"
 NC="\033[0m"
+DONE="\r[${GREEN}DONE${NC}]\n"
+T="\t"
 
-printf "\n${RED}Downloading dependencies...${NC}\n"
-printf "Downloading CXF...\n"
-wget -O /tmp/cxf		http://apache.mirrors.pair.com/cxf/3.3.5/apache-cxf-3.3.5.tar.gz
-printf "${GREEN}CXF download complete${NC}\n"
-printf "Downloading Tomcat...\n"
-wget -O /tmp/tomcat		http://mirror.metrocast.net/apache/tomcat/tomcat-8/v8.5.51/bin/apache-tomcat-8.5.51.tar.gz
-printf "${GREEN}Tomcat download complete${NC}\n"
-printf "Downloading HTTPD...\n"
-wget -O /tmp/httpd		http://mirrors.gigenet.com/apache//httpd/httpd-2.4.41.tar.gz
-printf "${GREEN}HTTPD download complete\n\n"
-printf "All dependencies downloaded successfully${NC}\n\n"
+# cd into the scripts directory from either the root or _deploy directory
+cd ./_deploy/scripts 2> /dev/null
+cd ./scripts 2> /dev/null
+source ./functions.sh
+
+if [ ! ${1} ]; then
+	printf "${RED}\nPlease pass \$USER environment variable as an argument${NC}\n"
+	exit -1
+fi
+
+printf "${NC}${T}Fetching your mirror..."
+wget -O ./mirrors.txt http://ws.apache.org/mirrors.cgi 2> /dev/null
+MIRROR=$(grep -E '<p><a href=.*</strong></a>' mirrors.txt | cut -d '"' -f 2)
+rm mirrors.txt
+printf ${DONE}
+
+printf "${BLUE}Your mirror is ${MIRROR}${NC}\n"
+
+printf "${BLUE}Checking for dependencies...${NC}\n"
+if [ ! -f /tmp/cxf.tar.gz ]; then
+	printf "${T}Downloading CXF..."
+	sudo -u ${1} -H wget -O /tmp/cxf.tar.gz		${MIRROR}/cxf/3.3.5/apache-cxf-3.3.5.tar.gz > /dev/null
+	printf ${DONE}
+fi
+
+if [ ! -f /tmp/tomcat.tar.gz ]; then
+	printf "${T}Downloading Tomcat..."
+	sudo -u ${1} -H wget -O /tmp/tomcat.tar.gz		${MIRROR}/tomcat/tomcat-8/v8.5.51/bin/apache-tomcat-8.5.51.tar.gz > /dev/null
+	printf ${DONE}
+fi
+
+if [ ! -f /tmp/httpd.tar.gz ]; then
+	printf "${T}Downloading HTTPD..."
+	sudo -u ${1} -H wget -O /tmp/httpd.tar.gz		${MIRROR}/httpd/httpd-2.4.41.tar.gz > /dev/null
+	printf ${DONE}
+fi
+
+if [[ ! $(exists mvn) ]]; then
+	printf "${T}Downloading Maven..."
+	sudo -u ${1} -H wget -O /tmp/maven.tar.gz		${MIRROR}/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz > /dev/null
+	printf ${DONE}
+fi
+
+printf "${GREEN}All dependencies downloaded successfully${NC}\n\n"
 
 # Find the java_api directory (This script may be called from multiple different sources)
+printf "${T}Moving into Java API deployment directory..."
 while [ ! -d ./_api ]
 do
 	cd ..
 done
 # We are now in the pianoboard root directory
-
 ROOT_DIR=$(pwd)
-JDIR="$(pwd)/_api/java_api"
+JDIR=$(pwd)/_api/java_api
 cd ${JDIR}
+printf ${DONE}
 
 rm -rf dependencies/ 2> /dev/null
-mkdir -m 777 dependencies/
+mkdir -m 777 ./dependencies/
 
-printf "${RED}Extracting dependencies...${NC}\n"
-printf "Extracting CXF...\n"
-tar -xvzf /tmp/cxf		-C dependencies/ > /dev/null
-printf "${GREEN}CXF extracted${NC}\n\n"
-printf "Extracting Tomcat...\n"
-tar -xvzf /tmp/tomcat	-C dependencies/ > /dev/null
-printf "${GREEN}Tomcat extracted${NC}\n\n"
-printf "Extracting HTTPD...\n"
-tar -xvzf /tmp/httpd	-C dependencies/ > /dev/null
-printf "${GREEN}HTTPD extracted${NC}\n\n"
+printf "${T}Extracting CXF..."
+sudo -u ${1} -H tar -xvzf /tmp/cxf.tar.gz		-C ./dependencies/ > /dev/null
+sudo -u ${1} -H mv ./dependencies/apache-cxf-3.3.5 ./dependencies/apache-cxf
+CXF_HOME=${JDIR}/dependencies/apache-cxf
+printf ${DONE}
 
-chmod -R 777 dependencies/
+printf "${T}Extracting Tomcat..."
+sudo -u ${1} -H tar -xvzf /tmp/tomcat.tar.gz	-C ./dependencies/ > /dev/null
+sudo -u ${1} -H mv ./dependencies/apache-tomcat-8.5.51 ./dependencies/apache-tomcat
+CATALINA_HOME=${JDIR}/dependencies/apache-tomcat
+printf ${DONE}
 
-CATALINA_HOME=${JDIR}/dependencies/apache-tomcat-8.5.51
-CXF_HOME=${JDIR}/dependencies/apache-cxf-3.3.5
+printf "${T}Extracting HTTPD..."
+sudo -u ${1} -H tar -xvzf /tmp/httpd.tar.gz		-C ./dependencies/ > /dev/null
+mkdir -m 777 ./dependencies/apache-httpd
 HTTPD_SRC=${JDIR}/dependencies/httpd-2.4.41
-HTTPD_HOME=${JDIR}/dependencies/httpd
+HTTPD_HOME=${JDIR}/dependencies/apache-httpd
+printf ${DONE}
+
+if [[ ! $(exists mvn) ]]; then
+	printf "${T}Extracting Maven..."
+	sudo -u ${1} -H tar -xvzf /tmp/maven.tar.gz	-C /opt/ > /dev/null
+	chmod -R 777 /opt/apache-maven-3.6.3
+	printf ${DONE}
+	printf "${T}Linking maven binaries to /usr/bin ..."
+	ln -s /opt/apache-maven-3.6.3/bin/* /usr/bin/ > /dev/null
+	printf ${DONE}
+fi
+
+chmod -R 777 ./dependencies/
 
 # Set up the cxf library in the source directory
+printf "${T}Copying CXF library into Java source dependency directory..."
 rm -rf ${JDIR}/src/main/WebContent/WEB-INF/lib 2> /dev/null
 mkdir -m 777 ${JDIR}/src/main/WebContent/WEB-INF/lib
-printf "Copying CXF library into Java source dependency directory...\n"
 cp -avr ${CXF_HOME}/lib/* ${JDIR}/src/main/WebContent/WEB-INF/lib > /dev/null
-printf "${GREEN}CXF configuration complete${NC}\n\n"
+printf ${DONE}
 
 # Install and configure the HTTP server
-cd ${HTTPD_SRC}
-printf "Installing Apache Http Server...\n"
-./configure --prefix=${HTTPD_HOME} > /dev/null
+printf "${T}Installing Apache Http Server..."
+cd ${HTTPD_SRC}/
+./configure --prefix=${HTTPD_HOME}/ > /dev/null
 make > /dev/null
 make install > /dev/null 2>&1
-printf "${GREEN}Apache HTTPD installed${NC}\n\n"
+printf ${DONE}
 
-cd ${HTTPD_HOME}
-rm -rf ${HTTPD_SRC}
 
+# Set configuration setting specific to PianoBoard
+printf "${T}Configuring PianoBoard specific settings in httpd.conf..."
+cd ${HTTPD_HOME}/
+rm -r ${HTTPD_SRC}/
 HTTPD_CONF=${HTTPD_HOME}/conf/httpd.conf
-echo "ServerName localhost
+echo "ServerName http://localhost:80
 LoadModule proxy_module modules/mod_proxy.so
 LoadModule proxy_http_module modules/mod_proxy_http.so
 LoadModule proxy_connect_module modules/mod_proxy_connect.so
 ProxyPass			/api	http://localhost:8081/
 ProxyPassReverse	/api	http://localhost:8081/
 " >> ${HTTPD_CONF}
+printf ${DONE}
 
+printf "${T}Creating symlink from client to HTTPD document root..."
 DOCROOT=$(grep 'DocumentRoot "' ${HTTPD_CONF} | cut -d '"' -f 2 | tr -d '\r')
 rm -f ${DOCROOT}/index.html 2> /dev/null
+ln -s ${ROOT_DIR}/_client/* ${DOCROOT}
+printf ${DONE}
 
-printf "Creating symlink from client to HTTPD document root...\n"
-ln -sf ${ROOT_DIR}/_client/* ${DOCROOT} > /dev/null
-printf "${GREEN}Client files configured${NC}\n\n"
+printf "${T}Starting HTTPD server..."
+# Kill any processes running on port 80 and wait a couple seconds for them to full shut down
+fuser -k 80/tcp > /dev/null 2>&1
+sleep 2
 
-printf "Starting HTTPD server...\n"
-fuser -k 80/tcp
-sudo systemctl stop httpd 2> /dev/null
-sudo systemctl stop apache2 2> /dev/null
-
+# FIXME If this returns an error, output an error message of some sort and exit
 sudo ${HTTPD_HOME}/bin/apachectl -k start
-printf "${GREEN}HTTPD started, listening at localhost:80${NC}\n\n"
+printf ${DONE}
+printf "${BLUE}${T}HTTPD started, listening at localhost:80${NC}\n"
 
-printf "Creating configuration files for deployment script...\n"
+printf "${T}Creating root config file..."
 cd $ROOT_DIR
 rm -f ./deploy.cfg 2> /dev/null
 install -m 777 /dev/null ./deploy.cfg
 echo "IMPL=${JDIR}
-SCRIPT=\"sh deploy.sh\"" > ./deploy.cfg
+SCRIPT=\"sh deploy.sh
+${HTTPD_HOME}/bin/apachectl -k start\"
+" > ./deploy.cfg
+printf ${DONE}
 
+printf "${T}Creating Java config file..."
 cd ${JDIR}
 rm -f ./deploy.cfg 2> /dev/null
 install -m 777 /dev/null ./deploy.cfg
-echo "CATALINA_HOME=${JDIR}/dependencies/apache-tomcat-8.5.51
-CXF_HOME=${JDIR}/dependencies/apache-cxf-3.3.5
-HTTPD_HOME=${JDIR}/dependencies/httpd
+echo "CATALINA_HOME=${CATALINA_HOME}
+CXF_HOME=${CXF_HOME}
+HTTPD_HOME=${HTTPD_HOME}
 JDIR=${JDIR}" > ./deploy.cfg
+printf ${DONE}
 
-printf "${GREEN}Configuration files created${NC}\n\n"
-
-printf "Creating deployment script...\n"
+printf "${T}Creating deployment script..."
 rm -f ./deploy.sh 2> /dev/null
 install -m 777 /dev/null ./deploy.sh
-echo "source ./deploy.cfg
-
-# Kill anything running on ports 8080 and 8081
-fuser -k 8080/tcp
-fuser -k 8081/tcp
+echo "if [ \$USER = \"root\" ]; then
+	printf \"${RED}ERROR${NC}: You are running as root\nTry again as a non-root user\n\"
+	exit -1
+fi
+source ./deploy.cfg
 
 # Compile the source into a war file
 mvn clean compile war:war
 
 # Remove any previous reminants of the previous build
 cd \${CATALINA_HOME}
+sh ./bin/shutdown.sh > /dev/null 2>&1
 rm -f webapps/web_service-1.0-SNAPSHOT.war 2> /dev/null
 rm -rf webapps/web_service-1.0-SNAPSHOT/ 2> /dev/null
 rm -rf work/* 2> /dev/null
 rm -rf temp/* 2> /dev/null
 
+# Kill anything running on ports 8080 and 8081
+fuser -k 8080/tcp > /dev/null 2>&1
+fuser -k 8081/tcp > /dev/null 2>&1
+fuser -k 8005/tcp > /dev/null 2>&1
+fuser -k 8009/tcp > /dev/null 2>&1
+
 # It often takes a moment for these changes to take effect
-sleep 3
+sleep 2
 
 # Copy the new war file into Cataline and start the servlet
 cp \${JDIR}/target/web_service-1.0-SNAPSHOT.war webapps/
-sh bin/startup.sh" > deploy.sh
-chmod +x ./deploy.sh
-printf "${GREEN}Deployment script created${NC}\n"
+sh ./bin/startup.sh" > deploy.sh
+chmod 777 ./deploy.sh
+printf ${DONE}
 
-printf "Deploying Pianoboard...\n"
-./deploy.sh
+printf "${T}Deploying Pianoboard..."
+# Kill anything running on ports 8080 and 8081
+fuser -k 8080/tcp > /dev/null 2>&1
+fuser -k 8081/tcp > /dev/null 2>&1
+fuser -k 8005/tcp > /dev/null 2>&1
+sudo -u ${1} -H ./deploy.sh > /dev/null
+printf ${DONE}
 
-xdg-open "http://localhost:80" & echo "All done!"
+lh="http://localhost:80"
+if [[ $(exists firefox) ]]; then
+	echo "Opening in Firefox"
+	sudo -u ${1} -H firefox ${lh}
+elif [[ $(exists chromium) ]]; then
+	echo "Opening in Chromium"
+	sudo -u ${1} -H chromium ${lh}
+elif [[ $(exists chrome) ]]; then
+	echo "opening in Chrome"
+	sudo -u ${1} -H chrome ${lh}
+elif [[ $(exists opera) ]]; then
+	echo "Opening in Opera"
+	sudo -u ${1} -H opera ${lh}
+else
+	echo "Opening with xdg-open"
+	xdg-open ${lh}
+fi
+
+exit 0
