@@ -71,8 +71,8 @@ XGCValues set_font(Display *display, int size, long color, long background) {
 	// Iterate through the available fonts and find one that is scalable
 	int count = 54;
 	char** fontlist = XListFonts(display, "-*-*-*-*-*-*-*-*-*-*-*-*-iso8859-1", 1000, &count);
-	char* font_name;
-	for(int i = 0; i < sizeof(fontlist); i++) {
+	char* font_name = fontlist[0];
+	for(int i = 0; i < count; i++) {
 		if(isScalableFont(fontlist[i])) {
 			font_name = fontlist[i];
 			break;
