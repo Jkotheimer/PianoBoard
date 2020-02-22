@@ -9,7 +9,7 @@ char* USER;
 
 int deploy_java() {
 
-	char pre_comm[512] = "sh ./scripts/java_dependencies.sh ";
+	char pre_comm[512] = "./scripts/java_dependencies.sh ";
 	char* command = strcat(pre_comm, USER);
 
 	system(command);
