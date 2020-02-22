@@ -193,17 +193,29 @@ rm -f ./deploy.sh 2> /dev/null
 install -m 777 /dev/null ./deploy.sh
 echo "#!/bin/bash
 if [ \$USER != \"${1}\" ]; then
-	printf \"${RED}ERROR${NC}: You are running as root\nTry again as a non-root user\n\"
+	printf \"[${RED}ERROR${NC}]\tThis configuration is set for ${1}, but you are signed in as \${USER}.\n\"
+	printf \"[${RED}ERROR${NC}]\tPlease sign in as ${1} and try again.\"
 	exit -1
 fi
 source ./deploy.cfg
 
+# Check if apachectl is running (The jank way because 'apachectl status' uses lynx, an uncommon tool)
+curl http://localhost:80 > /dev/null 2>&1
+A_STATUS=\$?
+if [ ! \${A_STATUS} -eq 0 ]; then
+	printf \"[${RED}ERROR ${NC}]\tApache http server not running.\"
+	printf \"${T}Starting apachectl now...\"
+	sudo fuser -k 80/tcp > /dev/null 2>&1
+	sudo ${HTTPD_HOME}/bin/apachectl start > /dev/null
+	${DONE}
+fi
+
 # Compile the source into a war file
-mvn clean compile war:war
+sudo -u ${1} -H mvn clean compile war:war
 
 # Remove any previous reminants of the previous build
 cd \${CATALINA_HOME}
-./bin/shutdown.sh > /dev/null 2>&1
+sudo -u ${1} -H ./bin/shutdown.sh > /dev/null 2>&1
 rm -f webapps/web_service-1.0-SNAPSHOT.war 2> /dev/null
 rm -rf webapps/web_service-1.0-SNAPSHOT/ 2> /dev/null
 rm -rf work/* 2> /dev/null
@@ -219,8 +231,8 @@ fuser -k 8009/tcp > /dev/null 2>&1
 sleep 2
 
 # Copy the new war file into Cataline and start the servlet
-cp \${JDIR}/target/web_service-1.0-SNAPSHOT.war webapps/
-./bin/startup.sh" > deploy.sh
+sudo -u ${1} -H cp \${JDIR}/target/web_service-1.0-SNAPSHOT.war webapps/
+sudo -u ${1} -H ./bin/startup.sh" > deploy.sh
 chmod +x ./deploy.sh
 printf ${DONE}
 
