@@ -7,8 +7,8 @@ DONE="\r[${GREEN}DONE${NC}]\n"
 T="\t"
 
 # cd into the scripts directory from either the root or _deploy directory
-cd ./_deploy/scripts 2> /dev/null
-cd ./scripts 2> /dev/null
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd $DIR
 source functions.sh
 
 if [ ! ${1} ]; then
@@ -16,6 +16,7 @@ if [ ! ${1} ]; then
 	exit -1
 fi
 
+# Extract the
 printf "${NC}${T}Fetching your mirror..."
 wget -O ./mirrors.txt http://ws.apache.org/mirrors.cgi 2> /dev/null
 MIRROR=$(grep -E '<p><a href=.*</strong></a>' mirrors.txt | cut -d '"' -f 2)
