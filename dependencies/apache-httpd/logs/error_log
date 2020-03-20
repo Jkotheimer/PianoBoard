@@ -1,0 +1,16 @@
+[Thu Mar 19 18:10:30.663633 2020] [mpm_event:notice] [pid 116376:tid 140261559068544] AH00489: Apache/2.4.41 (Unix) PHP/7.4.4 configured -- resuming normal operations
+[Thu Mar 19 18:10:30.663712 2020] [core:notice] [pid 116376:tid 140261559068544] AH00094: Command line: '/srv/http/php-test/dependencies/apache-httpd//bin/httpd'
+[Thu Mar 19 20:32:08.172437 2020] [core:warn] [pid 117556:tid 140430480930688] AH00098: pid file /srv/http/php-test/dependencies/apache-httpd/logs/httpd.pid overwritten -- Unclean shutdown of previous Apache run?
+[Thu Mar 19 20:32:08.173794 2020] [mpm_event:notice] [pid 117556:tid 140430480930688] AH00489: Apache/2.4.41 (Unix) PHP/7.4.4 configured -- resuming normal operations
+[Thu Mar 19 20:32:08.173891 2020] [core:notice] [pid 117556:tid 140430480930688] AH00094: Command line: '/srv/http/php-test/dependencies/apache-httpd//bin/httpd'
+[Thu Mar 19 20:33:21.110713 2020] [core:warn] [pid 117687:tid 139845297792896] AH00098: pid file /srv/http/php-test/dependencies/apache-httpd/logs/httpd.pid overwritten -- Unclean shutdown of previous Apache run?
+[Thu Mar 19 20:33:21.112390 2020] [mpm_event:notice] [pid 117687:tid 139845297792896] AH00489: Apache/2.4.41 (Unix) PHP/7.4.4 configured -- resuming normal operations
+[Thu Mar 19 20:33:21.112454 2020] [core:notice] [pid 117687:tid 139845297792896] AH00094: Command line: '/srv/http/php-test/dependencies/apache-httpd//bin/httpd'
+[Thu Mar 19 20:40:41.696705 2020] [core:warn] [pid 118002:tid 139852111849344] AH00098: pid file /srv/http/php-test/dependencies/apache-httpd/logs/httpd.pid overwritten -- Unclean shutdown of previous Apache run?
+[Thu Mar 19 20:40:41.697755 2020] [mpm_event:notice] [pid 118002:tid 139852111849344] AH00489: Apache/2.4.41 (Unix) PHP/7.4.4 configured -- resuming normal operations
+[Thu Mar 19 20:40:41.697798 2020] [core:notice] [pid 118002:tid 139852111849344] AH00094: Command line: '/srv/http/php-test/dependencies/apache-httpd//bin/httpd'
+[Thu Mar 19 20:40:54.799671 2020] [core:warn] [pid 118102:tid 139965388117888] AH00098: pid file /srv/http/php-test/dependencies/apache-httpd/logs/httpd.pid overwritten -- Unclean shutdown of previous Apache run?
+[Thu Mar 19 20:40:54.800976 2020] [mpm_event:notice] [pid 118102:tid 139965388117888] AH00489: Apache/2.4.41 (Unix) PHP/7.4.4 configured -- resuming normal operations
+[Thu Mar 19 20:40:54.801026 2020] [core:notice] [pid 118102:tid 139965388117888] AH00094: Command line: '/srv/http/php-test/dependencies/apache-httpd//bin/httpd'
+[Thu Mar 19 21:44:58.554803 2020] [proxy:error] [pid 118104:tid 139965073655552] (111)Connection refused: AH00957: HTTP: attempt to connect to 127.0.0.1:8081 (localhost) failed
+[Thu Mar 19 21:44:58.554845 2020] [proxy_http:error] [pid 118104:tid 139965073655552] [client ::1:49874] AH01114: HTTP: failed to make connection to backend: localhost, referer: http://localhost/

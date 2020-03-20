@@ -1,0 +1,8 @@
+#! /bin/sh
+#
+# Created by configure
+
+"./configure" \
+"--prefix=/srv/http/php-test/dependencies/apache-httpd/" \
+"--enable-so" \
+"$@"

@@ -1,0 +1,259 @@
+:root {
+	--login-panel-width: 700px;
+	--login-panel-height: 350px;
+}
+body {
+	background-color: var(--bgp);
+}
+input:focus { outline: none; }
+.sector {
+	display: none;
+}
+#login {
+	text-align: center;
+	width: 100%;
+}
+#dashboard {
+	text-align: left;
+}
+.panel {
+	position: relative;
+	width: auto;
+	height: auto;
+	margin-top: 25px;
+	padding: 25px;
+	display: inline-block;
+	vertical-align: top;
+	text-align: left;
+	background-color: var(--grey);
+	border-left: 4px solid var(--purple);
+	border-top: 4px solid var(--purple);
+	border-right: 4px solid var(--yellow);
+	border-bottom: 4px solid var(--yellow);
+	border-radius: 10px;
+	font-family: sans-serif;
+}
+.panel_label {
+	color: var(--cream);
+	font-size: 20px;
+}
+
+/* DASHBOARD STYLES */
+/* NAVBAR */
+#nav_bar {
+	height: auto;
+}
+.nav_link {
+	float: right;
+	position: relative;
+	display: inline-block;
+	margin-left: 10px;
+	font-size: 16px;
+	padding: calc(var(--logo-height)/4);
+	border: 2px solid var(--grey);
+	border-radius: 30px;
+}
+.nav_link:hover { cursor: pointer; }
+.icon {
+	vertical-align: middle;
+	height: calc(var(--logo-height)/2);
+}
+.icon:hover { cursor: pointer; }
+
+.search_container {
+	width: calc(100% - 750px);
+	height: auto;
+	padding: none;
+	border: 1px solid var(--grey);
+	border-radius: 100px;
+	background-color: transparent;
+	color: var(--grey);
+}
+#search_bar {
+	vertical-align: middle;
+	text-align: left;
+	width: calc(100% - 50px);
+	height: 100%;
+	border: none;
+	color: var(--grey);
+}
+#search_bar:hover { cursor: text; }
+#search_bar:focus {
+	background-color: transparent;
+}
+.search_icon {
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	margin: none;
+}
+
+/* SPECIFIC PANEL STYLES */
+.left_panel {
+	text-align: center;
+	width: 256px;
+	float: left;
+}
+.right_panel {
+	float: right;
+	margin-left: 25px;
+	width: calc(100% - 400px);
+	text-align: center;
+}
+
+/* LEFT PANEL STYLES */
+#profile_picture {
+	position: relative;
+	width: 256px;
+	height: 256px;
+}
+#picture_hint {
+	position: absolute;
+	padding: 5px 10px;
+	text-align: center;
+	background-color: var(--yellow);
+	border-radius: 10px;
+	font-size: 14px;
+	display: none;
+}
+
+#info {
+
+}
+#username {
+	background-color: transparent;
+	text-align: center;
+	color: var(--cream);
+	border: none;
+	border-radius: 10px;
+	font-size: 20px;
+	width: calc(100% - 25px);
+
+}
+#username:hover { cursor: pointer; }
+#username:focus {
+	background-color: var(--lightgrey);
+	cursor: text;
+}
+#username::placeholder { color: var(--yellow); }
+.info_container {
+	width: 100%;
+	margin-bottom: 25px;
+}
+.info_label {
+	color: var(--purple);
+}
+.favorite_container {
+	margin-top: 5px;
+}
+.favorite_element {
+	width: auto;
+	padding: 0 10px;
+	margin: 2px;
+	border-radius: 5px;
+	font-size: 14px;
+	display: inline-block;
+	background-color: var(--lightgrey);
+}
+.favorite_element:hover {
+	cursor: pointer;
+	background-color: var(--cream);
+}
+.add_favorite {
+	font-size: 14px;
+	border-radius: 10px;
+	width: 100%;
+	text-align: center;
+	background-color: transparent;
+	border: none;
+}
+.add_favorite::placeholder {
+	color: var(--yellow);
+}
+.add_favorite:hover { cursor: pointer; }
+.add_favorite:focus {
+	background-color: var(--lightgrey);
+	cursor: text;
+}
+
+
+#sign_out {
+	width: 100px;
+	margin-top: 50px;
+	text-align: center;
+	background-color: var(--cream);
+	padding: 5px;
+	border-radius: 5px;
+	border: 1px solid black;
+}
+#sign_out:hover { cursor: pointer; }
+
+/* RIGHT PANEL STYLES */
+#project_area {
+
+}
+
+
+/* LOGIN PAGE */
+.login_logo {
+	position: relative;
+	vertical-align: top;
+	display: inline-block;
+	text-align: center;
+	width: 50%;
+	height: 25%;
+	padding-top: 25px;
+}
+.login_logo:hover { cursor: default; }
+.login_form_area {
+	position: relative;
+	display: inline-block;
+	top: -75%;
+	width: 50%;
+	height: 75%;
+	padding-left: 20px;
+}
+.login_form_section {
+	margin-bottom: 20px;
+}
+/* LINK AREA */
+.link_area {
+	position: relative;
+	display: inline-block;
+	width: 49%;
+	height: 100%;
+}
+.link {
+	position: absolute;
+	padding: 5px;
+	text-decoration: none;
+	text-align: center;
+	font-size: 20px;
+	width: 75%;
+	left: 12.5%;
+	color: #393939;
+	border-radius: 5px;
+	border: 2px solid transparent;
+}
+.link:hover { border: 2px solid #FFF; cursor: pointer; }
+.link:active { border: 2px solid #333; outline: none; }
+.link::selection { background: transparent; }
+.reset_password_link {
+	background-color: var(--yellow);
+	top: 50%;
+}
+.create_account_link {
+	background-color: var(--purple);
+	top: 25%;
+}
+.submit_link {
+	background-color: var(--cream);
+	top: 75%;
+}
+.info {
+	position: relative;
+	width: var(--login-panel-width);
+	margin: 10px auto 0;
+	text-align: right;
+	font-size: 12px;
+}
