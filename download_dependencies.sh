@@ -12,9 +12,10 @@ MIRROR=$(grep -E '<p><a href=.*</strong></a>' mirrors.txt | cut -d '"' -f 2)
 rm mirrors.txt
 printf ${DONE}
 
+cd "$( dirname "${BASH_SOURCE[0]}" )" > /dev/null 2>&1
 ROOT_DIR=$(pwd)
-rm -rf ./dependencies 2> /dev/null
-mkdir -m 777 ./dependencies
+rm -rf ./_dependencies 2> /dev/null
+mkdir -m 777 ./_dependencies
 
 if [ ! -f /tmp/httpd.tar.gz ]; then
 	printf "${T}Downloading HTTPD..."
@@ -29,17 +30,17 @@ if [ ! -f /tmp/php.tar.gz ]; then
 fi
 
 printf "${T}Extracting HTTPD..."
-sudo -u ${1} -H tar -xvzf /tmp/httpd.tar.gz		-C ./dependencies/ > /dev/null 2>&1
-mkdir -m 777 ./dependencies/apache-httpd
-HTTPD_SRC=${ROOT_DIR}/dependencies/httpd-2.4.41
-HTTPD_HOME=${ROOT_DIR}/dependencies/apache-httpd
+sudo -u ${1} -H tar -xvzf /tmp/httpd.tar.gz		-C ./_dependencies/ > /dev/null 2>&1
+mkdir -m 777 ./_dependencies/apache-httpd
+HTTPD_SRC=${ROOT_DIR}/_dependencies/httpd-2.4.41
+HTTPD_HOME=${ROOT_DIR}/_dependencies/apache-httpd
 printf ${DONE}
 
 printf "${T}Extracting PHP..."
-sudo -u ${1} -H tar -xvzf /tmp/php.tar.gz		-C ./dependencies/ > /dev/null 2>&1
-mkdir -m 777 ./dependencies/php
-PHP_SRC=${ROOT_DIR}/dependencies/php-7.4.4
-PHP_HOME=${ROOT_DIR}/dependencies/php
+sudo -u ${1} -H tar -xvzf /tmp/php.tar.gz		-C ./_dependencies/ > /dev/null 2>&1
+mkdir -m 777 ./_dependencies/php
+PHP_SRC=${ROOT_DIR}/_dependencies/php-7.4.4
+PHP_HOME=${ROOT_DIR}/_dependencies/php
 printf ${DONE}
 
 printf "${T}Installing Apache Http Server..."
@@ -76,6 +77,6 @@ ProxyPassReverse	/api	http://localhost:8081/
 " >> ${HTTPD_CONF}
 printf ${DONE}
 
-sudo chmod -R 777 ./dependencies/
+sudo chmod -R 777 ./_dependencies/
 
 sudo ${HTTPD_HOME}/bin/apachectl start
