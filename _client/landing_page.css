@@ -1,6 +1,6 @@
 :root {
 	--login-panel-width: 700px;
-	--login-panel-height: 350px;
+	--login-panel-height: 300px;
 }
 body {
 	background-color: var(--bgp);
@@ -15,6 +15,7 @@ input:focus { outline: none; }
 }
 #dashboard {
 	text-align: left;
+	width: 100%;
 }
 .panel {
 	position: relative;
@@ -175,8 +176,6 @@ input:focus { outline: none; }
 	background-color: var(--lightgrey);
 	cursor: text;
 }
-
-
 #sign_out {
 	width: 100px;
 	margin-top: 50px;
@@ -195,23 +194,22 @@ input:focus { outline: none; }
 
 
 /* LOGIN PAGE */
+.login_panel {
+	width: var(--login-panel-width);
+	height: var(--login-panel-height);
+}
 .login_logo {
 	position: relative;
-	vertical-align: top;
 	display: inline-block;
-	text-align: center;
 	width: 50%;
 	height: 25%;
-	padding-top: 25px;
 }
 .login_logo:hover { cursor: default; }
 .login_form_area {
 	position: relative;
 	display: inline-block;
-	top: -75%;
 	width: 50%;
 	height: 75%;
-	padding-left: 20px;
 }
 .login_form_section {
 	margin-bottom: 20px;
@@ -220,35 +218,34 @@ input:focus { outline: none; }
 .link_area {
 	position: relative;
 	display: inline-block;
+	text-align: center;
 	width: 49%;
 	height: 100%;
 }
 .link {
-	position: absolute;
+	position: relative;
 	padding: 5px;
+	margin: 25px auto;
 	text-decoration: none;
 	text-align: center;
 	font-size: 20px;
 	width: 75%;
-	left: 12.5%;
 	color: #393939;
 	border-radius: 5px;
 	border: 2px solid transparent;
+	display: block;
 }
 .link:hover { border: 2px solid #FFF; cursor: pointer; }
 .link:active { border: 2px solid #333; outline: none; }
 .link::selection { background: transparent; }
 .reset_password_link {
 	background-color: var(--yellow);
-	top: 50%;
-}
+	}
 .create_account_link {
 	background-color: var(--purple);
-	top: 25%;
 }
 .submit_link {
 	background-color: var(--cream);
-	top: 75%;
 }
 .info {
 	position: relative;
