@@ -13,6 +13,7 @@ rm mirrors.txt
 printf ${DONE}
 
 cd "$( dirname "${BASH_SOURCE[0]}" )" > /dev/null 2>&1
+cd ../
 ROOT_DIR=$(pwd)
 rm -rf ./_dependencies 2> /dev/null
 mkdir -m 777 ./_dependencies
@@ -77,6 +78,29 @@ ProxyPassReverse	/api	http://localhost:8081/
 " >> ${HTTPD_CONF}
 printf ${DONE}
 
+printf "${T}Starting Apache HTTP Server..."
+cd ${ROOT_DIR}
 sudo chmod -R 777 ./_dependencies/
-
+sudo fuser -k 80/tcp
 sudo ${HTTPD_HOME}/bin/apachectl start
+printf ${DONE}
+
+printf "${T}Copying files from _client to HTTPD document root..."
+rm -rf ${HTTPD_HOME}/htdocs/* > /dev/null
+sudo -u ${1} -H cp -r _client/* ${HTTPD_HOME}/htdocs/ > /dev/null
+printf ${DONE}
+
+printf "${T}Generating config file..."
+touch run.cfg
+echo "refresh_server() {
+	sudo fuser -k 80/tcp
+	sudo ${HTTPD_HOME}/bin/apachectl start
+}
+refresh_client() {
+	rm -rf ${HTTPD_HOME}/htdocs/*
+	ln -s ${ROOT_DIR}/_client/* ${HTTPD_HOME}/htdocs/
+}
+" > run.cfg
+chmod 777 run.cfg
+printf ${DONE}
+

@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
-if [ -d ./dependencies ]; then
-	sudo fuser -k 80/tcp
-	sudo ./dependencies/apache-httpd/bin/apachectl start
+if [ -f run.cfg ]; then
+	source run.cfg
+	curl -m 5 http://localhost:80 > /dev/null 2>&1
+	if [ ! $? ]; then
+		refresh_server
+	fi
+	refresh_client
 else
-	sudo ./download_dependencies.sh ${USER}
+	sudo ./_scripts/download_dependencies.sh ${USER}
 fi
+
