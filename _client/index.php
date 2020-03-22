@@ -1,5 +1,17 @@
 ﻿<?
 ob_start();
+$servername = "localhost:3306";
+$username = "root";
+$password = "Dnt\$g2wndurwch";
+
+// Create connection
+$db = new mysqli($servername, $username, $password);
+unset($servername, $username, $password);
+
+// Check connection
+if ($db->connect_error) {
+	die("Connection failed: " . $conn->connect_error);
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -15,8 +27,9 @@ ob_start();
 	<body>
 		<?
 		$page = "login";
-		if(isset($_POST['submit'])) {
-			//code for the php form
+		echo implode(" : ", $_POST);
+		if(isset($_POST['email']) && isset($_POST['password'])) {
+			
 			$page = "dashboard";
 		}
 		$path = "./resources/html/" . $page . ".html";
