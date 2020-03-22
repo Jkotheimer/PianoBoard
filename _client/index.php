@@ -1,11 +1,11 @@
 ﻿<?
 ob_start();
-$servername = "localhost:3306";
-$username = "root";
-$password = "Dnt\$g2wndurwch";
+$servername = "127.0.0.1";
+$username = "pb";
+$password = "SceptreStudios990";
 
 // Create connection
-$db = new mysqli($servername, $username, $password);
+$db = mysqli_connect($servername, $username, $password);
 unset($servername, $username, $password);
 
 // Check connection
