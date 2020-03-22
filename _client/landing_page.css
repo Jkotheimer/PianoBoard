@@ -197,6 +197,7 @@ input:focus { outline: none; }
 .login_panel {
 	width: var(--login-panel-width);
 	height: var(--login-panel-height);
+	margin-top: 100px;
 }
 .login_logo {
 	position: relative;
