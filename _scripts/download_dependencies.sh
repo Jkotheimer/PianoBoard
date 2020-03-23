@@ -1,72 +1,49 @@
 #!/usr/bin/env bash
-GREEN="\033[0;32m"
-BLUE="\033[0;34m"
-RED="\033[0;31m"
-NC="\033[0m"
-DONE="\r[${GREEN}DONE${NC}]\n"
-T="\t"
 
-printf "${NC}${T}Fetching your mirror..."
-curl -o ./mirrors.txt http://ws.apache.org/mirrors.cgi 2> /dev/null
+printf "\tLocating project root and creating dependencies directory..."
+cd ../"$( dirname "${BASH_SOURCE[0]}" )" > /dev/null 2>&1
+source ./_scripts/functions.sh
+DEP_DIR=$(pwd)/_dependencies
+CLIENT_DIR=$(pwd)/_client
+SRV_DIR=$(pwd)/_server
+ROOT_DIR=$(pwd)
+rm -rf ${DEP_DIR} 2> /dev/null
+mkdir ${DEP_DIR}
+printf ${DONE}
+
+if [ ! $(exists mysql) ]; then
+	printf "\n[\033[0;31mERROR\033[0m] Please install mysql before installing this package\n"
+	exit -1
+fi
+
+printf "${T}Fetching your mirror..."
+handle_error $(curl -o ./mirrors.txt http://ws.apache.org/mirrors.cgi 2>&1)
 MIRROR=$(grep -E '<p><a href=.*</strong></a>' mirrors.txt | cut -d '"' -f 2)
 rm mirrors.txt
 printf ${DONE}
 
-cd "$( dirname "${BASH_SOURCE[0]}" )" > /dev/null 2>&1
-cd ../
-ROOT_DIR=$(pwd)
-rm -rf ./_dependencies 2> /dev/null
-mkdir -m 777 ./_dependencies
+# DOWNLOAD AND INSTALL HTTPD
+HTTPD_HOME=${DEP_DIR}/httpd
+download_dependency httpd ${MIRROR}/httpd/httpd-2.4.41.tar.gz
+extract_dependency httpd ${DEP_DIR}
+install_dependency ${DEP_DIR}/httpd-* \
+	"--prefix=${HTTPD_HOME} --enable-so" \
+	$()
 
-if [ ! -f /tmp/httpd.tar.gz ]; then
-	printf "${T}Downloading HTTPD..."
-	sudo -u ${1} -H curl -o /tmp/httpd.tar.gz		${MIRROR}/httpd/httpd-2.4.41.tar.gz > /dev/null
-	printf ${DONE}
-fi
-
-if [ ! -f /tmp/php.tar.gz ]; then
-	printf "${T}Downloading PHP..."
-	sudo -u ${1} -H curl -o /tmp/php.tar.gz			https://www.php.net/distributions/php-7.4.4.tar.gz > /dev/null
-	printf ${DONE}
-fi
-
-printf "${T}Extracting HTTPD..."
-sudo -u ${1} -H tar -xvzf /tmp/httpd.tar.gz		-C ./_dependencies/ > /dev/null 2>&1
-mkdir -m 777 ./_dependencies/apache-httpd
-HTTPD_SRC=${ROOT_DIR}/_dependencies/httpd-2.4.41
-HTTPD_HOME=${ROOT_DIR}/_dependencies/apache-httpd
-printf ${DONE}
-
-printf "${T}Extracting PHP..."
-sudo -u ${1} -H tar -xvzf /tmp/php.tar.gz		-C ./_dependencies/ > /dev/null 2>&1
-mkdir -m 777 ./_dependencies/php
-PHP_SRC=${ROOT_DIR}/_dependencies/php-7.4.4
-PHP_HOME=${ROOT_DIR}/_dependencies/php
-printf ${DONE}
-
-printf "${T}Installing Apache Http Server..."
-cd ${HTTPD_SRC}/
-./configure --prefix=${HTTPD_HOME}/ --enable-so > /dev/null
-make > /dev/null 2>&1
-make install > /dev/null 2>&1
-printf ${DONE}
-
-printf "${T}Installing PHP..."
-cd ${PHP_SRC}/
-./configure --prefix=${PHP_HOME}/ --with-apxs2=${HTTPD_HOME}/bin/apxs --with-mysqli > /dev/null
-make > /dev/null 2>&1
-make install > /dev/null 2>&1
-cp php.ini-development /usr/local/lib/php.ini
-printf ${DONE}
+# DOWNLOAD AND INSTALL PHP
+download_dependency php https://www.php.net/distributions/php-7.4.4.tar.gz
+extract_dependency php ${DEP_DIR}
+install_dependency ${DEP_DIR}/php-* \
+	"--prefix=${DEP_DIR}/php/ --with-apxs2=${HTTPD_HOME}/bin/apxs --with-mysqli" \
+	$(cp php.ini-development /usr/local/lib/php.ini 2> /dev/null)
 
 printf "${T}Configuring PHP with HTTPD..."
-rm -r ${HTTPD_SRC}/
-rm -r ${PHP_SRC}/
 HTTPD_CONF=${HTTPD_HOME}/conf/httpd.conf
-echo "ServerName http://localhost:80
-LoadModule proxy_module modules/mod_proxy.so
-LoadModule proxy_http_module modules/mod_proxy_http.so
-LoadModule proxy_connect_module modules/mod_proxy_connect.so
+uncomment mod_proxy.so ${HTTPD_CONF}
+uncomment mod_proxy_http.so ${HTTPD_CONF}
+uncomment mod_proxy_connect.so ${HTTPD_CONF}
+uncomment ServerName ${HTTPD_CONF}
+echo "
 ProxyPass			/api	http://localhost:8081/
 ProxyPassReverse	/api	http://localhost:8081/
 <FilesMatch \"\.ph(p[2-6]?|tml)$\">
@@ -79,28 +56,47 @@ ProxyPassReverse	/api	http://localhost:8081/
 printf ${DONE}
 
 printf "${T}Starting Apache HTTP Server..."
-cd ${ROOT_DIR}
-sudo chmod -R 777 ./_dependencies/
+sudo chmod -R 777 ${DEP_DIR}
 sudo fuser -k 80/tcp
 sudo ${HTTPD_HOME}/bin/apachectl start
 printf ${DONE}
 
 printf "${T}Copying files from _client to HTTPD document root..."
 rm -rf ${HTTPD_HOME}/htdocs/* > /dev/null
-sudo -u ${1} -H cp -r _client/* ${HTTPD_HOME}/htdocs/ > /dev/null
+handle_error $(ln -s ${CLIENT_DIR}/* ${HTTPD_HOME}/htdocs/ 2>&1 > /dev/null)
 printf ${DONE}
 
 printf "${T}Generating config file..."
+cd ${ROOT_DIR}
 touch run.cfg
-echo "refresh_server() {
+echo "#!/usr/bin/env bash
+refresh_server() {
 	sudo fuser -k 80/tcp
 	sudo ${HTTPD_HOME}/bin/apachectl start
 }
 refresh_client() {
 	rm -rf ${HTTPD_HOME}/htdocs/*
-	ln -s ${ROOT_DIR}/_client/* ${HTTPD_HOME}/htdocs/
+	ln -s ${CLIENT_DIR}* ${HTTPD_HOME}/htdocs/
 }
 " > run.cfg
 chmod 777 run.cfg
 printf ${DONE}
 
+printf "${T}Initializing MYSQL server..."
+handle_error $(sudo systemctl start mysqld 2>&1)
+printf ${DONE}
+
+read -t 60 -p "Enter MySQL username (default is 'root'): " USERNAME
+if [ -z ${USERNAME} ]; then
+	USERNAME="root"
+fi
+read -t 60 -s -p "Enter password for '${USERNAME}'@'localhost' (default is ''): " PASSWORD
+echo ""
+printf "${T}Creating Pianoboard database..."
+if [ -z ${PASSWORD} ]; then
+	handle_error $(mysql -u${USERNAME} < ${SRV_DIR}/sql/create_db.sql 2>&1)
+else
+	handle_error $(mysql -u${USERNAME} -p"${PASSWORD}" < ${SRV_DIR}/sql/create_db.sql 2>&1)
+fi
+PASSWORD="NULL"
+printf ${DONE}
