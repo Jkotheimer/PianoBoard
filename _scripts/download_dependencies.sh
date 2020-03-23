@@ -17,7 +17,7 @@ if [ ! $(exists mysql) ]; then
 fi
 
 printf "${T}Fetching your mirror..."
-handle_error $(curl -o ./mirrors.txt http://ws.apache.org/mirrors.cgi 2>&1)
+handle_error "$(curl -o ./mirrors.txt http://ws.apache.org/mirrors.cgi 2>&1)"
 MIRROR=$(grep -E '<p><a href=.*</strong></a>' mirrors.txt | cut -d '"' -f 2)
 rm mirrors.txt
 printf ${DONE}
@@ -69,7 +69,7 @@ printf ${DONE}
 
 printf "${T}Copying files from _client to HTTPD document root..."
 rm -rf ${HTTPD_HOME}/htdocs/* > /dev/null
-handle_error $(ln -s ${CLIENT_DIR}/* ${HTTPD_HOME}/htdocs/ 2>&1 > /dev/null)
+handle_error "$(ln -s ${CLIENT_DIR}/* ${HTTPD_HOME}/htdocs/ 2>&1 > /dev/null)"
 printf ${DONE}
 
 printf "${T}Generating config file..."
@@ -88,21 +88,8 @@ refresh_client() {
 chmod 777 run.cfg
 printf ${DONE}
 
-printf "${T}Initializing MYSQL server..."
-handle_error $(sudo systemctl start mysqld 2>&1)
+printf "${T}Initializing MySQL server..."
+handle_error "$(sudo systemctl start mysqld 2>&1)"
 printf ${DONE}
 
-read -t 60 -p "Enter MySQL username (default is 'root'): " USERNAME
-if [ -z ${USERNAME} ]; then
-	USERNAME="root"
-fi
-read -t 60 -s -p "Enter password for '${USERNAME}'@'localhost' (default is ''): " PASSWORD
-echo ""
-printf "${T}Creating Pianoboard database..."
-if [ -z ${PASSWORD} ]; then
-	handle_error $(mysql -u${USERNAME} < ${SRV_DIR}/sql/create_db.sql 2>&1)
-else
-	handle_error $(mysql -u${USERNAME} -p"${PASSWORD}" < ${SRV_DIR}/sql/create_db.sql 2>&1)
-fi
-PASSWORD="NULL"
-printf ${DONE}
+create_database ${ROOT_DIR}
