@@ -42,8 +42,8 @@ HTTPD_CONF=${HTTPD_HOME}/conf/httpd.conf
 uncomment mod_proxy.so ${HTTPD_CONF}
 uncomment mod_proxy_http.so ${HTTPD_CONF}
 uncomment mod_proxy_connect.so ${HTTPD_CONF}
-uncomment ServerName ${HTTPD_CONF}
 echo "
+ServerName 127.0.0.1:80
 ProxyPass			/api	http://localhost:8081/
 ProxyPassReverse	/api	http://localhost:8081/
 <FilesMatch \"\.ph(p[2-6]?|tml)$\">
