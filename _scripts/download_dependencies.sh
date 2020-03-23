@@ -52,6 +52,12 @@ ProxyPassReverse	/api	http://localhost:8081/
 <Directory />
 	DirectoryIndex index.php index.html
 </Directory>
+<Files \"*.phpsecret\">
+	Require all denied
+</Files>
+<Directory \"${HTTPD_HOME}/htdocs/resources\">
+	Require all denied
+</Directory>
 " >> ${HTTPD_CONF}
 printf ${DONE}
 
@@ -76,7 +82,7 @@ refresh_server() {
 }
 refresh_client() {
 	rm -rf ${HTTPD_HOME}/htdocs/*
-	ln -s ${CLIENT_DIR}* ${HTTPD_HOME}/htdocs/
+	ln -s ${CLIENT_DIR}/* ${HTTPD_HOME}/htdocs/
 }
 " > run.cfg
 chmod 777 run.cfg
