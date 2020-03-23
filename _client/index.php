@@ -1,17 +1,6 @@
 ﻿<?
 ob_start();
-$servername = "127.0.0.1";
-$username = "pb";
-$password = "SceptreStudios990";
 
-// Create connection
-$db = mysqli_connect($servername, $username, $password);
-unset($servername, $username, $password);
-
-// Check connection
-if ($db->connect_error) {
-	die("Connection failed: " . $conn->connect_error);
-}
 ?>
 <!DOCTYPE html>
 <html>
