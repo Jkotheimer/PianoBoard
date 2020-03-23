@@ -2,7 +2,7 @@
 if [ -f run.cfg ]; then
 	source run.cfg
 	curl -m 5 http://localhost:80 > /dev/null 2>&1
-	if [ ! $? ]; then
+	if [[ $? || "${1}" == "refresh" ]]; then
 		refresh_server
 	fi
 	refresh_client
