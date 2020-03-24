@@ -19,10 +19,27 @@ ob_start();
 	<body>
 		<?
 		$page = "login";
-		echo implode(" : ", $_POST);
 		if(isset($_POST['email']) && isset($_POST['password'])) {
+			require "./resources/php/database.phpsecret";
+			require "./resources/php/pepper.phpsecret";
+			$email = $_POST['email'];
+			$hash = password_hash($_POST['password'] . $pepper, PASSWORD_DEFAULT);
+			echo "HASHED PASSWORD: $hash<br>";
 			
+			$query = "SELECT Password FROM Account WHERE Email='$email';";
+			$result = mysqli_query($database,$query);
+			$rows = mysqli_num_rows($result); 
+   			// get number of rows returned 
+
+			if ($rows) {     
+				while ($row = mysqli_fetch_array($result)) {         
+					echo 'ID: ' . $row['AccountID'] . '<br>';
+				}
+			} else {
+				// NO ACCOUNT WITH THIS EMAIL EXISTS
+			}
 			$page = "dashboard";
+			mysqli_close($database); 
 		}
 		$path = "./resources/html/" . $page . ".html";
 		$template = fopen($path, "r") or die("Unable to open file!");
