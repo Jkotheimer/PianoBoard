@@ -7,6 +7,7 @@ DEP_DIR=$(pwd)/_dependencies
 CLIENT_DIR=$(pwd)/_client
 SRV_DIR=$(pwd)/_server
 ROOT_DIR=$(pwd)
+sudo chmod -R 777 ${ROOT_DIR}
 rm -rf ${DEP_DIR} 2> /dev/null
 mkdir ${DEP_DIR}
 printf ${DONE}
@@ -35,7 +36,7 @@ download_dependency php https://www.php.net/distributions/php-7.4.4.tar.gz
 extract_dependency php ${DEP_DIR}
 install_dependency ${DEP_DIR}/php-* \
 	"--prefix=${DEP_DIR}/php/ --with-apxs2=${HTTPD_HOME}/bin/apxs --with-mysqli" \
-	$(cp php.ini-development /usr/local/lib/php.ini 2> /dev/null)
+	$(cp php.ini-development /usr/local/lib/php.ini 2> /dev/null; cd ${ROOT_DIR})
 
 printf "${T}Configuring PHP with HTTPD..."
 HTTPD_CONF=${HTTPD_HOME}/conf/httpd.conf
