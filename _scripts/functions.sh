@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 GREEN="\033[0;32m"
+YELLOW="\033[0;33m"
 BLUE="\033[0;34m"
 RED="\033[0;31m"
 NC="\033[0m"
 DONE="\r[${GREEN}DONE${NC}]\n"
+WARNING="\r[${YELLOW}WARNING${NC}] "
 ERROR="\r[${RED}ERROR${NC}] "
 T="\t"
 
@@ -67,10 +69,11 @@ get_port() {
 	if [ -z ${PORT} ]; then
 		PORT=$(sudo netstat -tulpn | grep ${1} | awk -F':' '{print $2}' | awk '{print $1}')
 	fi
+	echo $PORT
 }
 
-# ${1} : Optional project root directory
-create_database() {
+# ${1} : ROOT_DIR
+refresh_database() {
 	
 	if [ -d ${1} ]; then
 		cd ${1}
@@ -94,6 +97,8 @@ create_database() {
 	fi
 	printf ${DONE}
 	
+	printf "${BLUE}MySQL database running on port $(get_port mysql)${NC}\n"
+	
 	printf "${T}Writing PHP script to connect to MySQL..."
 	rm ./_client/resources/php/database.phpsecret 2> /dev/null
 	touch ./_client/resources/php/database.phpsecret
@@ -103,7 +108,26 @@ create_database() {
 		die('Connection failed: ' . \$conn->connect_error);
 	}
 	?>
-	" >> ${CLIENT_DIR}/resources/php/database.phpsecret
+	" >> ${1}/_client/resources/php/database.phpsecret
 	PASSWORD="NULL"
 	printf ${DONE}
+}
+
+# ${1} : ROOT_DIR
+refresh_server() {
+	sudo fuser -k 80/tcp > /dev/null 2>&1
+	sudo ${1}/_dependencies/httpd/bin/apachectl start
+}
+
+# ${1} : ROOT_DIR
+refresh_client() {
+	rm -rf ${1}/_dependencies/httpd/htdocs/*
+	ln -s ${1}/_client/* ${1}/_dependencies/httpd/htdocs/
+}
+
+refresh_all() {
+	refresh_server ${1}
+	refresh_client ${1}
+	refresh_database ${1}
+	exit 0
 }
