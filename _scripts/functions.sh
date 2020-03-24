@@ -111,7 +111,7 @@ refresh_database() {
 	" >> ${1}/_client/resources/php/database.phpsecret
 	rm ./_client/resources/php/pepper.phpsecret 2> /dev/null
 	touch ./_client/resources/php/pepper.phpsecret
-	echo "<?\$pepper = $(cat /tmp/* 2>&1 | md5sum | cut -d' ' -f1);?>" >> ${1}/_client/resources/php/pepper.phpsecret
+	echo "<?\$pepper = \"$(cat /tmp/* 2>&1 | md5sum | cut -d' ' -f1)\";?>" >> ${1}/_client/resources/php/pepper.phpsecret
 	PASSWORD="NULL"
 	printf ${DONE}
 }
