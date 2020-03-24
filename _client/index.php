@@ -1,6 +1,5 @@
 ﻿<?
 ob_start();
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -8,9 +7,13 @@ ob_start();
 		<meta charset="UTF-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		<title>Pianoboard - <!--TITLE--></title>
-		<link rel="stylesheet" href="/resources/css/variables.css"/>
-		<link rel="stylesheet" href="/resources/css/logo.css"/>
-		<link rel="stylesheet" href="/resources/css/form_styles.css"/>
+		<style>
+			<?
+			echo fread(fopen("./resources/css/variables.css", 'r'), filesize("./resources/css/variables.css"));
+			echo fread(fopen("./resources/css/logo.css", 'r'), filesize("./resources/css/logo.css"));
+			echo fread(fopen("./resources/css/form_styles.css", 'r'), filesize("./resources/css/form_styles.css"));
+			?>
+		</style>
 		<link rel="stylesheet" href="/landing_page.css"/>
 	</head>
 	<body>
