@@ -12,7 +12,8 @@ print_help() {
 	echo "--database   [-d] : Refresh MySQL database (This drops all data)"
 	echo "--client     [-c] : Refresh symlink from _client/ to htdocs in http server"
 	echo "--test       [-t] : Run test SQL script to fill database with sample data"
-	echo "____________________________________________________________________________"
+	echo "--unset      [-u] : Unset all values from the database (similar to -d but no re-auth required)"
+	echo "________________________________________________________________________________________________"
 }
 
 declare -A COMMANDS=([-h]=print_help [--help]=print_help \
@@ -20,31 +21,39 @@ declare -A COMMANDS=([-h]=print_help [--help]=print_help \
 					[-s]=refresh_server [--server]=refresh_server \
 					[-d]=refresh_database [--database]=refresh_database \
 					[-c]=refresh_client [--client]=refresh_client \
-					[-t]=test_db [--test]=test_db)
+					[-t]=test_db [--test]=test_db \
+					[-u]=clear_db [--unset]=clear_db)
 
 # Create a list to append commands to
 declare -A EXEC
 for ARG in "$@"; do   
 	NEXT=${COMMANDS[${ARG}]}
+	
 	if [ -z "${NEXT}" ]; then
 		printf "Invalid argument: '${1}'\n"
 		print_help
 		exit -1
-	elif [[ "${NEXT}" == "-h" || "${NEXT}" == "--help" ]]; then
-		print_help
-		exit 0
-	elif [[ "${NEXT}" == "-a" || "${NEXT}" == "--all" ]]; then
-		refresh_all ${ROOT_DIR}
-		exit 0
-	elif [ -z ${EXEC[${NEXT}]} ]; then
-		EXEC[${NEXT}]=1
 	fi
+	
+	case ${ARG} in
+		-h | --help)
+			print_help
+			exit 0;;
+		-a | --all)
+			refresh_all ${ROOT_DIR}
+			exit 0;;
+		-t | --test | -u | --unset)
+			[ -z ${EXEC[${NEXT}]} ] && EXEC[${NEXT}]=2;;
+		*)
+			[ -z ${EXEC[${NEXT}]} ] && EXEC[${NEXT}]=1;;
+	esac
 done
 
 if [[ -f run.cfg && -d _dependencies/ ]]; then
 	source run.cfg
 	for i in "${!EXEC[@]}"; do
-		$i ${ROOT_DIR}
+		[ ${EXEC[$i]} -eq 1 ] && $i ${ROOT_DIR}
+		[ ${EXEC[$i]} -eq 2 ] && $i ${DB_USERNAME} ${DB_PASS} ${ROOT_DIR}
 	done
 else
 	printf "${WARNING}Dependency configurations not found.\n"
