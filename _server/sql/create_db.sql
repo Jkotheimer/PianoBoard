@@ -7,7 +7,7 @@ CREATE TABLE Account (
 	AccountID INT UNSIGNED AUTO_INCREMENT,
 	Email VARCHAR(64) NOT NULL,
 	Username VARCHAR(32) NOT NULL,
-	Password CHAR(64) NOT NULL,
+	Password CHAR(255) NOT NULL,
 	Creation_date BIGINT UNSIGNED,
 	Is_private BIT,
 	CONSTRAINT Account_PK PRIMARY KEY (AccountID)
