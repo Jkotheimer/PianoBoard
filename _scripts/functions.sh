@@ -134,3 +134,7 @@ refresh_all() {
 	refresh_database ${1}
 	exit 0
 }
+
+test_db() {
+	${1}/_scripts/exec_sql.sh ${1}/_server/sql/test/test_insertions.sql
+}

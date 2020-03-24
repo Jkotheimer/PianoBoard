@@ -11,6 +11,7 @@ print_help() {
 	echo "--server     [-s] : Refresh Apache Http server"
 	echo "--database   [-d] : Refresh MySQL database (This drops all data)"
 	echo "--client     [-c] : Refresh symlink from _client/ to htdocs in http server"
+	echo "--test       [-t] : Run test SQL script to fill database with sample data"
 	echo "____________________________________________________________________________"
 }
 
@@ -18,7 +19,8 @@ declare -A COMMANDS=([-h]=print_help [--help]=print_help \
 					[-a]=refresh_all [--all]=refresh_all \
 					[-s]=refresh_server [--server]=refresh_server \
 					[-d]=refresh_database [--database]=refresh_database \
-					[-c]=refresh_client [--client]=refresh_client)
+					[-c]=refresh_client [--client]=refresh_client \
+					[-t]=test_db [--test]=test_db)
 
 # Create a list to append commands to
 declare -A EXEC
