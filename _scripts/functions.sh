@@ -99,7 +99,7 @@ refresh_database() {
 	printf "${BLUE}MySQL database running on port $(get_port mysql)${NC}\n"
 	
 	printf "${T}Writing PHP script to connect to MySQL..."
-	rm ./_client/resources/php/database.phpsecret 2> /dev/null
+	rm ./_client/resources/php/database.phpsecret 
 	touch ./_client/resources/php/database.phpsecret
 	echo "<?
 	\$database = mysqli_connect('127.0.0.1', '${USERNAME}', '${PASSWORD}', 'Pianoboard');
@@ -108,16 +108,16 @@ refresh_database() {
 	}
 ?>
 	" >> ${1}/_client/resources/php/database.phpsecret
-	rm ./_client/resources/php/pepper.phpsecret 2> /dev/null
+	rm ./_client/resources/php/pepper.phpsecret 
 	touch ./_client/resources/php/pepper.phpsecret
 	echo "<?\$pepper = \"$(cat /tmp/* 2>&1 | md5sum | cut -d' ' -f1)\";?>" >> ${1}/_client/resources/php/pepper.phpsecret
 	printf ${DONE}
 	
 	printf "${T}Generating config file..."
 	rm run.cfg 2> /dev/null
-	echo "ROOT_DIR=\"${1}\"
-DB_USERNAME=\"${USERNAME}\"
-DB_PASS=\"${PASSWORD}\"" > run.cfg
+	echo "ROOT_DIR='${1}'
+DB_USERNAME='${USERNAME}'
+DB_PASS='${PASSWORD}'" > run.cfg
 	chmod 777 run.cfg
 	PASSWORD="NULL"
 	printf ${DONE}
