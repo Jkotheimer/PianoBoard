@@ -61,12 +61,6 @@ ProxyPassReverse	/api	http://localhost:8081/
 " >> ${HTTPD_CONF}
 printf ${DONE}
 
-printf "${T}Generating config file..."
-cd ${ROOT_DIR}
-echo "ROOT_DIR=${ROOT_DIR}" >> run.cfg
-chmod +r run.cfg
-printf ${DONE}
-
 sudo chmod -R 777 ${DEP_DIR}
 
 printf "${T}Starting Apache HTTP Server..."
