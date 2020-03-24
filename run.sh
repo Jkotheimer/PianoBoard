@@ -40,8 +40,8 @@ for ARG in "$@"; do
 			print_help
 			exit 0;;
 		-a | --all)
-			refresh_all ${ROOT_DIR}
-			exit 0;;
+			[ -z ${EXEC[${NEXT}]} ] && declare -A EXEC && EXEC[${NEXT}]=1
+			break;;
 		-t | --test | -u | --unset)
 			[ -z ${EXEC[${NEXT}]} ] && EXEC[${NEXT}]=2;;
 		*)
@@ -57,10 +57,13 @@ if [[ -f run.cfg && -d _dependencies/ ]]; then
 	done
 else
 	printf "${WARNING}Dependency configurations not found.\n"
-	[ -n ${1} ] && printf "Ignoring command line argument: ${1}\n"
+	[ -n "${1}" ] && printf "Ignoring command line argument: ${1}\n"
 	printf "Download dependencies now? [Y/n] "
-	read -n1 CHOICE
-	printf "\n"
+	read -sn1 CHOICE
+	while [[ ${CHOICE^^} != 'Y' && ${CHOICE^^} != 'N' && ${CHOICE} != '' ]]; do
+		read -sn1 CHOICE
+	done
+	printf "${CHOICE}\n"
 	[[ ${CHOICE^^} = 'Y' || -z ${CHOICE} ]] && sudo ./_scripts/download_dependencies.sh
 fi
 
