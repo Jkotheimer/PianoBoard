@@ -61,35 +61,24 @@ ProxyPassReverse	/api	http://localhost:8081/
 " >> ${HTTPD_CONF}
 printf ${DONE}
 
-printf "${T}Starting Apache HTTP Server..."
+printf "${T}Generating config file..."
+cd ${ROOT_DIR}
+echo "ROOT_DIR=${ROOT_DIR}" >> run.cfg
+chmod +r run.cfg
+printf ${DONE}
+
 sudo chmod -R 777 ${DEP_DIR}
-sudo fuser -k 80/tcp
-sudo ${HTTPD_HOME}/bin/apachectl start
+
+printf "${T}Starting Apache HTTP Server..."
+refresh_server ${ROOT_DIR}
 printf ${DONE}
 
 printf "${T}Copying files from _client to HTTPD document root..."
-rm -rf ${HTTPD_HOME}/htdocs/* > /dev/null
-handle_error "$(ln -s ${CLIENT_DIR}/* ${HTTPD_HOME}/htdocs/ 2>&1 > /dev/null)"
-printf ${DONE}
-
-printf "${T}Generating config file..."
-cd ${ROOT_DIR}
-touch run.cfg
-echo "#!/usr/bin/env bash
-refresh_server() {
-	sudo fuser -k 80/tcp
-	sudo ${HTTPD_HOME}/bin/apachectl start
-}
-refresh_client() {
-	rm -rf ${HTTPD_HOME}/htdocs/*
-	ln -s ${CLIENT_DIR}/* ${HTTPD_HOME}/htdocs/
-}
-" > run.cfg
-chmod 777 run.cfg
+refresh_client ${ROOT_DIR}
 printf ${DONE}
 
 printf "${T}Initializing MySQL server..."
 handle_error "$(sudo systemctl start mysqld 2>&1)"
 printf ${DONE}
 
-create_database ${ROOT_DIR}
+refresh_database ${ROOT_DIR}
