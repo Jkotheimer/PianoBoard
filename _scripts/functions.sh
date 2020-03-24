@@ -90,10 +90,9 @@ refresh_database() {
 	echo ""
 	printf "${T}Creating Pianoboard database..."
 	if [ -z ${PASSWORD} ]; then
-		handle_error "$(mysql -u${USERNAME} < ./_server/sql/create_db.sql 2>&1)"
-		printf "Database created with no credentials\n"
+		handle_error "$(mysql -u${USERNAME} < ${1}/_server/sql/create_db.sql 2>&1)"
 	else
-		handle_error "$(mysql -u${USERNAME} -p"${PASSWORD}" < ./_server/sql/create_db.sql 2>&1)"
+		handle_error "$(mysql -u${USERNAME} -p"${PASSWORD}" < ${1}/_server/sql/create_db.sql 2>&1)"
 	fi
 	printf ${DONE}
 	
@@ -107,11 +106,19 @@ refresh_database() {
 	if(\$database->connect_error) {
 		die('Connection failed: ' . \$conn->connect_error);
 	}
-	?>
+?>
 	" >> ${1}/_client/resources/php/database.phpsecret
 	rm ./_client/resources/php/pepper.phpsecret 2> /dev/null
 	touch ./_client/resources/php/pepper.phpsecret
 	echo "<?\$pepper = \"$(cat /tmp/* 2>&1 | md5sum | cut -d' ' -f1)\";?>" >> ${1}/_client/resources/php/pepper.phpsecret
+	printf ${DONE}
+	
+	printf "${T}Generating config file..."
+	rm run.cfg 2> /dev/null
+	echo "ROOT_DIR=\"${1}\"
+DB_USERNAME=\"${USERNAME}\"
+DB_PASS=\"${PASSWORD}\"" > run.cfg
+	chmod 777 run.cfg
 	PASSWORD="NULL"
 	printf ${DONE}
 }
@@ -136,5 +143,13 @@ refresh_all() {
 }
 
 test_db() {
-	${1}/_scripts/exec_sql.sh ${1}/_server/sql/test/test_insertions.sql
+	exec_sql ${1} ${2}  ${3}/_server/sql/test/test_insertions.sql
+}
+
+clear_db() {
+	exec_sql ${1} ${2} ${3}/_server/sql/create_db.sql
+}
+
+exec_sql() {
+	mysql -u${1} -p${2} < ${3}
 }
