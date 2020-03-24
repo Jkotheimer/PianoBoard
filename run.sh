@@ -1,51 +1,55 @@
 #!/usr/bin/env bash
 
-# Ensure we are in the proper directory
+# Ensure we are in the proper directory and import functions and variables
 cd "$( dirname "${BASH_SOURCE[0]}" )" > /dev/null 2>&1
+source ./_scripts/functions.sh
 
 print_help() {
-	#TODO
+	printf "\n${BLUE}HOW TO USE THIS SCRIPT:${NC}\n"
+	echo "--help       [-h] : Display this prompt"
+	echo "--all        [-a] : Refresh all Pianoboard services"
+	echo "--server     [-s] : Refresh Apache Http server"
+	echo "--database   [-d] : Refresh MySQL database (This drops all data)"
+	echo "--client     [-c] : Refresh symlink from _client/ to htdocs in http server"
+	echo "____________________________________________________________________________"
 }
 
-if [ $# -gt 1 ]; then
-	printf "Too many arguments\n"
-	print_help
-	exit -1
-fi
+declare -A COMMANDS=([-h]=print_help [--help]=print_help \
+					[-a]=refresh_all [--all]=refresh_all \
+					[-s]=refresh_server [--server]=refresh_server \
+					[-d]=refresh_database [--database]=refresh_database \
+					[-c]=refresh_client [--client]=refresh_client)
 
-declare -A COMMANDS
-for const in ('h' 'a' 's' 'd' 'help' 'all' 'server' 'database'); do
-	COMMANDS[$const]=1
+# Create a list to append commands to
+declare -A EXEC
+for ARG in "$@"; do   
+	NEXT=${COMMANDS[${ARG}]}
+	if [ -z "${NEXT}" ]; then
+		printf "Invalid argument: '${1}'\n"
+		print_help
+		exit -1
+	elif [[ "${NEXT}" == "-h" || "${NEXT}" == "--help" ]]; then
+		print_help
+		exit 0
+	elif [[ "${NEXT}" == "-a" || "${NEXT}" == "--all" ]]; then
+		refresh_all ${ROOT_DIR}
+		exit 0
+	elif [ -z ${EXEC[${NEXT}]} ]; then
+		EXEC[${NEXT}]=1
+	fi
 done
-
-if [[ ! ${COMMANDS[${1}]} ]]; then
-	printf "Argument '${1}' unknown\n"
-	print_help
-fi
-
-if [[ ]]
 
 if [[ -f run.cfg && -d _dependencies/ ]]; then
 	source run.cfg
-	curl -m 5 http://localhost:80 > /dev/null 2>&1
-	if [[ ! $? -eq 0 || "${1}" == "refresh_server" ]]; then
-		refresh_server
-	fi
-	if [[ "${1}" == "refresh_database" ]]; then
-		source ./_scripts/functions.sh
-		create_database $(pwd)
-	fi
-	refresh_client
+	for i in "${!EXEC[@]}"; do
+		$i ${ROOT_DIR}
+	done
 else
-	printf "Dependency configurations not found.\n"
-	if [ -n ${1} ]; then
-		printf "Ignoring command line argument: ${1}"
-	fi
+	printf "${WARNING}Dependency configurations not found.\n"
+	[ -n ${1} ] && printf "Ignoring command line argument: ${1}\n"
 	printf "Download dependencies now? [Y/n] "
 	read -n1 CHOICE
 	printf "\n"
-	if [[ ! ${CHOICE^^} -eq 'N']]; then
-		sudo ./_scripts/download_dependencies.sh
-	fi
+	[[ ${CHOICE^^} = 'Y' || -z ${CHOICE} ]] && sudo ./_scripts/download_dependencies.sh
 fi
 
