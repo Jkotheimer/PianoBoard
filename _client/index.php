@@ -25,7 +25,11 @@ ob_start();
 			$email = $_POST['email'];
 			$hash = password_hash($_POST['password'] . $pepper, PASSWORD_DEFAULT);
 			echo "HASHED PASSWORD: $hash<br>";
-			
+			if(password_verify($_POST['password'] . $pepper, $hash)) {
+				echo "Verified!";
+			} else {
+				echo "Failed :(";
+			}
 			$query = "SELECT Password FROM Account WHERE Email='$email';";
 			$result = mysqli_query($database,$query);
 			$rows = mysqli_num_rows($result); 
