@@ -40,19 +40,15 @@
 	border-radius: 0px 10px 10px 10px;
 	opacity: 1;
 	color: #444;
-	display: none;
 }
 .error {
 	background-color: red;
-	display: block;
 }
 .neutral {
 	background-color: var(--cream);
-	display: block;
 }
 .success {
 	background-color: green;
-	display: block;
 }
 .complete_form_input {
 	border-bottom-color: var(--yellow) !important;
