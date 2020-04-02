@@ -7,7 +7,6 @@ DEP_DIR=$(pwd)/_dependencies
 CLIENT_DIR=$(pwd)/_client
 SRV_DIR=$(pwd)/_server
 ROOT_DIR=$(pwd)
-sudo chmod -R 777 ${ROOT_DIR}
 rm -rf ${DEP_DIR} 2> /dev/null
 mkdir ${DEP_DIR}
 printf ${DONE}
@@ -43,6 +42,7 @@ HTTPD_CONF=${HTTPD_HOME}/conf/httpd.conf
 uncomment mod_proxy.so ${HTTPD_CONF}
 uncomment mod_proxy_http.so ${HTTPD_CONF}
 uncomment mod_proxy_connect.so ${HTTPD_CONF}
+sed -i "s|_dependencies/httpd/htdocs|_client|g" ${HTTPD_CONF}
 echo "
 ServerName 127.0.0.1:80
 ProxyPass			/api	http://localhost:8081/
@@ -56,13 +56,11 @@ ProxyPassReverse	/api	http://localhost:8081/
 <Files \"*.phpsecret\">
 	Require all denied
 </Files>
-<Directory \"${HTTPD_HOME}/htdocs/resources\">
+<Directory \"${ROOT_DIR}/_client/resources\">
 	Require all denied
 </Directory>
 " >> ${HTTPD_CONF}
 printf ${DONE}
-
-sudo chmod -R 777 ${DEP_DIR}
 
 printf "${T}Starting Apache HTTP Server..."
 refresh_server ${ROOT_DIR}
@@ -77,3 +75,6 @@ handle_error "$(sudo systemctl start mysqld 2>&1)"
 printf ${DONE}
 
 refresh_database ${ROOT_DIR}
+
+sudo chmod -R 665 ${ROOT_DIR}
+sudo chown -R ${1}:${1} ${ROOT_DIR}
