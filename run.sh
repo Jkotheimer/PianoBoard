@@ -2,6 +2,7 @@
 
 # Ensure we are in the proper directory and import functions and variables
 cd "$( dirname "${BASH_SOURCE[0]}" )" > /dev/null 2>&1
+ROOT_DIR=$(pwd)
 source ./_scripts/functions.sh
 
 print_help() {
@@ -50,7 +51,12 @@ for ARG in "$@"; do
 done
 
 if [[ -f run.cfg && -d _dependencies/ ]]; then
-	source run.cfg
+	source ./run.cfg
+	if [ $# -eq 0 ]; then
+		refresh_all ${ROOT_DIR} 
+		exit 1
+	fi
+	echo "About to iterate through some shit!"
 	for i in "${!EXEC[@]}"; do
 		[ ${EXEC[$i]} -eq 1 ] && $i ${ROOT_DIR}
 		[ ${EXEC[$i]} -eq 2 ] && $i ${DB_USERNAME} ${DB_PASS} ${ROOT_DIR}
@@ -64,6 +70,6 @@ else
 		read -sn1 CHOICE
 	done
 	printf "${CHOICE}\n"
-	[[ ${CHOICE^^} = 'Y' || -z ${CHOICE} ]] && sudo ./_scripts/download_dependencies.sh
+	[[ ${CHOICE^^} = 'Y' || -z ${CHOICE} ]] && sudo ./_scripts/download_dependencies.sh $USER
 fi
 
