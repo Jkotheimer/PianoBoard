@@ -136,9 +136,9 @@ refresh_client() {
 }
 
 refresh_all() {
+	refresh_database ${1}
 	refresh_server ${1}
 	refresh_client ${1}
-	refresh_database ${1}
 	exit 0
 }
 
