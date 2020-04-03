@@ -114,11 +114,11 @@ refresh_database() {
 	printf ${DONE}
 	
 	printf "${T}Generating config file..."
-	rm run.cfg 2> /dev/null
+	rm app.cfg 2> /dev/null
 	echo "ROOT_DIR='${1}'
 DB_USERNAME='${USERNAME}'
-DB_PASS='${PASSWORD}'" > run.cfg
-	chmod 777 run.cfg
+DB_PASS='${PASSWORD}'" > app.cfg
+	chmod 777 app.cfg
 	PASSWORD="NULL"
 	printf ${DONE}
 }
