@@ -22,7 +22,6 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Create Account") {
 	} else {
 		$status = 0;
 	}
-	unset($password, $confirm_password);
 }
 ?>
 
@@ -68,14 +67,16 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Create Account") {
 			echo $html;
 		} else {
 			// TODO Create an account
-			$hashed_password = password_hash($_POST['password'], PASSWORD_BCRYPT, ['salt' => $pepper]);
+			$hashed_password = password_hash($_POST['password'] . $pepper, PASSWORD_BCRYPT);
 			// TODO Push email and hashed password to database along with timestamp
 			$query = "INSERT INTO Account (Email, Username, Password, Creation_date, Is_private)
 					VALUES ('$email', '$email', '$hashed_password', 122, 0);";
 			$result = mysqli_query($database, $query);
 			if($result) {
 				// Success - redirect to home page
+				echo "Account created";
 			} else {
+				echo "Something went wrong";
 				// Error - something went wrong (
 			}
 			$status = 0;

@@ -7,12 +7,12 @@ if(isset($_POST['email']) && isset($_POST['password'])) {
 	// Get the database connection and the secret pepper
 	require $ROOT . "/resources/php/database.phpsecret";
 	require $ROOT . "/resources/php/pepper.phpsecret";
+
 	// TODO use this in the account creation to hash the password and store it in the database
 	$email = $_POST['email'];
-	$query = "SELECT Password FROM Account WHERE Email='$email';";
-	$result = mysqli_query($database,$query);
+	$result = mysqli_query($database, "SELECT Password FROM Account WHERE Email='$email';");
 	// get number of rows returned 
-	if(mysqli_num_rows($result)) {
+	if($result && mysqli_num_rows($result)) {
 		$row = mysqli_fetch_array($result);
 		$db_pass = $row['Password'];
 		echo 'Password: ' . $db_pass . '<br>';
