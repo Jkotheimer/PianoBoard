@@ -50,13 +50,16 @@ for ARG in "$@"; do
 	esac
 done
 
-if [[ -f run.cfg && -d _dependencies/ ]]; then
-	source ./run.cfg
+[[ ! -f app.cfg && -d _dependencies/ ]] && {
+	refresh_all ${ROOT_DIR}
+	exit 0
+}
+if [[ -f app.cfg && -d _dependencies/ ]]; then
+	source ./app.cfg
 	if [ $# -eq 0 ]; then
 		refresh_all ${ROOT_DIR} 
-		exit 1
+		exit 0
 	fi
-	echo "About to iterate through some shit!"
 	for i in "${!EXEC[@]}"; do
 		[ ${EXEC[$i]} -eq 1 ] && $i ${ROOT_DIR}
 		[ ${EXEC[$i]} -eq 2 ] && $i ${DB_USERNAME} ${DB_PASS} ${ROOT_DIR}
