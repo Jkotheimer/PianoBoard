@@ -1,3 +1,12 @@
+<style>
+	<?
+	$ROOT = $_SERVER['DOCUMENT_ROOT'];
+	echo fread(fopen($ROOT . "/resources/css/form_styles.css", 'r'),
+		filesize($ROOT . "/resources/css/form_styles.css"));
+	echo fread(fopen($ROOT . "/landing_page.css", "r"),
+		filesize($ROOT . "/landing_page.css"));
+	?>
+</style>
 <div id="login">
 	<form class="panel form_panel login_panel" method="POST" action="/">
 		<div class="login_logo">

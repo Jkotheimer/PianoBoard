@@ -1,10 +1,12 @@
 ﻿<?
 // Get the document root directory for complete file paths
 $ROOT = $_SERVER['DOCUMENT_ROOT'];
+ob_start()
 // If the request was a post, check if a user with the given email exists
 // if not, create an account, create a token, set the cookies and redirect to the landing page
 $status = 1;
 $error = NULL;
+
 if(isset($_POST['submit']) && $_POST['submit'] == "Create Account") {
 	// Get the database connection and the secret pepper
 	require $ROOT . "/resources/php/database.phpsecret";
@@ -13,6 +15,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Create Account") {
 	$email = $_POST['email'];
 	$password = $_POST['password'];
 	$confirm_password = $_POST['confirm_password'];
+
 	if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 		$error = ["email_notification", "Invalid email"];
 	} else if(strlen($password) < 8) {
@@ -27,22 +30,10 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Create Account") {
 
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8"/>
-		<meta name="viewport" content="width=device-width, initial-scale=1"/>
-		<title>Pianoboard - Create Account</title>
-		<style>	
-			 <?
-			echo fread(fopen($ROOT . "/resources/css/variables.css", 'r'), 
-				filesize($ROOT . "/resources/css/variables.css"));
-			echo fread(fopen($ROOT . "/resources/css/logo.css", 'r'), 
-				filesize($ROOT . "/resources/css/logo.css"));
-			echo fread(fopen($ROOT . "/resources/css/form_styles.css", 'r'), 
-				filesize($ROOT . "/resources/css/form_styles.css"));
-		       	 ?>
-		</style>
-		<link rel="stylesheet" href="/create_account/create_account.css"/>
-	</head>
+	<?
+	echo fread(fopen($ROOT . "/resources/php/head.php", "r"),
+		filesize($ROOT . "/resources/php/head/php"));
+	?>
 	<body>
 		<a class="logo_box" href="/">
 			<img src="/images/logo.png" class="logo"/>
@@ -84,3 +75,9 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Create Account") {
 		?>
 	</body>
 </html>	
+<?
+$page_contents = ob_get_contents();
+ob_end_clean();
+
+echo str_replace("<!--TITLE-->", "Create Account", $page_contents);
+?>

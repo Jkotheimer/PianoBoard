@@ -33,29 +33,13 @@ if(isset($_POST['email']) && isset($_POST['password'])) {
 ?>
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8"/>
-		<meta name="viewport" content="width=device-width, initial-scale=1"/>
-		<title>Pianoboard - <!--TITLE--></title>
-		<style>
-			<?
-			echo fread(fopen($ROOT . "/resources/css/variables.css", 'r'), 
-				filesize($ROOT . "/resources/css/variables.css"));
-			echo fread(fopen($ROOT . "/resources/css/logo.css", 'r'), 
-				filesize($ROOT . "/resources/css/logo.css"));
-			echo fread(fopen($ROOT . "/resources/css/form_styles.css", 'r'), 
-				filesize($ROOT . "/resources/css/form_styles.css"));
-			?>
-		</style>
-		<link rel="stylesheet" href="/landing_page.css"/>
-	</head>
+	<?
+	require $ROOT . "/resources/php/head.php";
+	?>
 	<body>
 		<?
 		// Get the body html file and render it here
-		$path = $ROOT . "/resources/html/" . $page . ".html";
-		$template = fopen($path, "r") or die("Unable to open file!");
-		echo fread($template, filesize($path));
-		fclose($template);
+		require $ROOT . "/resources/php/" . $page . ".php";
 		?>
 
 		<div class="info">
