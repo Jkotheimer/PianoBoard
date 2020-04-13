@@ -1,7 +1,7 @@
 ﻿<?
 // Get the document root directory for complete file paths
 $ROOT = $_SERVER['DOCUMENT_ROOT'];
-ob_start()
+ob_start();
 // If the request was a post, check if a user with the given email exists
 // if not, create an account, create a token, set the cookies and redirect to the landing page
 $status = 1;
@@ -31,8 +31,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Create Account") {
 <!DOCTYPE html>
 <html>
 	<?
-	echo fread(fopen($ROOT . "/resources/php/head.php", "r"),
-		filesize($ROOT . "/resources/php/head/php"));
+	require $ROOT . "/resources/php/head.php";
 	?>
 	<body>
 		<a class="logo_box" href="/">
@@ -41,20 +40,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Create Account") {
 		<?
 		// Get the create account html file and render it here
 		if($status > 0) {
-			$path = $ROOT . "/resources/html/create_account.html";
-			$template = fopen($path, "r") or die("Unable to open file!");
-			$html = fread($template, filesize($path));
-			fclose($template);
-			if(isset($error)) {
-				$html = str_replace("<!--$error[0]-->", 
-					'<div id="email_notification" class="notification error">' . $error[1] . '</div>', 
-					$html);
-				if(isset($email)) {
-					$html = str_replace('placeholder="your.email@something.com"',
-						'value="' . $email . '"',
-						$html);
-				}	
-			}
+			require $ROOT . "/resources/php/create_account.php";
 			echo $html;
 		} else {
 			// TODO Create an account
@@ -76,8 +62,18 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Create Account") {
 	</body>
 </html>	
 <?
-$page_contents = ob_get_contents();
+$html = ob_get_contents();
 ob_end_clean();
 
-echo str_replace("<!--TITLE-->", "Create Account", $page_contents);
+if(isset($error)) {
+	$html = str_replace("<!--$error[0]-->", 
+		'<div id="' . $error[0] . '" class="notification error">' . $error[1] . '</div>', 
+		$html);
+	if(isset($email)) {
+		$html = str_replace('placeholder="your.email@something.com"',
+			'value="' . $email . '"',
+			$html);
+	}	
+}
+echo str_replace("<!--TITLE-->", "Create Account", $html);
 ?>
