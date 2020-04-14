@@ -17,6 +17,34 @@ function gen_username($email) {
 	// Append the postfix to the username and return the unique username
 	return ($username . $postfix);
 }
+
+// Generate an account object based on the provided AccountID
+function gen_account($AccountID) {
+	require "database.phpsecret";
+	// First, get the generic account information
+	$query = "SELECT Email, Username, Creation_date, Is_private 
+					FROM Account WHERE AccountID='$AccountID';";
+	$account = $database->query($query)->fetch_object();
+	
+	// Next, get the favorite genres and artists
+	$query = "SELECT Artist from Favorite_artists WHERE AccountID='$AccountID';";
+	$result = $database->query($query);
+	$account->Artists = [];
+	while($row = $result->fetch_array()) { $account->Artists[] = $row[0]; }
+
+	$query = "SELECT Genre FROM Favorite_genres WHERE AccountID='$AccountID';";
+	$result = $database->query($query);
+	$account->Genres = [];
+	while($row = $result->fetch_array()) { $account->Genres[] = $row[0]; }
+
+	$query = "SELECt ProjectID, Name, Genre FROM Project WHERE AccountID='$AccountID';";
+	$result = $database->query($query);
+	$account->Projects = [];
+	while($row = $result->fetch_assoc()) { $account->Projects[] = $row; }
+
+	return $account;
+}
+
 $session_cookie = "Pianoboard_Token";
 $ID_cookie = "Pianoboard_ID";
 ?>
