@@ -14,6 +14,7 @@ print_help() {
 	echo "--client     [-c] : Refresh symlink from _client/ to htdocs in http server"
 	echo "--test       [-t] : Run test SQL script to fill database with sample data"
 	echo "--unset      [-u] : Unset all values from the database (similar to -d but no re-auth required)"
+	echo "--reset      [-r] : Entirely recreate the database (use this if the model has been updated)"
 	echo "________________________________________________________________________________________________"
 }
 
@@ -21,9 +22,11 @@ declare -A COMMANDS=([-h]=print_help [--help]=print_help \
 					[-a]=refresh_all [--all]=refresh_all \
 					[-s]=refresh_server [--server]=refresh_server \
 					[-d]=refresh_database [--database]=refresh_database \
+					[-D]=refresh_database
 					[-c]=refresh_client [--client]=refresh_client \
 					[-t]=test_db [--test]=test_db \
-					[-u]=clear_db [--unset]=clear_db)
+					[-u]=clear_db [--unset]=clear_db \
+					[-r]=refresh_database [--reset]=refresh_database)
 
 # Create a list to append commands to
 declare -A EXEC
@@ -43,7 +46,7 @@ for ARG in "$@"; do
 		-a | --all)
 			[ -z ${EXEC[${NEXT}]} ] && declare -A EXEC && EXEC[${NEXT}]=1
 			break;;
-		-t | --test | -u | --unset)
+		-t | --test | -u | --unset | -r | --reset)
 			[ -z ${EXEC[${NEXT}]} ] && EXEC[${NEXT}]=2;;
 		*)
 			[ -z ${EXEC[${NEXT}]} ] && EXEC[${NEXT}]=1;;
@@ -62,7 +65,7 @@ if [[ -f app.cfg && -d _dependencies/ ]]; then
 	fi
 	for i in "${!EXEC[@]}"; do
 		[ ${EXEC[$i]} -eq 1 ] && $i ${ROOT_DIR}
-		[ ${EXEC[$i]} -eq 2 ] && $i ${DB_USERNAME} ${DB_PASS} ${ROOT_DIR}
+		[ ${EXEC[$i]} -eq 2 ] && $i ${ROOT_DIR} ${DB_USERNAME} ${DB_PASS} 
 	done
 else
 	printf "${WARNING}Dependency configurations not found.\n"
