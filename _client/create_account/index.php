@@ -43,6 +43,7 @@ if( isset($_POST['submit']) && isset($_POST['email']) &&
 			// Push the token to the database and set it as a cookie
 			$query = "INSERT INTO Access_token (Token, AccountID, Expiration_date)
 					VALUES ('$Token', '$AccountID', '$Expiration_date');";
+			$database->query($query);
 			setcookie($session_cookie, $Token, $Expiration_date, "/");
 			setcookie($ID_cookie, $AccountID, $Expiration_date, "/");
 
