@@ -54,6 +54,7 @@ if( isset($_POST['submit']) && isset($_POST['email']) &&
 			http_response_code(400);
 		}
 	}
+	mysqli_close($database); 
 }
 ob_start();
 ?>
