@@ -34,9 +34,9 @@ input:focus { outline: none; }
 	border-radius: 10px;
 	font-family: sans-serif;
 }
-.panel_label {
+.panel_header {
 	color: var(--cream);
-	font-size: 20px;
+	font-size: 26px;
 }
 
 /* DASHBOARD STYLES */
@@ -63,9 +63,11 @@ input:focus { outline: none; }
 
 .search_container {
 	width: calc(100% - 750px);
-	height: auto;
-	padding: none;
-	border: 1px solid var(--grey);
+	height: 100%;
+	padding: 0px;
+	padding-right: calc(var(--logo-height)/4);
+	float: none;
+	max-width: 500px;
 	border-radius: 100px;
 	background-color: transparent;
 	color: var(--grey);
@@ -73,10 +75,13 @@ input:focus { outline: none; }
 #search_bar {
 	vertical-align: middle;
 	text-align: left;
-	width: calc(100% - 50px);
-	height: 100%;
-	border: none;
+	padding-left: 20px;
+	width: calc(100% - 70px);
+	height: var(--logo-height);
+	border-radius: 100px;
+	border: transparent;
 	color: var(--grey);
+	font-size: 16px;
 }
 #search_bar:hover { cursor: text; }
 #search_bar:focus {
@@ -189,9 +194,32 @@ input:focus { outline: none; }
 
 /* RIGHT PANEL STYLES */
 #project_area {
-
+	width: 100%;
+	text-align: left;
 }
-
+.project_label {
+	width: 100%;
+	font-size: 22px;
+	margin: 10px 0px;
+	color: var(--yellow);
+}
+.project {
+	position: relative;
+	width: 100%;
+	padding: 10px 0px;
+	font-size: 20px;
+	color: var(--cream);
+	border-radius: 10px;
+}
+.project:hover {
+	background-color: #666666;
+	cursor: pointer;
+}
+.project_attribute {
+	display: inline-block;
+	width: 32%;
+	text-align: center;
+}
 
 /* LOGIN PAGE */
 .login_panel {
@@ -250,8 +278,8 @@ input:focus { outline: none; }
 }
 .info {
 	position: relative;
-	width: var(--login-panel-width);
-	margin: 10px auto 0;
-	text-align: right;
+	height: 50px;
+	width: 350px;
+	margin: 10px;
 	font-size: 12px;
 }
