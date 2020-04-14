@@ -11,6 +11,7 @@ if( isset($_POST['submit']) && isset($_POST['email']) &&
 	// Get the database connection and the secret pepper
 	require "$ROOT/resources/php/database.phpsecret";
 	require "$ROOT/resources/php/pepper.phpsecret";
+	require "$ROOT/resources/php/resources.php";
 	
 	$email = $_POST['email'];
 	$password = $_POST['password'];
@@ -25,10 +26,9 @@ if( isset($_POST['submit']) && isset($_POST['email']) &&
 	} else {
 		// No error - try to push to the database
 		$hashed_password = password_hash($password . $pepper, PASSWORD_BCRYPT);
-		require "$ROOT/resources/php/resources.php";
 		$username = gen_username($email);
 		$query = "INSERT INTO Account (Email, Username, Password, Creation_date, Is_private)
-				VALUES ('$email', '$username', '$hashed_password', " . time() . ", 0);";
+				VALUES ('$email', '$username', '$hashed_password', " . time() . ", " . False . ");";
 		if($database->query($query)) {
 			// Account successfully created - create a token, set it as a cookie, and redirect 
 
