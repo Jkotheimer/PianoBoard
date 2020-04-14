@@ -42,6 +42,7 @@ HTTPD_CONF=${HTTPD_HOME}/conf/httpd.conf
 uncomment mod_proxy.so ${HTTPD_CONF}
 uncomment mod_proxy_http.so ${HTTPD_CONF}
 uncomment mod_proxy_connect.so ${HTTPD_CONF}
+uncomment mod_rewrite.so ${HTTPD_CONF}
 sed -i "s|_dependencies/httpd/htdocs|_client|g" ${HTTPD_CONF}
 echo "
 ServerName 127.0.0.1:80
@@ -59,6 +60,10 @@ ProxyPassReverse	/api	http://localhost:8081/
 <Directory \"${ROOT_DIR}/_client/resources\">
 	Require all denied
 </Directory>
+RewriteEngine On
+RewriteCond %{DOCUMENT_ROOT}/\$1 !-f 
+RewriteCond %{DOCUMENT_ROOT}/\$1 !-d
+RewriteRule ^/?(\w+)/?(\w*)?/?(\w*)?/?(\w*)?/?$ /accounts.php?account=\$1&project=\$2&track=\$3&recording=\$4 [PT]
 " >> ${HTTPD_CONF}
 printf ${DONE}
 
