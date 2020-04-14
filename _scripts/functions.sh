@@ -73,21 +73,27 @@ get_port() {
 }
 
 # ${1} : ROOT_DIR
+# ${2} : MySQL username (optional)
+# ${3} : MySQL password (optional)
 refresh_database() {
 	
-	if [ -d ${1} ]; then
-		cd ${1}
+	# Check if the provided root directory is correct
+	[ -d ${1} ] && cd ${1}
+	[ ! -d ./_client ] && printf "${ERROR}Move to project root directory and try again\n" && exit -1
+
+	# If no credentials were provided, prompt for them
+	if [ -z ${2} ]; then
+		read -t 60 -p "Enter MySQL username (default is 'root'): " USERNAME
+		if [ -z ${USERNAME} ]; then
+			USERNAME="root"
+		fi
+		read -t 60 -s -p "Enter password for '${USERNAME}'@'localhost' (default is ''): " PASSWORD
+		echo ""
+	else
+		USERNAME=${2}
+		PASSWORD=${3}
 	fi
-	if [ ! -d ./_client ]; then
-		printf "${ERROR}Move to project root directory and try again\n"
-	fi
-	
-	read -t 60 -p "Enter MySQL username (default is 'root'): " USERNAME
-	if [ -z ${USERNAME} ]; then
-		USERNAME="root"
-	fi
-	read -t 60 -s -p "Enter password for '${USERNAME}'@'localhost' (default is ''): " PASSWORD
-	echo ""
+
 	printf "${T}Creating Pianoboard database..."
 	if [ -z ${PASSWORD} ]; then
 		handle_error "$(mysql -u${USERNAME} < ${1}/_server/sql/create_db.sql 2>&1)"
@@ -101,13 +107,10 @@ refresh_database() {
 	printf "${T}Writing PHP script to connect to MySQL..."
 	rm ./_client/resources/php/database.phpsecret 
 	touch ./_client/resources/php/database.phpsecret
-	echo "<?
-	\$database = mysqli_connect('127.0.0.1', '${USERNAME}', '${PASSWORD}', 'Pianoboard');
+	echo "<?\$database = mysqli_connect('127.0.0.1', '${USERNAME}', '${PASSWORD}', 'Pianoboard');
 	if(\$database->connect_error) {
 		die('Connection failed: ' . \$conn->connect_error);
-	}
-?>
-	" >> ${1}/_client/resources/php/database.phpsecret
+	}?>" >> ${1}/_client/resources/php/database.phpsecret
 	rm ./_client/resources/php/pepper.phpsecret 
 	touch ./_client/resources/php/pepper.phpsecret
 	echo "<?\$pepper = \"$(cat /tmp/* 2>&1 | md5sum | cut -d' ' -f1)\";?>" >> ${1}/_client/resources/php/pepper.phpsecret
@@ -142,12 +145,15 @@ refresh_all() {
 	exit 0
 }
 
+# ${1} : ROOT_DIR
+# ${2} : MySQL username
+# ${3} : MySQL password
 test_db() {
-	exec_sql ${1} ${2}  ${3}/_server/sql/test/test_insertions.sql
+	exec_sql ${2} ${3}  ${1}/_server/sql/test/test_insertions.sql
 }
 
 clear_db() {
-	exec_sql ${1} ${2} ${3}/_server/sql/create_db.sql
+	exec_sql ${2} ${3} ${1}/_server/sql/create_db.sql
 }
 
 exec_sql() {
