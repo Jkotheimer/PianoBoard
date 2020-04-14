@@ -1,46 +1,76 @@
-﻿<?
+<?
 $ROOT = $_SERVER['DOCUMENT_ROOT'];
-ob_start();
-// If the request was a POST, verify the email and password
-$page = "login";
-if(isset($_POST['email']) && isset($_POST['password'])) {
-	// Get the database connection and the secret pepper
-	require $ROOT . "/resources/php/database.phpsecret";
-	require $ROOT . "/resources/php/pepper.phpsecret";
 
-	// TODO use this in the account creation to hash the password and store it in the database
+// Get the database connection and the secret pepper
+require "$ROOT/resources/php/database.phpsecret";
+require "$ROOT/resources/php/pepper.phpsecret";
+require "$ROOT/resources/php/resources.php";
+
+$page = "login";
+$error = NULL;
+$account = NULL;
+if(isset($_COOKIE[$session_cookie]) && isset($_COOKIE[$ID_cookie])) {
+	$Token = $_COOKIE[$session_cookie];
+	$AccountID = $_COOKIE[$ID_cookie];
+	$query = "SELECT Expiration_date from Access_token WHERE Token='$Token' AND AccountID='$AccountID';";
+	$Expiration_date = $database->query($query)->fetch_row()[0];
+	if($Expiration_date && time() < $Expiration_date) {
+		// Token exists and is valid - load the account into the dashboard
+		$page = "dashboard";
+		$GLOBALS['account'] = gen_account($AccountID);
+	} else {
+		// Token does not exist for given account or token is expired
+		echo "Token failed";
+	}
+}
+// If the request was a POST, verify the email and password
+else if(isset($_POST['submit']) && isset($_POST['email']) && isset($_POST['password'])) {
+
 	$email = $_POST['email'];
-	$result = mysqli_query($database, "SELECT Password FROM Account WHERE Email='$email';");
-	// get number of rows returned 
-	if($result && mysqli_num_rows($result)) {
-		$row = mysqli_fetch_array($result);
-		$db_pass = $row['Password'];
-		echo 'Password: ' . $db_pass . '<br>';
-		if(password_verify($_POST['password'] . $pepper, $db_pass)) {
-			echo "Verified";
-			unset($_POST['password'], $db_pass, $row);	
+	$password = $_POST['password'];
+	$query = "SELECT AccountID, Password FROM Account WHERE Email='$email';";
+	$result = $database->query($query)->fetch_row();
+	$AccountID = $result[0];
+	$db_pass = $result[1];
+	if($db_pass) {
+		if(password_verify($password . $pepper, $db_pass)) {
+			// Successfully logged in - refresh token and load the dashboard
+
+			// Delete any tokens that may exist for this user
+			$query = "DELETE FROM Access_token WHERE AccountID='$AccountID'";
+			$database->query($query);
+
+			// Generate a new token and set the expiration date for a month from now
+			$Token = bin2hex(random_bytes(32));
+			$Expiration_date = time() + (86400 * 30);
+
+			// Push the token to the database and set it as a cookie
+			$query = "INSERT INTO Access_token (Token, AccountID, Expiration_date)
+					VALUES ('$Token', '$AccountID', '$Expiration_date');";
+			$database->query($query);
+			setcookie($session_cookie, $Token, $Expiration_date, "/");
+			setcookie($ID_cookie, $AccountID, $Expiration_date, "/");
+
 			$page = "dashboard";
-			// TODO get a token and set it as a cookie
+			$GLOBALS['account'] = gen_account($AccountID);
 		} else {
-			echo "Invalid Password";
+			$error = ["password_notification", "Incorrect password"];			
 		}
 	} else {
-		echo "Account with email $email does not exist";
-		// NO ACCOUNT WITH THIS EMAIL EXISTS
+		$error = ["email_notification", "Account with email $email does not exist"];
 	}
 	mysqli_close($database); 
 }
+ob_start();
 ?>
 <!DOCTYPE html>
 <html>
 	<?
-	require $ROOT . "/resources/php/head.php";
+	require "$ROOT/resources/php/head.php";
 	?>
 	<body>
-		<?
-		// Get the body html file and render it here
-		require $ROOT . "/resources/php/" . $page . ".php";
-		?>
+
+		<? require "$ROOT/resources/php/$page.php";?>
 
 		<div class="info">
 			Developed and maintained by Jack Kotheimer
@@ -53,5 +83,15 @@ if(isset($_POST['email']) && isset($_POST['password'])) {
 $page_contents = ob_get_contents();
 ob_end_clean();
 
+if(isset($error)) {
+	$html = str_replace("<!--$error[0]-->", 
+		'<div id="' . $error[0] . '" class="notification error">' . $error[1] . '</div>', 
+		$html);
+	if(isset($email)) {
+		$html = str_replace('placeholder="your.email@something.com"',
+			'value="' . $email . '"',
+			$html);
+	}	
+}
 echo str_replace('<!--TITLE-->', $page, $page_contents);
 ?>
