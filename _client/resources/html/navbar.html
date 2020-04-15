@@ -1,24 +1,23 @@
 <div>
-	<div class="logo_box" onclick="window.location.reload()">
+	<a class="logo_box" href="/">
 		<img src="/images/logo.png" class="logo"/>
-	</div>
-	<span class="nav_link search_container">
-		<input id="search_bar" onkeypress="presearch(event, this.value)" placeholder="Search for users or projects"/>
-		<img class="icon search_icon" onclick="search(document.getElementById('search_bar').value)"
-			src="/images/search.png"/>
-	</span>
+	</a>
+	<form class="nav_link search_container" method="GET" action="/search">
+		<input type="text" name="query" id="search_bar" placeholder="Search for users or projects"/>
+		<input type="image" class="icon search_icon" src="/images/search.png"/>
+	</form>
 
-	<span class="nav_link">
+	<a class="nav_link" href="/settings">
 		Settings
 		<img class="icon" src="/images/settings.png"/>
-	</span>
-	<span class="nav_link">
+	</a>
+	<a class="nav_link" href="/tutorial">
 		Tutorial
 		<img class="icon" src="/images/tutorial.png"/>
-	</span>
-	<span class="nav_link" onclick="create_project()">
+	</a>
+	<a class="nav_link" href="/create_project">
 		Create New Project
-		<img class="icon" src="/images/create.png"/>
-	</span>
+		<input type="image" class="icon" src="/images/create.png"/>
+	</a>
 
 </div>
