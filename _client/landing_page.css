@@ -126,9 +126,6 @@ input:focus { outline: none; }
 	display: none;
 }
 
-#info {
-
-}
 #username {
 	background-color: transparent;
 	text-align: center;
@@ -244,7 +241,7 @@ input:focus { outline: none; }
 	height: 75%;
 }
 .login_form_section {
-	margin-bottom: 20px;
+	margin-bottom: 25px;
 }
 /* LINK AREA */
 .link_area {
@@ -280,9 +277,10 @@ input:focus { outline: none; }
 	background-color: var(--cream);
 }
 .info {
-	position: relative;
+	position: fixed;
+	right: 0px;
+	bottom: 0px;
 	height: 50px;
 	width: 350px;
-	margin: 10px;
 	font-size: 12px;
 }
