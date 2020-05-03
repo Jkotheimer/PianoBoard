@@ -81,5 +81,5 @@ printf ${DONE}
 
 refresh_database ${ROOT_DIR}
 
-sudo chmod -R 664 ${ROOT_DIR}
+sudo chmod -R 764 ${ROOT_DIR}
 sudo chown -R ${1}:${1} ${ROOT_DIR}
