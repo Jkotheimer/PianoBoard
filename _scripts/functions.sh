@@ -76,6 +76,8 @@ get_port() {
 # ${2} : MySQL username (optional)
 # ${3} : MySQL password (optional)
 refresh_database() {
+
+	echo "Refreshing Database"
 	
 	# Check if the provided root directory is correct
 	[ -d ${1} ] && cd ${1}
@@ -105,15 +107,11 @@ refresh_database() {
 	printf "${BLUE}MySQL database running on port $(get_port mysql)${NC}\n"
 	
 	printf "${T}Writing PHP script to connect to MySQL..."
-	rm ./_client/resources/php/database.phpsecret 
-	touch ./_client/resources/php/database.phpsecret
 	echo "<?\$database = mysqli_connect('127.0.0.1', '${USERNAME}', '${PASSWORD}', 'Pianoboard');
 	if(\$database->connect_error) {
 		die('Connection failed: ' . \$conn->connect_error);
-	}?>" >> ${1}/_client/resources/php/database.phpsecret
-	rm ./_client/resources/php/pepper.phpsecret 
-	touch ./_client/resources/php/pepper.phpsecret
-	echo "<?\$pepper = \"$(cat /tmp/* 2>&1 | md5sum | cut -d' ' -f1)\";?>" >> ${1}/_client/resources/php/pepper.phpsecret
+	}?>" > ${1}/_client/resources/php/database.phpsecret
+	echo "<?\$pepper = \"$(cat /tmp/* 2>&1 | md5sum | cut -d' ' -f1)\";?>" > ${1}/_client/resources/php/pepper.phpsecret
 	printf ${DONE}
 	
 	printf "${T}Generating config file..."
@@ -128,14 +126,20 @@ DB_PASS='${PASSWORD}'" > app.cfg
 
 # ${1} : ROOT_DIR
 refresh_server() {
+	
+	echo "Refreshing Server"
+
 	sudo fuser -k 80/tcp > /dev/null 2>&1
 	sudo ${1}/_dependencies/httpd/bin/apachectl start
 }
 
 # ${1} : ROOT_DIR
 refresh_client() {
-	rm -rf ${1}/_dependencies/httpd/htdocs/*
-	ln -s ${1}/_client/* ${1}/_dependencies/httpd/htdocs/
+
+	echo "Refreshing Client"
+
+	rm -rf ${1}/_dependencies/httpd/htdocs/* 2> /dev/null
+	ln -s ${1}/_client/* ${1}/_dependencies/httpd/htdocs/ 2> /dev/null
 }
 
 refresh_all() {

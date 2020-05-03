@@ -44,6 +44,7 @@ uncomment mod_proxy_http.so ${HTTPD_CONF}
 uncomment mod_proxy_connect.so ${HTTPD_CONF}
 uncomment mod_rewrite.so ${HTTPD_CONF}
 sed -i "s|_dependencies/httpd/htdocs|_client|g" ${HTTPD_CONF}
+sed -i "s|daemon|${1}|g" ${HTTPD_CONF}
 echo "
 ServerName 127.0.0.1:80
 ProxyPass			/api	http://localhost:8081/
