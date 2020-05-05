@@ -24,7 +24,7 @@ printf ${DONE}
 
 # DOWNLOAD AND INSTALL HTTPD
 HTTPD_HOME=${DEP_DIR}/httpd
-download_dependency httpd ${MIRROR}/httpd/httpd-2.4.41.tar.gz
+download_dependency httpd ${MIRROR}/httpd/httpd-2.4.43.tar.gz
 extract_dependency httpd ${DEP_DIR}
 install_dependency ${DEP_DIR}/httpd-* \
 	"--prefix=${HTTPD_HOME} --enable-so" \
@@ -44,6 +44,7 @@ uncomment mod_proxy_http.so ${HTTPD_CONF}
 uncomment mod_proxy_connect.so ${HTTPD_CONF}
 uncomment mod_rewrite.so ${HTTPD_CONF}
 sed -i "s|_dependencies/httpd/htdocs|_client|g" ${HTTPD_CONF}
+sed -i "s|daemon|${1}|g" ${HTTPD_CONF}
 echo "
 ServerName 127.0.0.1:80
 ProxyPass			/api	http://localhost:8081/
@@ -81,5 +82,5 @@ printf ${DONE}
 
 refresh_database ${ROOT_DIR}
 
-sudo chmod -R 665 ${ROOT_DIR}
+sudo chmod -R 764 ${ROOT_DIR}
 sudo chown -R ${1}:${1} ${ROOT_DIR}

@@ -13,10 +13,10 @@
 }
 .form_input {
 	position: relative;
-	height: 15px;
+	height: 25px;
 	width: 100%;
 	margin: 5px 10px 5px -25px;
-	padding-bottom: 10px;
+	padding-bottom: 5px;
 	left: 25px;
 	font-size: 20px;
 	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
