@@ -18,6 +18,27 @@ function gen_username($email) {
 	return ($username . $postfix);
 }
 
+// Search for accounts based on the provided query
+function search_account($q) {
+	require "database.phpsecret";
+	$query = "SELECT AccountID, Username, Is_private FROM Account
+				WHERE Username LIKE '$q' or Email LIKE '$q';";
+	$result = $database->query($query);
+	$rows = [];
+	while($row = $result->fetch_assoc()) { $rows[] = $row; }
+	return $rows;
+}
+
+// Get an account ID from the provided vague account attribute and call gen_account with it
+function gen_account_vague($account) {
+	require "database.phpsecret";
+	$query = "SELECT AccountID FROM Account WHERE
+				AccountID='$account' OR Username='$account' OR Email='$account';";
+	$AccountID = $database->query($query);
+	if($AccountID) { return gen_account($AccountID->fetch_row()[0]); }
+	else { return NULL; }
+}
+
 // Generate an account object based on the provided AccountID
 function gen_account($AccountID) {
 	require "database.phpsecret";
