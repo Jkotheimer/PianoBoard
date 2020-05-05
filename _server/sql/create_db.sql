@@ -45,6 +45,7 @@ CREATE TABLE Favorite_artists (
 CREATE TABLE Access_token (
 	Token CHAR(64) NOT NULL,
 	AccountID INT UNSIGNED NOT NULL UNIQUE,
+	FormToken CHAR(64),
 	Expiration_date BIGINT UNSIGNED NOT NULL,
 	CONSTRAINT Token_PK PRIMARY KEY (Token),
 	CONSTRAINT Token_FK FOREIGN KEY (AccountID) REFERENCES Account(AccountID)
