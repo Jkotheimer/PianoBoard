@@ -1,3 +1,5 @@
 /_dependencies/
+node_modules/
 *.cfg
 *.phpsecret
+*.jsecret
