@@ -114,7 +114,7 @@ refresh_database() {
 	echo "module.exports = {mysql_username:'${USERNAME}', mysql_password:'${PASSWORD}'}" > ${1}/_api/sql_config.jsecret
 	PEPPER=$(cat /tmp/* 2>&1 | md5sum | cut -d' ' -f1)
 	echo "<?\$pepper = \"${PEPPER}\";?>" > ${1}/_client/resources/php/pepper.phpsecret
-	echo "module.exports = ${PEPPER};" > ${1}/_api/auth/pepper.jsecret
+	echo "module.exports = '${PEPPER}';" > ${1}/_api/auth/pepper.jsecret
 	printf ${DONE}
 	
 	printf "${T}Generating config file..."
