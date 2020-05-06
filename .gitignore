@@ -3,3 +3,4 @@ node_modules/
 *.cfg
 *.phpsecret
 *.jsecret
+package-lock.json
