@@ -47,8 +47,8 @@ sed -i "s|_dependencies/httpd/htdocs|_client|g" ${HTTPD_CONF}
 sed -i "s|daemon|${1}|g" ${HTTPD_CONF}
 echo "
 ServerName 127.0.0.1:80
-ProxyPass			/api	http://localhost:8081/
-ProxyPassReverse	/api	http://localhost:8081/
+ProxyPass			/api	http://localhost:8081
+ProxyPassReverse	/api	http://localhost:8081
 <FilesMatch \"\.ph(p[2-6]?|tml)$\">
 	SetHandler application/x-httpd-php
 </FilesMatch>
@@ -64,6 +64,7 @@ ProxyPassReverse	/api	http://localhost:8081/
 RewriteEngine On
 RewriteCond %{DOCUMENT_ROOT}/\$1 !-f 
 RewriteCond %{DOCUMENT_ROOT}/\$1 !-d
+RewriteCond \$1 -ne\"api\"
 RewriteRule ^/?(\w+)/?(\w*)?/?(\w*)?/?(\w*)?/?$ /accounts.php?account=\$1&project=\$2&track=\$3&recording=\$4 [PT]
 " >> ${HTTPD_CONF}
 printf ${DONE}
