@@ -98,9 +98,9 @@ refresh_database() {
 
 	printf "${T}Creating Pianoboard database..."
 	if [ -z ${PASSWORD} ]; then
-		handle_error "$(mysql -u${USERNAME} < ${1}/_server/sql/create_db.sql 2>&1)"
+		handle_error "$(mysql -u${USERNAME} < ${1}/_sql/create_db.sql 2>&1)"
 	else
-		handle_error "$(mysql -u${USERNAME} -p"${PASSWORD}" < ${1}/_server/sql/create_db.sql 2>&1)"
+		handle_error "$(mysql -u${USERNAME} -p"${PASSWORD}" < ${1}/_sql/create_db.sql 2>&1)"
 	fi
 	printf ${DONE}
 	
@@ -154,11 +154,11 @@ refresh_all() {
 # ${2} : MySQL username
 # ${3} : MySQL password
 test_db() {
-	exec_sql ${2} ${3}  ${1}/_server/sql/test/test_insertions.sql
+	exec_sql ${2} ${3}  ${1}/_sql/test/test_insertions.sql
 }
 
 clear_db() {
-	exec_sql ${2} ${3} ${1}/_server/sql/create_db.sql
+	exec_sql ${2} ${3} ${1}/_sql/create_db.sql
 }
 
 exec_sql() {
