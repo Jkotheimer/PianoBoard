@@ -9,8 +9,10 @@ CREATE TABLE Account (
 	Username VARCHAR(32) NOT NULL UNIQUE,
 	Password CHAR(255) NOT NULL,
 	Salt CHAR(32) NOT NULL,
-	Creation_date BIGINT UNSIGNED NOT NULL,
-	Is_private BIT,
+	Creation_date DateTime NOT NULL,
+	Last_modified DateTime,
+	Is_private BIT DEFAULT 0,
+	Project_index TINYINT UNSIGNED DEFAULT 0,
 	CONSTRAINT Account_PK PRIMARY KEY (AccountID)
 );
 
@@ -18,7 +20,7 @@ CREATE TABLE Known_IP (
 	AccountID INT UNSIGNED NOT NULL,
 	IP_address INT UNSIGNED NOT NULL,
 	Login_count INT UNSIGNED,
-	Last_login BIGINT UNSIGNED,
+	Last_login DateTime,
 	CONSTRAINT KIP_FK FOREIGN KEY (AccountID) REFERENCES Account(AccountID)
 );
 
@@ -26,7 +28,7 @@ CREATE TABLE Failed_IP (
 	AccountID INT UNSIGNED NOT NULL,
 	IP_address INT UNSIGNED NOT NULL,
 	Attempt_count INT UNSIGNED,
-	Last_attempt BIGINT UNSIGNED,
+	Last_attempt DateTime,
 	CONSTRAINT FIP_FK FOREIGN KEY (AccountID) REFERENCES Account(AccountID)
 );
 
@@ -47,7 +49,7 @@ CREATE TABLE Access_token (
 	Token CHAR(64) NOT NULL,
 	AccountID INT UNSIGNED NOT NULL UNIQUE,
 	FormToken CHAR(64),
-	Expiration_date BIGINT UNSIGNED NOT NULL,
+	Expiration_date DateTime NOT NULL,
 	CONSTRAINT Token_PK PRIMARY KEY (Token),
 	CONSTRAINT Token_FK FOREIGN KEY (AccountID) REFERENCES Account(AccountID)
 );
@@ -55,54 +57,58 @@ CREATE TABLE Access_token (
 CREATE TABLE Access_rights (
 	EntityID INT UNSIGNED NOT NULL,
 	AccountID INT UNSIGNED NOT NULL,
-	Rights CHAR(3) NOT NULL,
+	Privileges CHAR(1) NOT NULL,
 	CONSTRAINT Rights_PK PRIMARY KEY (EntityID),
 	CONSTRAINT Rights_FK FOREIGN KEY (AccountID) REFERENCES Account(AccountID)
 );
 
 /* PROJECT ENTITIES */
 CREATE TABLE Project (
-	ProjectID INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	ProjectID INT UNSIGNED NOT NULL,
 	AccountID INT UNSIGNED NOT NULL,
 	Name VARCHAR(32) NOT NULL,
 	Genre VARCHAR(32),
-	Time_signature CHAR(5) NOT NULL,
-	Tempo TINYINT UNSIGNED NOT NULL,
-	Creation_date BIGINT UNSIGNED NOT NULL,
-	Last_modified BIGINT UNSIGNED,
-	Is_private BIT,
+	Time_signature CHAR(5),
+	Tempo TINYINT UNSIGNED,
+	Creation_date DateTime,
+	Last_modified DateTime,
+	Is_private BIT DEFAULT 0,
+	Track_index TINYINT UNSIGNED DEFAULT 0,
 	CONSTRAINT Project_PK PRIMARY KEY (ProjectID),
 	CONSTRAINT Project_FK FOREIGN KEY (AccountID) REFERENCES Account(AccountID)
 );
 
 CREATE TABLE Track (
-	TrackID INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	TrackID INT UNSIGNED NOT NULL,
 	ProjectID INT UNSIGNED NOT NULL,
-	Name VARCHAR(32) NOT NULL,
+	Name VARCHAR(32),
 	Instrument VARCHAR(32) NOT NULL,
 	Volume TINYINT NOT NULL,
 	Pan TINYINT NOT NULL,
 	Mute BIT,
 	Solo BIT,
-	Creation_date BIGINT UNSIGNED NOT NULL,
-	Last_modified BIGINT UNSIGNED,
+	Creation_date DateTime NOT NULL,
+	Last_modified DateTime,
+	Is_private BIT DEFAULT 0,
+	Recording_index TINYINT UNSIGNED DEFAULT 0,
 	CONSTRAINT Track_PK PRIMARY KEY (TrackID),
 	CONSTRAINT Track_FK FOREIGN KEY (ProjectID) REFERENCES Project(ProjectID)
 );
 
 CREATE TABLE Recording (
-	RecordingID INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	RecordingID INT UNSIGNED NOT NULL,
 	TrackID INT UNSIGNED NOT NULL,
 	Start_time INT UNSIGNED NOT NULL,
 	End_time INT UNSIGNED NOT NULL,
-	Creation_date BIGINT UNSIGNED NOT NULL,
-	Last_modified BIGINT UNSIGNED,
+	Creation_date DateTime NOT NULL,
+	Last_modified DateTime,
+	Note_index SMALLINT UNSIGNED DEFAULT 0,
 	CONSTRAINT Recording_PK PRIMARY KEY (RecordingID),
 	CONSTRAINT Recording_FK FOREIGN KEY (TrackID) REFERENCES Track(TrackID)
 );
 
 CREATE TABLE Note (
-	NoteID INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	NoteID INT UNSIGNED NOT NULL,
 	RecordingID INT UNSIGNED NOT NULL,
 	Note CHAR(2) NOT NULL,
 	Start_time INT UNSIGNED NOT NULL,
