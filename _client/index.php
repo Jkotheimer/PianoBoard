@@ -10,18 +10,21 @@ $page = "login";
 $error = NULL;
 $account = NULL;
 if(isset($_COOKIE[$session_cookie]) && isset($_COOKIE[$ID_cookie])) {
+	
+	// Attempt to grab the expiration date of the token from the set cookies
 	$Token = $_COOKIE[$session_cookie];
 	$AccountID = $_COOKIE[$ID_cookie];
 	$query = "SELECT Expiration_date from Access_token WHERE Token='$Token' AND AccountID='$AccountID';";
+	
 	$Expiration_date = new DateTime($database->query($query)->fetch_row()[0]);
 	$Expiration_date = $Expiration_date->getTimeStamp();
+
+	// If the query returns an actual value, load the dashboard
 	if($Expiration_date && time() < $Expiration_date) {
-		// Token exists and is valid - load the account into the dashboard
 		$page = "dashboard";
 		$GLOBALS['account'] = gen_account($AccountID);
-	} else {
-		// Token does not exist for given account or token is expired
-	}
+	} 
+	// If the query returns nothing, let it load the login page
 }
 // If the request was a POST, verify the email and password
 else if(isset($_POST['submit']) && isset($_POST['email']) && isset($_POST['password'])) {
