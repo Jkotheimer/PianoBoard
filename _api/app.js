@@ -3,9 +3,18 @@
 const express = require('express');
 const fs = require('fs');
 const app = express();
+const port = 8081;
+const ROOT = require('path').dirname(require.main.filename);
+const resources = require('./resources.js');
+
 app.use(express.urlencoded());
 app.use(express.json());
-const port = 8081;
+app.locals.title = 'Pianoboard';
+app.locals.email = 'jkotheimer9@gmail.com';
+app.locals.host = 'http://localhost';
+app.locals.domain = 'localhost';
+app.locals.root = ROOT;
+app.locals.resources = resources;
 
 // ROOT directory returns api documentation pdf
 app.get('/', (req, res) => {
