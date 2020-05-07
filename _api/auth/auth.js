@@ -26,24 +26,29 @@ var gen_hash = function(password, salt, pepper){
     var value = hash.digest('hex');
     return {
         salt:salt,
-        passwordHash:value
+        hash:value
     };
 };
 
 function hash_password(password) {
     const salt = gen_salt(16); /** Gives us salt of length 16 */
-	const pepper = require('pepper.jsecret');
-    return { hash: gen_hash(password, salt, pepper), salt: salt];
+	const pepper = require('./pepper.jsecret');
+    return gen_hash(password, salt, pepper);
 }
 
 
 function verify_password(password, salt, hash) {
-	const pepper = require('pepper.jsecret');
+	const pepper = require('./pepper.jsecret');
 	const hashed_pass = gen_hash(passowrd, salt, pepper);
 	return hashed_pass == hash;
 }
 
+function gen_token() {
+	return gen_salt(64);
+}
+
 module.exports = {
+	gen_token: gen_token,
 	hash_password: hash_password,
 	verify_password: verify_password
 }
