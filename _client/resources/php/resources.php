@@ -66,6 +66,6 @@ function gen_account($AccountID) {
 	return $account;
 }
 
-$session_cookie = "Pianoboard_Token";
-$ID_cookie = "Pianoboard_ID";
+$session_cookie = "pb_token";
+$ID_cookie = "pb_uid";
 ?>

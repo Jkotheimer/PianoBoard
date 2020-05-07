@@ -13,6 +13,7 @@ app.locals.title = 'Pianoboard';
 app.locals.email = 'jkotheimer9@gmail.com';
 app.locals.host = 'http://localhost';
 app.locals.domain = 'localhost';
+app.locals.token_exp = 604800000;
 app.locals.root = ROOT;
 app.locals.resources = resources;
 

@@ -69,11 +69,11 @@ module.exports = function(req, res) {
 				if(data) {
 					const token = crypto.gen_token();
 					// Token expires a month from today
-					const exp_date = req.app.locals.resources.new_cookie_date(604800000);
+					const exp_date = req.app.locals.resources.new_date(req.app.locals.token_exp);
 					const account_id = data.insertId;
-					set_token(account_id, token, req.app.locals.resources.new_date(604800000));
-					res.cookie('pb_token', token, {domain: req.app.locals.domain, path: '/', expires: exp_date});
-					res.cookie('pb_uid', account_id, {domain: req.app.locals.domain, path: '/', expires: exp_date});
+					set_token(account_id, token, exp_date);
+					res.cookie('pb_token', token, {domain: req.app.locals.domain, path: '/', maxAge: req.app.locals.token_exp});
+					res.cookie('pb_uid', account_id, {domain: req.app.locals.domain, path: '/', maxAge: req.app.locals.token_exp});
 					if(platform == 'web') {
 						res.redirect('/')
 					}

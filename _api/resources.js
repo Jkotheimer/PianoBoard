@@ -12,12 +12,7 @@ var new_date = function(offset) {
 	return new Date(Date.now() + offset).toISOString().slice(0, 19).replace('T', ' ');
 }
 
-var new_cookie_date = function(offset) {
-	return new Date(Number(new Date()) + offset);
-}
-
 module.exports = {
 	gen_username: gen_username,
 	new_date: new_date,
-	new_cookie_date: new_cookie_date
 }

@@ -1,3 +1,6 @@
+<?php
+ob_start();
+?>
 <!DOCTYPE html>
 <html>
 	<?php
@@ -74,3 +77,9 @@
 		</div>
 	</body>
 </html>	
+<?php
+$page_contents = ob_get_contents();
+ob_end_clean();
+
+echo str_replace('<!--TITLE-->', 'Create Account', $page_contents);
+?>
