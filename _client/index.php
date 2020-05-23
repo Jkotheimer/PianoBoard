@@ -1,5 +1,6 @@
 <?
 $ROOT = $_SERVER['DOCUMENT_ROOT'];
+header_remove();
 
 // Get the database connection and the secret pepper
 require "$ROOT/resources/php/database.phpsecret";
