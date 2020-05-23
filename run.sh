@@ -10,6 +10,7 @@ print_help() {
 	echo "--help       [-h] : Display this prompt"
 	echo "--all        [-a] : Refresh all Pianoboard services"
 	echo "--server     [-s] : Refresh Apache Http server"
+	echo "--node       [-n] : Refresh Node.js modules and restart service"
 	echo "--database   [-d] : Refresh MySQL database (This drops all data)"
 	echo "--client     [-c] : Refresh symlink from _client/ to htdocs in http server"
 	echo "--test       [-t] : Run test SQL script to fill database with sample data"
@@ -22,7 +23,7 @@ declare -A COMMANDS=([-h]=print_help [--help]=print_help \
 					[-a]=refresh_all [--all]=refresh_all \
 					[-s]=refresh_server [--server]=refresh_server \
 					[-d]=refresh_database [--database]=refresh_database \
-					[-D]=refresh_database
+					[-n]=refresh_node [--node]=refresh_node \
 					[-c]=refresh_client [--client]=refresh_client \
 					[-t]=test_db [--test]=test_db \
 					[-u]=clear_db [--unset]=clear_db \

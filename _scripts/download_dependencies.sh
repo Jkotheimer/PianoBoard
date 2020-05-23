@@ -9,7 +9,7 @@ SRV_DIR=$(pwd)/_server
 ROOT_DIR=$(pwd)
 rm -rf ${DEP_DIR} 2> /dev/null
 mkdir ${DEP_DIR}
-printf ${DONE}
+printf "$DONE"
 
 if [ ! $(exists mysql) ]; then
 	printf "\n[\033[0;31mERROR\033[0m] Please install mysql before installing this package\n"
@@ -20,7 +20,7 @@ printf "${T}Fetching your mirror..."
 handle_error "$(curl -o ./mirrors.txt http://ws.apache.org/mirrors.cgi 2>&1)"
 MIRROR=$(grep -E '<p><a href=.*</strong></a>' mirrors.txt | cut -d '"' -f 2)
 rm mirrors.txt
-printf ${DONE}
+printf "$DONE"
 
 # DOWNLOAD AND INSTALL HTTPD
 HTTPD_HOME=${DEP_DIR}/httpd
@@ -67,21 +67,21 @@ RewriteCond %{DOCUMENT_ROOT}/\$1 !-d
 RewriteCond \$1 -ne\"api\"
 RewriteRule ^/?(\w+)/?(\w*)?/?(\w*)?/?(\w*)?/?$ /accounts.php?account=\$1&project=\$2&track=\$3&recording=\$4 [PT]
 " >> ${HTTPD_CONF}
-printf ${DONE}
+printf "$DONE"
 
-printf "${T}Starting Apache HTTP Server..."
 refresh_server ${ROOT_DIR}
-printf ${DONE}
 
-printf "${T}Copying files from _client to HTTPD document root..."
 refresh_client ${ROOT_DIR}
-printf ${DONE}
 
-printf "${T}Initializing MySQL server..."
 handle_error "$(sudo systemctl start mysqld 2>&1)"
-printf ${DONE}
 
 refresh_database ${ROOT_DIR}
 
+printf "${T}Setting proper file permissions..."
 sudo chmod -R 764 ${ROOT_DIR}
+# Remove executable permissions from files that shouldn't be executable
+for file in $(find . -name '*.\*.sh$|\.*\.php$'); do
+	sudo chmod -x $file
+done
 sudo chown -R ${1}:${1} ${ROOT_DIR}
+printf "$DONE"

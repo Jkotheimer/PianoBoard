@@ -4,7 +4,7 @@ YELLOW="\033[0;33m"
 BLUE="\033[0;34m"
 RED="\033[0;31m"
 NC="\033[0m"
-DONE="\r[${GREEN}DONE${NC}]\n"
+DONE="\r[${GREEN} DONE ${NC}]\n"
 WARNING="\r[${YELLOW}WARNING${NC}] "
 ERROR="\r[${RED}ERROR${NC}] "
 T="\t"
@@ -30,7 +30,7 @@ download_dependency() {
 	if [ ! -f /tmp/${1}.tar.gz ]; then
 		handle_error "$(curl -o /tmp/${1}.tar.gz ${2} 2>&1)"
 	fi
-	printf ${DONE}
+	printf "$DONE"
 }
 
 # ${1} : name of file to extract
@@ -39,7 +39,7 @@ extract_dependency() {
 	printf "${T}Extracting ${1}..."
 	mkdir ${2}/${1}
 	handle_error "$(tar -xvzf /tmp/${1}.tar.gz -C ${2} 2>&1 > /dev/null)"
-	printf ${DONE}
+	printf "$DONE"
 }
 
 # ${1} : directory of source to be installed
@@ -53,7 +53,7 @@ install_dependency() {
 	handle_error "$(make install 2>&1 > /dev/null)"
 	${3}
 	rm -r ${1}
-	printf ${DONE}
+	printf "$DONE"
 }
 
 # ${1} Line identifier
@@ -77,8 +77,6 @@ get_port() {
 # ${3} : MySQL password (optional)
 refresh_database() {
 
-	echo "Refreshing Database"
-	
 	# Check if the provided root directory is correct
 	[ -d ${1} ] && cd ${1}
 	[ ! -d ./_client ] && printf "${ERROR}Move to project root directory and try again\n" && exit -1
@@ -102,7 +100,7 @@ refresh_database() {
 	else
 		handle_error "$(mysql -u${USERNAME} -p"${PASSWORD}" < ${1}/_sql/create_db.sql 2>&1)"
 	fi
-	printf ${DONE}
+	printf "$DONE"
 	
 	printf "${BLUE}MySQL database running on port $(get_port mysql)${NC}\n"
 	
@@ -115,7 +113,7 @@ refresh_database() {
 	PEPPER=$(cat /tmp/* 2>&1 | md5sum | cut -d' ' -f1)
 	echo "<?\$pepper = \"${PEPPER}\";?>" > ${1}/_client/resources/php/pepper.phpsecret
 	echo "module.exports = '${PEPPER}';" > ${1}/_api/auth/pepper.jsecret
-	printf ${DONE}
+	printf "$DONE"
 	
 	printf "${T}Generating config file..."
 	rm app.cfg 2> /dev/null
@@ -124,31 +122,56 @@ DB_USERNAME='${USERNAME}'
 DB_PASS='${PASSWORD}'" > app.cfg
 	chmod 777 app.cfg
 	PASSWORD="NULL"
-	printf ${DONE}
+	printf "$DONE"
 }
 
 # ${1} : ROOT_DIR
 refresh_server() {
-	
-	echo "Refreshing Server"
-
+	printf "${T}Starting Apache HTTP Server..."
 	sudo fuser -k 80/tcp > /dev/null 2>&1
 	sudo ${1}/_dependencies/httpd/bin/apachectl start
+	printf "$DONE"
 }
 
 # ${1} : ROOT_DIR
 refresh_client() {
-
-	echo "Refreshing Client"
-
+	printf "${T}Copying files from _client to HTTPD document root..."
 	rm -rf ${1}/_dependencies/httpd/htdocs/* 2> /dev/null
 	ln -s ${1}/_client/* ${1}/_dependencies/httpd/htdocs/ 2> /dev/null
+	printf "$DONE"
+}
+
+# ${1}: ROOT_DIR
+refresh_node() {
+	printf "${T}Installing node modules..."
+	cd ${1}/_api
+	rm -r node_modules 2> /dev/null
+	npm install express fs path > /dev/null 2>&1
+	printf "$DONE"
+
+	printf "${T}Starting node servlet"
+	fuser -k 8081/tcp
+	node app.js > node.log 2>&1 &
+	printf "$DONE"
+}
+
+display_info() {
+	printf "\n${BLUE}Project information:${NC}\n\n"
+	printf "${GREEN}Ports:${NC}\n"
+	sudo netstat -tulpn | grep 'httpd\|mysql\|node'
+
+	printf "\n${GREEN}Logs:${NC}\n"
+	ls -d ${1}/_api/* | grep .log 2> /dev/null
+	ls -d ${1}/_dependencies/httpd/logs/* 2> /dev/null
+	ls -d ${1}/_dependencies/php/var/log/* 2> /dev/null
 }
 
 refresh_all() {
 	refresh_database ${1}
 	refresh_server ${1}
 	refresh_client ${1}
+	refresh_node ${1}
+	display_info ${1}
 	exit 0
 }
 

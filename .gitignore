@@ -3,4 +3,5 @@
 *.cfg
 *.phpsecret
 *.jsecret
+*.log
 package-lock.json
