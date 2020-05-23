@@ -141,17 +141,25 @@ refresh_client() {
 	printf "$DONE"
 }
 
+install_node_modules() {
+	printf "${T}Installing node modules..."
+	rm -r node_modules 2> /dev/null
+	npm install express fs path email-validator util mysql > /dev/null 2>&1
+	printf "$DONE"
+}
+
 # ${1}: ROOT_DIR
 refresh_node() {
-	printf "${T}Installing node modules..."
 	cd ${1}/_api
-	rm -r node_modules 2> /dev/null
-	npm install express fs path > /dev/null 2>&1
-	printf "$DONE"
+	[ ! -d node_modules ] && install_node_modules
 
 	printf "${T}Starting node servlet"
-	fuser -k 8081/tcp
-	node app.js > node.log 2>&1 &
+	fuser -k 8081/tcp > /dev/null 2>&1
+	node app.js > server.log 2>&1 &
+	[ $? != 0 ] && {
+		install_node_modules
+		node app.js > server.log 2>&1 &
+	}
 	printf "$DONE"
 }
 
