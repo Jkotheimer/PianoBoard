@@ -9,6 +9,7 @@ const resources = require('./resources.js');
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
+app.use(require('cookie-parser')());
 app.locals.title = 'Pianoboard';
 app.locals.email = 'jkotheimer9@gmail.com';
 app.locals.host = 'http://localhost';
