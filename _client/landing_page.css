@@ -9,7 +9,7 @@ input:focus { outline: none; }
 .sector {
 	display: none;
 }
-#login {
+#login_panel {
 	text-align: center;
 	width: 100%;
 }
@@ -182,13 +182,16 @@ input:focus { outline: none; }
 	cursor: text;
 }
 #sign_out {
+	display: inline-block;
 	width: 100px;
-	margin-top: 50px;
+	margin: 50px 50% 0px 0px; 
 	text-align: center;
 	background-color: var(--cream);
 	padding: 5px;
 	border-radius: 5px;
 	border: 1px solid black;
+	text-decoration: none;
+	color: black;
 }
 #sign_out:hover { cursor: pointer; }
 

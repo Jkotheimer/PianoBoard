@@ -61,7 +61,7 @@
 
 	</div>
 
-	<div id="sign_out">Sign out</div>
+	<a id="sign_out" href="/api/auth/logout/?platform=web">Sign out</a>
 </div>
 
 <div class="panel right_panel">

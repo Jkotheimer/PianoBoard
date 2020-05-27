@@ -7,7 +7,7 @@
 		filesize("$ROOT/landing_page.css"));
 	?>
 </style>
-<div id="login">
+<div id="login_panel">
 	<form class="panel form_panel login_panel" method="POST" action="/">
 		<div class="login_logo">
 			<img src="/images/logo.png"/>
