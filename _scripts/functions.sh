@@ -144,7 +144,7 @@ refresh_client() {
 install_node_modules() {
 	printf "${T}Installing node modules..."
 	rm -r node_modules 2> /dev/null
-	npm install express cookie-parser fs path email-validator util mysql > /dev/null 2>&1
+	npm install express fs path email-validator util mysql > /dev/null 2>&1
 	printf "$DONE"
 }
 
@@ -158,18 +158,20 @@ refresh_node() {
 	printf "${T}Starting node servlet"
 	fuser -k 8081/tcp > /dev/null 2>&1
 	node app.js > server.log 2>&1 &
+	sleep .5
 	[ ! $(pgrep node) ] && {
 		printf "$ERROR\n"
-		cat server.log
+		cat ${1}/_api/server.log
 		echo '____________________________'
 		read -n1 -p "Reinstall node modules? [y/N]" CHOICE
 		[[ ${CHOICE^^} != 'Y' ]] && exit -1
 		install_node_modules
 		printf "${T}Trying to start node servlet again..."
 		node app.js > server.log 2>&1 &
+		sleep .5
 		[ ! $(pgrep node) ] && {
 			printf "$ERROR"
-			cat server.log
+			cat ${1}/_api/server.log
 			exit -1
 		}
 	}
