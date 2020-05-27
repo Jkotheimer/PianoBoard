@@ -144,7 +144,7 @@ refresh_client() {
 install_node_modules() {
 	printf "${T}Installing node modules..."
 	rm -r node_modules 2> /dev/null
-	npm install express fs path email-validator util mysql > /dev/null 2>&1
+	npm install express cookie-parser fs path email-validator util mysql > /dev/null 2>&1
 	printf "$DONE"
 }
 
