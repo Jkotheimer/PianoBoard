@@ -7,7 +7,7 @@ const port = 8081;
 const ROOT = require('path').dirname(require.main.filename);
 const resources = require('./resources.js');
 
-app.use(express.urlencoded());
+app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.locals.title = 'Pianoboard';
 app.locals.email = 'jkotheimer9@gmail.com';
@@ -33,6 +33,8 @@ app.get('/', (req, res) => {
 
 app.post('/auth/register', require('./auth/register.js'));
 app.post('/auth/login', require('./auth/login.js'));
+app.post('/auth/logout', require('./auth/logout.js'));
+app.get('/auth/logout', require('./auth/logout.js'));
 
 
 /**
