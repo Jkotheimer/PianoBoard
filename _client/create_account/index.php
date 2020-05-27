@@ -48,7 +48,8 @@ ob_start();
 					<div class="form_label">Password</div>
 					
 					<input type="password" id="password" name="password" 
-						class="form_input" placeholder="Choose a password" required/>
+						class="form_input" placeholder="Choose a password" 
+						autocomplete="new-password" required/>
 
 					<?php
 					# If a password notification was sent in the parameters, display it here
@@ -62,7 +63,8 @@ ob_start();
 					<div class="form_label">Confirm Password</div>
 					
 					<input type="password" id="confirm_password" name="confirm_password" 
-						class="form_input" placeholder="Confirm Password" required/>
+						class="form_input" placeholder="Confirm Password" 
+						autocomplete="new-password" required/>
 
 					<?php
 					# If a password confirmation notification was sent in the parameters, display it here

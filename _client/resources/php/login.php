@@ -15,13 +15,14 @@
 		<div class="form_area login_form_area">
 			<div class="form_section login_form_section">
 				<div class="form_label">Email</div>
-				<input type="text" id="email" name="email" class="form_input" placeholder="your.email@something.com"
+				<input type="text" id="login" name="login" class="form_input" placeholder="your.email@something.com"
 					autocapitalize="off" spellcheck="false" autocorrect="off"/>
 				<!--email_notification-->
 			</div>
 			<div class="form_section login_form_section">
 				<div class="form_label">Password</div>
-				<input type="password" id="password" name="password" class="form_input" placeholder="Enter your password"/>
+				<input type="password" id="password" name="password" class="form_input" placeholder="Enter your password"
+					autocomplete="new-password"/>
 				<!--password_notification-->
 			</div>
 		</div>
