@@ -150,6 +150,8 @@ install_node_modules() {
 
 # ${1}: ROOT_DIR
 refresh_node() {
+	[ ! $(exists npm) ] && printf "${ERROR} Please install npm and run './run.sh --node' to install npm dependencies."
+	[ ! $(exists node) ] && printf "${ERROR} Please install node and run './run.sh --node' to start the node servlet."
 	cd ${1}/_api
 	[ ! -d node_modules ] && install_node_modules
 

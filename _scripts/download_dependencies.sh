@@ -12,7 +12,8 @@ mkdir ${DEP_DIR}
 printf "$DONE"
 
 if [ ! $(exists mysql) ]; then
-	printf "\n[\033[0;31mERROR\033[0m] Please install mysql before installing this package\n"
+	printf "\n${ERROR} Please install mysql before installing this package\n"
+	rm -rf ${DEP_DIR}
 	exit -1
 fi
 
