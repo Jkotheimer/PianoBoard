@@ -39,7 +39,7 @@ function hash_password(password) {
 
 function verify_password(password, salt, hash) {
 	const pepper = require('./pepper.jsecret');
-	const hashed_pass = gen_hash(passowrd, salt, pepper);
+	const hashed_pass = gen_hash(password, salt, pepper);
 	return hashed_pass == hash;
 }
 
