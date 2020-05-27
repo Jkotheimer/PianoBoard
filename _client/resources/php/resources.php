@@ -66,6 +66,6 @@ function gen_account($AccountID) {
 	return $account;
 }
 
-$session_cookie = "pb_token";
+$_GLOBALS['session_cookie'] = "pb_token";
 $ID_cookie = "pb_uid";
 ?>
