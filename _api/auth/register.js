@@ -36,9 +36,9 @@ module.exports = function(req, res) {
 	}
 	if(password != confirm_password) {
 		if(platform == 'web') {
-			res.redirect(`/create_account/
-				?confirm_password_notification=Passwords do not match
-				&email=${email}`);
+			res.redirect('/create_account/' +
+				'?confirm_password_notification=Passwords do not match' +
+				`&email=${email}`);
 		}
 		else {
 			res.status(400).json({message: 'Passwords do not match'});
@@ -57,9 +57,9 @@ module.exports = function(req, res) {
 					console.log(err)
 					// An account with this email already exists
 					if(platform == 'web') {
-						res.redirect(`/create_account/
-							?email_notification=Account with this email already exists
-							&email=${_email}`);
+						res.redirect('/create_account/' +
+							'?email_notification=Account with this email already exists' +
+							`&email=${_email}`);
 					}
 					else {
 						res.status(400).json({message: 'Account with this email already exists'});
