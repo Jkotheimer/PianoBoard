@@ -1,6 +1,7 @@
 <?
 $ROOT = $_SERVER['DOCUMENT_ROOT'];
 require "$ROOT/resources/php/auth.php";
+
 if(auth_token()) $page = "dashboard";
 else $page = "login";
 

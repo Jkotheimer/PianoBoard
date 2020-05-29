@@ -58,7 +58,7 @@ function gen_account($AccountID) {
 	$account->Genres = [];
 	while($row = $result->fetch_array()) { $account->Genres[] = $row[0]; }
 
-	$query = "SELECt ProjectID, Name, Genre FROM Project WHERE AccountID='$AccountID';";
+	$query = "SELECT ProjectID, Name, Genre FROM Project WHERE AccountID='$AccountID';";
 	$result = $database->query($query);
 	$account->Projects = [];
 	while($row = $result->fetch_assoc()) { $account->Projects[] = $row; }
@@ -66,6 +66,6 @@ function gen_account($AccountID) {
 	return $account;
 }
 
-$_GLOBALS['session_cookie'] = "pb_token";
+$session_cookie = "pb_token";
 $ID_cookie = "pb_uid";
 ?>

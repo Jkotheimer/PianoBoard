@@ -1,14 +1,13 @@
 <?php
-$ROOT = $_SERVER['DOCUMENT_ROOT'];
-
-// Get the database connection and the secret pepper
-require "$ROOT/resources/php/database.phpsecret";
-require "$ROOT/resources/php/pepper.phpsecret";
-require "$ROOT/resources/php/resources.php";
 
 // Check for cookie tokens, authenticate it, and retrieve the account info if authorized
 function auth_token() {
-	echo $_GLOBALS['session_cookie'];
+	$ROOT = $_SERVER['DOCUMENT_ROOT'];
+
+	// Get the database connection and the resources
+	require "$ROOT/resources/php/database.phpsecret";
+	require "$ROOT/resources/php/resources.php";
+	
 	if(isset($_COOKIE[$session_cookie]) && isset($_COOKIE[$ID_cookie])) {
 		
 		// Attempt to grab the expiration date of the token from the set cookies
