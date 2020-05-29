@@ -15,9 +15,9 @@ module.exports = function(req, res) {
 	if(!validator.validate(email)) {
 		// If the request was sent from a web browser, send a redirect back to the create account page
 		if(platform == 'web') {
-			res.redirect(`/create_account/
-				?email_notification=Invalid email address
-				&email=${email}`);
+			res.redirect('/create_account/' +
+				'?email_notification=Invalid email address' +
+				`&email=${email}`);
 		}
 		// If the request came from anywhere else, send back an error code with a json message
 		else {
@@ -26,9 +26,9 @@ module.exports = function(req, res) {
 	}
 	if(password.length < 8) {
 		if(platform == 'web') {
-			res.redirect(`/create_account/
-				?password_notification=Password too weak
-				&email=${email}`);
+			res.redirect('/create_account/' +
+				'?password_notification=Password too weak' +
+				`&email=${email}`);
 		}
 		else {
 			res.status(400).json({message: 'Password too weak'});
