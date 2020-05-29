@@ -22,20 +22,23 @@ module.exports = function(req, res) {
 		}
 	}
 
+	console.log(login);
 	mysql.query(`SELECT AccountId, Salt, Password FROM Account WHERE Email='${login}' OR Username='${login}'`,
-		function(err, data) {
+		function(err, data, fields) {
 			if(err) {
 				console.log(err);
 				// No account exists with that login
 				if(platform == 'web') {
-					res.redirect('/?login_notification=Email or Username not found');
+					console.log('not found before');
+					res.redirect(`/?login_notification=Email or Username not found&login=${login}`);
 				} else {
-					res.status(400).json({message: 'Email or Username not found'});
+					res.status(403).json({message: 'Email or Username not found'});
 				}
 			}
-			if(data) {
+			if(data.size != 0) {
 				data = data[0];
 				if(crypto.verify_password(password, data.Salt, data.Password)) {
+					console.log('password authentication successful');
 					// The user is authenticated - set token cookies and return
 					const token = crypto.gen_token();
 					const exp_date = req.app.locals.resources.new_date(req.app.locals.token_exp);
@@ -48,16 +51,26 @@ module.exports = function(req, res) {
 					);
 					res.cookie('pb_token', token, {domain: req.app.locals.domain, path: '/', maxAge: req.app.locals.token_exp});
 					res.cookie('pb_uid', data.AccountId, {domain: req.app.locals.domain, path: '/', maxAge: req.app.locals.token_exp});
+					if(platform == 'web') {
+						res.redirect('/');
+					} else {
+						res.status(200).json({message: 'Successfully logged in!'});
+					}
 				} else {
 					// The password authentication failed
 					if(platform == 'web') {
 						res.redirect(`/?password_notification=Incorrect password&login=${login}`);
 					} else {
-						res.status(400).json({message: 'Incorrect password'});
+						res.status(403).json({message: 'Incorrect password'});
 					}
 				}
 			} else {
-				res.json({ofucc: 'poop'});
+				// There was no error but nothing returned from the query
+				if(platform == 'web') {
+					res.redirect(`/?login_notification=Email or Username not found&login=${login}`);
+				} else {
+					res.status(403).json({message: 'Email or Username not found'});
+				}
 			}
 		} // End query callback
 	);
