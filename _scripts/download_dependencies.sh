@@ -35,7 +35,7 @@ install_dependency ${DEP_DIR}/httpd-* \
 download_dependency php https://www.php.net/distributions/php-7.4.4.tar.gz
 extract_dependency php ${DEP_DIR}
 install_dependency ${DEP_DIR}/php-* \
-	"--prefix=${DEP_DIR}/php/ --with-apxs2=${HTTPD_HOME}/bin/apxs --with-mysqli" \
+	"--prefix=${DEP_DIR}/php/ --with-apxs2=${HTTPD_HOME}/bin/apxs --with-mysqli --with-curl" \
 	$(cp php.ini-development /usr/local/lib/php.ini 2> /dev/null; cd ${ROOT_DIR})
 
 printf "${T}Configuring PHP with HTTPD..."
