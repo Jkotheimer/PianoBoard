@@ -1,9 +1,15 @@
 <?
 $ROOT = $_SERVER['DOCUMENT_ROOT'];
 require "$ROOT/resources/php/auth.php";
-
-if(auth_token()) $page = "dashboard";
-else $page = "login";
+$page = 'login';
+if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login']) && isset($_POST['password'])) {
+	// Attempt to login
+	$result = login($_POST['login'], $_POST['password']);
+	if($result['status'] == 200) $page = 'dashboard';
+	else if($result['status'] == 404) $_GLOBALS['login_notification'] = $result['body']->message;
+	else if($result['status'] == 403) $_GLOBALS['password_notification'] = $result['body']->message;
+}
+else if(auth_token()) $page = 'dashboard';
 
 ob_start();
 ?>
@@ -12,7 +18,9 @@ ob_start();
 	<? require "$ROOT/resources/php/head.php"; ?>
 	<body>
 
-		<? require "$ROOT/resources/php/$page.php";?>
+		<?php
+		require "$ROOT/resources/php/$page.php";
+		?>
 
 		<div class="info">
 			Developed and maintained by Jack Kotheimer
