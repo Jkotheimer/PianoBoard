@@ -1,4 +1,10 @@
 <?php
+$session_cookie = "pb_token";
+$id_cookie = "pb_uid";
+$expiration_date = time() + (86400 * 30);
+$domain = 'localhost';
+$API = 'http://localhost/api';
+
 // Generate a unique username based on the given unique email address
 function gen_username($email) {
 
@@ -66,6 +72,59 @@ function gen_account($AccountID) {
 	return $account;
 }
 
-$session_cookie = "pb_token";
-$ID_cookie = "pb_uid";
+function xhr($method, $url, $data = false) {
+
+    $curl = curl_init();
+
+    switch ($method) {
+
+        case "POST":
+            curl_setopt($curl, CURLOPT_POST, 1);
+            if ($data)
+                curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+            break;
+
+        case "PUT":
+            curl_setopt($curl, CURLOPT_PUT, 1);
+            break;
+
+        default:
+            if ($data)
+                $url = sprintf("%s?%s", $url, http_build_query(json_encode($data)));
+    }
+
+    // Optional Authentication:
+    curl_setopt($curl, CURLOPT_URL, $url);
+	curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($curl, CURLOPT_HEADER, true);
+	curl_setopt($curl, CURLOPT_VERBOSE, true);
+
+    $response = curl_exec($curl);
+	$header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+	$header = substr($response, 0, $header_size);
+	$body = json_decode(substr($response, $header_size));
+
+	$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+	$cookies = extract_cookies($header);
+	$uid = null;
+	if(isset($cookies[$id_cookie])) $uid = $cookies[$id_cookie];
+
+    curl_close($curl);
+
+    return array('body' => $body, 'status' => $status, 'cookies' => $cookies, 'uid' => $uid);
+}
+
+function extract_cookies($headers) {
+
+	preg_match_all('/^Set-Cookie:\s*([^;]*)/mi', $headers, $matches);
+	
+	$cookies = array();
+	foreach($matches[1] as $item) {
+    	parse_str($item, $cookie);
+    	$cookies = array_merge($cookies, $cookie);
+	}
+
+	return $cookies;
+}
 ?>

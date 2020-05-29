@@ -1,6 +1,10 @@
+<?php
+$ROOT = $_SERVER['DOCUMENT_ROOT'];
+require_once "$ROOT/resources/php/resources.php";
+$account = gen_account($GLOBALS['uid']);
+?>
 <style>
 	<?
-	$ROOT = $_SERVER['DOCUMENT_ROOT'];
 	echo fread(fopen("$ROOT/resources/css/form_styles.css", 'r'),
 		filesize("$ROOT/resources/css/form_styles.css"));
 	echo fread(fopen("$ROOT/landing_page.css", "r"),

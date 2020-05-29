@@ -8,25 +8,24 @@
 	?>
 </style>
 <div id="login_panel">
-	<form class="panel form_panel login_panel" method="POST" action="/api/auth/login">
+	<form class="panel form_panel login_panel" method="POST" action="">
 		<div class="login_logo">
 			<img src="/images/logo.png"/>
 		</div>
-		<input type="hidden" name="platform" value="web"/>
 		<div class="form_area login_form_area">
 			<div class="form_section login_form_section">
 				<div class="form_label">Email or Username</div>
 				<input type="text" id="login" name="login" class="form_input" placeholder="Enter your Email or Username"
 					autocapitalize="off" spellcheck="false" autocorrect="off" required
 					<?php
-					if(isset($_GET['login'])) echo 'value="' . $_GET['login'] . '"';
+					if(isset($_POST['login'])) echo 'value="' . $_POST['login'] . '"';
 					?>
 				/>
 				<?php
 				# If an email notification was sent in the parameters, display it here
-				if(isset($_GET['login_notification'])) {
+				if(isset($_GLOBALS['login_notification'])) {
 					echo '<div id="login_notification" class="notification error">' . 
-						$_GET['login_notification'] . '</div>';
+						$_GLOBALS['login_notification'] . '</div>';
 				}
 				?>
 			</div>
@@ -36,9 +35,9 @@
 					autocomplete="new-password" required/>
 				<?php
 				# If an email notification was sent in the parameters, display it here
-				if(isset($_GET['password_notification'])) {
+				if(isset($_GLOBALS['password_notification'])) {
 					echo '<div id="password_notification" class="notification error">' . 
-						$_GET['password_notification'] . '</div>';
+						$_GLOBALS['password_notification'] . '</div>';
 				}
 				?>
 			</div>
