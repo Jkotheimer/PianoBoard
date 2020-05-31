@@ -1,4 +1,24 @@
 <?php
+$ROOT = $_SERVER['DOCUMENT_ROOT'];
+
+// If a post request was made, call the registration API and redirect if successful
+if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) 
+	&& isset($_POST['password']) && isset($_POST['confirm_password'])) {
+	require_once "$ROOT/resources/php/resources.php";
+	$body = array('email' => $_POST['email'], 'password' => $_POST['password'], 
+		'confirm_password' => $_POST['confirm_password']);
+	$response = xhr('POST', "$API/auth/register", $body);
+
+	if($response['status'] == 201) {
+		setcookie($session_cookie, $response['cookies'][$session_cookie], $expiration_date, '/', $domain);
+		setcookie($id_cookie, $response['cookies'][$id_cookie], $expiration_date, '/', $domain);
+		header("Location: $host");
+		exit;
+	}
+	http_response_code($response['status']);
+	$notifications = $response['body']->message;
+}
+
 ob_start();
 ?>
 <!DOCTYPE html>
@@ -10,7 +30,6 @@ ob_start();
 	<body>
 		<style>
 			<?php
-			$ROOT = $_SERVER['DOCUMENT_ROOT'];
 			echo fread(fopen($ROOT . "/resources/css/form_styles.css", 'r'),
 				filesize($ROOT . "/resources/css/form_styles.css"));
 			echo fread(fopen($ROOT . "/create_account/create_account.css", "r"),
@@ -24,23 +43,23 @@ ob_start();
 		<div class="panel form_panel">
 			<h>Create An Account</h>
 	
-			<form class="form_area" method="POST" action="/api/auth/register">
-				<input type="hidden" id="platform" name="platform" value="web"/>
+			<form class="form_area" method="POST" action="">
 				<div class="form_section">
 					<div class="form_label">Email</div>
 					<input type="text" id="email" name="email" class="form_input" placeholder="your.email@something.com"
 						autocapitalize="off" spellcheck="false" autocorrect="off" required
 						<?php
 						# If an email address was passed in the parameters, set it as the value of this input
-						if(isset($_GET['email'])) echo 'value="' . $_GET['email'] . '"';
+						if(isset($_POST['email'])) 
+							echo 'value="' . $_POST['email'] . '"';
 						?>
 					/>
 
 					<?php
 					# If an email notification was sent in the parameters, display it here
-					if(isset($_GET['email_notification'])) {
+					if(isset($notifications->email_notification)) {
 						echo '<div id="email_notification" class="notification error">' . 
-							$_GET['email_notification'] . '</div>';
+							$notifications->email_notification . '</div>';
 					}
 					?>
 				</div>
@@ -53,9 +72,9 @@ ob_start();
 
 					<?php
 					# If a password notification was sent in the parameters, display it here
-					if(isset($_GET['password_notification'])) {
+					if(isset($notifications->password_notification)) {
 						echo '<div id="password_notification" class="notification error">' . 
-							$_GET['password_notification'] . '</div>';
+							$notifications->password_notification . '</div>';
 					}
 					?>
 				</div>
@@ -68,9 +87,9 @@ ob_start();
 
 					<?php
 					# If a password confirmation notification was sent in the parameters, display it here
-					if(isset($_GET['confirm_password_notification'])) {
+					if(isset($notifications->confirm_password_notification)) {
 						echo '<div id="confirm_password_notification" class="notification error">' . 
-							$_GET['confirm_password_notification'] . '</div>';
+							$notifications->confirm_password_notification . '</div>';
 					}
 					?>
 				</div>
