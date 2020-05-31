@@ -3,25 +3,31 @@ $session_cookie = "pb_token";
 $id_cookie = "pb_uid";
 $expiration_date = time() + (86400 * 30);
 $domain = 'localhost';
+$host = 'http://localhost';
 $API = 'http://localhost/api';
 
 // Generate a unique username based on the given unique email address
 function gen_username($email) {
+	require_once 'database.phpsecret';
 
 	// Get the string before the @ sign in the email
 	$at_pos = strpos($email, '@');
 	$username = substr($email, 0, $at_pos);
 
-	// Sum up the ascii values of each character after the @ sign
-	$postfix = 0;
-	$arr = str_split(substr($email, $at_pos, -1));
-	foreach ($arr as $char) {$postfix += ord($char);}
-	
-	// Divide that value by the length of the email, round it down, and stringify it
-	$postfix = strval(round($postfix/strlen($email)));
+	return username_recursion($username, 0);
+}
 
-	// Append the postfix to the username and return the unique username
-	return ($username . $postfix);
+function username_recursion($prefix, $tag) {
+	$username = $prefix . $tag;
+	mysql.query("SELECT AccountID FROM Account WHERE Username = $username;",
+		function(err, data) {
+			if(err || !data) {
+				// Nothing exists with this username -  it is unique
+				return $username;
+			} else return username_recursion($prefix, $tag + 1);
+		}
+	);
+	
 }
 
 // Search for accounts based on the provided query
@@ -49,9 +55,10 @@ function gen_account_vague($account) {
 function gen_account($AccountID) {
 	require "database.phpsecret";
 	// First, get the generic account information
-	$query = "SELECT Email, Username, Creation_date, Is_private 
+	$query = "SELECT AccountID, Email, Username, Creation_date, Is_private 
 					FROM Account WHERE AccountID='$AccountID';";
 	$account = $database->query($query)->fetch_object();
+	if(!isset($account)) return null;
 	
 	// Next, get the favorite genres and artists
 	$query = "SELECT Artist from Favorite_artists WHERE AccountID='$AccountID';";
@@ -93,9 +100,12 @@ function xhr($method, $url, $data = false) {
                 $url = sprintf("%s?%s", $url, http_build_query(json_encode($data)));
     }
 
-    // Optional Authentication:
+	// Optional Authentication: 
+	$token = $_COOKIE['pb_token'];
+	$uid = $_COOKIE['pb_uid'];
+	$headers = ['Content-Type:application/json', "Cookie:pb_token=$token; pb_uid=$uid"];
     curl_setopt($curl, CURLOPT_URL, $url);
-	curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+	curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($curl, CURLOPT_HEADER, true);
 	curl_setopt($curl, CURLOPT_VERBOSE, true);
