@@ -2,14 +2,7 @@
 $ROOT = $_SERVER['DOCUMENT_ROOT'];
 require "$ROOT/resources/php/auth.php";
 $page = 'login';
-if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login']) && isset($_POST['password'])) {
-	// Attempt to login
-	$result = login($_POST['login'], $_POST['password']);
-	if($result['status'] == 200) $page = 'dashboard';
-	else if($result['status'] == 404) $_GLOBALS['login_notification'] = $result['body']->message;
-	else if($result['status'] == 403) $_GLOBALS['password_notification'] = $result['body']->message;
-}
-else if(auth_token()) $page = 'dashboard';
+if(isset($user)) $page = 'dashboard';
 
 ob_start();
 ?>
