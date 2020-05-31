@@ -223,6 +223,9 @@ input:focus { outline: none; }
 	width: 32%;
 	text-align: center;
 }
+.project_attribute.long {
+	width: 100%;
+}
 
 /* LOGIN PAGE */
 .login_panel {
