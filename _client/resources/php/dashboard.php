@@ -1,10 +1,9 @@
 <?php
 $ROOT = $_SERVER['DOCUMENT_ROOT'];
-require_once "$ROOT/resources/php/resources.php";
-$account = gen_account($GLOBALS['uid']);
+require_once "auth.php";
 ?>
 <style>
-	<?
+	<?php
 	echo fread(fopen("$ROOT/resources/css/form_styles.css", 'r'),
 		filesize("$ROOT/resources/css/form_styles.css"));
 	echo fread(fopen("$ROOT/landing_page.css", "r"),
@@ -12,8 +11,7 @@ $account = gen_account($GLOBALS['uid']);
 	?>
 </style>
 <div id="nav_bar">
-	<? echo fread(fopen("$ROOT/resources/html/navbar.html", 'r'),
-			filesize("$ROOT/resources/html/navbar.html")); ?>
+	<? require "navbar.php"; ?>
 </div>
 <div class="panel left_panel">
 
@@ -23,7 +21,7 @@ $account = gen_account($GLOBALS['uid']);
 	<div id="info">
 
 		<div class="info_container">
-			<input type="text" id="username" value="<? echo $account->Username; ?>"/>
+			<input type="text" id="username" value="<? echo $user->Username; ?>"/>
 			<div id="username_notification" class="notification"></div>
 		</div>
 
@@ -33,8 +31,12 @@ $account = gen_account($GLOBALS['uid']);
 				<!--The genres get listed here in the following form: -->
 				<!--span class='favorite_element'> Genre </span-->
 				<?
-				foreach($account->Genres as $genre) {
-					echo "<span class='favorite_element'>$genre</span>";
+				if(empty($user->Genres)) {
+					echo "You haven't added any of your favorite genres yet";
+				} else {
+					foreach($user->Genres as $genre) {
+						echo "<span class='favorite_element'>$genre</span>";
+					}
 				}
 				?>
 			</div>
@@ -51,8 +53,12 @@ $account = gen_account($GLOBALS['uid']);
 				<!--The artists get listed here in the following form: -->
 				<!--span class='favorite_element'> Artist </span-->
 				<?
-				foreach($account->Artists as $artist) {
-					echo "<span class='favorite_element'>$artist</span>";
+				if(empty($user->Artists)) {
+					echo "You haven't added any of your favorite artists yet";
+				} else {
+					foreach($user->Artists as $artist) {
+						echo "<span class='favorite_element'>$artist</span>";
+					}
 				}
 				?>
 			</div>
@@ -65,25 +71,31 @@ $account = gen_account($GLOBALS['uid']);
 
 	</div>
 
-	<a id="sign_out" href="/api/auth/logout/?platform=web">Sign out</a>
+	<a id="sign_out" href="/logout/">Sign out</a>
 </div>
 
 <div class="panel right_panel">
 	<h class="panel_header">Your Projects</h>
 	<div id="project_area">
-		<div class="project_label">
-			<span class="project_attribute">Project ID</span>
-			<span class="project_attribute">Name</span>
-			<span class="project_attribute">Genre</span>
-		</div>
-	<?
-	foreach($account->Projects as $project) {
-		echo "\n\t\t<div class='project'>\n" .
-				"\t\t\t<span class='project_attribute'>" . $project['ProjectID'] . "</span>\n" .
-				"\t\t\t<span class='project_attribute'>" . $project['Name'] . "</span>\n" .
-				"\t\t\t<span class='project_attribute'>" . $project['Genre'] . "</span>\n" .
-			"\t\t</div>\n";
-	}
-	?>
+		<?php
+		if(empty($user->Projects)) {
+			echo "<div class='project_label'>
+					<span class='project_attribute long'>You haven't started any projects yet</span>
+				<div>";
+		} else {
+			echo "<div class='project_label'>
+					<span class='project_attribute'>Project ID</span>
+					<span class='project_attribute'>Name</span>
+					<span class='project_attribute'>Genre</span>
+				</div>";
+			foreach($user->Projects as $project) {
+				echo "<div class='project'>
+						<span class='project_attribute'>" . $project['ProjectID'] . "</span>
+						<span class='project_attribute'>" . $project['Name'] . "</span>
+						<span class='project_attribute'>" . $project['Genre'] . "</span>
+					</div>";
+			}
+		}
+		?>
 	</div>
 </div>
