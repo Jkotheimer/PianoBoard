@@ -5,7 +5,8 @@ const crypto = require('./auth.js');
 
 module.exports = function(req, res) {
 	
-	const mysql = require(`${req.app.locals.root}/sql_connect.js`);
+	const local = req.app.locals;
+	const mysql = require(`${local.root}/sql_connect.js`);
 	
 	const email = req.body.email;
 	const password = req.body.password;
@@ -27,9 +28,10 @@ module.exports = function(req, res) {
 
 	// ALL IS WELL - ATTEMPT TO CREATE THE ACCOUNT
 	async function create_account(_email, _password) {
-		const username = req.app.locals.resources.gen_username(_email);
+		const username = await local.resources.gen_username(_email);
+		console.log(username);
 		const hashes = crypto.hash_password(_password)
-		const timestamp = req.app.locals.resources.new_date(0);
+		const timestamp = local.resources.new_date(0);
 		mysql.query(`INSERT INTO Account (Email, Username, Password, Salt, Creation_date) VALUES 
 			('${_email}', '${username}', '${hashes.hash}', '${hashes.salt}', '${timestamp}');`, 
 			function(err, data) {
@@ -41,11 +43,11 @@ module.exports = function(req, res) {
 				else if(data) {
 					const token = crypto.gen_token();
 					// Token expires a month from today
-					const exp_date = req.app.locals.resources.new_date(req.app.locals.token_exp);
+					const exp_date = local.resources.new_date(local.token_exp);
 					const account_id = data.insertId;
 					set_token(account_id, token, exp_date);
-					res.cookie('pb_token', token, {domain: req.app.locals.domain, path: '/', maxAge: req.app.locals.token_exp});
-					res.cookie('pb_uid', account_id, {domain: req.app.locals.domain, path: '/', maxAge: req.app.locals.token_exp});
+					res.cookie('pb_token', token, {domain: local.domain, path: '/', maxAge: local.token_exp});
+					res.cookie('pb_uid', account_id, {domain: local.domain, path: '/', maxAge: local.token_exp});
 					body.message =  'Account successfully created!';
 					res.status(201).json(body);
 					
