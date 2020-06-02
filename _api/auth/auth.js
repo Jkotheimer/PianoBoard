@@ -47,8 +47,34 @@ function gen_token() {
 	return gen_salt(64);
 }
 
+function check_token(err, data) {
+	if(err || data.length == 0) return null;
+	data = data[0];
+
+	// Check if the token is still valid
+	const exp_date = new Date(data.Expiration_date);
+	const now = new Date(Date.now());
+	if(exp_date >= now) return data.AccountID;
+	return null;
+}
+
+async function current_user(req) {
+	const mysql = require(`${req.app.locals.root}/sql_connect.js`);
+	var uid = req.cookies.pb_uid;
+	const token = req.cookies.pb_token;
+
+	var promise = new Promise((resolve, reject) => {
+		mysql.query(`SELECT AccountID, Expiration_date FROM Access_token WHERE AccountID = ${uid} AND Token = '${token}';`,
+			(err, data) => resolve(check_token(err,data))
+		);
+	});
+	uid = await promise;
+	return uid;
+}
+
 module.exports = {
 	gen_token: gen_token,
 	hash_password: hash_password,
-	verify_password: verify_password
+	verify_password: verify_password,
+	current_user: current_user
 }
