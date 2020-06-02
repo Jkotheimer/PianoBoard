@@ -6,30 +6,6 @@ $domain = 'localhost';
 $host = 'http://localhost';
 $API = 'http://localhost/api';
 
-// Generate a unique username based on the given unique email address
-function gen_username($email) {
-	require_once 'database.phpsecret';
-
-	// Get the string before the @ sign in the email
-	$at_pos = strpos($email, '@');
-	$username = substr($email, 0, $at_pos);
-
-	return username_recursion($username, 0);
-}
-
-function username_recursion($prefix, $tag) {
-	$username = $prefix . $tag;
-	mysql.query("SELECT AccountID FROM Account WHERE Username = $username;",
-		function(err, data) {
-			if(err || !data) {
-				// Nothing exists with this username -  it is unique
-				return $username;
-			} else return username_recursion($prefix, $tag + 1);
-		}
-	);
-	
-}
-
 // Search for accounts based on the provided query
 function search_account($q) {
 	require "database.phpsecret";
@@ -42,7 +18,7 @@ function search_account($q) {
 }
 
 // Get an account ID from the provided vague account attribute and call gen_account with it
-function gen_account_vague($account) {
+function get_account_vague($account) {
 	require "database.phpsecret";
 	$query = "SELECT AccountID FROM Account WHERE
 				AccountID='$account' OR Username='$account' OR Email='$account';";
@@ -52,7 +28,7 @@ function gen_account_vague($account) {
 }
 
 // Generate an account object based on the provided AccountID
-function gen_account($AccountID) {
+function get_account($AccountID) {
 	require "database.phpsecret";
 	// First, get the generic account information
 	$query = "SELECT AccountID, Email, Username, Creation_date, Is_private 
@@ -71,6 +47,7 @@ function gen_account($AccountID) {
 	$account->Genres = [];
 	while($row = $result->fetch_array()) { $account->Genres[] = $row[0]; }
 
+	// Finally, get the name, genre, and id of all projects owned by the user
 	$query = "SELECT ProjectID, Name, Genre FROM Project WHERE AccountID='$AccountID';";
 	$result = $database->query($query);
 	$account->Projects = [];
