@@ -9,9 +9,7 @@ var gen_username_recursive = function(err, data, username, num) {
 	if(err || !data) return;
 	var username_concat = num == 0 ? username : `${username}${num}`;
 	data.forEach((item, index) => {
-		console.log(`${item.Username} : ${username_concat}`);
 		if(item.Username == username_concat) {
-			console.log(`Restarting: ${username_concat}`);
 			username_concat = gen_username_recursive(err, data, username,  ++num);
 			return;
 		}
@@ -35,7 +33,23 @@ var new_date = function(offset) {
 	return new Date(Date.now() + offset).toISOString().slice(0, 19).replace('T', ' ');
 }
 
+function comp(err, data, uid) {
+	if(err || data.length == 0) return -1;
+	return uid - data[0].AccountID;
+}
+
+async function user_compare(uid, login) {
+	var promise = new Promise((resolve, reject) => {
+		mysql.query(`SELECT AccountID FROM Account WHERE AccountID='${login}' OR Username='${login}' OR Email='${login}'`,
+			(err, data) => resolve(comp(err, data, uid))
+		);
+	})
+	var result = await promise;
+	return result;
+}
+
 module.exports = {
 	gen_username: gen_username,
 	new_date: new_date,
+	user_compare: user_compare
 }
