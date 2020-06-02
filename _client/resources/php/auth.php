@@ -22,7 +22,7 @@ function auth_token() {
 	
 		// If the query returns an actual value, load the dashboard
 		if($Expiration_date && time() < $Expiration_date) {
-			return gen_account($AccountID);
+			return get_account($AccountID);
 		} 
 	}
 	return null;
@@ -40,17 +40,17 @@ function login($login, $password) {
 	if($response['status'] == 200) {
 		setcookie($session_cookie, $response['cookies'][$session_cookie], $expiration_date, '/', $domain);
 		setcookie($id_cookie, $response['cookies'][$id_cookie], $expiration_date, '/', $domain);
-		return gen_account($response['cookies'][$id_cookie]);
+		return get_account($response['cookies'][$id_cookie]);
 	}
 	else if($response['status'] == 404) $_GLOBALS['login_notification'] = $result['body']->message;
 	else if($response['status'] == 403) $_GLOBALS['password_notification'] = $result['body']->message;
 	return null;
 }
 
-$user = null;
+$current_user = null;
 if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login']) && isset($_POST['password'])) {
 	// Attempt to login
-	$user = login($_POST['login'], $_POST['password']);
+	$current_user = login($_POST['login'], $_POST['password']);
 }
-if(!isset($user)) $user = auth_token();
+if(!isset($current_user)) $current_user = auth_token();
 ?>
