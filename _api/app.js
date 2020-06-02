@@ -43,42 +43,42 @@ app.get('/auth/logout', require('./auth/logout.js'));
  * ____________________________________________________________________________
  */
 
-app.get('/:user', require('./user/read.js'));
-app.put('/:user', require('./user/update.js'));
-app.delete('/:user', require('./user/delete.js'));
+app.get('/users/:user', require('./user/read.js'));
+app.put('/users/:user', require('./user/update.js'));
+app.delete('/users/:user', require('./user/delete.js'));
 
 /**
  * PROJECT CRUD
  * ____________________________________________________________________________
  */
 
-app.post('/:user/projects', require('./user/projects/create.js'));
-app.get('/:user/projects/:project', require('./user/projects/read.js'));
-app.put('/:user/projects/:project', require('./user/projects/update.js'));
-app.delete('/:user/projects/:project', require('./user/projects/delete.js'));
+app.post('/users/:user/projects', require('./user/projects/create.js'));
+app.get('/users/:user/projects/:project', require('./user/projects/read.js'));
+app.put('/users/:user/projects/:project', require('./user/projects/update.js'));
+app.delete('/users/:user/projects/:project', require('./user/projects/delete.js'));
 
 /**
  * TRACK CRUD
  * ____________________________________________________________________________
  */
 
-app.post('/:user/projects/:project/tracks', require('./user/projects/tracks/create.js'));
-app.get('/:user/projects/:project/tracks/:track', require('./user/projects/tracks/read.js'));
-app.put('/:user/projects/:project/tracks/:track', require('./user/projects/tracks/update.js'));
-app.delete('/:user/projects/:project/tracks/:track', require('./user/projects/tracks/delete.js'));
+app.post('/users/:user/projects/:project/tracks', require('./user/projects/tracks/create.js'));
+app.get('/users/:user/projects/:project/tracks/:track', require('./user/projects/tracks/read.js'));
+app.put('/users/:user/projects/:project/tracks/:track', require('./user/projects/tracks/update.js'));
+app.delete('/users/:user/projects/:project/tracks/:track', require('./user/projects/tracks/delete.js'));
 
 /**
  * RECORDING CRUD
  * ____________________________________________________________________________
  */
 
-app.post('/:user/projects/:project/tracks/:track/recordings',
+app.post('/users/:user/projects/:project/tracks/:track/recordings',
 	require('./user/projects/tracks/recordings/create.js'));
-app.get('/:user/projects/:project/tracks/:track/recordings/:recording',
+app.get('/users/:user/projects/:project/tracks/:track/recordings/:recording',
 	require('./user/projects/tracks/recordings/read.js'));
-app.put('/:user/projects/:project/tracks/:track/recordings/:recording',
+app.put('/users/:user/projects/:project/tracks/:track/recordings/:recording',
 	require('./user/projects/tracks/recordings/update.js'));
-app.delete('/:user/projects/:project/tracks/:track/recordings/:recording',
+app.delete('/users/:user/projects/:project/tracks/:track/recordings/:recording',
 	require('./user/projects/tracks/recordings/delete.js'));
 
 /**
@@ -86,13 +86,13 @@ app.delete('/:user/projects/:project/tracks/:track/recordings/:recording',
  * ____________________________________________________________________________
  */
 
-app.post('/:user/projects/:project/tracks/:track/recordings/:recording/notes',
+app.post('/users/:user/projects/:project/tracks/:track/recordings/:recording/notes',
 	require('./user/projects/tracks/recordings/notes/create.js'));
-app.get('/:user/projects/:project/tracks/:track/recordings/:recording/notes/:note',
+app.get('/users/:user/projects/:project/tracks/:track/recordings/:recording/notes/:note',
 	require('./user/projects/tracks/recordings/notes/read.js'));
-app.put('/:user/projects/:project/tracks/:track/recordings/:recording/notes/:note',
+app.put('/users/:user/projects/:project/tracks/:track/recordings/:recording/notes/:note',
 	require('./user/projects/tracks/recordings/notes/update.js'));
-app.delete('/:user/projects/:project/tracks/:track/recordings/:recording/notes/:note',
+app.delete('/users/:user/projects/:project/tracks/:track/recordings/:recording/notes/:note',
 	require('./user/projects/tracks/recordings/notes/delete.js'));
 
 
