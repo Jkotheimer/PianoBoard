@@ -1,6 +1,12 @@
 <?php
 $ROOT = $_SERVER['DOCUMENT_ROOT'];
 require_once "auth.php";
+require_once "resources.php";
+if(!isset($current_user)) {
+	// Something is seriously wrong - redirect home
+	header("Location: $domain");
+	exit();
+}
 ?>
 <style>
 	<?php
@@ -10,6 +16,14 @@ require_once "auth.php";
 		filesize("$ROOT/landing_page.css"));
 	?>
 </style>
+<script>
+	<?php
+	echo fread(fopen("$ROOT/resources/js/resources.js", "r"),
+		filesize("$ROOT/resources/js/resources.js"));
+	echo fread(fopen("$ROOT/resources/js/api.js", "r"),
+		filesize("$ROOT/resources/js/api.js"));
+	?>
+</script>
 <div id="nav_bar">
 	<? require "navbar.php"; ?>
 </div>
@@ -21,7 +35,7 @@ require_once "auth.php";
 	<div id="info">
 
 		<div class="info_container">
-			<input type="text" id="username" value="<? echo $user->Username; ?>"/>
+			<input type="text" id="username" onkeypress="input_event(event, this, update_user);" value="<? echo $current_user->Username; ?>"/>
 			<div id="username_notification" class="notification"></div>
 		</div>
 
@@ -31,16 +45,16 @@ require_once "auth.php";
 				<!--The genres get listed here in the following form: -->
 				<!--span class='favorite_element'> Genre </span-->
 				<?
-				if(empty($user->Genres)) {
-					echo "You haven't added any of your favorite genres yet";
+				if(empty($current_user->Genres)) {
+					echo "<span class='message white'>You haven't added any of your favorite genres yet</span>";
 				} else {
-					foreach($user->Genres as $genre) {
+					foreach($current_user->Genres as $genre) {
 						echo "<span class='favorite_element'>$genre</span>";
 					}
 				}
 				?>
 			</div>
-			<input type="text" id="favoriteGenres" class="add_favorite" placeholder="Add more favorite genres"/>
+			<input type="text" id="favorite_genres" class="add_favorite" onkeypress="input_event(event, this, update_user);" placeholder="Add more favorite genres"/>
 			<div id="genre_search">
 				<!--As the user types in the above input bar, this populates with API search results-->
 			</div>
@@ -53,20 +67,20 @@ require_once "auth.php";
 				<!--The artists get listed here in the following form: -->
 				<!--span class='favorite_element'> Artist </span-->
 				<?
-				if(empty($user->Artists)) {
-					echo "You haven't added any of your favorite artists yet";
+				if(empty($current_user->Artists)) {
+					echo "<span class='message white'>You haven't added any of your favorite artists yet</span>";
 				} else {
-					foreach($user->Artists as $artist) {
+					foreach($current_user->Artists as $artist) {
 						echo "<span class='favorite_element'>$artist</span>";
 					}
 				}
 				?>
 			</div>
-			<input type="text" id="favoriteArtists" class="add_favorite" placeholder="Add more favorite artists"/>
+			<input type="text" id="favorite_artists" class="add_favorite" onkeypress="input_event(event, this, update_user);" placeholder="Add more favorite artists"/>
 			<div id="artist_search">
 				<!--As the user types in the above input bar, this populates with API search results-->
 			</div>
-			<div id="favoriteArtists_notification" class="notification"></div>
+			<div id="favorite_artists_notification" class="notification"></div>
 		</div>
 
 	</div>
@@ -78,9 +92,10 @@ require_once "auth.php";
 	<h class="panel_header">Your Projects</h>
 	<div id="project_area">
 		<?php
-		if(empty($user->Projects)) {
-			echo "<div class='project_label'>
+		if(empty($current_user->Projects)) {
+			echo "<div class='project_label center'>
 					<span class='project_attribute long'>You haven't started any projects yet</span>
+					<button class='round_button spaced' onclick='create_project()'>Create Your First Project</button>
 				<div>";
 		} else {
 			echo "<div class='project_label'>
@@ -88,7 +103,7 @@ require_once "auth.php";
 					<span class='project_attribute'>Name</span>
 					<span class='project_attribute'>Genre</span>
 				</div>";
-			foreach($user->Projects as $project) {
+			foreach($current_user->Projects as $project) {
 				echo "<div class='project'>
 						<span class='project_attribute'>" . $project['ProjectID'] . "</span>
 						<span class='project_attribute'>" . $project['Name'] . "</span>
