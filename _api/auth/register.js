@@ -29,7 +29,6 @@ module.exports = function(req, res) {
 	// ALL IS WELL - ATTEMPT TO CREATE THE ACCOUNT
 	async function create_account(_email, _password) {
 		const username = await local.resources.gen_username(_email);
-		console.log(username);
 		const hashes = crypto.hash_password(_password)
 		const timestamp = local.resources.new_date(0);
 		mysql.query(`INSERT INTO Account (Email, Username, Password, Salt, Creation_date) VALUES 
