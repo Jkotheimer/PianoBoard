@@ -4,68 +4,19 @@
 
 var xhr = undefined;
 const resources = {
-	"account"	: "pianoboard_account",
-	"token"		: "pianoboard_token",
-	"uid"		: "pianoboard_uid",
-	"api_root"	: "http://localhost/api",
-	"api_user"	: "http://localhost/api/users",
-	"api_auth"	: "http://localhost/api/authentication",
-	"templates"	: "http://localhost/resources/html"
+	"token"		: "pb_token",
+	"uid"		: "pb_uid",
+	"api"		: "http://localhost/api",
 }
 
 /**
  * ERROR HANDLING
  * ____________________________________________________________________________
  */
-var fade;
-function display_error(field_name, message) {
-	const err_element = document.getElementById(field_name + "_notification");
-	const input_element = document.getElementById(field_name);
-	clearInterval(fade);
-	err_element.style.opacity = 1;
-	err_element.className = "notification";
-	err_element.classList.add("error");
-	err_element.innerHTML = message;
-	var wait = function() {
-		remove_notification(field_name);
-		input_element.removeEventListener("keydown", wait);
-	};
-	input_element.addEventListener("keydown", wait);
-	focus_on(input_element);
-}
-
-function display_notification(type, field_name, message) {
-	clearInterval(fade);
-	const element = document.getElementById(field_name + "_notification");
-	element.style.opacity = 1;
-	element.className = "notification";
-	element.classList.add(type);
+function display_error(element, message) {
+	element = document.getElementById(`${element}_notification`);
+	element.classList.add('error');
 	element.innerHTML = message;
-}
-
-function fade_notification(field_name) {
-	var wait = 0;
-	fade = setInterval(function() {
-		wait++;
-		let element = document.getElementById(field_name + "_notification");
-		if(wait < 100) wait++;
-		else if(element.style.opacity > .03) {
-			element.style.opacity -= .03;
-		}
-		else {
-			element.className = "notification";
-			element.innerHTML = null;
-			element.style.opacity = 1;
-			clearInterval(fade);
-		}
-	}, 50);
-}
-
-function remove_notification(field_name) {
-	const element = document.getElementById(field_name + "_notification");
-	element.innerHTML = null;
-	element.className = "notification";
-
 }
 
 /**
@@ -82,9 +33,9 @@ function check_all_complete_inputs(parent) {
 	}
 }
 
-function check_complete_input(element, success_function, failure_function) {
-	var validator = validators[element.id] || validators["attribute"];
-	if(validator(element.value)) {
+function check_complete_input(element, value, success_function, failure_function) {
+	var validator = validators[element] || validators["attribute"];
+	if(validator(value)) {
 		if(success_function) success_function();
 		return true;
 	}
