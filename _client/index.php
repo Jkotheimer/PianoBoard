@@ -2,7 +2,7 @@
 $ROOT = $_SERVER['DOCUMENT_ROOT'];
 require "$ROOT/resources/php/auth.php";
 $page = 'login';
-if(isset($user)) $page = 'dashboard';
+if(isset($current_user)) $page = 'dashboard';
 
 ob_start();
 ?>
