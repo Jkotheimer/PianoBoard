@@ -7,7 +7,6 @@ module.exports = function(req, res) {
 
 	const mysql = require(`${req.app.locals.root}/sql_connect.js`);
 
-	console.log(req.body);
 	const login = req.body.login;
 	const password = req.body.password;
 	
@@ -18,7 +17,6 @@ module.exports = function(req, res) {
 		res.status(403).json({message: 'Password too weak'});
 	}
 
-	console.log(login);
 	mysql.query(`SELECT AccountId, Salt, Password FROM Account WHERE Email='${login}' OR Username='${login}'`,
 		function(err, data, fields) {
 			if(err) {
@@ -28,10 +26,10 @@ module.exports = function(req, res) {
 			if(data.length != 0) {
 				data = data[0];
 				if(crypto.verify_password(password, data.Salt, data.Password)) {
-					console.log('password authentication successful');
 					// The user is authenticated - set token cookies and return
 					const token = crypto.gen_token();
 					const exp_date = req.app.locals.resources.new_date(req.app.locals.token_exp);
+					// Delete any existing tokens for this user then insert the new one
 					mysql.query(`DELETE FROM Access_token WHERE AccountID=${data.AccountId};`,
 						(err, data) => {if(err) throw err}
 					);
