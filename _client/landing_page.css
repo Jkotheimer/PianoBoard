@@ -172,6 +172,7 @@ input:focus { outline: none; }
 	text-align: center;
 	background-color: transparent;
 	border: none;
+	color: white;
 }
 .add_favorite::placeholder {
 	color: var(--yellow);
@@ -180,6 +181,24 @@ input:focus { outline: none; }
 .add_favorite:focus {
 	background-color: var(--lightgrey);
 	cursor: text;
+}
+.round_button {
+	padding: 5px 20px;
+	font-size: 18px;
+	color: var(--grey);
+	background-color: var(--purple);
+	border: 1px solid var(--yellow);
+	cursor: pointer;
+	transition: .3s ease;
+}
+.round_button:hover {
+	border-radius: 10px;
+}
+.message {
+	
+}
+.message.white {
+	color: white;
 }
 #sign_out {
 	display: inline-block;
@@ -225,6 +244,12 @@ input:focus { outline: none; }
 }
 .project_attribute.long {
 	width: 100%;
+}
+.center {
+	text-align: center;
+}
+.spaced {
+	margin: 20px auto 0px;
 }
 
 /* LOGIN PAGE */
