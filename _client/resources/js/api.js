@@ -3,6 +3,19 @@ function input_event(event, element, submit) {
 
 }
 
+/* CREATE FUNCTIONS */
+async function create_project(data) {
+	if(data) api_call('POST', `/users/${user.Username}/projects`, data, () => window.location = '/studio/');
+	else {
+		var project_init = await get_html('/resources/html/project_init.html');
+		console.log(project_init);
+	}
+}
+
+/* READ FUNCTIONS */
+
+
+/* UPDATE FUNCTIONS */
 
 // Update the provided attribute with the given value
 function update_user(attribute, value) {
@@ -34,4 +47,16 @@ function api_call(method, path, data, callback) {
 	xhr.setRequestHeader("Content-type", "application/json");
 	xhr.onload = () => callback(xhr);
 	xhr.send(JSON.stringify(data));
+}
+
+async function get_html(path) {
+	var response = null;
+	const xhr = new XMLHttpRequest();
+	xhr.open('GET', `${resources.host}${path}`, true);
+	var promise = new Promise((resolve, reject) => {
+		xhr.onload = () => resolve(xhr.response);
+	});
+	xhr.send();
+	response = await promise;
+	return response;
 }

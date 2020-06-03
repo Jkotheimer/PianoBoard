@@ -7,6 +7,7 @@ const resources = {
 	"token"		: "pb_token",
 	"uid"		: "pb_uid",
 	"api"		: "http://localhost/api",
+	"host"		: "http://localhost"
 }
 
 /**
