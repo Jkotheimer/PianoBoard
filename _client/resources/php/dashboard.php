@@ -95,7 +95,7 @@ if(!isset($current_user)) {
 		if(empty($current_user->Projects)) {
 			echo "<div class='project_label center'>
 					<span class='project_attribute long'>You haven't started any projects yet</span>
-					<button class='round_button spaced' onclick='create_project()'>Create Your First Project</button>
+					<button class='round_button spaced' onclick='create_project(null)'>Create Your First Project</button>
 				<div>";
 		} else {
 			echo "<div class='project_label'>
