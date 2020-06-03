@@ -62,6 +62,9 @@ ProxyPassReverse	/api	http://localhost:8081
 <Directory \"${ROOT_DIR}/_client/resources\">
 	Require all denied
 </Directory>
+<Directory \"${ROOT_DIR}/_client/resources/html\">
+	Require all granted
+</Directory>
 RewriteEngine On
 RewriteCond %{DOCUMENT_ROOT}/\$1 !-f 
 RewriteCond %{DOCUMENT_ROOT}/\$1 !-d
