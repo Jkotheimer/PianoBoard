@@ -6,7 +6,7 @@
 function auth_token() {
 	// Get the database connection and the resources
 	require_once "database.phpsecret";
-	require_once "resources.php";
+	include_once "resources.php";
 
 	if(isset($_COOKIE[$session_cookie]) && isset($_COOKIE[$id_cookie])) {
 		
@@ -29,9 +29,7 @@ function auth_token() {
 }
 
 function login($login, $password) {
-	// Get the database connection and the resources
-	require_once "database.phpsecret";
-	require_once "resources.php";
+	include_once "resources.php";
 	
 	$body = array('login' => $login, 'password' => $password);
 	$response = xhr('POST', "$API/auth/login", $body);
