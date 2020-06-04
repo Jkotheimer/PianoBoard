@@ -40,62 +40,6 @@ input:focus { outline: none; }
 }
 
 /* DASHBOARD STYLES */
-/* NAVBAR */
-#nav_bar {
-	height: auto;
-}
-.nav_link {
-	float: right;
-	text-decoration: none;
-	color: black;
-	position: relative;
-	display: inline-block;
-	margin-left: 10px;
-	font-size: 16px;
-	padding: calc(var(--logo-height)/4);
-	border: 2px solid var(--grey);
-	border-radius: 30px;
-}
-.nav_link:hover { cursor: pointer; }
-.icon {
-	vertical-align: middle;
-	height: calc(var(--logo-height)/2);
-}
-.icon:hover { cursor: pointer; }
-
-.search_container {
-	width: calc(100% - 750px);
-	height: 100%;
-	padding: 0px;
-	float: none;
-	max-width: 500px;
-	border-radius: 100px;
-	background-color: transparent;
-	color: var(--grey);
-}
-#search_bar {
-	vertical-align: middle;
-	text-align: left;
-	padding-left: 20px;
-	width: calc(100% - 80px);
-	height: var(--logo-height);
-	border-radius: 100px;
-	border: 0px transparent;
-	color: var(--grey);
-	font-size: 16px;
-}
-#search_bar:hover { cursor: text; }
-#search_bar:focus {
-	background-color: transparent;
-}
-.search_icon {
-	display: inline-block;
-	width: 30px;
-	height: 30px;
-	padding: 11px;
-	border-radius: 0px 20px 20px 0px;
-	margin: 0px;
-}
 
 /* SPECIFIC PANEL STYLES */
 .left_panel {
