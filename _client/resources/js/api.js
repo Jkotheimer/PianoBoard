@@ -7,8 +7,9 @@ function input_event(event, element, submit) {
 async function create_project(data) {
 	if(data) api_call('POST', `/users/${user.Username}/projects`, data, () => window.location = '/studio/');
 	else {
-		var project_init = await get_html('/resources/html/project_init.html');
-		console.log(project_init);
+		var project_init = await get_html('/resources/html/blur.php/?file=project_init.html');
+		var element = document.createElement('div').innerHTML = project_init;
+		document.body.innerHTML += element;
 	}
 }
 
