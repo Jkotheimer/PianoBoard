@@ -1,38 +1,15 @@
 <?
 $ROOT = $_SERVER['DOCUMENT_ROOT'];
-require "$ROOT/resources/php/resources.php";
 
 if($_GET['recording'] != NULL) {
-	recording();
+	require "$ROOT/resources/php/recording.php";
 } else if($_GET['track'] != NULL) {
-	track();
+	require "$ROOT/resources/php/track.php";
 } else if($_GET['project'] != NULL) {
-	project();
+	require "$ROOT/resources/php/project.php";
 } else if($_GET['account'] != NULL) {
-	account();
+	require "$ROOT/resources/php/user.php";
 } else {
 	exit(header("Location: http://" . $_SERVER['SERVER_NAME'], true, 301));
-}
-
-function account() {
-	$account = $_GET['account'];
-	$account = gen_account_vague($account);
-	if(isset($account)) {
-		print_r($account);
-	} else {
-		echo "404 not found";
-	}
-}
-
-function project() {
-
-}
-
-function track() {
-
-}
-
-function recording() {
-
 }
 ?>
