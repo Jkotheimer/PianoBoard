@@ -3,8 +3,8 @@
 	$ROOT = $_SERVER['DOCUMENT_ROOT'];
 	echo fread(fopen("$ROOT/resources/css/form_styles.css", 'r'),
 		filesize("$ROOT/resources/css/form_styles.css"));
-	echo fread(fopen("$ROOT/landing_page.css", "r"),
-		filesize("$ROOT/landing_page.css"));
+	echo fread(fopen("$ROOT/resources/css/landing_page.css", "r"),
+		filesize("$ROOT/resources/css/landing_page.css"));
 	?>
 </style>
 <div id="login_panel">
