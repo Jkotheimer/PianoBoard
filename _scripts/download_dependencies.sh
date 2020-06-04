@@ -69,7 +69,7 @@ RewriteEngine On
 RewriteCond %{DOCUMENT_ROOT}/\$1 !-f 
 RewriteCond %{DOCUMENT_ROOT}/\$1 !-d
 RewriteCond \$1 !\"api\"
-RewriteRule ^/?(\w+)/?(\w*)?/?(\w*)?/?(\w*)?/?$ /accounts.php?account=\$1&project=\$2&track=\$3&recording=\$4 [PT]
+RewriteRule ^/?(\w+)/?(\w*)?/?(\w*)?/?(\w*)?/?(\w*)/?$ /accounts.php?account=\$1&project=\$2&track=\$3&recording=\$4&note=\$5 [PT]
 ServerTokens min
 " >> ${HTTPD_CONF}
 printf "$DONE"
