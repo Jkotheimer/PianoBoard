@@ -62,6 +62,45 @@ uncomment() {
 	sed -i "/${1}/s/^#//g" ${2}
 }
 
+# ${1} Root directory
+config_httpd() {
+	printf "${T}Configuring PHP with HTTPD..."
+	HTTPD_CONF=${1}/_dependencies/httpd/conf/httpd.conf
+	uncomment mod_proxy.so ${HTTPD_CONF}
+	uncomment mod_proxy_http.so ${HTTPD_CONF}
+	uncomment mod_proxy_connect.so ${HTTPD_CONF}
+	uncomment mod_rewrite.so ${HTTPD_CONF}
+	sed -i "s|_dependencies/httpd/htdocs|_client|g" ${HTTPD_CONF}
+	sed -i "s|daemon|${1}|g" ${HTTPD_CONF}
+	echo "
+	ServerName 127.0.0.1:80
+	ProxyPass			/api	http://localhost:8081
+	ProxyPassReverse	/api	http://localhost:8081
+	<FilesMatch \"\.ph(p[2-6]?|tml)$\">
+		SetHandler application/x-httpd-php
+	</FilesMatch>
+	<Directory />
+		DirectoryIndex index.php index.html
+	</Directory>
+	<Files \"*.phpsecret\">
+		Require all denied
+	</Files>
+	<Directory \"${1}/_client/resources\">
+		Require all denied
+	</Directory>
+	<Directory \"${1}/_client/resources/html\">
+		Require all granted
+	</Directory>
+	RewriteEngine On
+	RewriteCond %{DOCUMENT_ROOT}/\$1 !-f 
+	RewriteCond %{DOCUMENT_ROOT}/\$1 !-d
+	RewriteCond \$1 !\"api\"
+	RewriteRule ^/?(\w+)/?(\w*)?/?(\w*)?/?(\w*)?/?(\w*)/?$ /accounts.php?account=\$1&project=\$2&track=\$3&recording=\$4&note=\$5 [PT]
+	ServerTokens min
+	" >> ${HTTPD_CONF}
+	printf "$DONE"
+}
+
 # ${1} Process to find port for
 # search through netstat for the process, then isolate the port number and return it
 get_port() {

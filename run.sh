@@ -9,6 +9,7 @@ print_help() {
 	printf "\n${BLUE}HOW TO USE THIS SCRIPT:${NC}\n"
 	echo "--help       [-h] : Display this prompt"
 	echo "--all        [-a] : Refresh all Pianoboard services"
+	echo "--conf       [-f] : Reconfigure httpd (if you changed any config)"
 	echo "--server     [-s] : Refresh Apache Http server"
 	echo "--node       [-n] : Refresh Node.js modules and restart service"
 	echo "--database   [-d] : Refresh MySQL database (This drops all data)"
@@ -22,6 +23,7 @@ print_help() {
 declare -A COMMANDS=([-h]=print_help [--help]=print_help \
 					[-a]=refresh_all [--all]=refresh_all \
 					[-s]=refresh_server [--server]=refresh_server \
+					[-f]=config_httpd [--conf]=config_httpd \
 					[-d]=refresh_database [--database]=refresh_database \
 					[-n]=refresh_node [--node]=refresh_node \
 					[-c]=refresh_client [--client]=refresh_client \

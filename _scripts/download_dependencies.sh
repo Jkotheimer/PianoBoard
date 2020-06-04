@@ -38,41 +38,7 @@ install_dependency ${DEP_DIR}/php-* \
 	"--prefix=${DEP_DIR}/php/ --with-apxs2=${HTTPD_HOME}/bin/apxs --with-mysqli --with-curl" \
 	$(cp php.ini-development /usr/local/lib/php.ini 2> /dev/null; cd ${ROOT_DIR})
 
-printf "${T}Configuring PHP with HTTPD..."
-HTTPD_CONF=${HTTPD_HOME}/conf/httpd.conf
-uncomment mod_proxy.so ${HTTPD_CONF}
-uncomment mod_proxy_http.so ${HTTPD_CONF}
-uncomment mod_proxy_connect.so ${HTTPD_CONF}
-uncomment mod_rewrite.so ${HTTPD_CONF}
-sed -i "s|_dependencies/httpd/htdocs|_client|g" ${HTTPD_CONF}
-sed -i "s|daemon|${1}|g" ${HTTPD_CONF}
-echo "
-ServerName 127.0.0.1:80
-ProxyPass			/api	http://localhost:8081
-ProxyPassReverse	/api	http://localhost:8081
-<FilesMatch \"\.ph(p[2-6]?|tml)$\">
-	SetHandler application/x-httpd-php
-</FilesMatch>
-<Directory />
-	DirectoryIndex index.php index.html
-</Directory>
-<Files \"*.phpsecret\">
-	Require all denied
-</Files>
-<Directory \"${ROOT_DIR}/_client/resources\">
-	Require all denied
-</Directory>
-<Directory \"${ROOT_DIR}/_client/resources/html\">
-	Require all granted
-</Directory>
-RewriteEngine On
-RewriteCond %{DOCUMENT_ROOT}/\$1 !-f 
-RewriteCond %{DOCUMENT_ROOT}/\$1 !-d
-RewriteCond \$1 !\"api\"
-RewriteRule ^/?(\w+)/?(\w*)?/?(\w*)?/?(\w*)?/?(\w*)/?$ /accounts.php?account=\$1&project=\$2&track=\$3&recording=\$4&note=\$5 [PT]
-ServerTokens min
-" >> ${HTTPD_CONF}
-printf "$DONE"
+config_httpd ${ROOT_DIR}
 
 refresh_server ${ROOT_DIR}
 
