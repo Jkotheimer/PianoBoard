@@ -23,7 +23,7 @@ function get_account_vague($account) {
 	$query = "SELECT AccountID FROM Account WHERE
 				AccountID='$account' OR Username='$account' OR Email='$account';";
 	$AccountID = $database->query($query);
-	if($AccountID) { return gen_account($AccountID->fetch_row()[0]); }
+	if($AccountID) { return get_account($AccountID->fetch_row()[0]); }
 	else { return NULL; }
 }
 
