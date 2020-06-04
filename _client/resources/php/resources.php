@@ -14,6 +14,7 @@ function search_account($q) {
 	$result = $database->query($query);
 	$rows = [];
 	while($row = $result->fetch_assoc()) { $rows[] = $row; }
+	mysqli_close($database); 
 	return $rows;
 }
 
@@ -23,6 +24,7 @@ function get_account_vague($account) {
 	$query = "SELECT AccountID FROM Account WHERE
 				AccountID='$account' OR Username='$account' OR Email='$account';";
 	$AccountID = $database->query($query);
+	mysqli_close($database); 
 	if($AccountID) { return get_account($AccountID->fetch_row()[0]); }
 	else { return NULL; }
 }
@@ -52,6 +54,8 @@ function get_account($AccountID) {
 	$result = $database->query($query);
 	$account->Projects = [];
 	while($row = $result->fetch_assoc()) { $account->Projects[] = $row; }
+	
+	mysqli_close($database); 
 
 	return $account;
 }
