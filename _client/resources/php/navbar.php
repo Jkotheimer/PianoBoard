@@ -2,6 +2,12 @@
 $ROOT = $_SERVER['DOCUMENT_ROOT'];
 require_once "$ROOT/resources/php/auth.php";
 ?>
+<style>
+	<?php 
+	echo fread(fopen("$ROOT/resources/css/navbar.css", "r"),
+		filesize("$ROOT/resources/css/navbar.css"));
+	?>
+</style>
 <div>
 	<a class="logo_box" href="/">
 		<img src="/images/logo.png" class="logo"/>
@@ -19,7 +25,7 @@ require_once "$ROOT/resources/php/auth.php";
 		Tutorial
 		<img class="icon" src="/images/tutorial.png"/>
 	</a>
-	<form class="nav_link" onclick="this.submit()" method="POST" action="<? echo "/api/$user->Username/projects"; ?>">
+	<form class="nav_link" onclick="this.submit()" method="POST" action="<? echo "/api/$current_user->Username/projects"; ?>">
 		Create New Project
 		<input type="image" class="icon" src="/images/create.png"/>
 	</form>
