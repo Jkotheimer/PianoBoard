@@ -18,7 +18,7 @@ module.exports = function(req, res) {
 	}
 
 	mysql.query(`SELECT AccountId, Salt, Password FROM Account WHERE Email='${login}' OR Username='${login}'`,
-		function(err, data, fields) {
+		async function(err, data, fields) {
 			if(err) {
 				// No account exists with that login
 				res.status(404).json({message: 'Email or Username not found'});
@@ -30,9 +30,13 @@ module.exports = function(req, res) {
 					const token = crypto.gen_token();
 					const exp_date = req.app.locals.resources.new_date(req.app.locals.token_exp);
 					// Delete any existing tokens for this user then insert the new one
-					mysql.query(`DELETE FROM Access_token WHERE AccountID=${data.AccountId};`,
-						(err, data) => {if(err) throw err}
-					);
+					var promise = new Promise((resolve, reject) => {
+							mysql.query(`DELETE FROM Access_token WHERE AccountID=${data.AccountId};`,
+								(err, data) => {resolve(err)}
+							);
+					});
+					// We do nothing with this variable - it's here to pause the code before inserting a new token
+					var deleted = await promise;
 					mysql.query(`INSERT INTO Access_token (Token, AccountID, Expiration_date) VALUES
 						('${token}', '${data.AccountId}', '${exp_date}');`,
 						(err, data) => {if(err) throw err}
