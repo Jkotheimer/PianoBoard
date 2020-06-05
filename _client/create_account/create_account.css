@@ -19,11 +19,6 @@ body {
 	border: 3px solid var(--purple);
 	text-align: center;
 }
-h {
-	display: block;
-	font-size: 32px;
-	color: var(--purple);
-}
 .form_section {
 	margin-bottom: 30px;
 }

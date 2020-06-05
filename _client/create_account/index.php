@@ -41,7 +41,7 @@ ob_start();
 			<img src="/images/logo.png" class="logo"/>
 		</a>
 		<div class="panel form_panel">
-			<h>Create An Account</h>
+			<h class="form_header">Create An Account</h>
 	
 			<form class="form_area" method="POST" action="">
 				<div class="form_section">

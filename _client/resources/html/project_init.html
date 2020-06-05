@@ -1,8 +1,26 @@
-<form class="panel">
+<form class="panel form_panel" onsubmit="create_project(this)">
+	<h class="form_header">New Project</h>
 	<div class="form_area">
 		<div class="form_section">
 			<div class="form_label">Project Name</div>
-			
+			<input class="form_input" type="text" name="name" placeholder="Bohemian Rhapsody"/>
 		</div>
+		<div class="form_section">
+			<div class="form_label">Genre</div>
+			<input class="form_input" type="text" name="genre" placeholder="Rock"/>
+		</div>
+		<div class="form_section">
+			<div class="form_label">Time Signature</div>
+			<input class="form_input" type="text" name="time_signature" placeholder="3/4"/>
+		</div>
+		<div class="form_section">
+			<div class="form_label">Tempo</div>
+			<input class="form_input" type="number" name="tempo" placeholder="120"/>
+		</div>
+		<div class="form_section">
+			<div class="form_label" style="display: inline-block;">Private</div>
+			<input class="form_input checkbox" type="checkbox" name="is_private"/>
+		</div>
+		<input class="link submit_link" type="submit" value="Create Project"/>
 	</div>
 </form>

@@ -20,16 +20,17 @@ if(!isset($file)) {
 	}
 	.foreground {
 		position: relative;
+		display: inline-block;
 		z-index: 1;
 		margin: auto;
 		background-filter: none;
 		backdrop-filter: none;
 		filter: none;
-		top: calc(50vh / 2);
+		top: calc(50vh / 3);
 	}
 </style>
-<div class="blur" onclick="this.parentNode.removeChild(this)">
-	<div class="foreground" onclick="event.stopPropagation()">
+<div class="blur" onclick="this.parentNode.removeChild(this)" onmousedown="this.parentNode.removeChild(this)" onmouseup="this.parentNode.removeChild(this)">
+	<div class="foreground" onclick="event.stopPropagation()" onmousedown="event.stopPropagation()" onmouseup="event.stopPropagation()">
 		<?php
 			echo fread(fopen("./$file", "r"), filesize("./$file"));
 		?>
