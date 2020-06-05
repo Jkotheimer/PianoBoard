@@ -97,10 +97,9 @@ config_httpd() {
 		Require all granted
 	</Directory>
 	RewriteEngine On
-	RewriteCond %{DOCUMENT_ROOT}/\$1 !-f 
-	RewriteCond %{DOCUMENT_ROOT}/\$1 !-d
-	RewriteCond \$1 !\"api\"
-	RewriteRule ^/?(\w+)/?(\w*)?/?(\w*)?/?(\w*)?/?(\w*)/?$ /accounts.php?account=\$1&project=\$2&track=\$3&recording=\$4&note=\$5 [PT]
+	RewriteCond %{DOCUMENT_ROOT}/$1 !-f 
+	RewriteCond %{DOCUMENT_ROOT}/$1 !-d
+	RewriteRule ^\/users\/(\w+)\/?(\w*)?\/?(\w*)?\/?(\w*)?\/?(\w*)\/?$ /accounts.php?account=\$1&project=\$2&track=\$3&recording=\$4&note=\$5 [P]
 	ServerTokens min
 	" >> ${HTTPD_CONF}
 	printf "$DONE"
