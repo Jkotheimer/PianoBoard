@@ -44,7 +44,7 @@ function update_callback(xhr) {
 
 function api_call(method, path, data, callback) {
 	const xhr = new XMLHttpRequest();
-	xhr.open(method, `${resources.api}/${path}`, true);
+	xhr.open(method, `${resources.api}${path}`, true);
 	xhr.setRequestHeader("Content-type", "application/json");
 	xhr.onload = () => callback(xhr);
 	xhr.send(JSON.stringify(data));

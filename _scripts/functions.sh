@@ -66,6 +66,11 @@ uncomment() {
 config_httpd() {
 	printf "${T}Configuring PHP with HTTPD..."
 	HTTPD_CONF=${1}/_dependencies/httpd/conf/httpd.conf
+	if [ -f "${HTTPD_CONF}.backup" ]; then
+		cp "${HTTPD_CONF}.backup" $HTTPD_CONF
+	else
+		cp $HTTPD_CONF "${HTTPD_CONF}.backup"
+	fi
 	uncomment mod_proxy.so ${HTTPD_CONF}
 	uncomment mod_proxy_http.so ${HTTPD_CONF}
 	uncomment mod_proxy_connect.so ${HTTPD_CONF}

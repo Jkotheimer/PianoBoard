@@ -3,6 +3,8 @@
 // PUT /users/<user>
 // Where <user> is a Username, Email, or UID
 module.exports = async function(req, res) {
+	
+	console.log('updating user');
 
 	const local = req.app.locals;
 	const auth = require(`${local.root}/auth/auth.js`);
