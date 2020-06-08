@@ -29,9 +29,14 @@ module.exports = function(req, res) {
 	// ALL IS WELL - ATTEMPT TO CREATE THE ACCOUNT
 	async function create_account(_email, _password) {
 		const username = await local.resources.gen_username(_email);
+		if(!username) {
+			body.message.email_notification = 'An account with this email already exists';
+			res.status(400).json(body);
+			return;
+		}
 		const hashes = crypto.hash_password(_password)
 		const timestamp = local.resources.new_date(0);
-		mysql.query(`INSERT INTO Account (Email, Username, Password, Salt, Creation_date) VALUES 
+		mysql.query(`INSERT INTO user (email, username, password, salt, creation_date) VALUES 
 			('${_email}', '${username}', '${hashes.hash}', '${hashes.salt}', '${timestamp}');`, 
 			function(err, data) {
 				if(err || !data) {
@@ -40,13 +45,14 @@ module.exports = function(req, res) {
 					res.status(409).json(body);
 				}
 				else if(data) {
+					// The insertion worked, create a token and return a 201
 					const token = crypto.gen_token();
 					// Token expires a month from today
 					const exp_date = local.resources.new_date(local.token_exp);
-					const account_id = data.insertId;
-					set_token(account_id, token, exp_date);
+					const user_id = data.insertId;
+					set_token(user_id, token, exp_date);
 					res.cookie('pb_token', token, {domain: local.domain, path: '/', maxAge: local.token_exp});
-					res.cookie('pb_uid', account_id, {domain: local.domain, path: '/', maxAge: local.token_exp});
+					res.cookie('pb_uid', user_id, {domain: local.domain, path: '/', maxAge: local.token_exp});
 					body.message =  'Account successfully created!';
 					res.status(201).json(body);
 					
@@ -60,9 +66,9 @@ module.exports = function(req, res) {
 
 	} // End create account
 
-	var set_token = function(account_id, token, exp_date) {
-		mysql.query(`INSERT INTO Access_token (Token, AccountID, Expiration_date) VALUES
-			('${token}', '${account_id}', '${exp_date}');`,
+	var set_token = function(user_id, token, exp_date) {
+		mysql.query(`INSERT INTO access_token (token, user_id, expiration_date) VALUES
+			('${token}', '${user_id}', '${exp_date}');`,
 			(err, data) => {
 				if(err) {
 					body.message = 'Something went wrong :/ we cannot authenticate you right now';
