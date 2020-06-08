@@ -35,7 +35,7 @@ if(!isset($current_user)) {
 	<div id="info">
 
 		<div class="info_container">
-			<input type="text" id="username" onkeypress="input_event(event, this, update_user);" value="<? echo $current_user->Username; ?>"/>
+			<input type="text" id="username" onkeypress="input_event(event, this, update_user);" value="<? echo $current_user->username; ?>"/>
 			<div id="username_notification" class="notification"></div>
 		</div>
 
@@ -45,10 +45,10 @@ if(!isset($current_user)) {
 				<!--The genres get listed here in the following form: -->
 				<!--span class='favorite_element'> Genre </span-->
 				<?
-				if(empty($current_user->Genres)) {
+				if(empty($current_user->genres)) {
 					echo "<span class='message white'>You haven't added any of your favorite genres yet</span>";
 				} else {
-					foreach($current_user->Genres as $genre) {
+					foreach($current_user->genres as $genre) {
 						echo "<span class='favorite_element'>$genre</span>";
 					}
 				}
@@ -67,10 +67,10 @@ if(!isset($current_user)) {
 				<!--The artists get listed here in the following form: -->
 				<!--span class='favorite_element'> Artist </span-->
 				<?
-				if(empty($current_user->Artists)) {
+				if(empty($current_user->artists)) {
 					echo "<span class='message white'>You haven't added any of your favorite artists yet</span>";
 				} else {
-					foreach($current_user->Artists as $artist) {
+					foreach($current_user->artists as $artist) {
 						echo "<span class='favorite_element'>$artist</span>";
 					}
 				}
@@ -92,7 +92,7 @@ if(!isset($current_user)) {
 	<h class="panel_header">Your Projects</h>
 	<div id="project_area">
 		<?php
-		if(empty($current_user->Projects)) {
+		if(empty($current_user->projects)) {
 			echo "<div class='project_label center'>
 					<span class='project_attribute long'>You haven't started any projects yet</span>
 					<button class='round_button spaced' onclick='create_project(null)'>Create Your First Project</button>
@@ -103,7 +103,7 @@ if(!isset($current_user)) {
 					<span class='project_attribute'>Name</span>
 					<span class='project_attribute'>Genre</span>
 				</div>";
-			foreach($current_user->Projects as $project) {
+			foreach($current_user->projects as $project) {
 				echo "<div class='project'>
 						<span class='project_attribute'>" . $project['ProjectID'] . "</span>
 						<span class='project_attribute'>" . $project['Name'] . "</span>

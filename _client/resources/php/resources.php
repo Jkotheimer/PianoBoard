@@ -9,8 +9,8 @@ $API = 'http://localhost/api';
 // Search for accounts based on the provided query
 function search_account($q) {
 	require "database.phpsecret";
-	$query = "SELECT AccountID, Username, Is_private FROM Account
-				WHERE Username LIKE '$q' or Email LIKE '$q';";
+	$query = "SELECT id, username, is_private FROM user
+				WHERE username LIKE '$q' or email LIKE '$q';";
 	$result = $database->query($query);
 	$rows = [];
 	while($row = $result->fetch_assoc()) { $rows[] = $row; }
@@ -21,38 +21,38 @@ function search_account($q) {
 // Get an account ID from the provided vague account attribute and call gen_account with it
 function get_account_vague($account) {
 	require "database.phpsecret";
-	$query = "SELECT AccountID FROM Account WHERE
-				AccountID='$account' OR Username='$account' OR Email='$account';";
-	$AccountID = $database->query($query);
+	$query = "SELECT id FROM user WHERE
+				id = '$account' OR username = '$account' OR email = '$account';";
+	$id = $database->query($query);
 	mysqli_close($database); 
-	if($AccountID) { return get_account($AccountID->fetch_row()[0]); }
+	if($id) { return get_account($id->fetch_row()[0]); }
 	else { return NULL; }
 }
 
-// Generate an account object based on the provided AccountID
-function get_account($AccountID) {
+// Generate an account object based on the provided id
+function get_account($id) {
 	require "database.phpsecret";
 	// First, get the generic account information
-	$query = "SELECT AccountID, Email, Username, Creation_date, Is_private 
-					FROM Account WHERE AccountID='$AccountID';";
+	$query = "SELECT id, email, username, creation_date, is_private 
+					FROM user WHERE id = '$id';";
 	$account = $database->query($query)->fetch_object();
 	if(!isset($account)) return null;
 	
 	// Next, get the favorite genres and artists
-	$query = "SELECT Artist from Favorite_artists WHERE AccountID='$AccountID';";
+	$query = "SELECT value from favorite_artists WHERE user_id='$id';";
 	$result = $database->query($query);
-	$account->Artists = [];
+	$account->artists = [];
 	while($row = $result->fetch_array()) { $account->Artists[] = $row[0]; }
 
-	$query = "SELECT Genre FROM Favorite_genres WHERE AccountID='$AccountID';";
+	$query = "SELECT value FROM favorite_genres WHERE user_id='$id';";
 	$result = $database->query($query);
-	$account->Genres = [];
+	$account->genres = [];
 	while($row = $result->fetch_array()) { $account->Genres[] = $row[0]; }
 
 	// Finally, get the name, genre, and id of all projects owned by the user
-	$query = "SELECT ProjectID, Name, Genre FROM Project WHERE AccountID='$AccountID';";
+	$query = "SELECT id, name, genre FROM project WHERE user_id='$id';";
 	$result = $database->query($query);
-	$account->Projects = [];
+	$account->projects = [];
 	while($row = $result->fetch_assoc()) { $account->Projects[] = $row; }
 	
 	mysqli_close($database); 

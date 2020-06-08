@@ -12,8 +12,8 @@ function auth_token() {
 		
 		// Attempt to grab the expiration date of the token from the set cookies
 		$Token = $_COOKIE[$session_cookie];
-		$AccountID = $_COOKIE[$id_cookie];
-		$query = "SELECT Expiration_date from Access_token WHERE Token='$Token' AND AccountID='$AccountID';";
+		$id = $_COOKIE[$id_cookie];
+		$query = "SELECT expiration_date from access_token WHERE token = '$Token' AND user_id = '$id';";
 		
 		$Expiration_date = new DateTime($database->query($query)->fetch_row()[0]);
 		$Expiration_date = $Expiration_date->getTimeStamp();
@@ -22,7 +22,7 @@ function auth_token() {
 	
 		// If the query returns an actual value, load the dashboard
 		if($Expiration_date && time() < $Expiration_date) {
-			return get_account($AccountID);
+			return get_account($id);
 		} 
 	}
 	return null;
