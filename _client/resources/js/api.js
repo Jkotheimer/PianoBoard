@@ -5,7 +5,7 @@ function input_event(event, element, submit) {
 
 /* CREATE FUNCTIONS */
 async function create_project(form) {
-	if(form) api_call('POST', `/users/${user.Username}/projects`, form, () => window.location = '/studio/');
+	if(form) api_call('POST', `/users/${user.username}/projects`, form, () => window.location = '/studio/');
 	else {
 		var project_init = await get_html('/resources/html/blur.php/?file=project_init.html');
 		var element = document.createElement('div').innerHTML = project_init;
@@ -27,18 +27,32 @@ function update_user(attribute, value) {
 	}
 	var data = {};
 	data[attribute] = value;
-	api_call('PUT', `/users/${user.Username}/`, data, update_callback);
+	api_call('PUT', `/users/${user.username}/`, data, update_callback);
 }
 
 function update_callback(xhr) {
+	const message = JSON.parse(xhr.response);
 	if(xhr.readyState == 4 && xhr.status >= 200 && xhr.status < 300) {
 		// The request was successful
-		const message = JSON.parse(xhr.response).message;
-		console.log(message);
+		for(notification in message) {
+			if(notification.includes('notification')) display_success(document.getElementById(notification), message[notification]);
+			else {
+				var element = document.getElementById(notification);
+				element.blur();
+				if(element.tagName == 'INPUT') element.value = message[notification];
+				else element.innerHTML = message[notification];
+				user[notification] = message[notification];
+			}
+		}
 	} else {
 		// There was an error - handle it here
-		const message = JSON.parse(xhr.response).message;
-		console.log(message);
+		for(notification in message) {
+			if(notification.includes('notification')) display_error(document.getElementById(notification), message[notification]);
+			else {
+				var element = document.getElementById(notification);
+				element.blur();
+			}
+		}
 	}
 }
 
