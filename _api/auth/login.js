@@ -17,11 +17,11 @@ module.exports = function(req, res) {
 		res.status(403).json({message: 'Password too weak'});
 	}
 
-	mysql.query(`SELECT AccountId, Salt, Password FROM Account WHERE Email='${login}' OR Username='${login}'`,
+	mysql.query(`SELECT id, salt, password FROM user WHERE email='${login}' OR username='${login}'`,
 		async function(err, data, fields) {
 			if(err) {
 				// No account exists with that login
-				res.status(404).json({message: 'Email or Username not found'});
+				res.status(404).json({message: 'Email or username not found'});
 			}
 			if(data.length != 0) {
 				data = data[0];
@@ -31,13 +31,13 @@ module.exports = function(req, res) {
 					const exp_date = req.app.locals.resources.new_date(req.app.locals.token_exp);
 					// Delete any existing tokens for this user then insert the new one
 					var promise = new Promise((resolve, reject) => {
-							mysql.query(`DELETE FROM Access_token WHERE AccountID=${data.AccountId};`,
+							mysql.query(`DELETE FROM access_token WHERE user_id=${data.AccountId};`,
 								(err, data) => {resolve(err)}
 							);
 					});
 					// We do nothing with this variable - it's here to pause the code before inserting a new token
 					var deleted = await promise;
-					mysql.query(`INSERT INTO Access_token (Token, AccountID, Expiration_date) VALUES
+					mysql.query(`INSERT INTO access_token (token, user_id, expiration_date) VALUES
 						('${token}', '${data.AccountId}', '${exp_date}');`,
 						(err, data) => {if(err) throw err}
 					);

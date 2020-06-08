@@ -12,8 +12,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])
 	if($response['status'] == 201) {
 		setcookie($session_cookie, $response['cookies'][$session_cookie], $expiration_date, '/', $domain);
 		setcookie($id_cookie, $response['cookies'][$id_cookie], $expiration_date, '/', $domain);
-		header("Location: $host");
-		exit;
+		exit(header("Location: $host"));
 	}
 	http_response_code($response['status']);
 	$notifications = $response['body']->message;

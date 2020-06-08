@@ -11,14 +11,37 @@ const resources = {
 }
 
 /**
- * ERROR HANDLING
+ * MESSAGE HANDLING
  * ____________________________________________________________________________
  */
-function display_error(element, message) {
-	element = document.getElementById(`${element}_notification`);
+
+function fade(element) {
+	element.style.opacity = '1';
+	element.style.display = 'inline-block';
+	setTimeout(() => {
+		var fader = setInterval(() => {
+			var new_opacity = parseFloat(element.style.opacity) - 0.01;
+			element.style.opacity = new_opacity.toString();
+			if(parseFloat(element.style.opacity) < .02) {
+				element.style.display = 'none';
+				element.style.opacity = '1';
+				element.innerHTML = '';
+				clearInterval(fader);
+			}
+		}, 10);
+	}, 3000);
+}
+function display_error(element, message, oldvalue) {
 	element.classList.add('error');
 	element.innerHTML = message;
+	fade(element);
 }
+function display_success(element, message, newvalue) {
+	element.classList.add('success');
+	element.innerHTML = message;
+	fade(element);
+}
+	
 
 /**
  * FORM VALIDATION HANDLING AND LISTENING
