@@ -69,23 +69,29 @@ input:focus { outline: none; }
 	font-size: 14px;
 	display: none;
 }
-
-#username {
+.attribute {
 	background-color: transparent;
 	text-align: center;
-	color: var(--cream);
 	border: none;
 	border-radius: 10px;
-	font-size: 20px;
 	width: calc(100% - 25px);
-
 }
-#username:hover { cursor: pointer; }
-#username:focus {
+.attribute:hover { cursor: pointer; }
+.attribute:focus {
 	background-color: var(--lightgrey);
 	cursor: text;
 }
-#username::placeholder { color: var(--yellow); }
+.attribute::placeholder { color: var(--yellow); }
+
+#username {
+	color: var(--cream);
+	font-size: 20px;
+}
+
+#email {
+	color: var(--yellow);
+	font-size: 14px;
+}
 .info_container {
 	width: 100%;
 	margin-bottom: 25px;
@@ -145,18 +151,33 @@ input:focus { outline: none; }
 	color: white;
 }
 #sign_out {
+	left: 0px;
+	float: left;
+	background-color: var(--cream);
+	border: 1px solid var(--purple);
+	text-decoration: none;
+}
+
+.button {
 	display: inline-block;
 	width: 100px;
-	margin: 50px 50% 0px 0px; 
+	margin-top: 50px; 
 	text-align: center;
-	background-color: var(--cream);
 	padding: 5px;
 	border-radius: 5px;
-	border: 1px solid black;
-	text-decoration: none;
 	color: black;
 }
-#sign_out:hover { cursor: pointer; }
+.button:hover { cursor: pointer; }
+
+.button.toggle {
+	background-color: var(--purple);
+	right: 0px;
+	float: right;
+	border: 1px solid white;
+}
+.button.toggle:hover {
+	border: 1px solid var(--yellow);
+}
 
 /* RIGHT PANEL STYLES */
 #project_area {
