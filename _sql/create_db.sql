@@ -3,116 +3,116 @@ CREATE DATABASE Pianoboard;
 USE Pianoboard;
 
 /* ACCOUNT SPECIFIC ENTITIES */
-CREATE TABLE Account (
-	AccountID INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
-	Email VARCHAR(64) NOT NULL UNIQUE,
-	Username VARCHAR(32) NOT NULL UNIQUE,
-	Password CHAR(255) NOT NULL,
-	Salt CHAR(32) NOT NULL,
-	Creation_date DateTime NOT NULL,
-	Last_modified DateTime,
-	Is_private BIT DEFAULT 0,
-	Project_index TINYINT UNSIGNED DEFAULT 0,
-	CONSTRAINT Account_PK PRIMARY KEY (AccountID)
+CREATE TABLE user (
+	id INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
+	email VARCHAR(64) NOT NULL UNIQUE,
+	username VARCHAR(32) NOT NULL UNIQUE,
+	password CHAR(255) NOT NULL,
+	salt CHAR(32) NOT NULL,
+	creation_date DateTime NOT NULL,
+	last_modified DateTime,
+	is_private BIT DEFAULT 0,
+	project_index TINYINT UNSIGNED DEFAULT 0,
+	CONSTRAINT user_PK PRIMARY KEY (id)
 );
 
-CREATE TABLE Known_IP (
-	AccountID INT UNSIGNED NOT NULL,
-	IP_address INT UNSIGNED NOT NULL,
-	Login_count INT UNSIGNED,
-	Last_login DateTime,
-	CONSTRAINT KIP_FK FOREIGN KEY (AccountID) REFERENCES Account(AccountID)
+CREATE TABLE known_ip (
+	user_id INT UNSIGNED NOT NULL,
+	ip_address INT UNSIGNED NOT NULL,
+	login_count INT UNSIGNED,
+	last_login DateTime,
+	CONSTRAINT KIP_FK FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
-CREATE TABLE Failed_IP (
-	AccountID INT UNSIGNED NOT NULL,
-	IP_address INT UNSIGNED NOT NULL,
-	Attempt_count INT UNSIGNED,
-	Last_attempt DateTime,
-	CONSTRAINT FIP_FK FOREIGN KEY (AccountID) REFERENCES Account(AccountID)
+CREATE TABLE failed_ip (
+	user_id INT UNSIGNED NOT NULL,
+	ip_address INT UNSIGNED NOT NULL,
+	attempt_count INT UNSIGNED,
+	last_attempt DateTime,
+	CONSTRAINT FIP_FK FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
-CREATE TABLE Favorite_genres (
-	AccountID INT UNSIGNED NOT NULL,
-	Genre VARCHAR(32) NOT NULL,
-	CONSTRAINT Genre_FK FOREIGN KEY (AccountID) REFERENCES Account(AccountID)
+CREATE TABLE favorite_genres (
+	user_id INT UNSIGNED NOT NULL,
+	value VARCHAR(32) NOT NULL,
+	CONSTRAINT Genre_FK FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
-CREATE TABLE Favorite_artists (
-	AccountID INT UNSIGNED NOT NULL,
-	Artist VARCHAR(32) NOT NULL,
-	CONSTRAINT Artist_FK FOREIGN KEY (AccountID) REFERENCES Account(AccountID)
+CREATE TABLE favorite_artists (
+	user_id INT UNSIGNED NOT NULL,
+	value VARCHAR(32) NOT NULL,
+	CONSTRAINT Artist_FK FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
 /* AUTHENTICATION ENTITIES */
-CREATE TABLE Access_token (
-	Token CHAR(64) NOT NULL,
-	AccountID INT UNSIGNED NOT NULL UNIQUE,
-	FormToken CHAR(64),
-	Expiration_date DateTime NOT NULL,
-	CONSTRAINT Token_PK PRIMARY KEY (Token),
-	CONSTRAINT Token_FK FOREIGN KEY (AccountID) REFERENCES Account(AccountID)
+CREATE TABLE access_token (
+	token CHAR(64) NOT NULL,
+	user_id INT UNSIGNED NOT NULL UNIQUE,
+	form_token CHAR(64),
+	expiration_date DateTime NOT NULL,
+	CONSTRAINT Token_PK PRIMARY KEY (token),
+	CONSTRAINT Token_FK FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
-CREATE TABLE Access_rights (
-	EntityID INT UNSIGNED NOT NULL,
-	AccountID INT UNSIGNED NOT NULL,
-	Privileges CHAR(1) NOT NULL,
-	CONSTRAINT Rights_PK PRIMARY KEY (EntityID),
-	CONSTRAINT Rights_FK FOREIGN KEY (AccountID) REFERENCES Account(AccountID)
+CREATE TABLE access_rights (
+	entity_id INT UNSIGNED NOT NULL,
+	user_id INT UNSIGNED NOT NULL,
+	privileges CHAR(1) NOT NULL,
+	CONSTRAINT Rights_PK PRIMARY KEY (entity_id),
+	CONSTRAINT Rights_FK FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
 /* PROJECT ENTITIES */
-CREATE TABLE Project (
-	ProjectID INT UNSIGNED NOT NULL,
-	AccountID INT UNSIGNED NOT NULL,
-	Name VARCHAR(32) NOT NULL,
-	Genre VARCHAR(32),
-	Time_signature CHAR(5),
-	Tempo TINYINT UNSIGNED,
-	Creation_date DateTime,
-	Last_modified DateTime,
-	Is_private BIT DEFAULT 0,
-	Track_index TINYINT UNSIGNED DEFAULT 0,
-	CONSTRAINT Project_PK PRIMARY KEY (ProjectID),
-	CONSTRAINT Project_FK FOREIGN KEY (AccountID) REFERENCES Account(AccountID)
+CREATE TABLE project (
+	id INT UNSIGNED NOT NULL,
+	user_id INT UNSIGNED NOT NULL,
+	name VARCHAR(32) NOT NULL,
+	genre VARCHAR(32),
+	time_signature CHAR(5),
+	tempo TINYINT UNSIGNED,
+	creation_date DateTime,
+	last_modified DateTime,
+	is_private BIT DEFAULT 0,
+	track_index TINYINT UNSIGNED DEFAULT 0,
+	CONSTRAINT project_PK PRIMARY KEY (id),
+	CONSTRAINT project_FK FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
-CREATE TABLE Track (
-	TrackID INT UNSIGNED NOT NULL,
-	ProjectID INT UNSIGNED NOT NULL,
-	Name VARCHAR(32),
-	Instrument VARCHAR(32) NOT NULL,
-	Volume TINYINT NOT NULL,
-	Pan TINYINT NOT NULL,
-	Mute BIT,
-	Solo BIT,
-	Creation_date DateTime NOT NULL,
-	Last_modified DateTime,
-	Is_private BIT DEFAULT 0,
-	Recording_index TINYINT UNSIGNED DEFAULT 0,
-	CONSTRAINT Track_PK PRIMARY KEY (TrackID),
-	CONSTRAINT Track_FK FOREIGN KEY (ProjectID) REFERENCES Project(ProjectID)
+CREATE TABLE track (
+	id INT UNSIGNED NOT NULL,
+	project_id INT UNSIGNED NOT NULL,
+	name VARCHAR(32),
+	instrument VARCHAR(32) NOT NULL,
+	volume TINYINT NOT NULL,
+	pan TINYINT NOT NULL,
+	mute BIT,
+	solo BIT,
+	creation_date DateTime NOT NULL,
+	last_modified DateTime,
+	is_private BIT DEFAULT 0,
+	recording_index TINYINT UNSIGNED DEFAULT 0,
+	CONSTRAINT track_PK PRIMARY KEY (id),
+	CONSTRAINT track_FK FOREIGN KEY (project_id) REFERENCES project(id)
 );
 
-CREATE TABLE Recording (
-	RecordingID INT UNSIGNED NOT NULL,
-	TrackID INT UNSIGNED NOT NULL,
-	Start_time INT UNSIGNED NOT NULL,
-	End_time INT UNSIGNED NOT NULL,
-	Creation_date DateTime NOT NULL,
-	Last_modified DateTime,
-	Note_index SMALLINT UNSIGNED DEFAULT 0,
-	CONSTRAINT Recording_PK PRIMARY KEY (RecordingID),
-	CONSTRAINT Recording_FK FOREIGN KEY (TrackID) REFERENCES Track(TrackID)
+CREATE TABLE recording (
+	id INT UNSIGNED NOT NULL,
+	track_id INT UNSIGNED NOT NULL,
+	start_time INT UNSIGNED NOT NULL,
+	end_time INT UNSIGNED NOT NULL,
+	creation_date DateTime NOT NULL,
+	last_modified DateTime,
+	note_index SMALLINT UNSIGNED DEFAULT 0,
+	CONSTRAINT recording_PK PRIMARY KEY (id),
+	CONSTRAINT recording_FK FOREIGN KEY (track_id) REFERENCES track(id)
 );
 
-CREATE TABLE Note (
-	NoteID INT UNSIGNED NOT NULL,
-	RecordingID INT UNSIGNED NOT NULL,
-	Note CHAR(2) NOT NULL,
-	Start_time INT UNSIGNED NOT NULL,
-	Duration SMALLINT UNSIGNED,
-	CONSTRAINT Note_PK PRIMARY KEY (NoteID),
-	CONSTRAINT Note_FK FOREIGN KEY (RecordingID) REFERENCES Recording(RecordingID)
+CREATE TABLE note (
+	id INT UNSIGNED NOT NULL,
+	recording_id INT UNSIGNED NOT NULL,
+	note CHAR(2) NOT NULL,
+	start_time INT UNSIGNED NOT NULL,
+	duration SMALLINT UNSIGNED,
+	CONSTRAINT note_PK PRIMARY KEY (id),
+	CONSTRAINT note_FK FOREIGN KEY (recording_id) REFERENCES recording(id)
 );
