@@ -17,14 +17,6 @@ require_once "$ROOT/resources/php/auth.php";
 		<input type="image" onclick="this.parentElement.submit();" class="icon search_icon" src="/images/search.png"/>
 	</form>
 
-	<a class="nav_link" href="/settings">
-		Settings
-		<img class="icon" src="/images/settings.png"/>
-	</a>
-	<a class="nav_link" href="/tutorial">
-		Tutorial
-		<img class="icon" src="/images/tutorial.png"/>
-	</a>
 	<form class="nav_link" onclick="this.submit()" method="POST" action="<? echo "/api/$current_user->Username/projects"; ?>">
 		Create New Project
 		<input type="image" class="icon" src="/images/create.png"/>
