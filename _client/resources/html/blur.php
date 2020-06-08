@@ -8,7 +8,7 @@ if(!isset($file)) {
 ?>
 <style>
 	.blur {
-		position: absolute;
+		position: fixed;
 		left: 0;
 		top: 0;
 		width: 100vw;
@@ -26,11 +26,11 @@ if(!isset($file)) {
 		background-filter: none;
 		backdrop-filter: none;
 		filter: none;
-		top: calc(50vh / 3);
+		top: calc(25vh / 4);
 	}
 </style>
-<div class="blur" onclick="this.parentNode.removeChild(this)" onmousedown="this.parentNode.removeChild(this)" onmouseup="this.parentNode.removeChild(this)">
-	<div class="foreground" onclick="event.stopPropagation()" onmousedown="event.stopPropagation()" onmouseup="event.stopPropagation()">
+<div class="blur" onclick="this.parentNode.removeChild(this)">
+	<div class="foreground" onclick="event.stopPropagation()">
 		<?php
 			echo fread(fopen("./$file", "r"), filesize("./$file"));
 		?>

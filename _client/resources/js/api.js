@@ -5,7 +5,10 @@ function input_event(event, element, submit) {
 
 /* CREATE FUNCTIONS */
 async function create_project(form) {
-	if(form) api_call('POST', `/users/${user.Username}/projects`, form, () => window.location = '/studio/');
+	if(form) {
+		console.log(form);
+		//api_call('POST', `/users/${user.Username}/projects`, form, () => window.location = '/studio/');
+	}
 	else {
 		var project_init = await get_html('/resources/html/blur.php/?file=project_init.html');
 		var element = document.createElement('div').innerHTML = project_init;
