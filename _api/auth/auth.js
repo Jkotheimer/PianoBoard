@@ -30,46 +30,45 @@ var gen_hash = function(password, salt, pepper){
     };
 };
 
-function hash_password(password) {
+var hash_password = function(password) {
     const salt = gen_salt(16); /** Gives us salt of length 16 */
 	const pepper = require('./pepper.jsecret');
     return gen_hash(password, salt, pepper);
 }
 
 
-function verify_password(password, salt, hash) {
+var verify_password = function(password, salt, hash) {
 	const pepper = require('./pepper.jsecret');
 	const hashed_pass = gen_hash(password, salt, pepper).hash;
 	return hashed_pass == hash;
 }
 
-function gen_token() {
+var gen_token = function() {
 	return gen_salt(64);
 }
 
-function check_token(err, data) {
+var check_token = function(err, data) {
 	if(err || data.length == 0) return null;
 	data = data[0];
 
 	// Check if the token is still valid
-	const exp_date = new Date(data.Expiration_date);
+	const exp_date = new Date(data.expiration_date);
 	const now = new Date(Date.now());
-	if(exp_date >= now) return data.AccountID;
+	if(exp_date >= now) return data.user_id;
 	return null;
 }
 
-async function current_user(req) {
+var current_user = function(req) {
 	const mysql = require(`${req.app.locals.root}/sql_connect.js`);
-	var uid = req.cookies.pb_uid;
+	const uid = req.cookies.pb_uid;
 	const token = req.cookies.pb_token;
 
 	var promise = new Promise((resolve, reject) => {
-		mysql.query(`SELECT AccountID, Expiration_date FROM Access_token WHERE AccountID = ${uid} AND Token = '${token}';`,
+		mysql.query(`SELECT user_id, expiration_date FROM access_token WHERE user_id = ${uid} AND token = '${token}';`,
 			(err, data) => resolve(check_token(err,data))
 		);
 	});
-	uid = await promise;
-	return uid;
+	return promise;
 }
 
 module.exports = {
