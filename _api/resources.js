@@ -18,10 +18,22 @@ var gen_username_recursive = function(err, data, username, num) {
 }
 
 async function gen_username(email) {
-	var username = email.split('@')[0];
+	// First, check if the email address exists in the database - if so, return false
 	var promise = new Promise((resolve, reject) => {
 		mysql.query(
-			`SELECT Username FROM Account WHERE Username REGEXP '^${username}';`,
+			`SELECT email FROM user WHERE email = '${email}'`,
+			(err, data) => {
+				if(data && data.length > 0) resolve(true);
+				else resolve(false);
+			}
+		);
+	});
+	var exists = await promise;
+	if(exists) return false;
+	var username = email.split('@')[0];
+	promise = new Promise((resolve, reject) => {
+		mysql.query(
+			`SELECT username FROM user WHERE username REGEXP '^${username}';`,
 			(err, data) => resolve(gen_username_recursive(err, data, username, 0))
 		);
 	});
@@ -35,17 +47,16 @@ var new_date = function(offset) {
 
 function comp(err, data, uid) {
 	if(err || data.length == 0) return -1;
-	return uid - data[0].AccountID;
+	return uid - data[0].id;
 }
 
 async function user_compare(uid, login) {
 	var promise = new Promise((resolve, reject) => {
-		mysql.query(`SELECT AccountID FROM Account WHERE AccountID='${login}' OR Username='${login}' OR Email='${login}'`,
+		mysql.query(`SELECT id FROM user WHERE id = '${login}' OR username = '${login}' OR email = '${login}'`,
 			(err, data) => resolve(comp(err, data, uid))
 		);
-	})
-	var result = await promise;
-	return result;
+	});
+	return promise;
 }
 
 module.exports = {
