@@ -53,7 +53,8 @@ module.exports = async function(req, res) {
 	const params = req.body;
 	for(val in params) {
 		switch(val.toLowerCase()) {
-			case 'username' || 'email':
+			case 'email':
+			case 'username':
 				success = await update(val, `'${params[val]}'`);
 				if(!success) message[`${val}_notification`] = `An account with this ${val} already exists`;
 				break;
