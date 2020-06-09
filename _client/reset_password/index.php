@@ -6,6 +6,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])) {
 	echo 'Resetting password';
 	exit();
 }
+ob_start();
 ?>
 <!DOCTYPE html>
 <html>
@@ -43,3 +44,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])) {
 		</script>
 	</body>
 </html>
+<?php
+$page_contents = ob_get_contents();
+ob_end_clean();
+
+echo str_replace('<!--TITLE--', 'reset password', $page_contents);
+?>
