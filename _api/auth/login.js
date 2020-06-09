@@ -25,14 +25,13 @@ module.exports = function(req, res) {
 			}
 			if(data.length != 0) {
 				data = data[0];
-				console.log(data);
 				if(crypto.verify_password(password, data.salt, data.password)) {
 					// The user is authenticated - set token cookies and return
 					const token = crypto.gen_token();
 					const exp_date = req.app.locals.resources.new_date(req.app.locals.token_exp);
 					// Delete any existing tokens for this user then insert the new one
 					var promise = new Promise((resolve, reject) => {
-							mysql.query(`DELETE FROM access_token WHERE user_id=${data.AccountId};`,
+							mysql.query(`DELETE FROM access_token WHERE user_id=${data.id};`,
 								(err, data) => {resolve(err)}
 							);
 					});
