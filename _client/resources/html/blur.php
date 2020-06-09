@@ -1,10 +1,6 @@
 <?php
 $ROOT = $_SERVER['DOCUMENT_ROOT'];
-$file = $_GET['file'];
-if(!isset($file)) {
-	http_response_code(400);
-	exit();
-}
+if(isset($_GET['file'])) $file = $_GET['file'];
 ?>
 <style>
 	.blur {
@@ -29,10 +25,11 @@ if(!isset($file)) {
 		top: calc(25vh / 4);
 	}
 </style>
-<div class="blur" onclick="this.parentNode.removeChild(this)">
+<div class="blur" id='blur' onclick="this.parentNode.removeChild(this)">
 	<div class="foreground" onclick="event.stopPropagation()">
 		<?php
-			echo fread(fopen("./$file", "r"), filesize("./$file"));
+			if(isset($file)) echo fread(fopen("./$file", "r"), filesize("./$file"));
+			else echo fread(fopen("./blank.html", "r"), filesize("./blank.html"));
 		?>
 	</div>
 </div>
