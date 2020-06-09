@@ -1,26 +1,21 @@
 function input_event(event, element, submit) {
 	if(event.type == 'keypress') {
-		if(event.keyCode == 13) submit(element.id, element.value, update_callback, true);
+		if(event.keyCode == 13) {
+			confirm(element, () => submit(element.id, element.value, update_callback, true));
+		}
 	}
 }
 function toggle(element, submit) {
 	// This value is going to be an integer - the boolean conversion is necessary, trust me
-	var value = element.dataset.value;
+	var value = element.dataset.value == 'true' ? false:true;
 
-	if(value == 'true') value = false;
-	else value = true;
-
-	submit(element.id, value, toggle_callback, false);
+	confirm(element, () => submit(element.id, value, toggle_callback, false))
 }
 
 /* CREATE FUNCTIONS */
 async function create_project(form) {
 	if(form) api_call('POST', `/users/${user.Username}/projects`, form, () => window.location = '/studio/');
-	else {
-		var project_init = await get_html('/resources/html/blur.php/?file=project_init.html');
-		var element = document.createElement('div').innerHTML = project_init;
-		document.body.innerHTML += element;
-	}
+	else append_html('blur.php/?file=project_init.html');
 }
 
 /* READ FUNCTIONS */
@@ -42,6 +37,8 @@ function update_user(attribute, value, callback, notify) {
 	api_call('PUT', `/users/${user.username}/`, data, callback);
 }
 
+
+/* CALLBACKS*/
 function update_callback(xhr) {
 	const message = JSON.parse(xhr.response);
 	if(xhr.readyState == 4 && xhr.status >= 200 && xhr.status < 300) {
@@ -97,15 +94,79 @@ function api_call(method, path, data, callback) {
 	xhr.onload = () => callback(xhr);
 	xhr.send(JSON.stringify(data));
 }
-
-async function get_html(path) {
+function get(path) {
 	var response = null;
 	const xhr = new XMLHttpRequest();
-	xhr.open('GET', `${resources.host}${path}`, true);
+	xhr.open('GET', `${resources.host}/${path}`, true);
 	var promise = new Promise((resolve, reject) => {
 		xhr.onload = () => resolve(xhr.response);
 	});
 	xhr.send();
-	response = await promise;
-	return response;
+	return promise;
 }
+async function append_html(file) {
+	var element = document.createElement('div');
+	element.innerHTML = await get(`/resources/html/${file}`);
+	document.body.appendChild(element);
+	return element;
+}
+
+async function confirm(element, callback) {
+	// This variable is null, but we need an assignment for the async to properly wait before trying to access the elements
+	deselect_all();
+	var submitter = function(event) {
+		if(event.keyCode == 13) {
+			event.preventDefault();
+			document.body.removeChild(parent);
+			callback();
+			document.removeEventListener('keypress', submitter);
+		}
+	}
+	var parent = await append_html('blur.php');
+	parent.addEventListener('DOMNodeRemoved', (event) => {
+		if(event.target.id == 'blur') {
+			element.value = user[element.id];
+			document.removeEventListener('keypress', submitter);
+		}
+	});
+	var label = document.createElement('H');
+	var action = element.id;
+	switch(element.id) {
+		case 'username':
+		case 'email':
+			action = `update your ${element.id}`;
+			break;
+		case 'is_private':
+			var swap = element.dataset.value == 'true' ? 'public':'private';
+			action = `make your account ${swap}`;
+			break;
+		case 'favorite_genres':
+		case 'favorite_artists':
+			action = `add a new favorite ${element.id.split('_', 2)[1]}`;
+			break;
+	}
+	label.innerText = `Are you sure you want to ${action}?`;
+	label.classList.add('panel_header');
+	var confirm = document.createElement('BUTTON');
+	confirm.innerText = 'Yes';
+	confirm.onclick = () => {
+		document.body.removeChild(parent);
+		callback();
+		document.removeEventListener('keypress', submitter);
+	}
+	document.addEventListener('keypress', submitter);
+	confirm.classList.add('button', 'right', 'confirm');
+	var deny = document.createElement('BUTTON');
+	deny.innerText = 'No';
+	deny.onclick = () => {
+		document.body.removeChild(parent);
+		element.value = user[element.id];
+		document.removeEventListener('keypress', submitter);
+	}
+	deny.classList.add('button', 'left', 'dull');
+	var panel = document.getElementById('foreground_panel');
+	panel.appendChild(label);
+	panel.appendChild(deny);
+	panel.appendChild(confirm);
+}
+
