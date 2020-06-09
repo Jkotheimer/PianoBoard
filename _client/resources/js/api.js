@@ -46,10 +46,20 @@ function update_callback(xhr) {
 		for(notification in message) {
 			if(notification.includes('notification')) display_success(document.getElementById(notification), message[notification]);
 			else {
-				var element = document.getElementById(notification);
-				element.blur();
+				var container = notification
+				var element = document.getElementById(container);
+				if(container.includes('favorite')) {
+					element.value = '';
+					element.focus()
+				}
+				else element.blur();
+				if(notification.includes('favorite')) element = document.getElementById(notification.split('_', 2)[1] + '_container');
+
 				if(element.tagName == 'INPUT') element.value = message[notification];
-				else element.innerHTML = message[notification];
+				else if(element.dataset.length == 0) element.innerHTML = `<span class='favorite_element' onclick='remove_favorite(this)'>
+																			${message[notification]}</span>`;
+				else element.innerHTML += `<span class='favorite_element' onclick='remove_favorite(this)'>
+												${message[notification]}</span>`;
 				user[notification] = message[notification];
 			}
 		}

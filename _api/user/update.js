@@ -37,7 +37,7 @@ module.exports = async function(req, res) {
 
 	var update_favorite = function(type, value) {
 		var promise = new Promise((resolve, reject) => {
-			mysql.query(`INSERT INTO ${type} (user_id, value) VALUES (${uid}, ${value});`,
+			mysql.query(`INSERT INTO ${type} (user_id, value) VALUES ('${uid}', '${value}');`,
 				(err, data) => {
 					if(err || data.length == 0) resolve(false);
 					else resolve(true);
@@ -62,17 +62,13 @@ module.exports = async function(req, res) {
 				success = await update(val, params[val]);
 				if(!success) message[`${val}_notification`] = `Could not set your privacy to ${params[val]} at this time`;
 				break;
+			case 'favorite_artists':
 			case 'favorite_genres':
 				//if(typeof params[val])
 				console.log(typeof params[val]);
-				success = await update_favorite('genre', params[val]);
-				if(!success) message[`${val}_notification`] = `You already have ${params[val]} as a favorite genre`;
-				break;
-			case 'favorite_artists':
-				//if(typeof params[val])
-				console.log(typeof params[val]);
-				success = await update_favorite('artist', params[val]);
-				if(!success) message[`${val}_notification`] = `You already have ${params[val]} as a favorite artist`;
+				var sep_words = val.split('_', 2);
+				success = await update_favorite(val, params[val]);
+				if(!success) message[`${val}_notification`] = `You already have ${params[val]} as a ${sep_words[0]} ${sep_words[1]}`;
 				break;
 			default:
 				break;

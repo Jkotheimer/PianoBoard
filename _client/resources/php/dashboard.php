@@ -46,7 +46,7 @@ if(!isset($current_user)) {
 
 		<div class="info_container">
 			<div class="info_label">My Favorite Genres</div>
-			<div class="favorite_container" id="genre_container">
+			<div class="favorite_container" id="genres_container" data-length="<? echo count($current_user->genres); ?>">
 				<!--The genres get listed here in the following form: -->
 				<!--span class='favorite_element'> Genre </span-->
 				<?
@@ -54,7 +54,7 @@ if(!isset($current_user)) {
 					echo "<span class='message white'>You haven't added any of your favorite genres yet</span>";
 				} else {
 					foreach($current_user->genres as $genre) {
-						echo "<span class='favorite_element'>$genre</span>";
+						echo "<span class='favorite_element' onclick='remove_favorite(this)'>$genre</span>";
 					}
 				}
 				?>
@@ -63,12 +63,12 @@ if(!isset($current_user)) {
 			<div id="genre_search">
 				<!--As the user types in the above input bar, this populates with API search results-->
 			</div>
-			<div id="favoriteGenres_notification" class="notification"></div>
+			<div id="favorite_genres_notification" class="notification"></div>
 		</div>
 
 		<div class="info_container">
 			<div class="info_label">My Favorite Artists</div>
-			<div class="favorite_container" id="artist_container">
+			<div class="favorite_container" id="artists_container" data-length="<? echo count($current_user->artists); ?>">
 				<!--The artists get listed here in the following form: -->
 				<!--span class='favorite_element'> Artist </span-->
 				<?
@@ -76,7 +76,7 @@ if(!isset($current_user)) {
 					echo "<span class='message white'>You haven't added any of your favorite artists yet</span>";
 				} else {
 					foreach($current_user->artists as $artist) {
-						echo "<span class='favorite_element'>$artist</span>";
+						echo "<span class='favorite_element' onclick='delete_favorite(this)'>$artist</span>";
 					}
 				}
 				?>

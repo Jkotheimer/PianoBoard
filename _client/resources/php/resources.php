@@ -42,18 +42,18 @@ function get_account($id) {
 	$query = "SELECT value from favorite_artists WHERE user_id='$id';";
 	$result = $database->query($query);
 	$account->artists = [];
-	while($row = $result->fetch_array()) { $account->Artists[] = $row[0]; }
+	while($row = $result->fetch_array()) { $account->artists[] = $row[0]; }
 
 	$query = "SELECT value FROM favorite_genres WHERE user_id='$id';";
 	$result = $database->query($query);
 	$account->genres = [];
-	while($row = $result->fetch_array()) { $account->Genres[] = $row[0]; }
+	while($row = $result->fetch_array()) { $account->genres[] = $row[0]; }
 
 	// Finally, get the name, genre, and id of all projects owned by the user
 	$query = "SELECT id, name, genre FROM project WHERE user_id='$id';";
 	$result = $database->query($query);
 	$account->projects = [];
-	while($row = $result->fetch_assoc()) { $account->Projects[] = $row; }
+	while($row = $result->fetch_assoc()) { $account->projects[] = $row; }
 	
 	mysqli_close($database); 
 
