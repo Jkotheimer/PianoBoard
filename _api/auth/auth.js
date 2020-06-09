@@ -39,6 +39,9 @@ var hash_password = function(password) {
 
 var verify_password = function(password, salt, hash) {
 	const pepper = require('./pepper.jsecret');
+	console.log(password);
+	console.log(salt);
+	console.log(hash);
 	const hashed_pass = gen_hash(password, salt, pepper).hash;
 	return hashed_pass == hash;
 }

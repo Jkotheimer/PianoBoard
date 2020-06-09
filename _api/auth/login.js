@@ -25,7 +25,8 @@ module.exports = function(req, res) {
 			}
 			if(data.length != 0) {
 				data = data[0];
-				if(crypto.verify_password(password, data.Salt, data.Password)) {
+				console.log(data);
+				if(crypto.verify_password(password, data.salt, data.password)) {
 					// The user is authenticated - set token cookies and return
 					const token = crypto.gen_token();
 					const exp_date = req.app.locals.resources.new_date(req.app.locals.token_exp);
@@ -38,11 +39,11 @@ module.exports = function(req, res) {
 					// We do nothing with this variable - it's here to pause the code before inserting a new token
 					var deleted = await promise;
 					mysql.query(`INSERT INTO access_token (token, user_id, expiration_date) VALUES
-						('${token}', '${data.AccountId}', '${exp_date}');`,
+						('${token}', '${data.id}', '${exp_date}');`,
 						(err, data) => {if(err) throw err}
 					);
 					res.cookie('pb_token', token, {domain: req.app.locals.domain, path: '/', maxAge: req.app.locals.token_exp});
-					res.cookie('pb_uid', data.AccountId, {domain: req.app.locals.domain, path: '/', maxAge: req.app.locals.token_exp});
+					res.cookie('pb_uid', data.id, {domain: req.app.locals.domain, path: '/', maxAge: req.app.locals.token_exp});
 					res.status(200).json({message: 'Successfully logged in!'});
 				} else {
 					// The password authentication failed
