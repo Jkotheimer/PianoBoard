@@ -98,13 +98,6 @@ function submit_listener(event, submit_function) {
 	}
 }
 
-function reset_form(prev_form) {
-	for(let field_name in prev_form) {
-		if(prev_form.hasOwnProperty(field_name))
-			document.getElementById(field_name).value = prev_form[field_name];
-	}
-}
-
 /**
  * COOKIE AND URI HELPERS
  * ____________________________________________________________________________
@@ -137,76 +130,6 @@ function get_query_parameter(name) {
 }
 
 /**
- * API HELPERS
- * ____________________________________________________________________________
- */
-
-function get(url) {
-	let xhr = new XMLHttpRequest();
-	xhr.open("GET", url);
-	xhr.send();
-	return new Promise(resolve => {
-		var wait = setInterval(() => {
-			if(xhr.readyState == 4) {
-				var response = xhr;
-				xhr = null;
-				resolve(response.response);
-				clearInterval(wait);
-			}
-		}, 10);
-	})
-}
-
-// Return the account object from the server from the cookies that are currently cached
-function get_account(success_function, failure_function) {
-	if(xhr) return;
-	xhr = new XMLHttpRequest();
-	var ID = get_cookie(resources.uid);
-	xhr.open("GET", resources.api_user + "/" + ID, true);
-	xhr.onload = function() {
-		var response = xhr;
-		xhr = undefined;
-		if(response.status == 201) {
-			if(success_function.length == 0) success_function();
-			else success_function(JSON.parse(response.response));
-		}
-		else failure_function();
-	}
-	xhr.send();
-}
-
-// Push the provided data to the current account, writing to the specified action
-function push_update(data, link, success_function, failure_function) {
-	if(xhr) return;
-	xhr = new XMLHttpRequest();
-	xhr.open(link.method, link.url);
-	xhr.onload = function() {
-		var response = xhr;
-		xhr = undefined;
-		if(response.status == 200) {
-			if(success_function.length == 0) success_function();
-			else success_function(JSON.parse(response.response));
-		}
-		else {
-			if(failure_function.length == 0) failure_function();
-			else failure_function(JSON.parse(response.response));
-		}
-	}
-	xhr.send(data);
-	return xhr;
-}
-
-// Get the link object correlating with the specified action within the given item
-function getLink(links, action) {
-	var value;
-	links.forEach(element => {
-		if(element.action == action) value = element;
-	});
-	if(value == undefined) return undefined;
-	else return value;
-}
-
-/**
  * OTHER HELPERS
  * ____________________________________________________________________________
  */
@@ -214,7 +137,6 @@ function getLink(links, action) {
 // Found this on THE WEB FLASH to deselect all input elements in the document.
 // Credit: [https://www.thewebflash.com/select-or-deselect-text-inside-an-element-using-js/]
 function deselect_all() {
-	console.log("Deselecting all");
 	var element = document.activeElement;
 
 	if (element && /INPUT|TEXTAREA/i.test(element.tagName)) {
@@ -261,11 +183,6 @@ function create_keyboard_event(type, key, keycode) {
 	});
 }
 
-function contains(object, value) {
-	return (typeof object == "string" && object == value  ||
-			is_iterable(object) && object.includes(value))
-}
-
 function is_iterable(object) {
 	return typeof object == "symbol" || typeof object == "object";
 }
@@ -285,7 +202,7 @@ function focus_on(element) {
 	setTimeout(function() { element.focus() }, 1);
 }
 
-async function appendHtml(element, url) {
+async function append_html(element, url) {
 	var html = await get(url);
 	var parser = new DOMParser();
 	element.appendChild(parser.parseFromString(html, "text/html").body);
