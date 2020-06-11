@@ -3,6 +3,9 @@ function input_event(event, element, submit) {
 		if(event.keyCode == 13) {
 			confirm(element, () => submit(element.id, element.value, update_callback, true));
 		}
+	} else if(event.type == 'click') {
+		var type = element.parentNode.id.includes('genre') ? 'favorite_genres':'favorite_artists';
+		confirm(element, () => submit(type, element.innerHTML, delete_callback, false));
 	}
 }
 function toggle(element, submit) {
@@ -37,8 +40,38 @@ function update_user(attribute, value, callback, notify) {
 	api_call('PUT', `/users/${user.username}/`, data, callback);
 }
 
+/* DELETE FUNCTIONS */
+function delete_favorite(attribute, value, callback) {
+	var data = {};
+	data[attribute] = value;
+	api_call('DELETE', `/users/${user.username}/`, data, callback);
+}
+
 
 /* CALLBACKS*/
+function delete_callback(xhr) {
+	const message = JSON.parse(xhr.response);
+	if(xhr.readyState == 4 && xhr.status >= 200 && xhr.status < 300) {
+		for(notification in message) {
+			if(notification.includes('notification')) display_success(document.getElementById(notification), message[notification]);
+			else {
+				var element = document.getElementById(message[notification]);	
+				console.log(message[notification]);
+				console.log(element);
+				var parent = element.parentNode;
+				parent.removeChild(element);
+				parent.dataset.length--;
+				console.log(typeof parent.dataset.length);
+				if(parent.dataset.length == 0) parent.innerHTML = `<span class='message white'>
+							You haven't added any of your favorite ${notification.split('_', 2)[1]} yet
+							</span>`;
+				user[notification].splice(user[notification].indexOf(message[notification]), 1);
+			}
+		}
+	} else {
+		console.log(xhr);
+	}
+}
 function update_callback(xhr) {
 	const message = JSON.parse(xhr.response);
 	if(xhr.readyState == 4 && xhr.status >= 200 && xhr.status < 300) {
@@ -56,11 +89,17 @@ function update_callback(xhr) {
 				if(notification.includes('favorite')) element = document.getElementById(notification.split('_', 2)[1] + '_container');
 
 				if(element.tagName == 'INPUT') element.value = message[notification];
-				else if(element.dataset.length == 0) element.innerHTML = `<span class='favorite_element' onclick='remove_favorite(this)'>
-																			${message[notification]}</span>`;
-				else element.innerHTML += `<span class='favorite_element' onclick='remove_favorite(this)'>
-												${message[notification]}</span>`;
-				user[notification] = message[notification];
+				else {
+					var new_element = document.createElement('SPAN');
+					new_element.className = 'favorite_element';
+					new_element.id = message[notification];
+					new_element.onclick = () => input_event(event, new_element, delete_favorite);
+					new_element.innerText = message[notification];
+					if(element.dataset.length == 0) element.innerHTML = '';
+					element.appendChild(new_element);
+				}
+				user[notification].push(message[notification]);
+				element.dataset.length++;
 			}
 		}
 	} else {
@@ -153,6 +192,11 @@ async function confirm(element, callback) {
 		case 'favorite_genres':
 		case 'favorite_artists':
 			action = `add a new favorite ${element.id.split('_', 2)[1]}`;
+			break;
+	}
+	switch(element.className) {
+		case 'favorite_element':
+			action = `delete ${element.innerHTML} from favorites`;
 			break;
 	}
 	label.innerText = `Are you sure you want to ${action}?`;
