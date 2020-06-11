@@ -35,13 +35,15 @@ CREATE TABLE failed_ip (
 CREATE TABLE favorite_genres (
 	user_id INT UNSIGNED NOT NULL,
 	value VARCHAR(32) NOT NULL,
-	CONSTRAINT Genre_FK FOREIGN KEY (user_id) REFERENCES user(id)
+	CONSTRAINT Genre_FK FOREIGN KEY (user_id) REFERENCES user(id),
+	CONSTRAINT Genre_PK PRIMARY KEY (user_id, value)
 );
 
 CREATE TABLE favorite_artists (
 	user_id INT UNSIGNED NOT NULL,
 	value VARCHAR(32) NOT NULL,
-	CONSTRAINT Artist_FK FOREIGN KEY (user_id) REFERENCES user(id)
+	CONSTRAINT Artist_FK FOREIGN KEY (user_id) REFERENCES user(id),
+	CONSTRAINT Artist_PK PRIMARY KEY (user_id, value)
 );
 
 /* AUTHENTICATION ENTITIES */
