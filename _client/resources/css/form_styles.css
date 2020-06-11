@@ -53,7 +53,7 @@
 	color: #444;
 }
 .error {
-	background-color: red;
+	background-color: var(--red);
 }
 .neutral {
 	background-color: var(--cream);
