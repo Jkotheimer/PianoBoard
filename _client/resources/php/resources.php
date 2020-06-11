@@ -41,13 +41,13 @@ function get_account($id) {
 	// Next, get the favorite genres and artists
 	$query = "SELECT value from favorite_artists WHERE user_id='$id';";
 	$result = $database->query($query);
-	$account->artists = [];
-	while($row = $result->fetch_array()) { $account->artists[] = $row[0]; }
+	$account->favorite_artists = [];
+	while($row = $result->fetch_array()) { $account->favorite_artists[] = $row[0]; }
 
 	$query = "SELECT value FROM favorite_genres WHERE user_id='$id';";
 	$result = $database->query($query);
-	$account->genres = [];
-	while($row = $result->fetch_array()) { $account->genres[] = $row[0]; }
+	$account->favorite_genres = [];
+	while($row = $result->fetch_array()) { $account->favorite_genres[] = $row[0]; }
 
 	// Finally, get the name, genre, and id of all projects owned by the user
 	$query = "SELECT id, name, genre FROM project WHERE user_id='$id';";

@@ -46,15 +46,15 @@ if(!isset($current_user)) {
 
 		<div class="info_container">
 			<div class="info_label">My Favorite Genres</div>
-			<div class="favorite_container" id="genres_container" data-length="<? echo count($current_user->genres); ?>">
+			<div class="favorite_container" id="genres_container" data-length="<? echo count($current_user->favorite_genres); ?>">
 				<!--The genres get listed here in the following form: -->
 				<!--span class='favorite_element'> Genre </span-->
 				<?
-				if(empty($current_user->genres)) {
+				if(empty($current_user->favorite_genres)) {
 					echo "<span class='message white'>You haven't added any of your favorite genres yet</span>";
 				} else {
-					foreach($current_user->genres as $genre) {
-						echo "<span class='favorite_element' onclick='remove_favorite(this)'>$genre</span>";
+					foreach($current_user->favorite_genres as $genre) {
+						echo "<span class='favorite_element' id='$genre' onclick='input_event(event, this, delete_favorite)'>$genre</span>";
 					}
 				}
 				?>
@@ -68,15 +68,15 @@ if(!isset($current_user)) {
 
 		<div class="info_container">
 			<div class="info_label">My Favorite Artists</div>
-			<div class="favorite_container" id="artists_container" data-length="<? echo count($current_user->artists); ?>">
+			<div class="favorite_container" id="artists_container" data-length="<? echo count($current_user->favorite_artists); ?>">
 				<!--The artists get listed here in the following form: -->
 				<!--span class='favorite_element'> Artist </span-->
 				<?
-				if(empty($current_user->artists)) {
+				if(empty($current_user->favorite_artists)) {
 					echo "<span class='message white'>You haven't added any of your favorite artists yet</span>";
 				} else {
-					foreach($current_user->artists as $artist) {
-						echo "<span class='favorite_element' onclick='delete_favorite(this)'>$artist</span>";
+					foreach($current_user->favorite_artists as $artist) {
+						echo "<span class='favorite_element' id='$artist' onclick='input_event(event, this, delete_favorite)'>$artist</span>";
 					}
 				}
 				?>
