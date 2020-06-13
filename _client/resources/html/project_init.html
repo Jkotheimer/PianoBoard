@@ -1,26 +1,32 @@
-<form class="panel form_panel" method="POST" action="/new">
+<div class="panel form_panel" id="project_init">
 	<h class="form_header">New Project</h>
 	<div class="form_area">
 		<div class="form_section">
 			<div class="form_label">Project Name</div>
 			<input class="form_input" type="text" name="name" placeholder="Bohemian Rhapsody"/>
+			<div id="project_name_notification" class="notification"></div>
 		</div>
 		<div class="form_section">
 			<div class="form_label">Genre</div>
 			<input class="form_input" type="text" name="genre" placeholder="Rock"/>
+			<div id="project_genre_notification" class="notification"></div>
 		</div>
 		<div class="form_section">
 			<div class="form_label">Time Signature</div>
-			<input class="form_input" type="text" name="time_signature" placeholder="3/4"/>
+			<input class="form_input number" type="number" name="time_signature_num" value="4" required/>
+			<span class="form_input number spacer">/</span>
+			<input class="form_input number" type="number" name="time_signature_den" value="4" required/>
+			<div id="project_time_signature_notification" class="notification"></div>
 		</div>
 		<div class="form_section">
 			<div class="form_label">Tempo</div>
-			<input class="form_input" type="number" name="tempo" placeholder="120"/>
+			<input class="form_input" type="number" name="tempo" value="120" required/>
+			<div id="project_tempo_notification" class="notification"></div>
 		</div>
 		<div class="form_section">
-			<div class="form_label" style="display: inline-block;">Private</div>
-			<input class="form_input checkbox" type="checkbox" name="is_private"/>
+			<label class="form_label" for="is_private" style="display: inline-block;">Private</label>
+			<input class="form_input checkbox" type="checkbox" name="is_private" id="is_private"/>
 		</div>
-		<input class="link submit_link" type="submit" value="Create Project"/>
+		<input class="link submit_link" type="submit" value="Create Project" onclick="create_project(this.parentNode);"/>
 	</div>
-</form>
+</div>
