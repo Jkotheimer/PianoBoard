@@ -15,30 +15,46 @@ const resources = {
  * ____________________________________________________________________________
  */
 
+// faders is an object containing the identifiers for all timeouts and intervals 
+// that currently exist for messages. faders[id] is an object containing the
+// timeout and interval tied to the element with the specified id.
+var faders = {};
 function fade(element) {
 	element.style.opacity = '1';
-	element.style.display = 'inline-block';
-	setTimeout(() => {
-		var fader = setInterval(() => {
-			var new_opacity = parseFloat(element.style.opacity) - 0.01;
+	let id = element.id ? element.id : element.innerText;
+
+	// If the element has been used before, ensure that the timeout and interval
+	// have been supressed. Else, create a new object for it
+	if(faders[id]) {
+		clearInterval(faders[id].interval);
+		clearTimeout(faders[id].timeout);
+	} else faders[id] = {};
+
+	// Wait 3 seconds before fading out the notification
+	faders[id].timeout = setTimeout(() => {
+		// Drop the opacity of the element every 10 ms until it is basically invisible
+		faders[id].interval = setInterval(() => {
+			let new_opacity = parseFloat(element.style.opacity) - 0.01;
 			element.style.opacity = new_opacity.toString();
+			// When it's gone, reset the opacity, remove any inner html, reset the
+			// class list, and clear the interval
 			if(parseFloat(element.style.opacity) < .02) {
-				element.style.display = 'none';
 				element.style.opacity = '1';
 				element.innerHTML = '';
-				clearInterval(fader);
+				element.className = element.classList[0];
+				clearInterval(faders[id].interval);
 			}
 		}, 10);
 	}, 3000);
 }
 function display_error(element, message, oldvalue) {
 	element.classList.add('error');
-	element.innerHTML = message;
+	element.innerText = message;
 	fade(element);
 }
 function display_success(element, message, newvalue) {
 	element.classList.add('success');
-	element.innerHTML = message;
+	element.innerText = message;
 	fade(element);
 }
 	
@@ -91,11 +107,14 @@ const validators = {
 	"confirm_password": check_matching_password
 }
 
-function submit_listener(event, submit_function) {
-	if(event.keyCode == 13) {
-		event.preventDefault();
-		submit_function();
+function get_inputs(form) {
+	var values = {};
+	for(node of form.getElementsByTagName('INPUT')) {
+		if(!node.name) continue;
+		if(node.type == 'checkbox') values[node.name] = node.checked;
+		else values[node.name] = node.value;
 	}
+	return values;
 }
 
 /**
