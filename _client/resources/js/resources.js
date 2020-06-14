@@ -73,6 +73,67 @@ function check_all_complete_inputs(parent) {
 	}
 }
 
+function check_validity(form, prefix) {
+	const inputs = get_inputs(form);
+	var errors = {};
+	
+	// Validity checkers for each data type
+	var check_number = (key, num, notification) => {
+		if(num > 255 || num < 0) 
+			errors[notification] = `${key} is too ${inputs[key] < 0 ? 'small' : 'large'}`;
+	}
+	
+	var check_string = (key, str, notification) => {
+		if(str.length > 32 || str.length < 2)
+			errors[notification] =  `${prefix} ${key} has too ${str.length < 2 ? 'few' : 'many'} characters`;
+	}
+	
+	var check_array = (key, arr, notification) => {
+		let err = {};
+		inputs[key].forEach(item => {
+			switch(typeof item) {
+				case 'string':
+					
+			}
+		});
+	}
+
+	// Generic validity checker allocates different datatypes to different functions
+	var check_value = (key, value, notification) => {
+		// In case if any errors went unnoticed by the individual check, this spans everything else
+		if(value == undefined || value == null) {
+			errors[notification] = 'You must provide a value here';
+			return;
+		}
+		// If the value type was a boolean, there's no way that can be fucked up so ignore it
+		switch(typeof value) {
+			case 'object':
+				check_array(key, value, notification);
+				break;
+			case 'string':
+				check_string(key, value, notification);
+				break;
+			case 'number':
+				check_number(key, value, notification);
+				break;
+		}
+	}
+
+	// Iterate through each key/value pair in the input dictionary and run them through the above functions
+	for(key in inputs) {
+		// Pre-emptively create the notification id string in case if an error is caught
+		var notif = prefix ? `${prefix}_${key}_notification` : `${key}_notification`;
+		check_value(key, inputs[key], notif);
+	}
+
+	// If errors were caught, display them and return
+	if(Object.keys(errors).length > 0) {
+		for(err in errors) display_error(document.getElementById(err), errors[err]);
+		return null;
+	}
+	return inputs;
+}
+
 function check_complete_input(element, value, success_function, failure_function) {
 	var validator = validators[element] || validators["attribute"];
 	if(validator(value)) {
@@ -109,11 +170,19 @@ const validators = {
 
 function get_inputs(form) {
 	var values = {};
-	console.log(form);
 	for(node of form.getElementsByTagName('INPUT')) {
 		if(!node.name) continue;
 		if(node.type == 'checkbox') values[node.name] = node.checked;
-		else values[node.name] = node.value;
+		else {
+			let val = Number(node.value) > 0 ? Number(node.value) : node.value;
+			if(values[node.name]) {
+				if(typeof values[node.name] != 'object') {
+					values[node.name] = [values[node.name], val];
+				} else {
+					values[node.name].push(val);
+				}
+			} else values[node.name] = val;
+		}
 	}
 	return values;
 }
@@ -159,18 +228,11 @@ function get_query_parameter(name) {
 function deselect_all() {
 	var element = document.activeElement;
 
-	if (element && /INPUT|TEXTAREA/i.test(element.tagName)) {
-		if ('selectionStart' in element) {
-			element.selectionEnd = element.selectionStart;
-		}
-		element.blur();
-	}
+	if(element) element.blur();
+	if(element.selectionStart && element.selectionEnd) element.selectionEnd = element.selectionStart;
 
-	if (window.getSelection) { // All browsers, except IE <=8
-		window.getSelection().removeAllRanges();
-	} else if (document.selection) { // IE <=8
-		document.selection.empty();
-	}
+	if (window.getSelection) window.getSelection().removeAllRanges();
+	else if (document.selection) document.selection.empty();
 }
 
 function remove_all_eventListeners(parent) {
@@ -182,7 +244,8 @@ function remove_all_eventListeners(parent) {
 
 function input_event(event, element, submit) {
 	if(event.type == 'keypress' && event.keyCode == 13) {
-		confirm(element, () => submit(element.id, element.value, update_callback, true));
+		if(!element) submit();
+		else confirm(element, () => submit(element.id, element.value, update_callback, true));
 	} else if(event.type == 'click') {
 		var type = element.parentNode.id.includes('genre') ? 'favorite_genres':'favorite_artists';
 		confirm(element, () => submit(type, element.innerHTML, delete_callback, false));
@@ -211,9 +274,7 @@ function is_iterable(object) {
 }
 
 // The timeout is required for some reason to make the focus work properly
-function focus_on(element) {
-	setTimeout(() => element.focus(), 1);
-}
+function focus_on(element) { setTimeout(() => element.focus(), 50); }
 
 /** 
  * This is a fucked up function and I apologize for it's spaghettification
