@@ -17,6 +17,9 @@ input:focus { outline: none; }
 	text-align: left;
 	width: 100%;
 }
+#project_init {
+	width: 400px;
+}
 .panel {
 	position: relative;
 	width: auto;

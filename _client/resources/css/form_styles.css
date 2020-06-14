@@ -8,8 +8,17 @@
 	margin-top: 15px;
 }
 .form_section {
+	display: inline-block;
 	position: relative;
+	width: 100%;
 	text-align: left;
+}
+.form_section.half { width: 48%; }
+.form_section.quarter { width: 29%; }
+.form_section.three_quarters { width: 69%; }
+.form_section.right {
+	float: right;
+	text-align: right;
 }
 .form_label {
 	position: relative;
@@ -21,9 +30,8 @@
 	position: relative;
 	height: 25px;
 	width: 100%;
-	margin: 5px 10px 5px -25px;
+	margin: 5px 0px;
 	padding-bottom: 5px;
-	left: 25px;
 	font-size: 20px;
 	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 	color: var(--cream);
@@ -35,28 +43,80 @@
 	outline: none;
 	border-bottom-color: var(--cream);
 }
+.form_input.number {
+	display: inline-block;
+	text-align: center;
+	width: 50px;
+}
+.form_input.spacer {
+	height: auto;
+	width: 20px;
+	margin: auto -10px;
+}
 .checkbox {
 	display: inline-block;
-	width: 10px;
-	height: 10px;
+	width: 20px;
+	height: 20px;
+	background-color: white;
+	border-radius: none;
+}
+.checkbox:hover {
+	background-color: var(--lightgrey);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.link {
+	position: relative;
+	padding: 5px;
+	margin: 25px auto;
+	text-decoration: none;
+	text-align: center;
+	font-size: 20px;
+	width: 75%;
+	color: #393939;
+	border-radius: 5px;
+	border: 2px solid transparent;
+	display: block;
+}
+.link:hover { border: 2px solid #FFF; cursor: pointer; }
+.link:active { border: 2px solid #333; outline: none; }
+.link::selection { background: transparent; }
+.link.full { width: 100%; }
+.reset_password_link {
+	background-color: var(--yellow);
+	}
+.create_account_link {
+	background-color: var(--purple);
+}
+.submit_link {
+	background-color: var(--cream);
 }
 
 .notification {
 	position: relative;
 	text-align: center;
-	width: 100%;
-	padding: 5px 0;
-	margin: 5px 0 -15px;
+	max-width: 100%;
+	padding: 5px;
+	margin: 5px 0 -10px;
 	font-size: 18px;
 	border-radius: 0px 10px 10px 10px;
 	opacity: 1;
-	color: #444;
+	color: var(--cream);
 }
 .error {
 	background-color: var(--red);
 }
 .neutral {
 	background-color: var(--cream);
+	color: var(--grey);
 }
 .success {
 	background-color: green;
