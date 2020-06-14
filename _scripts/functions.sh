@@ -96,6 +96,9 @@ config_httpd() {
 	<Directory \"${1}/_client/resources/html\">
 		Require all granted
 	</Directory>
+	<Directory \"${1}/_client/resources/js\">
+		Require all granted
+	</Directory>
 	RewriteEngine On
 	RewriteCond %{DOCUMENT_ROOT}/$1 !-f 
 	RewriteCond %{DOCUMENT_ROOT}/$1 !-d
