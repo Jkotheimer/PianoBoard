@@ -69,25 +69,36 @@ function update_callback(xhr) {
 			else {
 				var container = notification
 				var element = document.getElementById(container);
-				if(container.includes('favorite')) {
+				
+				// If the notification is from a favorite, it must be handled differently
+				if(notification.includes('favorite')) {
+					// First, clear the input field but keep it focused 
 					element.value = '';
-					element.focus()
-				}
-				else element.blur();
-				if(notification.includes('favorite')) element = document.getElementById(notification.split('_', 2)[1] + '_container');
+					focus_on(element);
 
-				if(element.tagName == 'INPUT') element.value = message[notification];
-				else {
+					// Now change the element to the container to add the new addition to it
+					element = document.getElementById(notification.split('_', 2)[1] + '_container');
+
+					// Begin creating the new element
 					var new_element = document.createElement('SPAN');
 					new_element.className = 'favorite_element';
 					new_element.id = message[notification];
 					new_element.onclick = () => input_event(event, new_element, delete_favorite);
 					new_element.innerText = message[notification];
+					
+					// If there was nothing in the container, remove the message
 					if(element.dataset.length == 0) element.innerHTML = '';
+
+					// Append the element to the UI, change it in the user object, and increment the counter
 					element.appendChild(new_element);
+					user[notification].push(message[notification]);
+					element.dataset.length++;
+				} else {
+					// If the change came from any other attribute, just blur the input field and set the new values
+					element.blur();
+					element.value = message[notification];
+					user[notification] = message[notification];
 				}
-				user[notification].push(message[notification]);
-				element.dataset.length++;
 			}
 		}
 	} else {
