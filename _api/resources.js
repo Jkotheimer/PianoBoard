@@ -6,10 +6,10 @@ const mysql = require('./sql_connect.js');
 // If the username we want to add exists in the database already,
 // then add one to the number at the end of the username and try again
 var gen_username_recursive = function(err, data, username, num) {
-	if(err || !data) return;
+	if(err || !data) return username;
 	var username_concat = num == 0 ? username : `${username}${num}`;
 	data.forEach((item, index) => {
-		if(item.Username == username_concat) {
+		if(item.username == username_concat) {
 			username_concat = gen_username_recursive(err, data, username,  ++num);
 			return;
 		}
@@ -37,8 +37,7 @@ async function gen_username(email) {
 			(err, data) => resolve(gen_username_recursive(err, data, username, 0))
 		);
 	});
-	username = await promise;
-	return username;
+	return promise;
 }
 
 var new_date = function(offset) {
