@@ -66,11 +66,12 @@ CREATE TABLE access_rights (
 
 /* PROJECT ENTITIES */
 CREATE TABLE project (
-	id INT UNSIGNED NOT NULL,
+	id INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
 	user_id INT UNSIGNED NOT NULL,
 	name VARCHAR(32) NOT NULL,
 	genre VARCHAR(32),
-	time_signature CHAR(5),
+	time_signature_num TINYINT,
+	time_signature_den TINYINT,
 	tempo TINYINT UNSIGNED,
 	creation_date DateTime,
 	last_modified DateTime,
@@ -81,7 +82,7 @@ CREATE TABLE project (
 );
 
 CREATE TABLE track (
-	id INT UNSIGNED NOT NULL,
+	id INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
 	project_id INT UNSIGNED NOT NULL,
 	name VARCHAR(32),
 	instrument VARCHAR(32) NOT NULL,
@@ -98,7 +99,7 @@ CREATE TABLE track (
 );
 
 CREATE TABLE recording (
-	id INT UNSIGNED NOT NULL,
+	id INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
 	track_id INT UNSIGNED NOT NULL,
 	start_time INT UNSIGNED NOT NULL,
 	end_time INT UNSIGNED NOT NULL,
@@ -110,7 +111,7 @@ CREATE TABLE recording (
 );
 
 CREATE TABLE note (
-	id INT UNSIGNED NOT NULL,
+	id BIGINT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
 	recording_id INT UNSIGNED NOT NULL,
 	note CHAR(2) NOT NULL,
 	start_time INT UNSIGNED NOT NULL,
