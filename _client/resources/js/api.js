@@ -1,23 +1,38 @@
-function input_event(event, element, submit) {
-	if(event.type == 'keypress') {
-		if(event.keyCode == 13) {
-			confirm(element, () => submit(element.id, element.value, update_callback, true));
-		}
-	} else if(event.type == 'click') {
-		var type = element.parentNode.id.includes('genre') ? 'favorite_genres':'favorite_artists';
-		confirm(element, () => submit(type, element.innerHTML, delete_callback, false));
-	}
-}
-function toggle(element, submit) {
-	// This value is going to be an integer - the boolean conversion is necessary, trust me
-	var value = element.dataset.value == 'true' ? false:true;
-
-	confirm(element, () => submit(element.id, value, toggle_callback, false))
-}
-
 /* CREATE FUNCTIONS */
 async function create_project(form) {
-	if(form) api_call('POST', `/users/${user.Username}/projects`, form, () => window.location = '/studio/');
+	if(form) {
+		const values = get_inputs(form);
+		var errors = {};
+		for(key in values) {
+			// If the value type was a boolean, there's no way that can be fucked up so ignore it
+			if(typeof values[key] == 'boolean') continue;
+
+			// Pre-emptively create the notification id string in case if an error is caught
+			var notif = `project_${key}_notification`;
+
+			// If the input is from the time signature, change the notification since there are 2 different time signature values 
+			if(key.includes('time_signature')) {
+				notif = `project_time_signature_notification`;
+				// If any of the time signature values are outside the range 2-16, throw an error
+				if(values[key] > 16 || values[key] < 2) errors[notif] = 'Project time signature is invalid';
+				continue;
+			} else if(!values[key]) errors[notif] = 'You must provide a value here';
+			// If any string inputs are outside the range 2-32, throw an error or if it's a number and it's larger than 255, throw an error
+			if(typeof values[key] == 'string' && values[key].length > 32 || values[key].length < 2)
+				errors[notif] = `Project ${key} has too ${values[key].length < 2 ? 'few' : 'many'} characters`;
+			else if(values[key] > 255 || values[key] < 0) errors[notif] = `${key} is too ${values[key] < 0 ? 'small' : 'large'}`;
+		}
+
+		// If errors were caught, display them and return
+		if(Object.keys(errors).length > 0) {
+			for(err in errors) {
+				console.log(err);
+				display_error(document.getElementById(err), errors[err]);
+			}
+			return;
+		}
+		api_call('POST', `/users/${user.username}/projects`, values, (xhr) => console.log(xhr));
+	}
 	else append_html('blur.php/?file=project_init.html');
 }
 
@@ -158,69 +173,5 @@ async function append_html(file) {
 	element.innerHTML = await get(`/resources/html/${file}`);
 	document.body.appendChild(element);
 	return element;
-}
-
-async function confirm(element, callback) {
-	// This variable is null, but we need an assignment for the async to properly wait before trying to access the elements
-	deselect_all();
-	var submitter = function(event) {
-		if(event.keyCode == 13) {
-			event.preventDefault();
-			document.body.removeChild(parent);
-			callback();
-			document.removeEventListener('keypress', submitter);
-		}
-	}
-	var parent = await append_html('blur.php');
-	parent.addEventListener('DOMNodeRemoved', (event) => {
-		if(event.target.id == 'blur') {
-			element.value = user[element.id];
-			document.removeEventListener('keypress', submitter);
-		}
-	});
-	var label = document.createElement('H');
-	var action = element.id;
-	switch(element.id) {
-		case 'username':
-		case 'email':
-			action = `update your ${element.id}`;
-			break;
-		case 'is_private':
-			var swap = element.dataset.value == 'true' ? 'public':'private';
-			action = `make your account ${swap}`;
-			break;
-		case 'favorite_genres':
-		case 'favorite_artists':
-			action = `add a new favorite ${element.id.split('_', 2)[1]}`;
-			break;
-	}
-	switch(element.className) {
-		case 'favorite_element':
-			action = `delete ${element.innerHTML} from favorites`;
-			break;
-	}
-	label.innerText = `Are you sure you want to ${action}?`;
-	label.classList.add('panel_header');
-	var confirm = document.createElement('BUTTON');
-	confirm.innerText = 'Yes';
-	confirm.onclick = () => {
-		document.body.removeChild(parent);
-		callback();
-		document.removeEventListener('keypress', submitter);
-	}
-	document.addEventListener('keypress', submitter);
-	confirm.classList.add('button', 'right', 'confirm');
-	var deny = document.createElement('BUTTON');
-	deny.innerText = 'No';
-	deny.onclick = () => {
-		document.body.removeChild(parent);
-		element.value = user[element.id];
-		document.removeEventListener('keypress', submitter);
-	}
-	deny.classList.add('button', 'left', 'dull');
-	var panel = document.getElementById('foreground_panel');
-	panel.appendChild(label);
-	panel.appendChild(deny);
-	panel.appendChild(confirm);
 }
 

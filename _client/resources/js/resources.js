@@ -109,6 +109,7 @@ const validators = {
 
 function get_inputs(form) {
 	var values = {};
+	console.log(form);
 	for(node of form.getElementsByTagName('INPUT')) {
 		if(!node.name) continue;
 		if(node.type == 'checkbox') values[node.name] = node.checked;
@@ -179,18 +180,21 @@ function remove_all_eventListeners(parent) {
 	}
 }
 
-// element: an HTML element
-// listener: click, keypress, etc...
-function removeEventListener(element, listener) {
-	if(listener) {
-		var listener_name = "on" + listener;
-		element.removeEventListener(listener, element[listener_name]);
-		element[listener_name] = null;
-	} else {
-		var clone = element.cloneNode(true);
-		element.parentNode.replaceChild(clone, element);
+function input_event(event, element, submit) {
+	if(event.type == 'keypress' && event.keyCode == 13) {
+		confirm(element, () => submit(element.id, element.value, update_callback, true));
+	} else if(event.type == 'click') {
+		var type = element.parentNode.id.includes('genre') ? 'favorite_genres':'favorite_artists';
+		confirm(element, () => submit(type, element.innerHTML, delete_callback, false));
 	}
 }
+function toggle(element, submit) {
+	// This value is going to be an integer - the boolean conversion is necessary, trust me
+	var value = element.dataset.value == 'true' ? false:true;
+
+	confirm(element, () => submit(element.id, value, toggle_callback, false))
+}
+
 
 function create_keyboard_event(type, key, keycode) {
 	return new KeyboardEvent(type, {
@@ -206,23 +210,106 @@ function is_iterable(object) {
 	return typeof object == "symbol" || typeof object == "object";
 }
 
-function separate_words(word) {
-	var result = "";
-	for(let i = 0; i < word.length; i++) {
-		var c = word.charAt(i);
-		if(c == c.toUpperCase()) result += ' ' + c.toLowerCase();
-		else result += c;
-	}
-	return result;
-}
-
 // The timeout is required for some reason to make the focus work properly
 function focus_on(element) {
-	setTimeout(function() { element.focus() }, 1);
+	setTimeout(() => element.focus(), 1);
 }
 
-async function append_html(element, url) {
-	var html = await get(url);
-	var parser = new DOMParser();
-	element.appendChild(parser.parseFromString(html, "text/html").body);
+/** 
+ * This is a fucked up function and I apologize for it's spaghettification
+ * Allow me to try to explain how it works:
+ * - If the user has changed something and submitted it, this function creates a pop-up that confirms
+ * whether or not the user actually wants to do that.
+ *
+ * - First, we deselect everything
+ *
+ * - Next, we declare a submitter function - this gets attached to multiple event listeners and
+ * removes itself when the user confirms whether or not they wish to submit their changes
+ *
+ * - Finally, we get the blank blur page from the serer and append an appropriate header, a 
+ * cancel button, and a submit button and wait for the user to do something
+ */
+
+async function confirm(element, callback) {
+	// This variable is null, but we need an assignment for the async to properly wait before trying to access the elements
+	deselect_all();
+	var submitter = function(event) {
+		if(event.keyCode == 13) {
+			event.preventDefault();
+			document.body.removeChild(parent);
+			callback();
+			document.removeEventListener('keypress', submitter);
+		}
+	}
+	
+	// Append the blank blur page and get the element in a variable
+	var parent = await append_html('blur.php');
+	
+	// When the user clicks outside of the focus box, the whole blur page deletes itself - this listens for that
+	parent.addEventListener('DOMNodeRemoved', (event) => {
+		if(event.target.id == 'blur') {
+			element.value = user[element.id];
+			document.removeEventListener('keypress', submitter);
+		}
+	});
+
+	// Create a header element - we will append an action statement to it as a prompt for the user
+	// example: 'Are you sure you want to update your email?'
+	var label = document.createElement('H');
+	var action = element.id;
+
+	// This is where it get's fucked up - we need a switch case for each different action prompt
+	switch(action) {
+		case 'username':
+		case 'email':
+			action = `update your ${action}`;
+			break;
+		case 'is_private':
+			var swap = element.dataset.value == 'true' ? 'public':'private';
+			action = `make your account ${swap}`;
+			break;
+		case 'favorite_genres':
+		case 'favorite_artists':
+			action = `add a new favorite ${action.split('_', 2)[1]}`;
+			break;
+		case 'project_init':
+			action = `create a new project`;
+			break;
+	}
+	// And a separate one for class names in class if we adding favorites
+	switch(element.className) {
+		case 'favorite_element':
+			action = `delete ${element.innerHTML} from favorites`;
+			break;
+	}
+	label.innerText = `Are you sure you want to ${action}?`;
+	label.classList.add('panel_header');
+
+	// Now that the label is done, we create buttons
+	// First is the confirmation button - when clicked, submit the changes
+	var confirmation = document.createElement('BUTTON');
+	confirmation.innerText = 'Yes';
+	confirmation.onclick = () => {
+		document.body.removeChild(parent);
+		callback();
+		document.removeEventListener('keypress', submitter);
+	}
+	document.addEventListener('keypress', submitter);
+	confirmation.classList.add('button', 'right', 'confirm');
+
+	// Next is the deny button - when clicked, remove the prompt and reset the UI attributes
+	var deny = document.createElement('BUTTON');
+	deny.innerText = 'No';
+	deny.onclick = () => {
+		document.body.removeChild(parent);
+		element.value = user[element.id];
+		document.removeEventListener('keypress', submitter);
+	}
+	deny.classList.add('button', 'left', 'dull');
+
+	// Finally, append all of the elements we created onto the blank panel
+	var panel = document.getElementById('foreground_panel');
+	panel.appendChild(label);
+	panel.appendChild(deny);
+	panel.appendChild(confirmation);
 }
