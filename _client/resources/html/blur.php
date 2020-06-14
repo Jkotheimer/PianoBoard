@@ -22,7 +22,7 @@ if(isset($_GET['file'])) $file = $_GET['file'];
 		background-filter: none;
 		backdrop-filter: none;
 		filter: none;
-		top: calc(25vh / 4);
+		top: 50px;
 	}
 </style>
 <div class="blur" id='blur' onclick="this.parentNode.removeChild(this)">
