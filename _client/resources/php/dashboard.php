@@ -120,10 +120,11 @@ if(!isset($current_user)) {
 					<span class='project_attribute'>Genre</span>
 				</div>";
 			foreach($current_user->projects as $project) {
-				echo "<div class='project'>
+				echo "<div class='project' >
 						<span class='project_attribute'>" . $project['id'] . "</span>
 						<span class='project_attribute'>" . $project['name'] . "</span>
 						<span class='project_attribute'>" . $project['genre'] . "</span>
+						<img src='/images/trash.png' class='project_button red' onclick='delete_project(" . $project['id'] . ")'/>
 					</div>";
 			}
 		}

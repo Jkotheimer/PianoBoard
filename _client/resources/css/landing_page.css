@@ -243,6 +243,18 @@ input:focus { outline: none; }
 .project_attribute.long {
 	width: 100%;
 }
+.project_button {
+	position: absolute;
+	height: 100%;
+	top: 0px;
+	right: 0px;
+}
+.project_button.red:hover {
+	background-color: var(--red);
+}
+.project_button.green:hover {
+	background-color: green;
+}
 .center {
 	text-align: center;
 }
