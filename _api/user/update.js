@@ -54,6 +54,12 @@ module.exports = async function(req, res) {
 	const value = req.body.value;
 	switch(attribute.toLowerCase()) {
 		case 'email':
+			const validator = require("email-validator");
+			if(!validator.validate(value)) {
+				message['email_notification'] = `${value} is not a valid email address`;
+				break;
+			}
+			// if the email passes the validator, this case will fall into the username block, which is the function we want
 		case 'username':
 			success = await update(attribute, `'${value}'`);
 			if(!success) message[`${attribute}_notification`] = `An account with this ${attribute} already exists`;

@@ -22,7 +22,8 @@ function update_user(attribute, value, callback, notify) {
 	if(notify) {
 		const valid = check_complete_input(attribute, value);
 		if(!valid) {
-			display_error(attribute, 'Invalid entry');
+			display_error(document.getElementById(`${attribute}_notification`), 'Invalid entry');
+			if(!attribute.includes('_')) document.getElementById(attribute).value = user[attribute];
 			return;
 		}
 	}
