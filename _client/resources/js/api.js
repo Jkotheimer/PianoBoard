@@ -26,16 +26,12 @@ function update_user(attribute, value, callback, notify) {
 			return;
 		}
 	}
-	var data = {};
-	data[attribute] = value;
-	api_call('PUT', `/users/${user.username}/`, data, callback);
+	api_call('PUT', `/users/${user.username}/${attribute}`, {value: value}, callback);
 }
 
 /* DELETE FUNCTIONS */
 function delete_favorite(attribute, value, callback) {
-	var data = {};
-	data[attribute] = value;
-	api_call('DELETE', `/users/${user.username}/`, data, callback);
+	api_call('DELETE', `/users/${user.username}/${attribute}`, {value: value}, callback);
 }
 
 
@@ -139,9 +135,12 @@ function toggle_callback(xhr) {
 function api_call(method, path, data, callback) {
 	const xhr = new XMLHttpRequest();
 	xhr.open(method, `${resources.api}${path}`, true);
-	xhr.setRequestHeader("Content-type", "application/json");
 	xhr.onload = () => callback(xhr);
-	xhr.send(JSON.stringify(data));
+	if(data) {
+		xhr.setRequestHeader("Content-Type", "application/json");
+		xhr.send(JSON.stringify(data));
+	}
+	else xhr.send();
 }
 
 // Get the resource at the given path and return it asynchronously

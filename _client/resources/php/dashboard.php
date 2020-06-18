@@ -121,9 +121,9 @@ if(!isset($current_user)) {
 				</div>";
 			foreach($current_user->projects as $project) {
 				echo "<div class='project'>
-						<span class='project_attribute'>" . $project['ProjectID'] . "</span>
-						<span class='project_attribute'>" . $project['Name'] . "</span>
-						<span class='project_attribute'>" . $project['Genre'] . "</span>
+						<span class='project_attribute'>" . $project['id'] . "</span>
+						<span class='project_attribute'>" . $project['name'] . "</span>
+						<span class='project_attribute'>" . $project['genre'] . "</span>
 					</div>";
 			}
 		}

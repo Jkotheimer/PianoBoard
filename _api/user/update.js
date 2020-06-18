@@ -50,35 +50,32 @@ module.exports = async function(req, res) {
 	var message = {};
 	var stat = 200;
 	var success = null;
-	const params = req.body;
-	for(val in params) {
-		switch(val.toLowerCase()) {
-			case 'email':
-			case 'username':
-				success = await update(val, `'${params[val]}'`);
-				if(!success) message[`${val}_notification`] = `An account with this ${val} already exists`;
-				break;
-			case 'is_private':
-				success = await update(val, params[val]);
-				if(!success) message[`${val}_notification`] = `Could not set your privacy to ${params[val]} at this time`;
-				break;
-			case 'favorite_artists':
-			case 'favorite_genres':
-				//if(typeof params[val])
-				console.log(typeof params[val]);
-				var sep_words = val.split('_', 2);
-				success = await update_favorite(val, params[val]);
-				if(!success) message[`${val}_notification`] = `You already have ${params[val]} as a ${sep_words[0]} ${sep_words[1]}`;
-				break;
-			default:
-				break;
-		}
-		if(success) {
-			message[val] = params[val];
-			message[`${val}_notification`] = `${val} successfully updated!`;
-		}
-		else stat = 400;
+	const attribute = req.params.attribute;
+	const value = req.body.value;
+	switch(attribute.toLowerCase()) {
+		case 'email':
+		case 'username':
+			success = await update(attribute, `'${value}'`);
+			if(!success) message[`${attribute}_notification`] = `An account with this ${attribute} already exists`;
+			break;
+		case 'is_private':
+			success = await update(attribute, value);
+			if(!success) message[`${attribute}_notification`] = `Could not set your privacy to ${value} at this time`;
+			break;
+		case 'favorite_artists':
+		case 'favorite_genres':
+			var sep_words = attribute.split('_', 2);
+			success = await update_favorite(attribute, value);
+			if(!success) message[`${attribute}_notification`] = `You already have ${value} as a ${sep_words[0]} ${sep_words[1]}`;
+			break;
+		default:
+			break;
 	}
+	if(success) {
+		message[attribute] = value;
+		message[`${attribute}_notification`] = `${attribute} successfully updated!`;
+	}
+	else stat = 400;
 
 	res.status(stat).json(message);
 

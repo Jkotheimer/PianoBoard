@@ -44,7 +44,8 @@ app.get('/auth/logout', require('./auth/logout.js'));
  */
 
 app.get('/users/:user', require('./user/read.js'));
-app.put('/users/:user', require('./user/update.js'));
+app.put('/users/:user/:attribute', require('./user/update.js'));
+app.delete('/users/:user/:attribute', require('./user/delete_attribute.js'));
 app.delete('/users/:user', require('./user/delete.js'));
 
 /**
