@@ -40,12 +40,13 @@ module.exports = async function(req, res) {
 		message[`${attribute}_notification`] = `${attribute} is not a deletable attribute`;
 	} else {
 		var deleted = await delete_favorite(attribute, value);
+		var name = attribute.split('_', 2);
 		if(deleted) {
-			message[`${attribute}_notification`] = `Successfully deleted ${value} from your ${attribute.split('_', 2)}`;
+			message[`${attribute}_notification`] = `Successfully deleted ${value} from your ${name[0]} ${name[1]}`;
 			message[attribute] = value;
 		}
 		else {
-			message[`${attribute}_notification`] = `Could not delete ${value} from your ${attribute.split('_', 2)}`;
+			message[`${attribute}_notification`] = `Could not delete ${value} from your ${name[0]} ${name[1]}`;
 			stat = 400;
 		}
 	}

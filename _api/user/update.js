@@ -73,7 +73,9 @@ module.exports = async function(req, res) {
 	}
 	if(success) {
 		message[attribute] = value;
-		message[`${attribute}_notification`] = `${attribute} successfully updated!`;
+		// If the attribute name has an underscore (favorite_genres), optionally split it and print it as separate words
+		var name = attribute.includes('_') ? attribute.split('_', 2) : attribute;
+		message[`${attribute}_notification`] = `${name == attribute ? name : `${name[0]} ${name[1]}`} successfully updated!`;
 	}
 	else stat = 400;
 
