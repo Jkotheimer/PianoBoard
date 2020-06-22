@@ -115,16 +115,20 @@ if(!isset($current_user)) {
 				<div>";
 		} else {
 			echo "<div class='project_label'>
-					<span class='project_attribute'>Project ID</span>
+					<span class='project_attribute button'></span>
 					<span class='project_attribute'>Name</span>
 					<span class='project_attribute'>Genre</span>
+					<span class='project_attribute'>Tempo</span>
+					<span class='project_attribute'>Time Signature</span>
 				</div>";
 			foreach($current_user->projects as $project) {
 				echo "<div class='project' >
-						<span class='project_attribute'>" . $project['id'] . "</span>
+						<img src='/images/edit.png' class='project_attribute button green' onclick='window.location.href=`/studio/" . $project['id'] . "`'/>
 						<span class='project_attribute'>" . $project['name'] . "</span>
 						<span class='project_attribute'>" . $project['genre'] . "</span>
-						<img src='/images/trash.png' class='project_button red' onclick='delete_project(" . $project['id'] . ")'/>
+						<span class='project_attribute'>" . $project['tempo'] . " bpm</span>
+						<span class='project_attribute'>" . $project['time_signature_num'] . '/' . $project['time_signature_den'] . "</span>
+						<img src='/images/trash.png' class='project_attribute button right red' onclick='delete_project(" . $project['id'] . ")'/>
 					</div>";
 			}
 		}

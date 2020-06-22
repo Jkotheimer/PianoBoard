@@ -50,7 +50,7 @@ function get_account($id) {
 	while($row = $result->fetch_array()) { $account->favorite_genres[] = $row[0]; }
 
 	// Finally, get the name, genre, and id of all projects owned by the user
-	$query = "SELECT id, name, genre FROM project WHERE user_id='$id';";
+	$query = "SELECT * FROM project WHERE user_id='$id';";
 	$result = $database->query($query);
 	$account->projects = [];
 	while($row = $result->fetch_assoc()) { $account->projects[] = $row; }

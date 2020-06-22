@@ -225,8 +225,8 @@ input:focus { outline: none; }
 }
 .project {
 	position: relative;
+	display: block;
 	width: 100%;
-	padding: 10px 0px;
 	font-size: 20px;
 	color: var(--cream);
 	border-radius: 10px;
@@ -237,22 +237,24 @@ input:focus { outline: none; }
 }
 .project_attribute {
 	display: inline-block;
-	width: 32%;
+	width: 20%;
 	text-align: center;
+}
+.project_attribute.button {
+	width: 30px;
+	height: 30px;
+	margin: 0px 10px;
 }
 .project_attribute.long {
 	width: 100%;
 }
-.project_button {
-	position: absolute;
-	height: 100%;
-	top: 0px;
-	right: 0px;
+.project_attribute.right {
+	right: 0px
 }
-.project_button.red:hover {
+.project_attribute.red:hover {
 	background-color: var(--red);
 }
-.project_button.green:hover {
+.project_attribute.green:hover {
 	background-color: green;
 }
 .center {
