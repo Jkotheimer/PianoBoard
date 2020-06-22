@@ -15,8 +15,14 @@ function auth_token() {
 		$id = $_COOKIE[$id_cookie];
 		$query = "SELECT expiration_date from access_token WHERE token = '$Token' AND user_id = '$id';";
 		
-		$Expiration_date = new DateTime($database->query($query)->fetch_row()[0]);
-		$Expiration_date = $Expiration_date->getTimeStamp();
+		$result = $database->query($query);
+		if($result) {
+			$Expiration_date = new DateTime($result->fetch_row()[0]);
+			$Expiration_date = $Expiration_date->getTimeStamp();
+		} else {
+			// If the token or user id doesn't exist in the table, nothing happens so we just return
+			return null;
+		}
 
 		mysqli_close($database); 
 	
