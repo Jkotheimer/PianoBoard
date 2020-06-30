@@ -10,7 +10,7 @@ ob_start();
 ?>
 <!DOCTYPE html>
 <html>
-	<? require "$ROOT/resources/php/head.php"; ?>
+	<?php require "$ROOT/resources/php/head.php"; ?>
 	<body>
 		<style>
 			<?php

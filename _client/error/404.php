@@ -48,7 +48,7 @@ ob_start();
 			}
 		</style>
 		<div class="content">
-			<h>404 <? echo $error; ?></h>
+			<h>404 <?php echo $error; ?></h>
 			<div id="piano">
 				<div class="note"></div><div class="note sharp"></div><div class="note"></div><div class="note sharp"></div><div class="note"></div><div class="note"></div><div class="note sharp"></div><div class="note"></div><div class="note sharp"></div><div class="note"></div><div class="note sharp"></div><div class="note"></div>
 			</div>

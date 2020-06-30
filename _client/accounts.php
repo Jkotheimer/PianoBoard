@@ -1,4 +1,4 @@
-<?
+<?php
 $ROOT = $_SERVER['DOCUMENT_ROOT'];
 
 if($_GET['recording'] != NULL) {

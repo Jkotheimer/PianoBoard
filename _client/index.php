@@ -1,4 +1,4 @@
-<?
+<?php
 $ROOT = $_SERVER['DOCUMENT_ROOT'];
 require "$ROOT/resources/php/auth.php";
 $page = 'login';
@@ -8,7 +8,7 @@ ob_start();
 ?>
 <!DOCTYPE html>
 <html>
-	<? require "$ROOT/resources/php/head.php"; ?>
+	<?php require "$ROOT/resources/php/head.php"; ?>
 	<body>
 
 		<?php
@@ -22,7 +22,7 @@ ob_start();
 		</div>
 	</body>
 </html>
-<?
+<?php
 $page_contents = ob_get_contents();
 ob_end_clean();
 

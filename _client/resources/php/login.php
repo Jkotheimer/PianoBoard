@@ -1,5 +1,5 @@
 <style>
-	<?
+	<?php
 	$ROOT = $_SERVER['DOCUMENT_ROOT'];
 	echo fread(fopen("$ROOT/resources/css/form_styles.css", 'r'),
 		filesize("$ROOT/resources/css/form_styles.css"));

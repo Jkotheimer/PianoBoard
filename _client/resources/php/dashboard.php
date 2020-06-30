@@ -25,7 +25,7 @@ if(!isset($current_user)) {
 	?>
 </script>
 <div id="nav_bar">
-	<? require "navbar.php"; ?>
+	<?php require "navbar.php"; ?>
 </div>
 <div class="panel left_panel">
 
@@ -35,21 +35,21 @@ if(!isset($current_user)) {
 	<div id="info">
 
 		<div class="info_container">
-			<input type="text" class="attribute" id="username" onkeypress="input_event(event, this, update_user);" value="<? echo $current_user->username; ?>"/>
+			<input type="text" class="attribute" id="username" onkeypress="input_event(event, this, update_user);" value="<?php echo $current_user->username; ?>"/>
 			<div id="username_notification" class="notification"></div>
 		</div>
 
 		<div class="info_container">
-			<input type="text" class="attribute" id="email" onkeypress="input_event(event, this, update_user);" value="<? echo $current_user->email; ?>"/>
+			<input type="text" class="attribute" id="email" onkeypress="input_event(event, this, update_user);" value="<?php echo $current_user->email; ?>"/>
 			<div id="email_notification" class="notification"></div>
 		</div>
 
 		<div class="info_container">
 			<div class="info_label">My Favorite Genres</div>
-			<div class="favorite_container" id="genres_container" data-length="<? echo count($current_user->favorite_genres); ?>">
+			<div class="favorite_container" id="genres_container" data-length="<?php echo count($current_user->favorite_genres); ?>">
 				<!--The genres get listed here in the following form: -->
 				<!--span class='favorite_element'> Genre </span-->
-				<?
+				<?php
 				if(empty($current_user->favorite_genres)) {
 					echo "<span class='message white'>You haven't added any of your favorite genres yet</span>";
 				} else {
@@ -68,10 +68,10 @@ if(!isset($current_user)) {
 
 		<div class="info_container">
 			<div class="info_label">My Favorite Artists</div>
-			<div class="favorite_container" id="artists_container" data-length="<? echo count($current_user->favorite_artists); ?>">
+			<div class="favorite_container" id="artists_container" data-length="<?php echo count($current_user->favorite_artists); ?>">
 				<!--The artists get listed here in the following form: -->
 				<!--span class='favorite_element'> Artist </span-->
-				<?
+				<?php
 				if(empty($current_user->favorite_artists)) {
 					echo "<span class='message white'>You haven't added any of your favorite artists yet</span>";
 				} else {
@@ -91,13 +91,13 @@ if(!isset($current_user)) {
 	</div>
 
 	<a id="sign_out" class="button" href="/logout/">Sign out</a>
-	<?
+	<?php
 		$priv = false;
 		if($current_user->is_private == 1) $priv = true;
 	?>
 
-	<span class="button toggle" data-true="Private" data-false="Public" data-value="<? if($priv) echo 'true'; else echo 'false'; ?>" id="is_private" onclick="toggle(this, update_user);">
-	<? 
+	<span class="button toggle" data-true="Private" data-false="Public" data-value="<?php if($priv) echo 'true'; else echo 'false'; ?>" id="is_private" onclick="toggle(this, update_user);">
+	<?php 
 	if($priv) echo 'Private';
 	else echo 'Public';
 	?>
