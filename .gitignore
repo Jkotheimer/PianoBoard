@@ -1,4 +1,5 @@
 /_dependencies/
+/_data/
 */node_modules/
 *.cfg
 *.phpsecret
