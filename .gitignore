@@ -5,4 +5,5 @@
 *.phpsecret
 *.jsecret
 *.log
+db.sh
 package-lock.json
