@@ -1,0 +1,34 @@
+<div class="panel form_panel" onkeypress="input_event(event, null, () => create_project(document.getElementById('project_init')))" tabindex="1">
+	<h class="form_header">New Project</h>
+	<div class="form_area" id="project_init">
+		<div class="form_section">
+			<div class="form_label">Project Name</div>
+			<input class="form_input" type="text" name="name" id="project_name_input" placeholder="Bohemian Rhapsody"/>
+			<div id="project_name_notification" class="notification"></div>
+		</div>
+		<div class="form_section">
+			<div class="form_label">Genre</div>
+			<input class="form_input" type="text" name="genre" placeholder="Rock"/>
+			<div id="project_genre_notification" class="notification"></div>
+		</div>
+		<div class="form_section quarter">
+			<div class="form_label">Tempo</div>
+			<input class="form_input number" type="number" name="tempo" value="120" min="1" max="255" step="1" required/>
+			<div id="project_tempo_notification" class="notification"></div>
+		</div>
+		<div class="form_section three_quarters right">
+			<div class="form_label">Time Signature</div>
+			<input class="form_input number" type="number" name="time_signature" min="2" max="16" step="1" value="4" required/>
+			<span class="form_input number spacer">/</span>
+			<input class="form_input number" type="number" name="time_signature" min="2" max="16" step="1" value="4" required/>
+			<div id="project_time_signature_notification" class="notification"></div>
+		</div>
+		<div class="form_section half">
+			<label class="form_label" for="is_private" style="display: inline-block;">Private</label>
+			<input class="form_input checkbox" type="checkbox" name="is_private" id="is_private"/>
+		</div>
+		<div class="form_section half">
+			<input class="link submit_link full" type="submit" value="Create Project" onclick="create_project(document.getElementById('project_init'));"/>
+		</div>
+	</div>
+</div>
