@@ -8,7 +8,7 @@ var pool = require('mysql').createPool({
 	host: 'localhost',
 	user: sql_config.mysql_username,
 	password: sql_config.mysql_password,
-	database: 'Pianoboard'
+	database: 'pianoboard'
 });
 
 pool.getConnection((err, connection) => {

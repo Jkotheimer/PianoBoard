@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS Pianoboard;
-CREATE DATABASE Pianoboard;
-USE Pianoboard;
+DROP DATABASE IF EXISTS pianoboard;
+CREATE DATABASE pianoboard;
+USE pianoboard;
 
 /* ACCOUNT SPECIFIC ENTITIES */
 CREATE TABLE user (
