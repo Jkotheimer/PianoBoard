@@ -27,7 +27,7 @@ _error() {
 	exit -1
 }
 _warn() {
-	printf "${WARNING}${1}\n"
+	printf "${WARNING} ${1}\n"
 }
 
 # -----------------------------------------------------------------------------
@@ -35,7 +35,7 @@ _warn() {
 # -----------------------------------------------------------------------------
 
 # Define a macro to get the docker id of the container named pianoboard
-container="docker ps -aqf name=pianoboard"
+container='docker ps -aqf name=pianoboard'
 
 # Define a macro to execute a command inside the docker container
 drun() {
@@ -58,8 +58,7 @@ script=$0
 args=$@
 elevate_privileges() {
 	[ $EUID -eq 0 ] || {
-		_warn "You must have root privileges to run this script"
-		exec sudo "$script" "$args"
+		exec sudo "$script" "$args" && _warn "You must have root privileges to run this script"
 	}
 }
 set_permissions() {
@@ -198,7 +197,7 @@ display_help() {
 
 install_docker() {
 	print "Installing docker"
-	curl -sSL https://get.docker.com/ | sh
+	curl -sSL https://get.docker.com/ | sh >/dev/null 2>&1
 	[ $? != 0 ] && {
 		_error "You must install Docker manually before deploying this script"
 		exit 1
@@ -250,7 +249,7 @@ configure_apache() {
 	elevate_privileges
 
 	# Copy the script into the container then execute it
-	print "Copying apache hook script into docker container"
+	print "Copying apache hook script into Docker container"
 	docker cp $ROOT/scripts/apache_hook.sh $($container):/apache_hook.sh
 	_done
 
@@ -271,17 +270,23 @@ start_node() {
 	elevate_privileges
 
 	# Copy the script into the container then execute it
-	print "Copying node hook script into docker container"
+	print "Copying node hook script into Docker container"
 	docker cp $ROOT/scripts/node_hook.sh $($container):/node_hook.sh
 	_done
 
 	print "Running node hook"
-	drun /node_hook.sh >/dev/null
-	if [ $? != 0 ]; then
-		_error
-	else
-		_done
-	fi
+	drun /node_hook.sh >/dev/null 2>&1
+	[ $? != 0 ] && _error
+	_done
+
+	print "Copying node startup script into Docker container"
+	docker cp $ROOT/scripts/node_start.sh $($container):/node_start.sh
+	_done
+
+	print "Starting Node servlet"
+	$(drun /node_start.sh >/dev/null 2>&1) &
+	[ $? != 0 ] && _error
+	_done
 }
 
 # -----------------------------------------------------------------------------
