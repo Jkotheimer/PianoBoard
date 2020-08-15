@@ -10,18 +10,17 @@ module.exports = function(req, res) {
 	const login = req.body.login;
 	const password = req.body.password;
 	
-	// We can't verify the login becase it will either be a username, password, or ID
-	// but we can verify that the password is the correct length before attempting a
+	// We can verify that the password and login are the correct length before attempting a
 	// potentially meaningless mysql query
 	if(password.length < 8) {
-		res.status(403).json({message: 'Password too weak'});
+		res.status(403).json({message: `Password too weak`});
 	}
 
 	mysql.query(`SELECT id, salt, password FROM user WHERE email='${login}' OR username='${login}'`,
 		async function(err, data, fields) {
 			if(err) {
 				// No account exists with that login
-				res.status(404).json({message: 'Email or username not found'});
+				res.status(404).json({message: `Email or username not found`});
 			}
 			if(data.length != 0) {
 				data = data[0];
@@ -50,7 +49,7 @@ module.exports = function(req, res) {
 				}
 			} else {
 				// There was no error but nothing returned from the query
-				res.status(404).json({message: 'Email or Username not found'});
+				res.status(404).json({message: 'Email or username not found'});
 			}
 		} // End query callback
 	);
