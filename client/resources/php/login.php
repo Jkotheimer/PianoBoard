@@ -8,7 +8,9 @@
 	?>
 </style>
 <div id="login_panel">
-	<form class="panel form_panel login_panel" method="POST" action="">
+	<script src="/resources/js/api.js" type="text/javascript"></script>
+	<script src="/resources/js/resources.js" type="text/javascript"></script>
+	<form class="panel form_panel login_panel" onsubmit="event.preventDefault(); pb_login()">
 		<div class="login_logo">
 			<img src="/images/logo.png"/>
 		</div>
@@ -21,25 +23,13 @@
 					if(isset($_POST['login'])) echo 'value="' . $_POST['login'] . '"';
 					?>
 				/>
-				<?php
-				# If an email notification was sent in the parameters, display it here
-				if(isset($_GLOBALS['login_notification'])) {
-					echo '<div id="login_notification" class="notification error">' . 
-						$_GLOBALS['login_notification'] . '</div>';
-				}
-				?>
+				<div id="login_notification" class="notification"></div> 
 			</div>
 			<div class="form_section login_form_section">
 				<div class="form_label">Password</div>
 				<input type="password" id="password" name="password" class="form_input" placeholder="Enter your password"
 					autocomplete="new-password" required/>
-				<?php
-				# If an email notification was sent in the parameters, display it here
-				if(isset($_GLOBALS['password_notification'])) {
-					echo '<div id="password_notification" class="notification error">' . 
-						$_GLOBALS['password_notification'] . '</div>';
-				}
-				?>
+				<div id="password_notification" class="notification"></div>
 			</div>
 		</div>
 		<div class="link_area">
