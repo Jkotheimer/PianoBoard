@@ -227,15 +227,18 @@ input:focus { outline: none; }
 	position: relative;
 	display: block;
 	width: 100%;
+	height: 40px;
 	font-size: 20px;
+	background-color: var(--lightgrey);
 	color: var(--cream);
 	border-radius: 10px;
 }
 .project:hover {
-	background-color: #666666;
+	background-color: #696900;
 	cursor: pointer;
 }
 .project_attribute {
+	position: relative;
 	display: inline-block;
 	width: 20%;
 	text-align: center;
@@ -243,7 +246,7 @@ input:focus { outline: none; }
 .project_attribute.button {
 	width: 30px;
 	height: 30px;
-	margin: 0px 10px;
+	margin: 0px;
 }
 .project_attribute.long {
 	width: 100%;
@@ -267,7 +270,7 @@ input:focus { outline: none; }
 /* LOGIN PAGE */
 .login_panel {
 	width: var(--login-panel-width);
-	height: var(--login-panel-height);
+	height: auto;
 	margin-top: 100px;
 }
 .login_logo {
@@ -327,3 +330,4 @@ input:focus { outline: none; }
 	width: 350px;
 	font-size: 12px;
 }
+
