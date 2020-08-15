@@ -122,7 +122,7 @@ if(!isset($current_user)) {
 					<span class='project_attribute'>Time Signature</span>
 				</div>";
 			foreach($current_user->projects as $project) {
-				echo "<div class='project' >
+				echo "<div class='project'>
 						<img src='/images/edit.png' class='project_attribute button green' onclick='window.location.href=`/studio/" . $project['id'] . "`'/>
 						<span class='project_attribute'>" . $project['name'] . "</span>
 						<span class='project_attribute'>" . $project['genre'] . "</span>
