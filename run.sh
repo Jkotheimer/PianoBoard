@@ -120,6 +120,9 @@ kill_services() {
 	}
 	_done
 }
+refresh_password() {
+	set_passwords $(cat $ROOT/db.sh | cut -d"'" -f 2)
+}
 set_passwords() {
 
 	print "Setting new password"
@@ -160,12 +163,9 @@ refresh_pepper() {
 refresh_database() {
 	print "Refreshing database"
 	./db.sh < sql/create_db.sql
-	if [ $? != 0 ]; then
-		_error "Something is wrong with your SQL connection or your db model"
-	else
-		refresh_pepper
-		_done
-	fi
+	[ $? != 0 ] && _error "Something is wrong with your SQL connection or your db model"
+	refresh_pepper
+	_done
 }
 print_details() {
 	echo ''
@@ -178,13 +178,14 @@ open_project() {
 display_help() {
 	echo "--help     [-h] : Display this prompt"
 	echo "--info     [-i] : Print useful details about the deployment of this project"
+	echo "--reset    [-r] : Re-deploy a clean version of this project"
+	echo "--start    [-s] : Start services"
 	echo "--connect  [-c] : Connect to the docker container via the CLI"
 	echo "--database [-d] : Clean the mysql database"
 	echo "--password [-p] : Reset the mysql password for the container"
 	echo "--apache   [-a] : Reconfigure apache and restart the server"
 	echo "--node     [-n] : Refresh the node servlet"
 	echo "--kill     [-k] : Kill the deployment of this project including any processes running on ports 80 & 3306"
-	echo "--reset    [-r] : Re-deploy a clean version of this project"
 	echo "_________________________________________________________________________________________"
 }
 
@@ -198,10 +199,7 @@ display_help() {
 install_docker() {
 	print "Installing docker"
 	curl -sSL https://get.docker.com/ | sh >/dev/null 2>&1
-	[ $? != 0 ] && {
-		_error "You must install Docker manually before deploying this script"
-		exit 1
-	}
+	[ $? != 0 ] && _error "You must install Docker manually before deploying this script"
 
 }
 configure_docker() {
@@ -221,21 +219,15 @@ start_docker() {
 
 	mkdir -p logs
 	print "Starting new container"
-	docker run -p 80:80 -p 3306:3306 -p 8081:8081 --name pianoboard -it -d -v $(pwd)/client:/app -v $(pwd)/api:/api -v $(pwd)/logs:/var/log/apache2 mattrayner/lamp:latest >/dev/null 2>&1
+	systemctl start docker
+	docker run -p 80:80 -p 3306:3306 -p 8081:8081 --name pianoboard -it -d -v $(pwd)/client:/app -v $(pwd)/api:/api -v $(pwd)/logs:/var/log/apache2 mattrayner/lamp:latest >/dev/null
+	[ $? != 0 ] && _error
 	_done
 
 	# Wait 3 seconds for the container to boot up and prepare the services we need
 	print "Waiting for services to start"
 	sleep 3
 	_done
-	
-	# Use the container's nice lil function to start up mysql
-	print "Initializing MySQL instance"
-	drun /create_mysql_users.sh >/dev/null 
-	sleep 1
-	_done
-	
-	set_mysql_password
 }
 docker_connect() {
 	elevate_privileges
@@ -243,7 +235,7 @@ docker_connect() {
 }
 
 # -----------------------------------------------------------------------------
-# APACHE FUNCTIONS
+# DOCKER SERVICE FUNCTIONS
 # -----------------------------------------------------------------------------
 configure_apache() {
 	elevate_privileges
@@ -255,11 +247,18 @@ configure_apache() {
 
 	print "Running apache hook"
 	drun /apache_hook.sh >/dev/null
-	if [ $? != 0 ]; then 
-		_error "Fix your apache config in $(pwd)/scripts/apache_hook.sh"
-	else
-		_done
-	fi
+	[ $? != 0 ] && _error "Fix your apache config in $(pwd)/scripts/apache_hook.sh"
+	_done
+}
+configure_mysql() {
+	
+	# Use the container's nice lil function to start up mysql
+	print "Initializing MySQL instance"
+	drun /create_mysql_users.sh >/dev/null 
+	sleep 1
+	_done
+	
+	set_mysql_password
 }
 
 # -----------------------------------------------------------------------------
@@ -275,7 +274,7 @@ start_node() {
 	_done
 
 	print "Running node hook"
-	drun /node_hook.sh >/dev/null 2>&1
+	drun /node_hook.sh >/dev/null
 	[ $? != 0 ] && _error
 	_done
 
@@ -297,6 +296,7 @@ fresh_install() {
 	configure_docker
 	kill_services
 	start_docker
+	configure_mysql
 	refresh_database
 	configure_apache
 	start_node
@@ -306,6 +306,16 @@ fresh_install() {
 }
 
 # -----------------------------------------------------------------------------
+# START ALL SERVICES
+# -----------------------------------------------------------------------------
+
+start_services() {
+	kill_services
+	start_docker
+	start_node
+	refresh_password
+	refresh_database
+}
 
 # Install docker if it isn't already on the system
 [ ! $(command -v docker) ] && {
@@ -331,9 +341,10 @@ fresh_install() {
 declare -A commands=([--help]=display_help [-h]=display_help \
 					[--info]=print_details [-i]=print_details \
 					[--connect]=docker_connect [-c]=docker_connect \
-					[--clean]=refresh_database [-C]=refresh_database \
+					[--database]=refresh_database [-d]=refresh_database \
 					[--kill]=kill_services [-k]=kill_services \
 					[--password]=set_mysql_password [-p]=set_mysql_password \
+					[--start]=start_services [-s]=start_services \
 					[--reset]=fresh_install [-r]=fresh_install \
 					[--apache]=configure_apache [-a]=configure_apache \
 					[--node]=start_node [-n]=start_node)
