@@ -1,8 +1,11 @@
 #!usr/bin/env bash
 
 [[ ! $(command -v node) || ! $(command -v npm) ]] && {
-	apt-get --yes update
-	apt-get --yes install nodejs npm
+	apt --yes install nodejs npm
+	[ $? != 0 ] && {
+		apt --yes update
+		apt --yes install nodejs npm
+	}
 }
 cd /api
 [ ! -d node_modules/ ] && {
