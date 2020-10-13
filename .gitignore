@@ -1,9 +1,11 @@
-/_dependencies/
-/_data/
-*/node_modules/
+# Generated directories
+data/
+
+# Config & logs
 *.cfg
-*.phpsecret
-*.jsecret
+*.*secret
 *.log
-db.sh
+
+# Node stuff
 package-lock.json
+node_modules/
