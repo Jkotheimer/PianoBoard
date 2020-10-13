@@ -5,8 +5,8 @@
 // Check for cookie tokens, authenticate it, and retrieve the account info if authorized
 function auth_token() {
 	// Get the database connection and the resources
-	require_once "database.phpsecret";
 	include_once "resources.php";
+	require_once "database.phpsecret";
 
 	if(isset($_COOKIE[$session_cookie]) && isset($_COOKIE[$id_cookie])) {
 		
@@ -15,7 +15,7 @@ function auth_token() {
 		$id = $_COOKIE[$id_cookie];
 		$query = "SELECT expiration_date from access_token WHERE token = '$Token' AND user_id = '$id';";
 		
-		$result = $database->query($query);
+		$result = $database->query("$query");
 		if($result) {
 			$Expiration_date = new DateTime($result->fetch_row()[0]);
 			$Expiration_date = $Expiration_date->getTimeStamp();
