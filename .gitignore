@@ -1,5 +1,6 @@
 # Generated directories
 data/
+.dependencies/
 
 # Config & logs
 *.cfg
