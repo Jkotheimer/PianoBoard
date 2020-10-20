@@ -20,16 +20,28 @@ module.exports = async function(req, res) {
 		res.status(401).json({message: 'You are not authorized to alter this account'});
 		return;
 	}
+	console.log("Fucking shit");
+	var check_existing_project = function(name) {
+		
+		let query = `SELECT id FROM project WHERE user_id=${uid} AND name=${name};`;
+		return new Promise(resolve => {
+			mysql.query(query, (err, data) => {
+				console.log("Retrieved data as to whether this project already exists");
+				console.log(data);	
+				resolve(data);
+			});
+		});
+	}
 
 	var create_project = function(att) {
-
-		var query = `INSERT INTO project (user_id, name, genre, time_signature_num, time_signature_den, tempo, creation_date, is_private)
+		check_existing_project(att.name);
+		let query = `INSERT INTO project (user_id, name, genre, time_signature_num, time_signature_den, tempo, creation_date, is_private)
 			VALUES ('${uid}', '${att.name}', '${att.genre ? att.genre : 'Pop'}', '${att.time_signature[0] ? att.time_signature[0] : 4}',
 			'${att.time_signature[1] ? att.time_signature[1] : 4}', '${att.tempo ? att.tempo : 120}', '${resources.new_date(0)}', 
 			${att.is_private ? att.is_private : false});`;
-		var promise = new Promise(resolve => {
+		return new Promise(resolve => {
 			mysql.query(query, (err, data) => {
-				console.log(err);
+				console.log("new project successfully inserted");
 				console.log(data);
 				if(err || !data) resolve(err);
 				else resolve(data);
