@@ -1,11 +1,12 @@
 # Generated directories
-data/
-.dependencies/
+database/
 
 # Config & logs
+config/app.conf
 *.cfg
 *.*secret
 *.log
+.env
 
 # Node stuff
 package-lock.json
