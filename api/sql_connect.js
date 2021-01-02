@@ -6,9 +6,9 @@ const sql_config = require('./sql_config.jsecret')
 var pool = require('mysql').createPool({
 	connectionLimit: 10,
 	host: 'localhost',
-	user: sql_config.mysql_username,
-	password: sql_config.mysql_password,
-	database: 'pianoboard'
+	user: sql_config.username,
+	password: sql_config.password,
+	database: sql_config.db
 });
 
 pool.getConnection((err, connection) => {

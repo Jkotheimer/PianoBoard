@@ -1,6 +1,5 @@
 # Generated directories
-data/
-.dependencies/
+database/
 
 # Config & logs
 *.conf
