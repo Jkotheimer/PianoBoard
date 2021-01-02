@@ -3,7 +3,7 @@
 const express = require('express');
 const fs = require('fs');
 const app = express();
-const port = 8081;
+const port = 8080;
 const ROOT = require('path').dirname(require.main.filename);
 const resources = require('./resources.js');
 
@@ -98,4 +98,4 @@ app.delete('/users/:user/projects/:project/tracks/:track/recordings/:recording/n
 
 
 // Start up the server
-app.listen(port, () => console.log(`pianoboard API listening at http://localhost:${port}`));
+app.listen(port, '0.0.0.0', () => console.log(`pianoboard API listening at http://localhost:${port}`));
