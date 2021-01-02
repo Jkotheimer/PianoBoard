@@ -146,7 +146,7 @@ _help() {
 	echo '    Dependencies from config/app.conf'
 	echo '        - ENV: Environment to deploy to (dev, staging, production). See --env'
 	echo '        - TAG: Docker image tag to deploy with. See --tag'
-	echo '--boot        [-b]: Reboot the container without starting the server.'
+	echo '--boot        [-b]: Boot up the container without starting the server. (good for server debugging)'
 	echo 
 	echoc 'SECONDARY COMMANDS' "$blue"
 	echoc '-------------------------------------------------------------------' "$blue"
@@ -193,7 +193,10 @@ req_check() {
 	done
 	[ ${#err[@]} -gt 0 ] && _err "You must install the following package(s) in order to deploy this project: ${err[*]}" -
 
-	[ ! -f .env ] && gen_dotenv
+	if [ ! -f .env ]; then
+		_warn 'Dotenv not found. Generating a new one now'
+		gen_dotenv
+	fi
 	if [ ! -f config/app.conf ]; then
 		_warn 'config/app.conf not found. You will be prompted for info on your application'
 		gen_app_conf
@@ -227,7 +230,7 @@ ELEV=0
 elevate_privileges() {
 	[ "$ELEV" -eq 0 ] && _warn 'Gaining root privileges'
 	# This stalls the terminal before doing a sudo task in case if a password is required
-	sudo chown -R "$USER":"$USER" "$(pwd)" &>/dev/null && ELEV=1
+	sudo chown -R "$USER" "$(pwd)" &>/dev/null && ELEV=1
 }
 # Update a variable setting in any given config file
 # $1: Variable name
@@ -235,14 +238,30 @@ elevate_privileges() {
 # $3: (optional) config file name - default=config/app.conf
 update_conf() {
 	[ -z "$3" ] && conf=config/app.conf || conf=$3
-	if grep "$1='" "$conf" &>/dev/null; then
-		sed -i "s|$1='.*|$1='$2'|g" "$conf"
+	if grep "$1=" "$conf" &>/dev/null; then
+		sed -i "s|$1=.*|$1=$2|g" "$conf"
 	else
-		echo "$1='$2'" >> "$conf"
+		echo "$1=$2" >> "$conf"
 	fi
 }
 gen_dotenv() {
-	update_conf DB_PASSWORD "$(openssl rand -hex 32)" .env
+	read -r -p 'Database name: ' DB_NAME
+	read -r -p 'Database username: ' DB_USER
+	DB_PASSWORD="$(openssl rand -hex 32)"
+	update_conf DB_NAME "$DB_NAME" .env
+	update_conf DB_USER "$DB_USER" .env
+	update_conf DB_PASSWORD "$DB_PASSWORD" .env
+	update_conf DB_HOST 127.0.0.1 .env
+	update_conf DB_PORT 3306 .env
+	echo "module.exports = '$(openssl rand -hex 32)'" > api/auth/pepper.jsecret
+	echo "module.exports = {username:'$DB_USER', password:'$DB_PASSWORD', db:'$DB_NAME'}" > api/sql_config.jsecret
+	echo "<?php
+	\$database = mysqli_connect('127.0.0.1', '$DB_USER', '$DB_PASSWORD', '$DB_NAME');
+	if(\$database->connect_error) {
+		die('Connection failed: ' . \$database->connect_error);
+	}
+?>" > client/resources/php/database.phpsecret
+	unset DB_PASSWORD
 }
 gen_app_conf() {
 	read -r -p 'Name of your organization: ' ORG
@@ -274,7 +293,7 @@ gen_docker_conf() {
 			elif [ -z "$local_v" ]; then
 				# If the local volume starts with a '.', replace it with $(pwd)
 				if [[ "$val" =~ ^\. ]]; then
-					[ ! -d $val ] && mkdir $val
+					[ ! -d "$val" ] && mkdir "$val"
 					val="$(pwd)${val:1}"
 				fi
 				local_v="$val"
@@ -285,7 +304,7 @@ gen_docker_conf() {
 	done < <(grep COPY Dockerfile)
 
 	# Add the DOCKER_RUN_PARAMETERS config to the config/app.conf
-	update_conf DOCKER_RUN_PARAMETERS "$DOCKER_RUN_PARAMETERS"
+	update_conf DOCKER_RUN_PARAMETERS "'$DOCKER_RUN_PARAMETERS'"
 }
 
 # -----------------------------------------------------------------------------
@@ -372,14 +391,16 @@ push_docker_image() {
 create_docker_image() {
 	[ "$VERBOSE" -ne 1 ] && echoc 'Verbose output auto-enabled' "$yellow"
 	VERBOSE=1
+	remove_docker_image
 	_print "Building Docker image: $ORG/${APP}_$ENV:$TAG (this may take a hot sec)"
 	_handle "docker build --tag $ORG/${APP}_$ENV:$TAG --target $ENV ." docker-init.log
 }
+# To override the CMD function, pass "bash" as $1
 create_docker_container() {
 	remove_docker_container
 	gen_docker_conf
 	_print "Creating Docker container named $APP with image: $ORG/${APP}_$ENV:$TAG"
-	_handle "docker run -d $DOCKER_RUN_PARAMETERS --hostname com-$APP-app --name $APP -it $ORG/${APP}_$ENV:$TAG" docker-run.log
+	_handle "docker run -d $DOCKER_RUN_PARAMETERS --env-file .env --hostname com-$APP-app --name $APP -it $ORG/${APP}_$ENV:$TAG $1" docker-run.log
 }
 start_docker_container() {
 	kill_docker_container
@@ -403,25 +424,25 @@ docker_ci_status() {
 	if docker image ls | grep "$ORG/${APP}_$ENV.*$TAG"; then
 		((STAT++))
 	else
-		return $STAT
+		return "$STAT"
 	fi
 
 	echoc "Checking for container named $APP" "$blue"
 	if docker ps -a | grep "$APP"; then
 		((STAT++))
 	else
-		return $STAT
+		return "$STAT"
 	fi
 
 	echoc "Checking status of container" "$blue"
 	if docker ps | grep "$APP"; then
 		((STAT++))
 	else
-		return $STAT
+		return "$STAT"
 	fi
 	docker ps | grep "Up.*$APP" && ((STAT++))
 
-	return $STAT
+	return "$STAT"
 }
 
 # -----------------------------------------------------------------------------
@@ -450,8 +471,6 @@ _deploy() {
 			remove_docker_container
 			create_docker_container;;
 	esac
-
-	# Execute the deploy script regardless
 	drun /var/www/config/deploy.sh
 }
 
@@ -522,14 +541,16 @@ parse_cmd() {
 			echo _deploy
 			return 2;;
 		--boot | -b)
-			echo create_docker_container
+			echo create_docker_container bash
 			return 2;;
 		# SECONDARY COMMANDS
 		# Pre-primary
+		--fix | -f)
+			echo _fix;;
 		--verbose | -v)
 			echo _verbose;;
 		--kill | -k)
-			echo kill_docker_container
+			echo remove_docker_container
 			return 0;;
 		--pull | -p)
 			echo pull_docker_image
@@ -549,44 +570,56 @@ parse_cmd() {
 		# Post-primary
 		--dockershell | -l)
 			echo docker exec -it "$APP" bash
-			return 3;;
+			return 4;;
 		--db-connect | -c)
 			echo db_connect
-			return 3;;
+			return 4;;
 		--push | -u)
 			echo push_docker_image
-			return 3;;
+			return 4;;
 		--clean | -n)
 			echo clean_docker_images
-			return 3;;
+			return 4;;
 		--help | -h)
 			echo _help
-			return 3;;
+			return 4;;
 		*)
 			return 255;;
 	esac
 }
 
+[ -z "$*" ] && _help && exit 0
+
 # The pre- and post-primary commands are placed in separate arrays to be executed at their respective times
 PRE=()
-PRIMARY=()
+PRIMARY=""
 POST=()
+var_set=''
 for cmd in "$@"; do
+
+	[ -n "$var_set" ] && {
+		PRE+=( "$var_set $cmd" )
+		continue
+		unset var_set
+	}
+	
 	[[ "$cmd" = --verbose || "$cmd" = -v ]] && _verbose && continue
-	next=$(parse_cmd $cmd)
+	next=$(parse_cmd "$cmd")
 	STAT=$?
 	# If $previous is set, that means were looking for 
 	if [ "$STAT" -eq 0 ]; then
 		PRE+=( "$next" )
 	elif [ "$STAT" -eq 1 ]; then
-		echo 'one'
+		var_set="$next"
 	elif [ "$STAT" -eq 2 ]; then
 		[ -n "$PRIMARY" ] && _err "Multiple primary command issued: $cmd" -
-		PRIMARY=$next
+		PRIMARY="$next"
 	elif [ "$STAT" -eq 3 ]; then
-		POST+=( "$next" )
+		shift
+		$next $@
+		exit $?
 	elif [ "$STAT" -eq 4 ]; then
-		echo 'four'
+		POST+=( "$next" )
 	fi
 done
 
