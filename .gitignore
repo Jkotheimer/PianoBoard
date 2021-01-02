@@ -3,9 +3,12 @@ data/
 .dependencies/
 
 # Config & logs
-*.cfg
-*.*secret
+*.conf
 *.log
+
+# Secret files
+.env
+*.*secret
 
 # Node stuff
 package-lock.json
