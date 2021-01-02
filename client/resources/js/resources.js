@@ -93,7 +93,14 @@ function check_validity(form, prefix) {
 		inputs[key].forEach(item => {
 			switch(typeof item) {
 				case 'string':
-					
+					check_string(key, item, notification);
+					break;
+				case 'number':
+					check_number(key, item, notification);
+					break;
+				default:
+					check_array(key, item, notification);
+					break;
 			}
 		});
 	}
@@ -210,6 +217,30 @@ function get_cookie(cname) {
 }
 function delete_cookie(name) {
 	document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+
+function pb_login() {
+	const inputs = get_inputs(document.getElementsByTagName('form')[0]);
+
+	if( check_valid_password(inputs.password) &&
+		check_valid_email(inputs.login) ||
+		check_valid_attribute(inputs.login) ||
+		!isNaN(inputs.login))
+	{
+		// The values are good to send
+		api_call('POST', '/auth/login', inputs, (xhr) => {
+			if(xhr.status == 200) window.location.reload();
+			else {
+				// Either grab the login or password notification based on whether it was a 403 or 404
+				let notification = document.getElementById('login_notification');
+				if(xhr.status == 403) {
+					notification = document.getElementById('password_notification');
+					document.getElementById('password').select();
+				} else document.getElementById('login').select();
+				display_error(notification, JSON.parse(xhr.response).message);
+			}
+		});
+	}
 }
 
 function get_query_parameter(name) {
