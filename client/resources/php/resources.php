@@ -82,11 +82,13 @@ function xhr($method, $url, $data = false) {
     }
 
 	// Optional Authentication: 
-	$token = $_COOKIE['pb_token'];
-	$uid = $_COOKIE['pb_uid'];
-	$headers = ['Content-Type:application/json', "Cookie:pb_token=$token; pb_uid=$uid"];
+	if(isset($_COOKIE['pb_token']) && isset($_COOKIE['pb_uid'])) {
+		$token = $_COOKIE['pb_token'];
+		$uid = $_COOKIE['pb_uid'];
+		$headers = ['Content-Type:application/json', "Cookie:pb_token=$token; pb_uid=$uid"];
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+	}
     curl_setopt($curl, CURLOPT_URL, $url);
-	curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($curl, CURLOPT_HEADER, true);
 	curl_setopt($curl, CURLOPT_VERBOSE, true);
