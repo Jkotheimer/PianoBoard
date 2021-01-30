@@ -2,8 +2,8 @@
 database/
 
 # Config & logs
-*.conf
-*.log
+logs/
+*.conf*
 
 # Secret files
 .env
