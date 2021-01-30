@@ -2,38 +2,20 @@
 # run.sh
 # 
 # @author: Jack Kotheimer
+# @org: Pianoboard
 # @date: 12/5/2020
 #
 # The main functionality of the script is listed just below in the '_help' function, but if you have any questions about
 # the functionality or implementation of this script, feel free to send me a message via email at jkotheimer9@gmail.com
 #
 # Enjoy!
+
 ###############################################################################
-
-if [ $EUID -eq 0 ]; then
-	_warn 'Hold your horses! You are running this script as root, meaning other users will not be able to access many of the generated server resources.'
-	read -r -n 1 -p 'Are you sure you wish to continue? [y/N] ' choice
-	echo
-	[[ ${choice^^} != 'Y' ]] && exit 1
-fi
-mkdir -p logs/
-
-# DEFAULT VARIABLES & ENABLERS
-VERBOSE=0
-_verbose() {
-	echoc 'Verbose output enabled' "$yellow"
-	VERBOSE=1
-}
-WSL=0 # Windows Subsystem for Linux has a few different setup conditions
-[ -d /mnt/c/Program\ Files ] && {
-	echoc 'WSL detected' "$yellow"
-	WSL=1
-	alias docker=docker.exe
-}
-
 # -----------------------------------------------------------------------------
 # PRETTY PRINTERS/ COMMAND HANDLER
 # -----------------------------------------------------------------------------
+###############################################################################
+
 # Just some colorful output handlers to satisfy those who enjoy clean script responses
 red=$'\033[0;31m'
 yellow=$'\033[0;33m'
@@ -114,6 +96,12 @@ _handle() {
 	fi
 	return "$STAT"
 }
+
+###############################################################################
+# -----------------------------------------------------------------------------
+# HELP MENU
+# -----------------------------------------------------------------------------
+###############################################################################
 _help() {
 	# figlet is used to make bubble letters!
 	FIG=0
@@ -138,393 +126,529 @@ _help() {
 	echo  '   <primary>   : (required) is any one of the below commands (a secondary command may be used as a primary)'
 	echo  '   <secondary> : (optional) is any combination of secondary commands'
 	echo 
-	echoc 'PRIMARY COMMANDS' "$blue"
-	echoc '-------------------------------------------------------------------' "$blue"
-	echo 'Only one of these may be used at a time. It must be the first argument'
-	echoc '-------------------------------------------------------------------' "$blue"
-	echo '--deploy      [-d]: Deploy the server'
-	echo '    Dependencies from config/app.conf'
-	echo '        - ENV: Environment to deploy to (dev, staging, production). See --env'
-	echo '        - TAG: Docker image tag to deploy with. See --tag'
-	echo '--boot        [-b]: Boot up the container without starting the server. (good for server debugging)'
+	echoc '####################' "$blue"
+	echoc '# ---------------- #' "$blue"
+	printf "%s# %sPRIMARY COMMANDS %s#\n" "$blue" "$nc" "$blue"
+	echoc '# ---------------- #' "$blue"
+	echoc '####################' "$blue"
+	echo 'Only one of these may be used at a time.'
+	echo '----------------------------------------'
+	echo '--boot         [-o]: Boot up the container without starting the server. (good for server debugging)'
+	echo '--deploy       [-d]: Deploy the server'
+	echo '    Dependencies from .config'
+	echo '        - ENV: Environment to deploy to (dev, staging, production). See --env below'
+	echo '        - TAG: Docker image tag to deploy with. See --tag below'
 	echo 
-	echoc 'SECONDARY COMMANDS' "$blue"
-	echoc '-------------------------------------------------------------------' "$blue"
-	echo 'Any number of these commands can be used in one call of this script in any order'
-	echo 'xxx-primary: When a secondary command is used as an \<option\>, it either resolves before \(pre\) or after \(post\) the primary command'
-	echoc '-------------------------------------------------------------------' "$blue"
+	echoc '######################' "$blue"
+	echoc '# ------------------ #' "$blue"
+	printf "%s# %sSECONDARY COMMANDS %s#\n" "$blue" "$nc" "$blue"
+	echoc '# ------------------ #' "$blue"
+	echoc '######################' "$blue"
+	echo 'Any number of these commands can be used in one call of this script in any order.'
+	echo '---------------------------------------------------------------------------------'
 	echoc 'Pre-primary -------------------------------------------------------' "$yellow"
 	echo '--verbose     [-v]: Display verbose output on the primary function'
 	echo '--kill        [-k]: Kill the docker container'
 	echo '--pull        [-p]: Pull an image from Docker Hub'
-	echo '--rebuild     [-r]: Build a new Docker image'
-	echo '--config      [-f]: Regenerate config/app.conf before doing anything'
-	echo '--env         [-e]: Switch environments to work in'
+	echo '--build       [-b]: Build a new Docker image'
+	echo '--gen-secrets [-s]: Regenerate new credentials for RabbitMQ and MySQL'
+	echo '--env <env>   [-e]: Switch environments to work in'
 	echo '    <env> : dev, staging, or production'
-	echo '--tag         [-t]: Checkout a new tag name for your image'
-	echo '    <tag> : Any string as a tag name OR'
-	echo '            "git" to use your git branch name as a tag OR'
-	echo '            "-" to copy your current tag onto the "latest" tag'
+	echoc "        Environment currently set to '$ENV'" "$green"
+	echo '--tag <tag>   [-t]: Checkout a new tag name for your image'
+	echo '    <tag> : Any string as a tag name'
+	echoc "        Tag currently set to '$TAG'" "$green"
+	echo '--host <host> [-H]: Set the host of the image for the current environment'
+	echo "    <host>: The host to which you wish to push and pull the $ORG/${APP}_$ENV:$TAG image"
+	NCOLOR="$green"
+	[ -z "${DHOSTS[$ENV]}" ] && NCOLOR="$red"
+	echoc "        Docker image host for $ENV currently set to '${DHOSTS[$ENV]}'" "$NCOLOR"
+	echoc 'Remote specific commands' "$yellow"
+	echo '--rebuild      [-R]: Rebuild ecs cluster (when switching between machines to use new ssh keypair)'
+	echo "--aws-dns      [-D]: Fetch the most recent dns hostname for the $ENV server"
+	NCOLOR="$green"
+	[ -z "$AWS_HOST" ] && NCOLOR="$red"
+	echoc "        $ENV dns hostname is currently set to '$AWS_HOST'" "$NCOLOR"
+	echo '--aws-cred     [-A]: Re-enter AWS credentials'
+	NCOLOR="$green"
+	if [[ -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_SECRET_ACCESS_KEY" ]]; then
+		CREDSTAT=' not'
+		NCOLOR="$red"
+	fi
+	echoc "        AWS credentials are currently$CREDSTAT set" "$NCOLOR"
+	echo '--region <reg> [-G]: Set the AWS region to deploy to (default: us-east-1)'
+	echo '    <reg> : Any AWS region'
+	NCOLOR="$green"
+	[ -z "$AWS_DEFAULT_REGION" ] && NCOLOR="$red"
+	echoc "        AWS region is currently set to '$AWS_DEFAULT_REGION'" "$NCOLOR"
+	echo '--keypair <kp> [-K]: Set the keypair to use when deploying remotely'
+	echo '    <kp>  : An AWS registered ssh keypair name'
+	NCOLOR="$green"
+	[ -z "$KEYPAIR" ] && NCOLOR="$red"
+	echoc "        AWS keypair is currently set to '$KEYPAIR'" "$NCOLOR"
+	echo "--add-ssh-key  [-S]: Grant someone access to the $ENV server (must be an authorized user to do this)"
 	echo 
 	echoc 'Post-primary ------------------------------------------------------' "$yellow"
-	echo '--dockershell [-l]: Enter the development docker container command line'
-	echo '--db-connect  [-c]: Connect to a database'
-	echo '--clean       [-n]: Clean all dangling docker images'
-	echo '--push        [-u]: Push a recently built image to Docker Hub'
 	echo '--help        [-h]: Show this help menu'
-	echo 
-	echoc '*If no arguments are supplied, this help menu is displayed' "$yellow"
+	echo '--push        [-u]: Push a recently built image to Docker Hub'
+	echo '--clean       [-c]: Clean all dangling docker images'
+	echo '--db-connect  [-C]: Connect to a database'
+	echo '--dockershell [-l]: Enter the development docker container command line'
+	echo '--logs        [-L]: Tail the server logs'
 	echo 
 }
 
 ###############################################################################
-# AUTOMATION FUNCTIONS START HERE
+# -----------------------------------------------------------------------------
+# DOCKER SHORTCUTS
+# -----------------------------------------------------------------------------
 ###############################################################################
-# -----------------------------------------------------------------------------
-# SOFTWARE REQUIREMENT CHECKING
-# -----------------------------------------------------------------------------
-# Ensure all manchine-specific programs are installed before attempting to set up the server
-# Pass any basic commands that are required for something
-req_check() {
-	# Absolute requirements + any requirements passed via arguments
-	err=()
-	for cmd in "$@"; do
-		command -v "$cmd" &>/dev/null || err+=("$cmd")
-	done
-	[ ${#err[@]} -gt 0 ] && _err "You must install the following package(s) in order to deploy this project: ${err[*]}" -
+#
+# A good majority of these functions are dependent on the current environment
+# If we're in the dev environment, everything happens locally
+# Else, most actions will occur in an AWS server, using the ecs-cli
 
-	if [ ! -f .env ]; then
-		_warn 'Dotenv not found. Generating a new one now'
-		gen_dotenv
-	fi
-	if [ ! -f config/app.conf ]; then
-		_warn 'config/app.conf not found. You will be prompted for info on your application'
-		gen_app_conf
-	fi
-}
-# These requirements are remote deployment specific. I added handlers for them just for ease of use
-remote_req_check() {
-	[ -f config/staging.secret ] || _err "Required file not found: config/staging.secret" -
-	command -v eb &>/dev/null || {
-		_warn 'You must install AWS eb cli before running any remote deployment'
-		read -r -n 1 -p 'Would you like to install now? [Y/n]: ' choice
-		[[ -z "$choice" || "${choice^^}" = 'Y' ]] && pip3 install awsebcli --upgrade --user || exit 1
-	}
-	[ -d .elasticbeanstalk/ ] || {
-		_warn 'You have not initialized ElasticBeanstalk'
-		read -r -n 1 -p 'Would you like to do that now? [Y/n]: ' choice
-		[[ -z "$choice" || "${choice^^}" = 'Y' ]] && eb init || exit 1
-		set_remote_env
-	}
-	EB_LIST="$(eb list)"
-	[ -z "$EB_LIST" ] && {
-		_warn 'You do not have any EB environments set up.'
-		read -r -n 1 -p 'Would you like to create one now? [Y/n]: ' choice
-		[[ -z "$choice" || "${choice^^}" = 'Y' ]] && eb create || exit 1
-	}
-}
-# -----------------------------------------------------------------------------
-# SHORTCUTS
-# -----------------------------------------------------------------------------
-ELEV=0
-elevate_privileges() {
-	[ "$ELEV" -eq 0 ] && _warn 'Gaining root privileges'
-	# This stalls the terminal before doing a sudo task in case if a password is required
-	sudo chown -R "$USER" "$(pwd)" &>/dev/null && ELEV=1
-}
-# Update a variable setting in any given config file
-# $1: Variable name
-# $2: Variable value
-# $3: (optional) config file name - default=config/app.conf
-update_conf() {
-	[ -z "$3" ] && conf=config/app.conf || conf=$3
-	if grep "$1=" "$conf" &>/dev/null; then
-		sed -i "s|$1=.*|$1=$2|g" "$conf"
+# Execute any bash command inside our app's container
+dexec() {
+	# TODO: Implement for remote server ssh
+	if [ "$ENV" = dev ]; then
+		docker exec -it "$APP" "$@" || _err
 	else
-		echo "$1=$2" >> "$conf"
+		ssh -i ~/.ssh/$KEYPAIR ec2-user@$AWS_HOST $*
 	fi
 }
-gen_dotenv() {
-	read -r -p 'Database name: ' DB_NAME
-	read -r -p 'Database username: ' DB_USER
-	DB_PASSWORD="$(openssl rand -hex 32)"
-	update_conf DB_NAME "$DB_NAME" .env
-	update_conf DB_USER "$DB_USER" .env
-	update_conf DB_PASSWORD "$DB_PASSWORD" .env
-	update_conf DB_HOST 127.0.0.1 .env
-	update_conf DB_PORT 3306 .env
-	echo "module.exports = '$(openssl rand -hex 32)'" > api/auth/pepper.jsecret
-	echo "module.exports = {username:'$DB_USER', password:'$DB_PASSWORD', db:'$DB_NAME'}" > api/sql_config.jsecret
-	echo "<?php
-	\$database = mysqli_connect('127.0.0.1', '$DB_USER', '$DB_PASSWORD', '$DB_NAME');
-	if(\$database->connect_error) {
-		die('Connection failed: ' . \$database->connect_error);
-	}
-?>" > client/resources/php/database.phpsecret
-	unset DB_PASSWORD
+# Test any environment's image by running it locally
+# $1: Pass "bash" to this function to bypass the CMD (in case the container keeps crashing because of it)
+create_docker_container() {
+	kill_server -
+	_print "Creating Docker container named $APP with image: $ORG/${APP}_$ENV:$TAG"
+	_handle "docker run -d --rm \
+			--env-file $(pwd)/deployment/$ENV/web.secret \
+			--env-file $(pwd)/deployment/$ENV/web.env \
+			--env-file $(pwd)/deployment/$ENV/db.secret \
+			--env-file $(pwd)/deployment/$ENV/db.env \
+			--hostname com-$APP-app \
+			--name $APP \
+			-v $(pwd):/app \
+			-p 80:80 \
+			-it $ORG/${APP}_$ENV:$TAG $1" docker-run.log
 }
-gen_app_conf() {
-	read -r -p 'Name of your organization: ' ORG
-	read -r -p 'Name of your application: ' APP
-	echo "#!/usr/bin/env bash
-ORG=$ORG
-APP=$APP
-ENV=dev
-TAG=latest" > config/app.conf
-	gen_docker_conf
-	source config/app.conf
-}
-# This function adds volume and port info from the Dockerfile as 'docker run' parameters to config/app.conf for continuous use
-gen_docker_conf() {
+# This is where the magic happens
+compose_project() {
 	
-	DOCKER_RUN_PARAMETERS=''
+	export COMPOSE_FILE="./deployment/$ENV/docker-compose.yml"
+	export DHOST="${DHOSTS[$ENV]}"
 
-	# Add any ports specified by EXPOSE in the Dockerfile
-	while IFS= read -r p; do
-		DOCKER_RUN_PARAMETERS+="-p $p:$p "
-	done < <(grep -oP '(?<=EXPOSE ).*?(?=/)' < Dockerfile)
+	if [ "$ENV" = dev ]; then
+		_print "Deploying dev server"
+		_handle "docker-compose up" docker-compose.log /
+	else
+		check_remote_conf
 
-	# Add any symlinked volumes specified by COPY in the Dockerfile
-	local_v=''
-	while IFS= read -r line; do
-		for val in $line; do
-			if [ "$val" = COPY ]; then
-				unset local_v
-			elif [ -z "$local_v" ]; then
-				# If the local volume starts with a '.', replace it with $(pwd)
-				if [[ "$val" =~ ^\. ]]; then
-					[ ! -d "$val" ] && mkdir "$val"
-					val="$(pwd)${val:1}"
-				fi
-				local_v="$val"
-			else
-				DOCKER_RUN_PARAMETERS+="-v $local_v:$val "
-			fi
-		done
-	done < <(grep COPY Dockerfile)
+		echoc "Copying $(pwd) to $AWS_HOST:/app" "$yellow"
+		scp -r -i ~/.ssh/$KEYPAIR $(pwd)/* ec2-user@$AWS_HOST:/app
 
-	# Add the DOCKER_RUN_PARAMETERS config to the config/app.conf
-	update_conf DOCKER_RUN_PARAMETERS "'$DOCKER_RUN_PARAMETERS'"
-}
-
-# -----------------------------------------------------------------------------
-# DOCKER MACROS & HELPERS
-# -----------------------------------------------------------------------------
-
-# Ensure installation and configuration of docker and make sure the docker service is started
-start_docker() {
-	# If you don't have docker, we try to auto install it
-	if ! command -v docker &>/dev/null; then
-		[ "$WSL" -eq 1 ] && _err 'You must have Docker for Windows installed as docker.exe'
-		_print 'Installing docker'
-		_handle 'curl -sSL https://get.docker.com/ | sh' docker-install.log
+		# https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cmd-ecs-cli-compose-service-up.html
+		_print "Composing $APP to $ENV with ECS"
+		_handle "ecs-cli compose \
+				--project-name $APP \
+				service up \
+				--cluster-config $APP-$ENV \
+				--ecs-profile $ORG-remote \
+				--force-deployment" ecs-compose.log
+				#--create-log-groups <- Add this back in if you can't access the logs
 	fi
 
-	# If we are working in WSL, make a symlink between Windows docker and the subsystem's docker
-	if [[ "$WSL" -eq 1 && ! $(command -v docker.exe) ]]; then
-		elevate_privileges
-		_print 'Linking Windows Docker with WSL Docker'
-		_handle 'sudo ln -sf /mnt/c/Program\ Files/Docker/Docker/resources/docker.exe /usr/bin/'
-	fi
-	
-	# If the user isn't already in the docker group, add them to it
-	if ! grep -E "docker.*$USER" /etc/group &>/dev/null; then
-		elevate_privileges
-		_print "Adding $USER to the docker group"
-		_handle "sudo usermod -aG docker $USER"
-	fi
+	[ "$VERBOSE" -eq 1 ] && get_logs
+}
+# $1: pass anything as the first argument to force dev environment
+kill_server() {
+	if [[ "$ENV" = dev || $1 -eq 1 ]]; then
+		_print "Killing local dev server"
+		# not in a _handle because it doesn't matter if these fail
+		docker kill "$APP" db rabbitmq &>/dev/null
+		docker rm "$APP" db rabbitmq &>/dev/null
+		_ok
+	else
+		read -r -n 1 -p "Are you sure you wish to stop the $APP $ENV task? [y/N]: " CHOICE
+		echo
+		[ "${CHOICE^^}" = Y ] || return 1
+		_print "Stopping task"
+		_handle "ecs_shortcut compose \
+			--project-name $APP \
+			service stop \
+			--cluster-config $APP-$ENV \
+			--ecs-profile $ORG-remote"
+		_print "Removing service"
+		_handle "ecs_shortcut compose \
+			--project-name $APP \
+			service rm \
+			--cluster-config $APP-$ENV \
+			--ecs-profile $ORG-remote"
+		sleep 10
 
-	# If the docker service is not running (if the status funtion failed), start it
-	if [[ $WSL -ne 1 && $(! pgrep docker &>/dev/null) ]]; then
-		elevate_privileges
-		_print 'Starting Docker service'
-		_handle 'sudo dockerd' docker-service.log -
-		_warn 'dockerd was used to start the docker service. This is known to be buggy. It is recommended that you start the docker daemon manually.'
+		read -r -n 1 -p "Would you like to kill the $ENV server? [y/N]: " CHOICE
+		echo
+		[ "${CHOICE^^}" = Y ] || return 1
+		_print "killing $ENV server"
+		_handle "ecs_shortcut down --force"
 	fi
-}
-
-# Macro to execute a command inside the docker container
-# $@: Any valid bash command
-drun() {
-	docker exec -it "$APP" "$@" || _err
-}
-kill_docker_container() {
-	_print 'Killing Docker container'
-	docker kill "$APP" &>/dev/null
-	_ok
-}
-remove_docker_container() {
-	kill_docker_container
-	_print 'Removing Docker container named ezclinic'
-	docker rm "$APP" &>/dev/null
-	_ok
-}
-remove_docker_image() {
-	remove_docker_container
-	_print "Removing Docker image named $ORG/${APP}_$ENV:$TAG"
-	docker image rm "$(docker image ls -aq "$ORG/${APP}_$ENV:$TAG")" &>/dev/null
-	_ok
 }
 docker_login() {
-	_print 'Logging you into Docker'
-	_handle 'docker login'
+	if [ "$ENV" = dev ]; then
+		docker login
+	else
+		# We use AWS Elastic Container Registry (ECR) for ECS deployment
+		aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "${DHOSTS[$ENV]}"
+	fi
+}
+# Push and pull containers to and from the image host
+push_docker_image() {
+	docker_login
+
+	# Prepend the image host to the image tag so Docker knows where to send it
+	docker tag "$ORG/${APP}_$ENV:$TAG" "${DHOSTS[$ENV]}/$ORG/${APP}_$ENV:$TAG"
+
+	_print "Pushing image to ${DHOSTS[$ENV]}/$ORG/${APP}_$ENV:$TAG"
+	_handle "docker push ${DHOSTS[$ENV]}/$ORG/${APP}_$ENV:$TAG"
 }
 pull_docker_image() {
 	docker_login
 
-	_print "Pulling from docker.io/$ORG/${APP}_$ENV:$TAG"
-	_handle "docker pull $ORG/${APP}_$ENV:$TAG"
+	_print "Pulling image from ${DHOSTS[$ENV]}/$ORG/${APP}_$ENV:$TAG"
+	_handle "docker pull ${DHOSTS[$ENV]}/$ORG/${APP}_$ENV:$TAG"
 }
-push_docker_image() {
-	docker_login
-
-	# If the second flag is set, make the latest tag reference the image of the last tag
-	[[ -n "$2" && "$TAG" != latest ]] && {
-		_warn "Overwriting latest tag with $TAG"
-		docker image tag "$ORG/${APP}_$ENV:$TAG" "$ORG/${APP}_$ENV:latest"
-		TAG=latest
-	}
-
-	_print "Pushing new docker image to docker.io/$ORG/${APP}_$ENV:$TAG"
-	_handle "docker push $ORG/${APP}_$ENV:$TAG"
-}
+# Create and remove docker images
 create_docker_image() {
 	[ "$VERBOSE" -ne 1 ] && echoc 'Verbose output auto-enabled' "$yellow"
 	VERBOSE=1
 	remove_docker_image
 	_print "Building Docker image: $ORG/${APP}_$ENV:$TAG (this may take a hot sec)"
-	_handle "docker build --tag $ORG/${APP}_$ENV:$TAG --target $ENV ." docker-init.log
+	_handle "docker build --tag $ORG/${APP}_$ENV:$TAG --build-arg ENV=$ENV ." docker-init.log
+	
+	# If the environment is remote, push the image
+	[ "$ENV" = dev ] || push_docker_image
 }
-# To override the CMD function, pass "bash" as $1
-create_docker_container() {
-	remove_docker_container
-	gen_docker_conf
-	_print "Creating Docker container named $APP with image: $ORG/${APP}_$ENV:$TAG"
-	_handle "docker run -d $DOCKER_RUN_PARAMETERS --env-file .env --hostname com-$APP-app --name $APP -it $ORG/${APP}_$ENV:$TAG $1" docker-run.log
-}
-start_docker_container() {
-	kill_docker_container
-	_print "Starting existing Docker container named $APP"
-	_handle "docker container start $APP"
+remove_docker_image() {
+	IMG=$(docker image ls -q "${DHOSTS[$ENV]}/$ORG/${APP}_$ENV:$TAG")
+	[ -z "$IMG" ] && return
+	_print "Removing docker image: ${DHOSTS[$ENV]}/$ORG/${APP}_$ENV:$TAG"
+	_handle "docker image rm -f $IMG"
 }
 clean_docker_images() {
+	DANGLING=$(docker image ls -aqf dangling=true)
+	[ -z "$DANGLING" ] && echo "Nothing to clean!" && return 0
 	_print 'Cleaning dangling images'
-	_handle "docker image rm -f $(docker image ls -aqf dangling=true)"
+	_handle "docker image rm -f $DANGLING"
+
+	_print 'Pruning all unused volumes'
+	_handle 'docker volume prune'
 }
-# Docker Container/Image Status
-# @returns
-#   0: No image, no container
-#   1: Image exists, but no container
-#   2: Image & container exist, but container not running
-#   3: Image & container exist, container is alive, but not running properly
-#   4: Image & container exist, container is alive & running properly
-docker_ci_status() {
-	STAT=0
-	echoc "Checking for image named $ORG/${APP}_$ENV:$TAG" "$blue"
-	if docker image ls | grep "$ORG/${APP}_$ENV.*$TAG"; then
-		((STAT++))
+enter_docker_shell() {
+	if [ "$ENV" = dev ]; then
+		docker exec -it "$APP" bash
 	else
-		return "$STAT"
+		check_remote_conf
+		_warn 'Use "docker exec -it $(docker ps -qf name=web) bash" to enter docker container within ec2 instance' 
+		ssh -i ~/.ssh/$KEYPAIR ec2-user@$AWS_HOST
 	fi
+}
 
-	echoc "Checking for container named $APP" "$blue"
-	if docker ps -a | grep "$APP"; then
-		((STAT++))
+###############################################################################
+# -----------------------------------------------------------------------------
+# MISC HELPER FUNCTIONS
+# -----------------------------------------------------------------------------
+###############################################################################
+
+# Export all variables in a basic config file of key=value pairs
+efile() {
+	source "$1"
+	export $(cut -d= -f1 "$1" | grep -v DHOSTS) &>/dev/null
+}
+get_logs() {
+	if [ "$ENV" = dev ]; then
+		tail -f logs/docker-compose.log
 	else
-		return "$STAT"
+		get_aws_task_id
+		ecs-cli logs --task-id $AWS_TASK_ID --since 1 --follow
 	fi
-
-	echoc "Checking status of container" "$blue"
-	if docker ps | grep "$APP"; then
-		((STAT++))
-	else
-		return "$STAT"
-	fi
-	docker ps | grep "Up.*$APP" && ((STAT++))
-
-	return "$STAT"
 }
-
-# -----------------------------------------------------------------------------
-# SERVER STARTUP FUNCTION
-# The goal of this function is to boot up a Docker container with the server (and all it's microservices) in one fell swoop.
-# -----------------------------------------------------------------------------
-_deploy() {
-
-	# Make sure the Docker daemon is running
-	start_docker
-
-	# Get the status of the project in terms of its Docker image and container
-	docker_ci_status
-	case $? in
-		0)
-			# No image/container - create image
-			create_docker_image;;
-		1)
-			# Image but no container - create container
-			create_docker_container;;
-		2)
-			# Image & dead container - start the dead container
-			start_docker_container;;
-		3)
-			# Image & faulty container - kill & restart container
-			remove_docker_container
-			create_docker_container;;
-	esac
-	drun /var/www/config/deploy.sh
+ecs_shortcut() {
+	[ "$ENV" = dev ] && _err "Operation not permitted in dev environment. Use --env to switch environments" -
+	export COMPOSE_FILE="./deployment/$ENV/docker-compose.yml"
+	ecs-cli "$@"
 }
-
-# -----------------------------------------------------------------------------
-# REMOTE DEPLOYMENT MECHANISMS
-# -----------------------------------------------------------------------------
-set_remote_env() {
-	_print 'Setting environment variables'
-	# Grab the secret files, use xargs to turn into arguments
-	_handle "eb setenv $(cat config/staging.env config/staging.secret .env | xargs)" eb-setenv-localreport.log
-	# Allow time for AWS to return to the 'ready' state
-	sleep 3
+# When switching between machines or developers, use this command to allow ssh access with your keypair
+rebuild_ecs_cluster() {
+	# https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cmd-ecs-cli-up.html
+	_print "Generating $ENV ECS cluster..."
+	_handle "ecs-cli up --cluster-config $APP-$ENV \
+			--ecs-profile $ORG-remote \
+			--keypair "$KEYPAIR" \
+			--capability-iam \
+			--size 1 \
+			--instance-type t2.medium \
+			--security-group sg-0f79330791670cf6e \
+			--vpc vpc-eeb9ee94 \
+			--subnets subnet-8fb64a81,subnet-6b070037,subnet-e80706c6,subnet-5cad6711,subnet-6bc6fd0c,subnet-6559175b \
+			--force
+			--verbose" ecs-up.log
 }
-deploy_staging_environment() {
+add_ssh_key() {
+	check_remote_conf
 
-	# Add explicit delimiters to the args
-	args=$(echo "/$*/" | tr ' ' /)
-
-	# If an environment is selected (it has a * in front of it), just use it. If not, prompt fo
-	eb_environment="$(echo "$EB_LIST" | grep '\*' | sed 's/* //g')"
-	[ -z "$eb_environment" ] && {
-		echoc 'Which EB Instance would you like to Use?' "$blue"
-		echoc "$EB_LIST" "$yellow"
+	read -r -s -p "Authority, enter your passcode: " PASSCODE
+	echo
+	read -r -p "New keypair name: " NEW_KEYPAIR
+	read -r -s -p "New keypair passcode: " NEW_PASSCODE
+	echo
+	read -r -p "New public key: " NEW_PUBKEY
 	
-		# Prompt for environment selection until valid selection
-		while true; do
-			read -r -p "Type one of the above env names: " eb_environment
-			if eb use "$eb_environment" &>/dev/null; then
-				break
-			else
-				_warn 'Invalid environment name'
-			fi
-		done
-	}
-
-	# Check for optional flags
-	[[ "$args" == */--update/* || "$args" == */-u/* ]] && set_remote_env
-	[[ "$args" == */--migrate/* || "$args" == */-m/* ]] && make_db_migrations
-
-	_print "Deploying application in $eb_environment (This may take a while)"
-	_handle 'eb deploy --staged' eb-deploy-localreport.log
-	eb open 
+	ssh -i ~/.ssh/$KEYPAIR ec2-user@$AWS_HOST ssh_key_manager "$KEYPAIR" "$PASSCODE" "$NEW_KEYPAIR" "$NEW_PASSCODE" "$NEW_PUBKEY"
 }
 
+###############################################################################
 # -----------------------------------------------------------------------------
-# FLAG SETTING & FUNCTION EXECUTION
+# APPLICATION SPECIFIC SHORTCUTS
 # -----------------------------------------------------------------------------
-req_check docker perl
-source config/app.conf
-if [ "$TAG" = git ]; then
-	TAG="$(git branch | grep '\* ' | sed 's/* //g')"
-elif [ -z "$TAG" ]; then
-	TAG=latest
+###############################################################################
+
+ecs_shortcut() {
+	[ "$ENV" = dev ] && _err "Operation not permitted in current environment: $ENV" -
+	docker_login
+	export COMPOSE_FILE="./deployment/$ENV/docker-compose.yml"
+	ecs-cli "$@"
+}
+# Export all variables in a basic config file of key=value pairs
+efile() {
+	source "$1"
+	export $(cut -d= -f1 "$1" | grep -v DHOSTS) &>/dev/null
+}
+db_connect() {
+	source deployment/$ENV/db.env
+	source deployment/$ENV/db.secret
+	docker exec -it db mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD"
+}
+
+###############################################################################
+# -----------------------------------------------------------------------------
+# CONFIG GENERATION
+# -----------------------------------------------------------------------------
+###############################################################################
+
+# Update a variable setting in any given config file
+# $1: Variable name
+# $2: Variable value
+# $3: (optional) config file name - default=.config
+update_conf() {
+	[ -z "$2" ] && _err "Missing value for $1" -
+	[ -z "$3" ] && conf='.config' || conf="$3"
+
+	# If the key was supposed to be secret, replace the output value with asterisks 
+	val="$2"
+	[[ "$1" == *SECRET* ]] && val=$(for ((i=0; i<"${#val}"; i++)); do printf '*'; done)
+
+	NAME="$(echo "$1" | tr '[]' '.*.*')"
+	if grep "$NAME" "$conf" &>/dev/null; then
+		cat "$conf" | sed "s|$NAME.*|$1=$2|" | cat > .temp
+		mv .temp "$conf"
+		echoc "$conf: $1 has been replaced with $val" "$blue"
+	else
+		echoc "$conf: $1 has been set to $val" "$blue"
+		echo "$1=$2" >> "$conf"
+	fi
+
+	
+	source "$conf"
+	efile "$conf"
+}
+# Prompt for a config variable from user
+# $1: Prompt text. (e.g. "AWS Access Key: ")
+# $2: Variable name (e.g. AWS_ACCESS_KEY_ID)
+# $3: Default value
+prompt_conf() {
+	
+	if [[ "$1" == *secret* ]]; then
+		read -r -s -p "$1" VALUE
+	else
+		read -r -p "$1" VALUE
+	fi
+	echo
+	[ -z "$VALUE" ] && VALUE="$3"
+	if [ -z "$VALUE" ]; then
+		_warn 'This field cannot be left empty'
+		prompt_conf "$1" "$2" "$3"
+		return $?
+	fi
+	update_conf "$2" "$VALUE"
+}
+gen_app_conf() {
+	echo 'ORG=ezclinic
+APP=ezclinic
+ENV=dev
+TAG=latest
+declare -A DHOSTS
+DHOSTS[dev]=dockerhub.io' > .config
+	source .config
+	efile .config
+}
+
+gen_secrets() {
+	_print 'Generating new credentials for RabbitMQ and MySQL'
+	echo "MYSQL_PASSWORD=$(openssl rand -hex 20)" > "deployment/$ENV/db.secret"
+	echo "RABBITMQ_DEFAULT_PASS=$(openssl rand -hex 32)" > "deployment/$ENV/rabbitmq.secret"
+	mv deployment/$ENV/$ENV.secret deployment/$ENV/web.secret &>/dev/null
+	_ok
+}
+# Check for AWS credentials only when a remote deployment is underway
+get_aws_cred() {
+	prompt_conf 'AWS access key ID: ' AWS_ACCESS_KEY_ID
+	prompt_conf 'AWS secret access key: ' AWS_SECRET_ACCESS_KEY
+}
+get_aws_host() {
+	_print "Retrieving AWS EC2 instance DNS hostname"
+	AWS_HOST="$(aws ec2 describe-instances \
+			--filter Name=tag:Name,Values="ECS Instance - amazon-ecs-cli-setup-$APP-$ENV" \
+			| grep PublicDnsName \
+			| head -1 \
+			| sed 's/.*: "//g; s/".*//g')"
+	[ $? -eq 0 ] && _ok || _err "$AWS_HOST"
+	update_conf AWS_HOST "$AWS_HOST"
+	update_conf ALLOWED_HOSTS "$AWS_HOST" "deployment/$ENV/web.env"
+}
+get_aws_task_id() {
+	_print "Retrieving latest ECS task id"
+	ATI="$(aws ecs list-tasks \
+			--cluster "$APP-$ENV" \
+			| grep "$AWS_DEFAULT_REGION.*$APP-$ENV" \
+			| sed "s|.*$ENV/||g; s|\"||g")"
+	[[ -z "$ATI" || $? -ne 0 ]] && _err 'Could not retrieve task id'
+	_ok
+	update_conf AWS_TASK_ID "$ATI"
+}
+# Verbose setter - default is off
+VERBOSE=0
+_verbose() {
+	echoc 'Verbose output enabled' "$yellow"
+	VERBOSE=1
+}
+
+###############################################################################
+# -----------------------------------------------------------------------------
+# REQUIREMENTS & CONFIG CHECK
+# -----------------------------------------------------------------------------
+###############################################################################
+
+check_remote_conf() {
+	[ -z "$AWS_DEFAULT_REGION" ] && prompt_conf 'AWS default region [default=us-east-1]: ' AWS_DEFAULT_REGION us-east-1
+	[ -z "$KEYPAIR" ] && prompt_conf 'AWS keypair name: ' KEYPAIR
+	[[ -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_SECRET_ACCESS_KEY" ]] && get_aws_cred
+	[ -z "${DHOSTS[${ENV}]}" ] && prompt_conf "Image host for $ORG/${APP}_$ENV:$TAG [default=dockerhub.io]: " "DHOSTS[$ENV]" dockerhub.io
+	[ -z "$AWS_HOST" ] && get_aws_host
+
+	# This ensures that you aren't prompted for your ssh key passphrase every time we do something to the remote server
+	grep 'AddKeysToAgent yes' ~/.ssh/config &>/dev/null || echo 'AddKeysToAgent yes' >> ~/.ssh/config
+
+	# https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cmd-ecs-cli-configure.html
+	_print "Setting ecs config for $ENV"
+	_handle "ecs-cli configure \
+			--cluster $APP-$ENV \
+			--default-launch-type EC2 \
+			--config-name $APP-$ENV \
+			--region $AWS_DEFAULT_REGION"
+	
+	# https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cmd-ecs-cli-configure-profile.html
+	_print "Applying ecs profile"
+	_handle "ecs-cli configure profile --profile-name $ORG-remote"
+	
+	req_check ecs-cli aws
+}
+
+# Check for missing required software
+req_check() {
+	ERR=()
+	for cmd in "$@"; do
+		command -v "$cmd" &>/dev/null || ERR+=("$cmd")
+	done
+	[ ${#ERR[@]} -gt 0 ] && _err "You must install the following package(s) in order to deploy this project: ${ERR[*]}" -
+}
+
+if [ $EUID -eq 0 ]; then
+	_warn 'Hold your horses! You are running this script as root, meaning other users will not be able to access many of the generated server resources.'
+	read -r -n 1 -p 'Are you sure you wish to continue? [y/N] ' CHOICE
+	echo
+	[[ ${CHOICE^^} != 'Y' ]] && exit 1
 fi
+mkdir -p logs/
+req_check docker docker-compose
+
+# Check for valid .config, then export all it's variables
+if ! grep APP .config &>/dev/null; then
+	_warn 'Invalid .config'
+	read -r -n 1 -p 'Regenerate? [Y/n]: ' CHOICE
+	echo
+	[[ ${CHOICE^^} != 'Y' ]] && exit 1
+	gen_app_conf
+fi
+source .config
+efile .config
+
+# Ensure environment secret file is available
+[[ ! -f api/sql_config.jsecret ||
+	! -f api/auth/pepper.jsecret ||
+	! -f deployment/$ENV/db.secret ||
+	! -f client/resources/php/database.phpsecret ]] && gen_secrets
+
+###############################################################################
+# -----------------------------------------------------------------------------
+# DEPLOYMENT MECHANISM
+# -----------------------------------------------------------------------------
+###############################################################################
+
+# $1: (optional) Different docker-compose.yml environment to deploy to current $ENV
+compose_project() {
+	
+	# For dev, just run the compose app and get outta here
+	if [ "$ENV" = dev ]; then
+		export DHOST=''
+		_print "Deploying dev server"
+		_handle "docker-compose up" server-dev.log /
+		xdg-open localhost &>/dev/null
+		return
+	fi
+
+	# compose path - If $1 is set to a different compose path, that compose file gets deployed to $ENV
+	# It seems counterintuitive, but this acts a a good debugging tool
+	export DHOST="${DHOSTS[$ENV]}/"
+
+	# Check for ecs-cli and docker as well as the proper AWS credential environment variables
+	check_remote_conf
+
+	# https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cmd-ecs-cli-configure.html
+	echoc "Setting ecs config for $ENV" "$blue"
+	ecs-cli configure \
+			--cluster "$APP-$ENV" \
+			--default-launch-type EC2 \
+			--config-name "$APP-$ENV" \
+			--region us-east-1
+
+	# https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cmd-ecs-cli-configure-profile.html
+	ecs-cli configure profile --profile-name "$ORG-remote"
+
+	# Attempt to start the ECS cluster as the staging app
+	# https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cmd-ecs-cli-compose-service-up.html
+	echoc "Composing $APP to $ENV with ECS" "$blue"
+	ecs-cli compose service up \
+			--cluster-config "$APP-$ENV" \
+			--ecs-profile "$ORG-remote" \
+			--create-log-groups
+}
+
+###############################################################################
+# -----------------------------------------------------------------------------
+# FLAG PARSING & FUNCTION EXECUTION
+# -----------------------------------------------------------------------------
+###############################################################################
 
 # This function "converts" an argument tag (like --verbose or -v) into a function name
 # @param: $1 an argument tag
@@ -532,96 +656,168 @@ fi
 #   0: pre-primary (no follow-up value)
 #   1: pre-primary (with follow-up value. e.g.: --tag <tagname>. (<tagname> is the follow-up value))
 #   2: primary
-#   3: post-primary (no follow-up value)
-#   4: post-primary (with follow-up value)
+#   3: primary (with multiple follow up values : no other sub-commands may be used with this)
+#   4: post-primary
 parse_cmd() {
-	case $1 in
-		# PRIMARY COMMANDS
+	case "$1" in
+		####################
+		# PRIMARY COMMANDS #
+		####################
 		--deploy | -d)
-			echo _deploy
+			echo compose_project
 			return 2;;
-		--boot | -b)
+		--boot | -o)
 			echo create_docker_container bash
 			return 2;;
-		# SECONDARY COMMANDS
+		--ecs)
+			echo ecs_shortcut
+			return 3;;
+
+		######################
+		# SECONDARY COMMANDS #
+		######################
 		# Pre-primary
-		--fix | -f)
-			echo _fix;;
+		# -----------
 		--verbose | -v)
 			echo _verbose;;
+		# Docker shortcuts
 		--kill | -k)
-			echo remove_docker_container
+			echo kill_server
 			return 0;;
 		--pull | -p)
 			echo pull_docker_image
 			return 0;;
-		--rebuild | -r)
+		--build | -b)
 			echo create_docker_image
 			return 0;;
-		--config | -f)
-			echo gen_app_conf
+		--gen-secrets | -s)
+			echo gen_secrets
 			return 0;;
+		# Remote specific
+		--rebuild | -R)
+			[ "$ENV" = dev ] && _err "Operation not allowed in current environment: $ENV"
+			echo rebuild_ecs_cluster
+			return 0;;
+		--aws-task-id | -I)
+			echo get_aws_task_id
+			return 0;;
+		--aws-dns | -D)
+			echo get_aws_dns
+			return 0;;
+		--aws-cred | -A)
+			echo get_aws_cred
+			return 0;;
+		--add-ssh-key | -S)
+			echo add_ssh_key
+			return 0;;
+		# State changers
 		--tag | -t)
 			echo update_conf TAG
 			return 1;;
 		--env | -e)
 			echo update_conf ENV
 			return 1;;
+		--host | -H)
+			echo update_conf DHOSTS["$ENV"]
+			return 1;;
+		--keypair | -K)
+			echo update_conf KEYPAIR
+			return 1;;
+		--aws-region | -G)
+			echo update_conf AWS_DEFAULT_REGION
+			return 1;;
+
 		# Post-primary
-		--dockershell | -l)
-			echo docker exec -it "$APP" bash
+		# ------------
+		--help | -h)
+			echo _help
 			return 4;;
-		--db-connect | -c)
+		--dockershell | -l)
+			echo enter_docker_shell
+			return 4;;
+		--db-connect | -C)
 			echo db_connect
 			return 4;;
 		--push | -u)
 			echo push_docker_image
-			return 4;;
-		--clean | -n)
+			[ "$ENV" = dev ] && return 4 || return 0;;
+		--clean | -c)
 			echo clean_docker_images
 			return 4;;
-		--help | -h)
-			echo _help
+		--logs | -L)
+			echo get_logs
 			return 4;;
+		
+		#########
+		# Error #
+		#########
 		*)
 			return 255;;
 	esac
 }
 
-[ -z "$*" ] && _help && exit 0
-
 # The pre- and post-primary commands are placed in separate arrays to be executed at their respective times
 PRE=()
-PRIMARY=""
+PRIMARY=''
 POST=()
+set_tack=''
 var_set=''
 for cmd in "$@"; do
 
-	[ -n "$var_set" ] && {
+	# If the last cmd was a variable setter (e.g. --tag or --env), append the current cmd (which would be the value) to that function call, then continue
+	if [ -n "$var_set" ]; then
+		
+		# Spelling autocorrect based on the first letter of environment
+		if [ "${var_set//* }" = ENV ]; then
+			case "${cmd:0:1}" in
+				d)
+					cmd=dev;;
+				s)
+					cmd=staging;;
+				p)
+					cmd=production;;
+				*)
+					_err "Invalid environment: $cmd" -
+			esac
+		fi
+
+		# Add the function call to the pre-primary commands, reset and continue parsing
 		PRE+=( "$var_set $cmd" )
+		unset var_set set_tack
 		continue
-		unset var_set
-	}
-	
-	[[ "$cmd" = --verbose || "$cmd" = -v ]] && _verbose && continue
-	next=$(parse_cmd "$cmd")
-	STAT=$?
-	# If $previous is set, that means were looking for 
-	if [ "$STAT" -eq 0 ]; then
-		PRE+=( "$next" )
-	elif [ "$STAT" -eq 1 ]; then
-		var_set="$next"
-	elif [ "$STAT" -eq 2 ]; then
-		[ -n "$PRIMARY" ] && _err "Multiple primary command issued: $cmd" -
-		PRIMARY="$next"
-	elif [ "$STAT" -eq 3 ]; then
-		shift
-		$next $@
-		exit $?
-	elif [ "$STAT" -eq 4 ]; then
-		POST+=( "$next" )
 	fi
+	
+	# Verbose mode should be the very first thing to be executed, so if it was set, enable verbose now
+	[[ "$cmd" = --verbose || "$cmd" = -v ]] && _verbose && continue
+
+	next=$(parse_cmd "$cmd")
+	case "$?" in
+		0)
+			PRE+=( "$next" );;
+		1)
+			set_tack="$cmd"
+			var_set="$next";;
+		2)
+			[ -n "$PRIMARY" ] && _err "Multiple primary command issued: $cmd" -
+			PRIMARY="$next";;
+		3)
+			shift
+			$next "$@"
+			exit $?;;
+		4)
+			POST+=( "$next" );;
+	esac
 done
+
+
+#grep -e ${var_set/* /} .config
+if [ -n "$var_set" ]; then
+	VAL="echo $(grep "$( echo ${var_set/* /} | sed 's|\[|.*|g; s|\]||g' )" .config | sed 's/.*=//g' )"
+	[ "$VAL" = "echo " ] && VAL="_warn ${var_set/* /} is not set"
+	PRE+=( "$VAL" )
+fi
+
+[[ -z "$PRE" && -z "$PRIMARY" && -z "$POST" ]] && _help && exit 1
 
 # Execute the commands in proper order
 for cmd in "${PRE[@]}"; do $cmd; done
