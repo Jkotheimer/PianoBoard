@@ -1,0 +1,25 @@
+version: '3'
+services:
+  db:
+    image: mysql:latest
+    container_name: db
+    env_file:
+      - ./deployment/$ENV/db.env
+      - ./deployment/$ENV/db.secret
+    ports:
+      - '3306:3306'
+  web:
+    image: $DHOST$ORG/${APP}_$ENV:$TAG
+    container_name: $APP
+    env_file:
+      - ./deployment/$ENV/db.env
+      - ./deployment/$ENV/db.secret
+    volumes:
+      - ./api:/var/www/api
+      - ./client:/var/www/html
+      - ./deployment/$ENV:/var/www/deployment
+    command: /var/www/deployment/run.sh
+    ports:
+      - '80:80'
+    depends_on:
+      - db
