@@ -8,29 +8,32 @@ module.exports = function(req, res) {
 	const local = req.app.locals;
 	const mysql = require(`${local.root}/sql_connect.js`);
 	
-	const email = req.body.email;
-	const password = req.body.password;
-	const confirm_password = req.body.confirm_password
+	console.log(req.body);
+	const req_body = JSON.parse(req.body);
+	const email = req_body.email;
+	const password = req_body.password;
+	const confirm_password = req_body.confirm_password
+	console.log(req_body.password);
 
-	var body = {message: {}};
+	var res_body = {message: {}};
 
 	if(!validator.validate(email)) {
 		// If the request was sent from a web browser, send a redirect back to the create account page
-		body.message.email_notification = 'Invalid Email Address';
+		res_body.message.email_notification = 'Invalid Email Address';
 	}
 	if(password.length < 8) {
-		body.message.password_notification = 'Password too weak';
+		res_body.message.password_notification = 'Password too weak';
 	}
 	if(password != confirm_password) {
-		body.message.confirm_password_notification = 'Passwords do not match';
+		res_body.message.confirm_password_notification = 'Passwords do not match';
 	}
-	if(body.message.size > 0) res.status(400).json(body);
+	if(res_body.message.size > 0) res.status(400).json(body);
 
 	// ALL IS WELL - ATTEMPT TO CREATE THE ACCOUNT
 	async function create_account(_email, _password) {
 		const username = await local.resources.gen_username(_email);
 		if(!username) {
-			body.message.email_notification = 'An account with this email already exists';
+			res_body.message.email_notification = 'An account with this email already exists';
 			res.status(400).json(body);
 			return;
 		}
@@ -41,7 +44,7 @@ module.exports = function(req, res) {
 			function(err, data) {
 				if(err || !data) {
 					// An account with this email already exists
-					body.message.email_notification = 'An account with this email already exists';
+					res_body.message.email_notification = 'An account with this email already exists';
 					res.status(409).json(body);
 				}
 				else if(data) {
@@ -58,7 +61,7 @@ module.exports = function(req, res) {
 					
 				} // End data check
 				else {
-					body.message = 'Something unexpected happened :/';
+					res_body.message = 'Something unexpected happened :/';
 					res.status(500).json(body);
 				}
 			} // End account insertion callback
@@ -71,7 +74,7 @@ module.exports = function(req, res) {
 			('${token}', '${user_id}', '${exp_date}');`,
 			(err, data) => {
 				if(err) {
-					body.message = 'Something went wrong :/ we cannot authenticate you right now';
+					res_body.message = 'Something went wrong :/ we cannot authenticate you right now';
 					res.status(500).json(body);
 				}
 			}

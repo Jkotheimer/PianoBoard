@@ -1,6 +1,4 @@
 <?php
-$session_cookie = "pb_token";
-$id_cookie = "pb_uid";
 $expiration_date = time() + (86400 * 30);
 $domain = 'localhost';
 $host = 'http://localhost';
@@ -101,7 +99,7 @@ function xhr($method, $url, $data = false) {
 	$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 	$cookies = extract_cookies($header);
 	$uid = null;
-	if(isset($cookies[$id_cookie])) $uid = $cookies[$id_cookie];
+	if(isset($cookies['pb_uid'])) $uid = $cookies['pb_uid'];
 
     curl_close($curl);
 

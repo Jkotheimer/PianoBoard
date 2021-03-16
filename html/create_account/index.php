@@ -10,12 +10,15 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])
 	$response = xhr('POST', "$API/auth/register", $body);
 
 	if($response['status'] == 201) {
-		setcookie($session_cookie, $response['cookies'][$session_cookie], $expiration_date, '/', $domain);
-		setcookie($id_cookie, $response['cookies'][$id_cookie], $expiration_date, '/', $domain);
+		setcookie('pb_token', $response['cookies']['pb_token'], $expiration_date, '/', $domain);
+		setcookie('pb_uid', $response['cookies']['pb_uid'], $expiration_date, '/', $domain);
 		exit(header("Location: $host"));
 	}
 	http_response_code($response['status']);
-	$notifications = $response['body']->message;
+	print_r($response);
+	if(isset($response['body'])) {
+		$notifications = $response['body']->message;
+	}
 }
 
 ob_start();

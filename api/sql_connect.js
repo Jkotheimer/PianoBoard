@@ -2,13 +2,20 @@
 
 const util = require('util')
 const sql_config = require('./sql_config.jsecret')
+const mysql = require('mysql');
 
-var pool = require('mysql').createPool({
+console.log(sql_config.host);
+console.log(sql_config.username);
+console.log(sql_config.db);
+console.log(sql_config.port);
+
+var pool = mysql.createPool({
 	connectionLimit: 10,
-	host: 'localhost',
+	host: sql_config.host,
 	user: sql_config.username,
 	password: sql_config.password,
-	database: sql_config.db
+	database: sql_config.db,
+	port: sql_config.port
 });
 
 pool.getConnection((err, connection) => {

@@ -2,8 +2,7 @@
 # run.sh
 # 
 # @author: Jack Kotheimer
-# @org: Pianoboard
-# @date: 12/5/2020
+# @date: 03/15/21
 #
 # The main functionality of the script is listed just below in the '_help' function, but if you have any questions about
 # the functionality or implementation of this script, feel free to send me a message via email at jkotheimer9@gmail.com
@@ -37,7 +36,7 @@ _ok() {
 	printf "\r[%s DONE %s]\n" "$green" "$nc"
 }
 _warn() {
-	printf "\r[%s WARN %s] %s\n" "$yellow" "$nc" "$1"
+	printf "\r[%s WARN %s] %s\n" "$yellow" "$nc" "$*"
 }
 # $1: Error message
 # $2: (optional) '-' to print the error message inline with the [ FAIL ] flag
@@ -151,7 +150,6 @@ _help() {
 	echo '--kill        [-k]: Kill the docker container'
 	echo '--pull        [-p]: Pull an image from Docker Hub'
 	echo '--build       [-b]: Build a new Docker image'
-	echo '--gen-secrets [-s]: Regenerate new credentials for RabbitMQ and MySQL'
 	echo '--env <env>   [-e]: Switch environments to work in'
 	echo '    <env> : dev, staging, or production'
 	echoc "        Environment currently set to '$ENV'" "$green"
@@ -164,11 +162,12 @@ _help() {
 	[ -z "${DHOSTS[$ENV]}" ] && NCOLOR="$red"
 	echoc "        Docker image host for $ENV currently set to '${DHOSTS[$ENV]}'" "$NCOLOR"
 	echoc 'Remote specific commands' "$yellow"
-	echo '--rebuild      [-R]: Rebuild ecs cluster (when switching between machines to use new ssh keypair)'
+	echo '--build-cluster[-B]: Rebuild ecs cluster (when switching between machines to use new ssh keypair)'
+	echo '--delete-cluster   : Delete the ecs cluster'
 	echo "--aws-dns      [-D]: Fetch the most recent dns hostname for the $ENV server"
 	NCOLOR="$green"
-	[ -z "$AWS_HOST" ] && NCOLOR="$red"
-	echoc "        $ENV dns hostname is currently set to '$AWS_HOST'" "$NCOLOR"
+	[ -z "$AWS_DNS" ] && NCOLOR="$red"
+	echoc "        $ENV dns hostname is currently set to '$AWS_DNS'" "$NCOLOR"
 	echo '--aws-cred     [-A]: Re-enter AWS credentials'
 	NCOLOR="$green"
 	if [[ -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_SECRET_ACCESS_KEY" ]]; then
@@ -203,71 +202,34 @@ _help() {
 # DOCKER SHORTCUTS
 # -----------------------------------------------------------------------------
 ###############################################################################
-#
-# A good majority of these functions are dependent on the current environment
-# If we're in the dev environment, everything happens locally
-# Else, most actions will occur in an AWS server, using the ecs-cli
 
-# Execute any bash command inside our app's container
+# Execute any bash command inside app container
 dexec() {
 	# TODO: Implement for remote server ssh
 	if [ "$ENV" = dev ]; then
 		docker exec -it "$APP" "$@" || _err
 	else
-		ssh -i ~/.ssh/$KEYPAIR ec2-user@$AWS_HOST $*
+		ssh -i ~/.ssh/$KEYPAIR ec2-user@$AWS_DNS $*
 	fi
 }
-# Test any environment's image by running it locally
-# $1: Pass "bash" to this function to bypass the CMD (in case the container keeps crashing because of it)
+# Create and remove docker containers
 create_docker_container() {
 	kill_server -
 	_print "Creating Docker container named $APP with image: $ORG/${APP}_$ENV:$TAG"
 	_handle "docker run -d --rm \
-			--env-file $(pwd)/deployment/$ENV/web.secret \
-			--env-file $(pwd)/deployment/$ENV/web.env \
-			--env-file $(pwd)/deployment/$ENV/db.secret \
-			--env-file $(pwd)/deployment/$ENV/db.env \
 			--hostname com-$APP-app \
+			-e ENV=$ENV \
 			--name $APP \
-			-v $(pwd):/app \
+			-v $(pwd):/srv \
 			-p 80:80 \
 			-it $ORG/${APP}_$ENV:$TAG $1" docker-run.log
 }
-# This is where the magic happens
-compose_project() {
-	
-	export COMPOSE_FILE="./deployment/$ENV/docker-compose.yml"
-	export DHOST="${DHOSTS[$ENV]}"
-
-	if [ "$ENV" = dev ]; then
-		_print "Deploying dev server"
-		_handle "docker-compose up" docker-compose.log /
-	else
-		check_remote_conf
-
-		echoc "Copying $(pwd) to $AWS_HOST:/app" "$yellow"
-		scp -r -i ~/.ssh/$KEYPAIR $(pwd)/* ec2-user@$AWS_HOST:/app
-
-		# https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cmd-ecs-cli-compose-service-up.html
-		_print "Composing $APP to $ENV with ECS"
-		_handle "ecs-cli compose \
-				--project-name $APP \
-				service up \
-				--cluster-config $APP-$ENV \
-				--ecs-profile $ORG-remote \
-				--force-deployment" ecs-compose.log
-				#--create-log-groups <- Add this back in if you can't access the logs
-	fi
-
-	[ "$VERBOSE" -eq 1 ] && get_logs
-}
-# $1: pass anything as the first argument to force dev environment
 kill_server() {
-	if [[ "$ENV" = dev || $1 -eq 1 ]]; then
+	if [[ "$ENV" = dev || -n "$1" ]]; then
 		_print "Killing local dev server"
 		# not in a _handle because it doesn't matter if these fail
-		docker kill "$APP" db rabbitmq &>/dev/null
-		docker rm "$APP" db rabbitmq &>/dev/null
+		docker kill "$APP" db &>/dev/null
+		docker rm "$APP" db &>/dev/null
 		_ok
 	else
 		read -r -n 1 -p "Are you sure you wish to stop the $APP $ENV task? [y/N]: " CHOICE
@@ -276,7 +238,7 @@ kill_server() {
 		_print "Stopping task"
 		_handle "ecs_shortcut compose \
 			--project-name $APP \
-			service stop \
+			service down \
 			--cluster-config $APP-$ENV \
 			--ecs-profile $ORG-remote"
 		_print "Removing service"
@@ -286,19 +248,20 @@ kill_server() {
 			--cluster-config $APP-$ENV \
 			--ecs-profile $ORG-remote"
 		sleep 10
-
-		read -r -n 1 -p "Would you like to kill the $ENV server? [y/N]: " CHOICE
-		echo
-		[ "${CHOICE^^}" = Y ] || return 1
-		_print "killing $ENV server"
-		_handle "ecs_shortcut down --force"
 	fi
 }
+delete_cluster() {
+	_print "Deleting ecs cluster (this may take some time)"
+	_handle "ecs_shortcut down \
+		--cluster-config $APP-$ENV \
+		--ecs-profile $ORG-remote \
+		--force"
+}
+# Log in to an image host, dependant on current environment
 docker_login() {
 	if [ "$ENV" = dev ]; then
 		docker login
 	else
-		# We use AWS Elastic Container Registry (ECR) for ECS deployment
 		aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "${DHOSTS[$ENV]}"
 	fi
 }
@@ -330,7 +293,7 @@ create_docker_image() {
 	[ "$ENV" = dev ] || push_docker_image
 }
 remove_docker_image() {
-	IMG=$(docker image ls -q "${DHOSTS[$ENV]}/$ORG/${APP}_$ENV:$TAG")
+	IMG=$(docker image ls -q "$ORG/${APP}_$ENV:$TAG")
 	[ -z "$IMG" ] && return
 	_print "Removing docker image: ${DHOSTS[$ENV]}/$ORG/${APP}_$ENV:$TAG"
 	_handle "docker image rm -f $IMG"
@@ -344,26 +307,31 @@ clean_docker_images() {
 	_print 'Pruning all unused volumes'
 	_handle 'docker volume prune'
 }
-enter_docker_shell() {
-	if [ "$ENV" = dev ]; then
-		docker exec -it "$APP" bash
-	else
-		check_remote_conf
-		_warn 'Use "docker exec -it $(docker ps -qf name=web) bash" to enter docker container within ec2 instance' 
-		ssh -i ~/.ssh/$KEYPAIR ec2-user@$AWS_HOST
-	fi
+
+###############################################################################
+# -----------------------------------------------------------------------------
+# APPLICATION SPECIFIC SHORTCUTS
+# -----------------------------------------------------------------------------
+###############################################################################
+
+ecs_shortcut() {
+	[ "$ENV" = dev ] && _err "Operation not permitted in dev environment. Use --env to switch environments" -
+	export COMPOSE_FILE="./deployment/$ENV/docker-compose.yml"
+	ecs-cli "$@"
 }
-
-###############################################################################
-# -----------------------------------------------------------------------------
-# MISC HELPER FUNCTIONS
-# -----------------------------------------------------------------------------
-###############################################################################
-
 # Export all variables in a basic config file of key=value pairs
 efile() {
 	source "$1"
 	export $(cut -d= -f1 "$1" | grep -v DHOSTS) &>/dev/null
+}
+enter_docker_shell() {
+	if [ "$ENV" = dev ]; then
+		docker exec -it "$APP" bash
+	else
+		[ -z "$AWS_DNS" ] && get_aws_dns
+		_warn 'Use "docker exec -it $(docker ps -qf name=web) bash" to enter docker container within ec2 instance' 
+		ssh -i ~/.ssh/$KEYPAIR ec2-user@$AWS_DNS
+	fi
 }
 get_logs() {
 	if [ "$ENV" = dev ]; then
@@ -373,29 +341,37 @@ get_logs() {
 		ecs-cli logs --task-id $AWS_TASK_ID --since 1 --follow
 	fi
 }
-ecs_shortcut() {
-	[ "$ENV" = dev ] && _err "Operation not permitted in dev environment. Use --env to switch environments" -
-	export COMPOSE_FILE="./deployment/$ENV/docker-compose.yml"
-	ecs-cli "$@"
-}
 # When switching between machines or developers, use this command to allow ssh access with your keypair
-rebuild_ecs_cluster() {
+build_ecs_cluster() {
+
+	_warn "In order to rebuild the ecs cluster, you need to specify your networking options. All of these options may be found in the AWS console."
+	read -r -p "Security group ID: " SECURITY_GROUP
+	read -r -p "VPC ID: " VPC
+	read -r -p "Subnet IDs (1 or more, comma+nospace separated): " SUBNETS
+	read -r -p "Number of servers [1]: " SIZE
+	SIZE=${SIZE:-1}
+	read -r -p "Instance type [t2.medium]: " TYPE
+	TYPE=${TYPE:-t2.medium}
+	echo "Size $SIZE"
+	echo "Type $TYPE"
+
 	# https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cmd-ecs-cli-up.html
-	_print "Generating $ENV ECS cluster..."
+	_print "Generating $ENV ECS cluster"
 	_handle "ecs-cli up --cluster-config $APP-$ENV \
 			--ecs-profile $ORG-remote \
 			--keypair "$KEYPAIR" \
 			--capability-iam \
-			--size 1 \
-			--instance-type t2.medium \
-			--security-group sg-0f79330791670cf6e \
-			--vpc vpc-eeb9ee94 \
-			--subnets subnet-8fb64a81,subnet-6b070037,subnet-e80706c6,subnet-5cad6711,subnet-6bc6fd0c,subnet-6559175b \
+			--size $SIZE \
+			--instance-type $TYPE \
+			--security-group $SECURITY_GROUP \
+			--vpc $VPC \
+			--subnets $SUBNETS \
 			--force
 			--verbose" ecs-up.log
 }
 add_ssh_key() {
-	check_remote_conf
+
+	[ -z "$AWS_DNS" ] && get_aws_dns
 
 	read -r -s -p "Authority, enter your passcode: " PASSCODE
 	echo
@@ -404,30 +380,14 @@ add_ssh_key() {
 	echo
 	read -r -p "New public key: " NEW_PUBKEY
 	
-	ssh -i ~/.ssh/$KEYPAIR ec2-user@$AWS_HOST ssh_key_manager "$KEYPAIR" "$PASSCODE" "$NEW_KEYPAIR" "$NEW_PASSCODE" "$NEW_PUBKEY"
+	ssh -i ~/.ssh/$KEYPAIR ec2-user@$AWS_DNS ssh_key_manager "$KEYPAIR" "$PASSCODE" "$NEW_KEYPAIR" "$NEW_PASSCODE" "$NEW_PUBKEY"
 }
+copy_files() {
 
-###############################################################################
-# -----------------------------------------------------------------------------
-# APPLICATION SPECIFIC SHORTCUTS
-# -----------------------------------------------------------------------------
-###############################################################################
-
-ecs_shortcut() {
-	[ "$ENV" = dev ] && _err "Operation not permitted in current environment: $ENV" -
-	docker_login
-	export COMPOSE_FILE="./deployment/$ENV/docker-compose.yml"
-	ecs-cli "$@"
-}
-# Export all variables in a basic config file of key=value pairs
-efile() {
-	source "$1"
-	export $(cut -d= -f1 "$1" | grep -v DHOSTS) &>/dev/null
-}
-db_connect() {
-	source deployment/$ENV/db.env
-	source deployment/$ENV/db.secret
-	docker exec -it db mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD"
+		[ -z "$AWS_DNS" ] && get_aws_dns
+		echoc "Copying $(pwd) to $AWS_DNS:/srv" "$yellow"
+		scp -r -i ~/.ssh/$KEYPAIR $(pwd)/* ec2-user@$AWS_DNS:/srv
+		[ $? -ne 0 ] && _err "Couldn't connect. Make sure you've built a cluster and given user 1000 permissions to the /srv directory (./run.sh -l; sudo chown -R 1000:1000 /srv)" -
 }
 
 ###############################################################################
@@ -446,7 +406,7 @@ update_conf() {
 
 	# If the key was supposed to be secret, replace the output value with asterisks 
 	val="$2"
-	[[ "$1" == *SECRET* ]] && val=$(for ((i=0; i<"${#val}"; i++)); do printf '*'; done)
+	[[ "$1" == *SECRET* || "$1" == *PASSWORD* ]] && val=$(for ((i=0; i<"${#val}"; i++)); do printf '*'; done)
 
 	NAME="$(echo "$1" | tr '[]' '.*.*')"
 	if grep "$NAME" "$conf" &>/dev/null; then
@@ -482,39 +442,75 @@ prompt_conf() {
 	fi
 	update_conf "$2" "$VALUE"
 }
+gen_credentials() {
+	# Collect credentials
+	read -r -p 'Database name: ' MYSQL_DATABASE
+	read -r -p 'Database username: ' MYSQL_USER
+	read -r -p 'Database host [default=127.0.0.1]: ' MYSQL_HOST
+	read -r -p 'Database port [default=3306]: ' MYSQL_PORT
+	read -r -p 'Database password [default=random]: ' MYSQL_PASSWORD
+	
+	# Set any defaults
+	[ -z "$MYSQL_HOST" ] && MYSQL_HOST=127.0.0.1
+	[ -z "$MYSQL_PORT" ] && MYSQL_PORT=3306
+	[ -z "$MYSQL_PASSWORD" ] && MYSQL_PASSWORD="$(openssl rand -hex 21)"
+
+	# Update all conf files
+	update_conf MYSQL_HOST "$MYSQL_HOST" deployment/$ENV/db.env
+	update_conf MYSQL_PORT "$MYSQL_PORT" deployment/$ENV/db.env
+	update_conf MYSQL_DATABASE "$MYSQL_DATABASE" deployment/$ENV/db.env
+	update_conf MYSQL_USER "$MYSQL_USER" deployment/$ENV/db.env
+	update_conf MYSQL_PASSWORD "$MYSQL_PASSWORD" deployment/$ENV/db.secret
+	
+	echo "module.exports = '$(openssl rand -hex 64)'" > api/auth/pepper.jsecret
+
+	echo "module.exports = {
+	username:'$MYSQL_USER',
+	password:'$MYSQL_PASSWORD',
+	db:'$MYSQL_NAME',
+	port:'$MYSQL_PORT',
+	host:'$MYSQL_HOST'
+}" > api/sql_config.jsecret
+
+	echo "<?php
+	\$database = new mysqli('$MYSQL_HOST', '$MYSQL_USER', '$MYSQL_PASSWORD', '$MYSQL_NAME');
+	if(\$database->connect_error) {
+		die('Connection failed: ' . \$database->connect_error);
+	}
+?>" > html/resources/php/database.phpsecret
+
+	# Can't let this sit in RAM
+	unset MYSQL_PASSWORD
+}
+
 gen_app_conf() {
-	echo 'ORG=ezclinic
-APP=ezclinic
+	read -r -p "Organization name: " ORG
+	read -r -p "App name: " APP
+	echo "ORG=$ORG
+APP=$APP
 ENV=dev
 TAG=latest
 declare -A DHOSTS
-DHOSTS[dev]=dockerhub.io' > .config
+DHOSTS[dev]=dockerhub.io" > .config
 	source .config
 	efile .config
 }
 
-gen_secrets() {
-	_print 'Generating new credentials for RabbitMQ and MySQL'
-	echo "MYSQL_PASSWORD=$(openssl rand -hex 20)" > "deployment/$ENV/db.secret"
-	echo "RABBITMQ_DEFAULT_PASS=$(openssl rand -hex 32)" > "deployment/$ENV/rabbitmq.secret"
-	mv deployment/$ENV/$ENV.secret deployment/$ENV/web.secret &>/dev/null
-	_ok
-}
 # Check for AWS credentials only when a remote deployment is underway
 get_aws_cred() {
 	prompt_conf 'AWS access key ID: ' AWS_ACCESS_KEY_ID
 	prompt_conf 'AWS secret access key: ' AWS_SECRET_ACCESS_KEY
 }
-get_aws_host() {
+get_aws_dns() {
 	_print "Retrieving AWS EC2 instance DNS hostname"
-	AWS_HOST="$(aws ec2 describe-instances \
+	AWS_DNS="$(aws ec2 describe-instances \
 			--filter Name=tag:Name,Values="ECS Instance - amazon-ecs-cli-setup-$APP-$ENV" \
 			| grep PublicDnsName \
 			| head -1 \
 			| sed 's/.*: "//g; s/".*//g')"
-	[ $? -eq 0 ] && _ok || _err "$AWS_HOST"
-	update_conf AWS_HOST "$AWS_HOST"
-	update_conf ALLOWED_HOSTS "$AWS_HOST" "deployment/$ENV/web.env"
+	[ -z "$AWS_DNS" ] && _err "Couldn't retrieve your servers dns hostname. Perhaps you need to create a cluster (./run.sh -R)" -
+	_ok
+	update_conf AWS_DNS "$AWS_DNS"
 }
 get_aws_task_id() {
 	_print "Retrieving latest ECS task id"
@@ -539,12 +535,19 @@ _verbose() {
 # -----------------------------------------------------------------------------
 ###############################################################################
 
-check_remote_conf() {
+# Check for missing required software
+conf_check() {
+	ERR=()
+	for cmd in "$@"; do
+		command -v "$cmd" &>/dev/null || ERR+=("$cmd")
+	done
+	[ ${#ERR[@]} -gt 0 ] && _err "You must install the following package(s) in order to deploy this project: ${ERR[*]}" -
+}
+remote_conf_check() {
 	[ -z "$AWS_DEFAULT_REGION" ] && prompt_conf 'AWS default region [default=us-east-1]: ' AWS_DEFAULT_REGION us-east-1
 	[ -z "$KEYPAIR" ] && prompt_conf 'AWS keypair name: ' KEYPAIR
 	[[ -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_SECRET_ACCESS_KEY" ]] && get_aws_cred
 	[ -z "${DHOSTS[${ENV}]}" ] && prompt_conf "Image host for $ORG/${APP}_$ENV:$TAG [default=dockerhub.io]: " "DHOSTS[$ENV]" dockerhub.io
-	[ -z "$AWS_HOST" ] && get_aws_host
 
 	# This ensures that you aren't prompted for your ssh key passphrase every time we do something to the remote server
 	grep 'AddKeysToAgent yes' ~/.ssh/config &>/dev/null || echo 'AddKeysToAgent yes' >> ~/.ssh/config
@@ -556,92 +559,51 @@ check_remote_conf() {
 			--default-launch-type EC2 \
 			--config-name $APP-$ENV \
 			--region $AWS_DEFAULT_REGION"
-	
+
 	# https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cmd-ecs-cli-configure-profile.html
 	_print "Applying ecs profile"
 	_handle "ecs-cli configure profile --profile-name $ORG-remote"
+
+	conf_check ecs-cli aws
+}
+production_conf_check() {
+	[[ ! -f deployment/production/ssl/pianoboard.key || ! -f deployment/production/ssl/pianoboard.bundle ]] && 
+		_err "Please put your ssl certificates under deployment/production/ssl/"
 	
-	req_check ecs-cli aws
+	# Generate the dhparams if they aren't already in there
+	[ ! -f deployment/production/ssl/dhparams.pem ] && openssl dhparam -out deployment/production/ssl/dhparams.pem 4096
 }
-
-# Check for missing required software
-req_check() {
-	ERR=()
-	for cmd in "$@"; do
-		command -v "$cmd" &>/dev/null || ERR+=("$cmd")
-	done
-	[ ${#ERR[@]} -gt 0 ] && _err "You must install the following package(s) in order to deploy this project: ${ERR[*]}" -
-}
-
-if [ $EUID -eq 0 ]; then
-	_warn 'Hold your horses! You are running this script as root, meaning other users will not be able to access many of the generated server resources.'
-	read -r -n 1 -p 'Are you sure you wish to continue? [y/N] ' CHOICE
-	echo
-	[[ ${CHOICE^^} != 'Y' ]] && exit 1
-fi
-mkdir -p logs/
-req_check docker docker-compose
-
-# Check for valid .config, then export all it's variables
-if ! grep APP .config &>/dev/null; then
-	_warn 'Invalid .config'
-	read -r -n 1 -p 'Regenerate? [Y/n]: ' CHOICE
-	echo
-	[[ ${CHOICE^^} != 'Y' ]] && exit 1
-	gen_app_conf
-fi
-source .config
-efile .config
-
-# Ensure environment secret file is available
-[[ ! -f api/sql_config.jsecret ||
-	! -f api/auth/pepper.jsecret ||
-	! -f deployment/$ENV/db.secret ||
-	! -f client/resources/php/database.phpsecret ]] && gen_secrets
 
 ###############################################################################
 # -----------------------------------------------------------------------------
 # DEPLOYMENT MECHANISM
 # -----------------------------------------------------------------------------
 ###############################################################################
-
-# $1: (optional) Different docker-compose.yml environment to deploy to current $ENV
-compose_project() {
+_deploy() {
 	
+	export COMPOSE_FILE="./deployment/$ENV/docker-compose.yml"
+	export DHOST="${DHOSTS[$ENV]}"
+
 	# For dev, just run the compose app and get outta here
 	if [ "$ENV" = dev ]; then
-		export DHOST=''
+
 		_print "Deploying dev server"
-		_handle "docker-compose up" server-dev.log /
-		xdg-open localhost &>/dev/null
-		return
+		_handle "docker-compose up" docker-compose.log /
+	else
+
+		# https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cmd-ecs-cli-compose-service-up.html
+		_print "Composing $APP to $ENV with ECS"
+		_handle "ecs-cli compose \
+				--project-name $APP \
+				service up \
+				--cluster-config $APP-$ENV \
+				--ecs-profile $ORG-remote \
+				--force-deployment"
+				#--create-log-groups" ecs-compose.log #<- Add this back in if you can't access the logs
 	fi
-
-	# compose path - If $1 is set to a different compose path, that compose file gets deployed to $ENV
-	# It seems counterintuitive, but this acts a a good debugging tool
-	export DHOST="${DHOSTS[$ENV]}/"
-
-	# Check for ecs-cli and docker as well as the proper AWS credential environment variables
-	check_remote_conf
-
-	# https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cmd-ecs-cli-configure.html
-	echoc "Setting ecs config for $ENV" "$blue"
-	ecs-cli configure \
-			--cluster "$APP-$ENV" \
-			--default-launch-type EC2 \
-			--config-name "$APP-$ENV" \
-			--region us-east-1
-
-	# https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cmd-ecs-cli-configure-profile.html
-	ecs-cli configure profile --profile-name "$ORG-remote"
-
-	# Attempt to start the ECS cluster as the staging app
-	# https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cmd-ecs-cli-compose-service-up.html
-	echoc "Composing $APP to $ENV with ECS" "$blue"
-	ecs-cli compose service up \
-			--cluster-config "$APP-$ENV" \
-			--ecs-profile "$ORG-remote" \
-			--create-log-groups
+}
+_refresh() {
+	dexec pm2 reload all
 }
 
 ###############################################################################
@@ -664,7 +626,10 @@ parse_cmd() {
 		# PRIMARY COMMANDS #
 		####################
 		--deploy | -d)
-			echo compose_project
+			echo _deploy
+			return 2;;
+		--refresh | -f)
+			echo _refresh
 			return 2;;
 		--boot | -o)
 			echo create_docker_container bash
@@ -690,25 +655,11 @@ parse_cmd() {
 		--build | -b)
 			echo create_docker_image
 			return 0;;
-		--gen-secrets | -s)
-			echo gen_secrets
+		--gen-cred | -g)
+			echo gen_credentials
 			return 0;;
-		# Remote specific
-		--rebuild | -R)
-			[ "$ENV" = dev ] && _err "Operation not allowed in current environment: $ENV"
-			echo rebuild_ecs_cluster
-			return 0;;
-		--aws-task-id | -I)
-			echo get_aws_task_id
-			return 0;;
-		--aws-dns | -D)
-			echo get_aws_dns
-			return 0;;
-		--aws-cred | -A)
-			echo get_aws_cred
-			return 0;;
-		--add-ssh-key | -S)
-			echo add_ssh_key
+		--copy-files | -c)
+			echo copy_files
 			return 0;;
 		# State changers
 		--tag | -t)
@@ -741,12 +692,33 @@ parse_cmd() {
 		--push | -u)
 			echo push_docker_image
 			[ "$ENV" = dev ] && return 4 || return 0;;
-		--clean | -c)
+		--clean)
 			echo clean_docker_images
 			return 4;;
 		--logs | -L)
 			echo get_logs
 			return 4;;
+		# Remote specific
+		--build-cluster | -B)
+			[ "$ENV" = dev ] && _err "Operation not allowed in current environment: $ENV"
+			echo build_ecs_cluster
+			return 0;;
+		--delete-cluster)
+			[ "$ENV" = dev ] && _err "Operation not allowed in current environment: $ENV"
+			echo delete_cluster
+			return 0;;
+		--aws-task-id | -I)
+			echo get_aws_task_id
+			return 0;;
+		--aws-dns | -D)
+			echo get_aws_dns
+			return 0;;
+		--aws-cred | -A)
+			echo get_aws_cred
+			return 0;;
+		--add-ssh-key | -S)
+			echo add_ssh_key
+			return 0;;
 		
 		#########
 		# Error #
@@ -755,6 +727,33 @@ parse_cmd() {
 			return 255;;
 	esac
 }
+
+if [ $EUID -eq 0 ]; then
+	_warn 'Hold your horses! You are running this script as root, meaning other users will not be able to access many of the generated server resources.'
+	read -r -n 1 -p 'Are you sure you wish to continue? [y/N] ' CHOICE
+	echo
+	[[ ${CHOICE^^} != 'Y' ]] && exit 1
+fi
+mkdir -p logs/
+
+# Check for valid .config, then export all it's variables
+if ! grep APP .config &>/dev/null; then
+	_warn 'Invalid .config'
+	read -r -n 1 -p 'Regenerate? [Y/n]: ' CHOICE
+	echo
+	[[ ${CHOICE^^} != 'Y' ]] && exit 1
+	gen_app_conf
+fi
+source .config
+efile .config
+
+# Check the proper config for the given environment
+conf_check docker docker-compose
+[ "$ENV" != dev ] && remote_conf_check
+[ "$ENV" = production ] && production_conf_check
+
+# Check for any application specific files
+[ ! -f deployment/$ENV/db.secret ] && gen_credentials
 
 # The pre- and post-primary commands are placed in separate arrays to be executed at their respective times
 PRE=()

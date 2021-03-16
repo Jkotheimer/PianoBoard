@@ -4,20 +4,18 @@ services:
     image: mysql:latest
     container_name: db
     env_file:
-      - ./deployment/$ENV/db.env
-      - ./deployment/$ENV/db.secret
+      - db.env
+      - db.secret
     ports:
       - '3306:3306'
   web:
-    image: $DHOST$ORG/${APP}_$ENV:$TAG
+    image: $ORG/${APP}_$ENV:$TAG
     container_name: $APP
     env_file:
-      - ./deployment/$ENV/db.env
-      - ./deployment/$ENV/db.secret
+      - db.env
+      - db.secret
     volumes:
-      - ./api:/var/www/api
-      - ./client:/var/www/html
-      - ./deployment/$ENV:/var/www/deployment
+      - ../../:/var/www/
     command: /var/www/deployment/run.sh
     ports:
       - '80:80'

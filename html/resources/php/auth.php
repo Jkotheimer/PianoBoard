@@ -8,11 +8,11 @@ function auth_token() {
 	include_once "resources.php";
 	require_once "database.phpsecret";
 
-	if(isset($_COOKIE[$session_cookie]) && isset($_COOKIE[$id_cookie])) {
+	if(isset($_COOKIE['pb_token']) && isset($_COOKIE['pb_uid'])) {
 		
 		// Attempt to grab the expiration date of the token from the set cookies
-		$Token = $_COOKIE[$session_cookie];
-		$id = $_COOKIE[$id_cookie];
+		$Token = $_COOKIE['pb_token'];
+		$id = $_COOKIE['pb_uid'];
 		$query = "SELECT expiration_date from access_token WHERE token = '$Token' AND user_id = '$id';";
 		
 		$result = $database->query("$query");
